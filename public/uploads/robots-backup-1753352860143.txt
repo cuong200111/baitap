@@ -1,0 +1,220 @@
+# Robots.txt for HACOM E-commerce Platform
+# Generated automatically on 2025-07-24T10:27:40.143Z
+# Optimized for Vietnam e-commerce market
+
+# ================================
+# GLOBAL RULES FOR ALL CRAWLERS
+# ================================
+
+User-agent: *
+Allow: /
+
+# Allow important SEO and discovery files
+Allow: /sitemap.xml
+Allow: /sitemap-index.xml
+Allow: /robots.txt
+Allow: /favicon.ico
+
+# Allow product and category pages (main content)
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+
+# ================================
+# DISALLOW SENSITIVE AREAS
+# ================================
+
+# Admin and authentication areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /checkout
+Disallow: /cart
+Disallow: /orders
+Disallow: /thank-you
+Disallow: /track-order
+Disallow: /billing
+
+# Development and testing paths
+Disallow: /debug*
+Disallow: /test*
+Disallow: /_next/
+Disallow: /.next/
+Disallow: /node_modules/
+
+# Temporary and backup files
+Disallow: /uploads/temp/
+Disallow: /uploads/cache/
+Disallow: /*backup*
+Disallow: /*temp*
+Disallow: /*.tmp$
+Disallow: /*.log$
+Disallow: /*.sql$
+Disallow: /*.env$
+
+# Duplicate content and query parameters
+Disallow: /*?*add-to-cart*
+Disallow: /*?*remove*
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid*
+Disallow: /*?*gclid*
+Disallow: /*?*ref=*
+Disallow: /*?*sort=*
+Disallow: /*?*filter=*
+Disallow: /*?*page=*
+Disallow: /*?*limit=*
+Disallow: /*?*offset=*
+Disallow: /search?*
+Disallow: /products?*
+
+# Prevent crawling of deep category paths
+Disallow: /category/*/*
+
+# ================================
+# SEARCH ENGINE SPECIFIC RULES
+# ================================
+
+# Google Bot - Most important for Vietnam market
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bing Bot - Secondary importance
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Yahoo Bot
+User-agent: Slurp
+Allow: /
+Crawl-delay: 3
+
+# Yandex Bot - For international reach
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+# ================================
+# SOCIAL MEDIA CRAWLERS
+# ================================
+
+# Facebook crawler for Open Graph
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter card crawler
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn crawler
+User-agent: LinkedInBot
+Allow: /
+
+# Pinterest crawler
+User-agent: Pinterestbot
+Allow: /
+
+# WhatsApp crawler
+User-agent: WhatsApp
+Allow: /
+
+# ================================
+# BLOCK UNWANTED BOTS
+# ================================
+
+# SEO analysis bots (can slow down site)
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: serpstatbot
+Disallow: /
+
+User-agent: BacklinkCrawler
+Disallow: /
+
+# Content scrapers and spam bots
+User-agent: EmailCollector
+Disallow: /
+
+User-agent: EmailSiphon
+Disallow: /
+
+User-agent: WebBandit
+Disallow: /
+
+User-agent: EmailWolf
+Disallow: /
+
+User-agent: ExtractorPro
+Disallow: /
+
+User-agent: CopyRightCheck
+Disallow: /
+
+User-agent: Crescent
+Disallow: /
+
+User-agent: SiteCheckBot
+Disallow: /
+
+User-agent: sogouspider
+Disallow: /
+
+User-agent: NaverBot
+Disallow: /
+
+# ================================
+# PERFORMANCE OPTIMIZATION
+# ================================
+
+# Crawl delay for resource-heavy operations
+Crawl-delay: 1
+
+# Request rate limiting
+Request-rate: 1/10s
+
+# ================================
+# SECURITY RULES
+# ================================
+
+# Block access to sensitive file types
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /*.env$
+Disallow: /*.backup$
+Disallow: /*.config$
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# Block development tools
+Disallow: /api/debug/
+Disallow: /api/test/
+Disallow: /.git/
+Disallow: /.env
+
+# Sitemaps
+Sitemap: https://hacom.vn/sitemap.xml
+Sitemap: https://hacom.vn/sitemap-index.xml
+
+# Host directive
+Host: hacom.vn
+
+# Cache directive for better performance
+Cache-delay: 86400

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://hacom.vn</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/products</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/cart</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/login</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/register</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/profile</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/orders</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/checkout</loc>
+    <lastmod>2025-07-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/game</loc>
+    <lastmod>2025-07-22 13:46:01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/chuot-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-asus</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-theo-hang</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/man-hinh-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/pc-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/iphone</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/ban-phim-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-msi</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-theo-nhu-cau</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-van-phong</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/man-hinh-4k</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/pc-desktop</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/pc-van-phong</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/samsung-galaxy</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/gaming-gear</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-dell</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-do-hoa</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/macbook-imac</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/man-hinh-cong</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/tai-nghe-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/workstation</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/xiaomi</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/ghe-gaming</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-hp</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-mong-nhe</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/man-hinh</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-lenovo</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/dien-thoai-tablet</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/category/laptop-acer</loc>
+    <lastmod>2025-07-21 16:29:09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/products/4</loc>
+    <lastmod>2025-07-23 00:46:34</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1592910061532-d53d1b739dc6?w=400&h=400&fit=crop</image:loc>
+      <image:title>iPhone 15 Pro Max 256GB</image:title>
+      <image:caption>iPhone 15 Pro Max 256GB - HACOM</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop</image:loc>
+      <image:title>iPhone 15 Pro Max 256GB</image:title>
+      <image:caption>iPhone 15 Pro Max 256GB - HACOM</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://hacom.vn/products/5</loc>
+    <lastmod>2025-07-21 15:12:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1527814050087-3793815479db?w=400&h=400&fit=crop</image:loc>
+      <image:title>Bàn phím cơ Gaming RGB Razer BlackWidow V3</image:title>
+      <image:caption>Bàn phím cơ Gaming RGB Razer BlackWidow V3 - HACOM</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=400&h=400&fit=crop</image:loc>
+      <image:title>Bàn phím cơ Gaming RGB Razer BlackWidow V3</image:title>
+      <image:caption>Bàn phím cơ Gaming RGB Razer BlackWidow V3 - HACOM</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://hacom.vn/products/1</loc>
+    <lastmod>2025-07-21 10:54:07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hacom.vn/products/3</loc>
+    <lastmod>2025-07-21 10:45:07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
