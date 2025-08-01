@@ -292,6 +292,14 @@ export const apiWrappers = {
   // Cart API
   cart: {
     getAll: (params: Record<string, any> = {}) => {
+      // Add session_id automatically for guest users
+      if (typeof window !== "undefined" && !params.user_id) {
+        const sessionId = localStorage.getItem('session_id');
+        if (sessionId) {
+          params.session_id = sessionId;
+        }
+      }
+
       const searchParams = new URLSearchParams();
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -301,28 +309,71 @@ export const apiWrappers = {
       return apiCall(`/api/cart?${searchParams}`);
     },
 
-    add: (data: any) =>
-      apiCall("/api/cart", {
+    add: (data: any) => {
+      // Add session_id automatically for guest users
+      if (typeof window !== "undefined" && !data.user_id) {
+        let sessionId = localStorage.getItem('session_id');
+        if (!sessionId) {
+          sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('session_id', sessionId);
+        }
+        data.session_id = sessionId;
+      }
+
+      return apiCall("/api/cart", {
         method: "POST",
         body: JSON.stringify(data),
-      }),
+      });
+    },
 
-    update: (data: any) =>
-      apiCall("/api/cart", {
+    update: (id: number, data: any) =>
+      apiCall(`/api/cart/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
       }),
 
-    remove: (data: any) =>
-      apiCall("/api/cart", {
+    remove: (id: number) =>
+      apiCall(`/api/cart/${id}`, {
         method: "DELETE",
-        body: JSON.stringify(data),
       }),
 
-    clear: (userId?: number) =>
-      apiCall("/api/cart", {
+    clear: (params: { user_id?: number; session_id?: string } = {}) => {
+      // Add session_id automatically for guest users
+      if (typeof window !== "undefined" && !params.user_id) {
+        const sessionId = localStorage.getItem('session_id');
+        if (sessionId) {
+          params.session_id = sessionId;
+        }
+      }
+
+      return apiCall("/api/cart", {
         method: "DELETE",
-        body: JSON.stringify({ user_id: userId, clear_all: true }),
+        body: JSON.stringify(params),
+      });
+    },
+
+    migrate: (sessionId: string, userId: number) =>
+      apiCall("/api/cart/migrate", {
+        method: "POST",
+        body: JSON.stringify({ session_id: sessionId, user_id: userId }),
       }),
+
+    getCount: (params: { user_id?: number; session_id?: string } = {}) => {
+      // Add session_id automatically for guest users
+      if (typeof window !== "undefined" && !params.user_id) {
+        const sessionId = localStorage.getItem('session_id');
+        if (sessionId) {
+          params.session_id = sessionId;
+        }
+      }
+
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+      return apiCall(`/api/cart/count?${searchParams}`);
+    },
   },
 };
