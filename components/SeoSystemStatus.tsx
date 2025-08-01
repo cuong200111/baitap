@@ -125,9 +125,14 @@ export default function SeoSystemStatus() {
 
   const generateRobots = async () => {
     try {
-      const response = await fetch("/api/admin/generate-robots", {
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+      const response = await fetch(`${Domain}/api/admin/generate-robots`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" }
+        headers
       });
       const data = await response.json();
       
