@@ -124,12 +124,53 @@ router.get("/", authenticateToken, async (req, res) => {
       offset,
     ]);
 
-    // Format orders
-    const formattedOrders = orders.map((order) => ({
-      ...order,
-      billing_address: order.billing_address,
-      shipping_address: order.shipping_address,
-    }));
+    // Get order items for each order
+    const formattedOrders = [];
+    for (const order of orders) {
+      const orderItems = await executeQuery(
+        `
+        SELECT
+          oi.*,
+          p.images as product_images
+        FROM order_items oi
+        LEFT JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = ?
+        ORDER BY oi.created_at ASC
+      `,
+        [order.id],
+      );
+
+      // Format items with images
+      const formattedItems = orderItems.map((item) => ({
+        ...item,
+        images: (() => {
+          try {
+            // Check if product_images exists and parse it
+            if (item.product_images) {
+              return JSON.parse(item.product_images);
+            }
+            // Fallback to product_image if it exists
+            return item.product_image ? [item.product_image] : [];
+          } catch (e) {
+            console.warn('Error parsing product images:', e);
+            return item.product_image ? [item.product_image] : [];
+          }
+        })(),
+        // Keep original fields for compatibility
+        product_name: item.product_name,
+        product_sku: item.product_sku,
+        quantity: item.quantity,
+        price: item.unit_price,
+        total: item.total_price,
+      }));
+
+      formattedOrders.push({
+        ...order,
+        billing_address: order.billing_address,
+        shipping_address: order.shipping_address,
+        items: formattedItems,
+      });
+    }
 
     const totalPages = Math.ceil(totalOrders / parseInt(limit));
 
