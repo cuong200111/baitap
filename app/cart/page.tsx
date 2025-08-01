@@ -94,6 +94,21 @@ export default function CartPage() {
   const loadGuestCart = async () => {
     try {
       setLoading(true);
+
+      // Try to load from session cart first
+      const sessionId = localStorage.getItem("session_id");
+      if (sessionId) {
+        const response = await fetch(`${Domain}/api/cart?session_id=${sessionId}`);
+        const data = await response.json();
+
+        if (data.success && data.data?.items) {
+          setCartItems(data.data.items);
+          setSummary(data.data.summary);
+          return;
+        }
+      }
+
+      // Fallback to localStorage guest cart
       const guestCart = localStorage.getItem("guest_cart");
       if (guestCart) {
         const parsedCart = JSON.parse(guestCart);
