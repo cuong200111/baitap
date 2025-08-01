@@ -47,7 +47,13 @@ export default function SeoSystemStatus() {
   const runSystemTest = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/admin/seo-test-all");
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+
+      const response = await fetch(`${Domain}/api/admin/seo-test-all`, { headers });
       const data = await response.json();
       
       if (data.success) {
