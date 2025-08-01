@@ -305,24 +305,20 @@ async saveSeoSettings(req, res) {
         });
       });
     });
-const areas = ['Hà Nội', 'TP.HCM', 'Đà Nẵng'];
+
     // Update or insert settings
     for (const setting of flatSettings) {
       await executeQuery(
-  `
-    INSERT INTO seo_settings (setting_key, setting_value, category, updated_at)
-    VALUES (?, ?, ?, NOW())
-    ON DUPLICATE KEY UPDATE
-      setting_value = VALUES(setting_value),
-      category = VALUES(category),
-      updated_at = NOW()
-  `,
-  [
-    'service_areas',
-    JSON.stringify(areas), // chuyển thành chuỗi JSON
-    'local'
-  ]
-);
+        `
+        INSERT INTO seo_settings (setting_key, setting_value, category, updated_at)
+        VALUES (?, ?, ?, NOW())
+        ON DUPLICATE KEY UPDATE
+          setting_value = VALUES(setting_value),
+          category = VALUES(category),
+          updated_at = NOW()
+        `,
+        [setting.key, setting.value, setting.category]
+      );
     }
 
     res.json({
