@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export default function RegisterPage() {
     }
 
     if (formData.password.length < 6) {
-      setError("Mật kh���u phải có ít nhất 6 ký tự");
+      setError("Mật khẩu phải có ít nhất 6 ký tự");
       return false;
     }
 
