@@ -184,7 +184,10 @@ export const cartController = {
         if (newQuantity > availableStock) {
           return res.status(400).json({
             success: false,
-            message: `Total quantity exceeds available stock. Current in cart: ${currentQuantity}, Adding: ${requestedQuantity}, Available: ${availableStock}`,
+            message: `Không thể thêm ${requestedQuantity} sản phẩm. Bạn đã có ${currentQuantity} trong giỏ hàng, chỉ còn lại ${Math.max(0, availableStock - currentQuantity)} sản phẩm có thể thêm.`,
+            current_in_cart: currentQuantity,
+            available_stock: availableStock,
+            max_can_add: Math.max(0, availableStock - currentQuantity)
           });
         }
 
