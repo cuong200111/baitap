@@ -105,10 +105,13 @@ export const seoApi = {
 // Utility helper functions (client-side only)
 export const clientUtils = {
   // Format price on client (immediate)
-  formatPrice: (price: number): string => {
-    
-    price = parseFloat(price.toString());
-    if (typeof price !== 'number') return '0₫';
+  formatPrice: (price: number | string | null | undefined): string => {
+    if (price == null || price === '' || isNaN(Number(price))) {
+      return '0₫';
+    }
+
+    const numPrice = typeof price === 'number' ? price : parseFloat(price.toString());
+    if (isNaN(numPrice)) return '0₫';
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
