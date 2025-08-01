@@ -316,13 +316,111 @@ export async function PUT(request: NextRequest) {
 
     const updatedUser = updatedUsers[0];
 
+    // Update address in customer_addresses table if address data is provided
+    if (
+      updateData.province_name ||
+      updateData.district_name ||
+      updateData.ward_name ||
+      updateData.address
+    ) {
+      try {
+        // Check if user already has an address
+        const existingAddresses = executeQuery(
+          "SELECT * FROM customer_addresses WHERE user_id = ?",
+          [userId],
+        );
+
+        const addressData = {
+          full_name: updateData.full_name || updatedUser.full_name,
+          phone: updateData.phone || updatedUser.phone,
+          address_line_1: updateData.address || "Địa chỉ chi tiết",
+          address_line_2: null,
+          ward: updateData.ward_name || "",
+          district: updateData.district_name || "",
+          city: updateData.province_name || "",
+          is_default: true,
+        };
+
+        if (existingAddresses.length > 0) {
+          // UPDATE existing address
+          executeQuery(
+            `UPDATE customer_addresses SET
+             full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?,
+             ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
+             WHERE user_id = ?`,
+            [
+              addressData.full_name,
+              addressData.phone,
+              addressData.address_line_1,
+              addressData.address_line_2,
+              addressData.ward,
+              addressData.district,
+              addressData.city,
+              addressData.is_default ? 1 : 0,
+              userId,
+            ],
+          );
+        } else {
+          // INSERT new address
+          executeQuery(
+            `INSERT INTO customer_addresses
+             (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+            [
+              userId,
+              "default",
+              addressData.full_name,
+              addressData.phone,
+              addressData.address_line_1,
+              addressData.address_line_2,
+              addressData.ward,
+              addressData.district,
+              addressData.city,
+              addressData.is_default ? 1 : 0,
+            ],
+          );
+        }
+      } catch (addressError) {
+        console.error("Error updating address:", addressError);
+        // Continue without failing the entire update
+      }
+    }
+
+    // Get updated address data
+    let userAddress = null;
+    try {
+      const addresses = executeQuery(
+        "SELECT * FROM customer_addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC LIMIT 1",
+        [userId],
+      );
+      if (addresses.length > 0) {
+        userAddress = addresses[0];
+      }
+    } catch (addressError) {
+      console.error("Error fetching updated address:", addressError);
+    }
+
+    // Merge user data with address data
+    const profileData = {
+      ...updatedUser,
+      is_active: Boolean(updatedUser.is_active),
+    };
+
+    // Add address data if available
+    if (userAddress) {
+      profileData.address = userAddress.address_line_1 || "";
+      profileData.province_name = userAddress.city || "";
+      profileData.district_name = userAddress.district || "";
+      profileData.ward_name = userAddress.ward || "";
+      profileData.address_line_2 = userAddress.address_line_2 || "";
+      profileData.address_full_name = userAddress.full_name || "";
+      profileData.address_phone = userAddress.phone || "";
+    }
+
     return NextResponse.json({
       success: true,
       message: "Profile updated successfully",
-      data: {
-        ...updatedUser,
-        is_active: Boolean(updatedUser.is_active),
-      },
+      data: profileData,
     });
   } catch (error: any) {
     console.error("Update profile error:", error);
