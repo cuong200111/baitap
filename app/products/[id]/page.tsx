@@ -34,6 +34,7 @@ import { productsApi, Product, formatPrice, getMediaUrl } from "@/config";
 import ProductReviews from "@/components/ProductReviews";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 export default function ProductDetailPage() {
   const params = useParams();
