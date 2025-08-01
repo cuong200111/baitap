@@ -414,15 +414,7 @@ router.post(
         res.status(201).json({
           success: true,
           message: "Order created successfully",
-          data: {
-            ...newOrder[0],
-            billing_address: newOrder[0].billing_address
-              ? JSON.parse(newOrder[0].billing_address)
-              : null,
-            shipping_address: newOrder[0].shipping_address
-              ? JSON.parse(newOrder[0].shipping_address)
-              : null,
-          },
+          data: newOrder[0],
         });
       } catch (error) {
         // Rollback transaction
