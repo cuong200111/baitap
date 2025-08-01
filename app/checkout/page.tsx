@@ -196,7 +196,7 @@ export default function CheckoutPage() {
 
           // Redirect if cart is empty
           if (data.data.items.length === 0) {
-            toast.error("Giỏ hàng trống");
+            toast.error("Gi��� hàng trống");
             router.push("/cart");
             return;
           }
@@ -293,16 +293,7 @@ export default function CheckoutPage() {
         if (userId) {
           // Clear database cart for authenticated users
           try {
-            const token = localStorage.getItem("token");
-            const headers: HeadersInit = {
-              "Content-Type": "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            };
-            await fetch(`${Domain}/api/cart`, {
-              method: "DELETE",
-              headers,
-              body: JSON.stringify({ user_id: userId, clear_all: true }),
-            });
+            await apiWrappers.cart.clear(userId);
           } catch (e) {
             console.log("Cart clear error:", e);
           }
