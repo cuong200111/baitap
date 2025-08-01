@@ -38,6 +38,7 @@ import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
 import { Domain, getMediaUrl } from "@/config";
 import { toast } from "sonner";
+import { fetchProvinces, fetchDistricts, fetchWards } from "@/vietnam-locations";
 
 interface UserProfile {
   id: number;
@@ -343,7 +344,7 @@ export default function ProfilePage() {
             { code: 491, name: "Cam Lệ", full_name: "Quận Cam Lệ", province_code: 48 },
             { code: 492, name: "Thanh Khê", full_name: "Quận Thanh Khê", province_code: 48 },
             { code: 493, name: "Liên Chiểu", full_name: "Quận Liên Chiểu", province_code: 48 },
-            { code: 494, name: "Ngũ Hành Sơn", full_name: "Quận Ngũ Hành Sơn", province_code: 48 },
+            { code: 494, name: "Ngũ Hành Sơn", full_name: "Qu���n Ngũ Hành Sơn", province_code: 48 },
             { code: 495, name: "Sơn Trà", full_name: "Quận Sơn Trà", province_code: 48 },
           ],
           92: [ // Cần Thơ
