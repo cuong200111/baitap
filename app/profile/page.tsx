@@ -328,6 +328,15 @@ export default function ProfilePage() {
             { code: 919, name: "Cái Răng", full_name: "Quận Cái Răng", province_code: 92 },
             { code: 923, name: "Thốt Nốt", full_name: "Quận Thốt Nốt", province_code: 92 },
           ],
+          20: [ // Quảng Nam
+            { code: 200, name: "Tam Kỳ", full_name: "Thành phố Tam Kỳ", province_code: 20 },
+            { code: 201, name: "Hội An", full_name: "Thành phố Hội An", province_code: 20 },
+            { code: 202, name: "Duy Xuyên", full_name: "Huyện Duy Xuyên", province_code: 20 },
+            { code: 203, name: "Đại Lộc", full_name: "Huyện Đại Lộc", province_code: 20 },
+            { code: 204, name: "Điện Bàn", full_name: "Thị xã Điện Bàn", province_code: 20 },
+            { code: 205, name: "Thăng Bình", full_name: "Huyện Thăng Bình", province_code: 20 },
+            { code: 206, name: "Tiên Phước", full_name: "Huyện Tiên Phước", province_code: 20 },
+          ],
           26: [ // Khánh Hòa
             { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
             { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
@@ -723,7 +732,7 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Thông tin cá nhân
+              Thông tin c�� nhân
             </h1>
             <p className="text-gray-600">Quản lý thông tin tài khoản của bạn</p>
           </div>
