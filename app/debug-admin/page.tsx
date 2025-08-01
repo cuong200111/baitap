@@ -99,6 +99,7 @@ export default function DebugAdminPage() {
         customer_email: "test@example.com",
         customer_phone: "0123456789",
         shipping_address: "123 Test Street, Test City",
+        billing_address: "123 Test Street, Test City",
         notes: "Test order",
       };
       const data = await apiWrappers.orders.createGuest(orderData);
