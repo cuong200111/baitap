@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { apiWrappers } from "@/lib/api-wrapper";
+import { testAPI } from "@/lib/test-api";
 
 export default function DebugAdminPage() {
   const [token, setToken] = useState("");
