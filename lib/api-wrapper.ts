@@ -288,4 +288,41 @@ export const apiWrappers = {
         method: "DELETE",
       }),
   },
+
+  // Cart API
+  cart: {
+    getAll: (params: Record<string, any> = {}) => {
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+      return apiCall(`/api/cart?${searchParams}`);
+    },
+
+    add: (data: any) =>
+      apiCall("/api/cart", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+
+    update: (data: any) =>
+      apiCall("/api/cart", {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+
+    remove: (data: any) =>
+      apiCall("/api/cart", {
+        method: "DELETE",
+        body: JSON.stringify(data),
+      }),
+
+    clear: (userId?: number) =>
+      apiCall("/api/cart", {
+        method: "DELETE",
+        body: JSON.stringify({ user_id: userId, clear_all: true }),
+      }),
+  },
 };
