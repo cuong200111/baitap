@@ -223,7 +223,7 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       const response = await fetch(
-        `/api/locations?type=districts&province_code=${provinceCode}`,
+        `${Domain}/api/locations?type=districts&province_code=${provinceCode}`,
       );
 
       const data = await response.json();
