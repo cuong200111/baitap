@@ -204,13 +204,68 @@ export default function ProfilePage() {
         // Set fallback provinces for common areas
         setProvinces([
           { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
-          {
-            code: 79,
-            name: "TP Hồ Chí Minh",
-            full_name: "Thành phố Hồ Chí Minh",
-          },
+          { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
           { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
           { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
+          { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
+          { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
+          { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
+          { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
+          { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
+          { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
+          { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
+          { code: 8, name: "Tuyên Quang", full_name: "Tỉnh Tuyên Quang" },
+          { code: 10, name: "Lào Cai", full_name: "Tỉnh Lào Cai" },
+          { code: 11, name: "Điện Biên", full_name: "Tỉnh Điện Biên" },
+          { code: 12, name: "Lai Châu", full_name: "Tỉnh Lai Châu" },
+          { code: 14, name: "Sơn La", full_name: "Tỉnh Sơn La" },
+          { code: 15, name: "Yên Bái", full_name: "Tỉnh Yên Bái" },
+          { code: 17, name: "Hoà Bình", full_name: "Tỉnh Hoà Bình" },
+          { code: 19, name: "Thái Nguyên", full_name: "Tỉnh Thái Nguyên" },
+          { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
+          { code: 24, name: "Bắc Giang", full_name: "Tỉnh Bắc Giang" },
+          { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
+          { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
+          { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
+          { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
+          { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
+          { code: 36, name: "Thái Bình", full_name: "Tỉnh Thái Bình" },
+          { code: 37, name: "Hà Nam", full_name: "Tỉnh Hà Nam" },
+          { code: 38, name: "Nam Định", full_name: "Tỉnh Nam Định" },
+          { code: 40, name: "Ninh Bình", full_name: "Tỉnh Ninh Bình" },
+          { code: 42, name: "Thanh Hóa", full_name: "Tỉnh Thanh Hóa" },
+          { code: 44, name: "Nghệ An", full_name: "Tỉnh Nghệ An" },
+          { code: 45, name: "Hà Tĩnh", full_name: "Tỉnh Hà Tĩnh" },
+          { code: 46, name: "Quảng Bình", full_name: "Tỉnh Quảng Bình" },
+          { code: 49, name: "Quảng Trị", full_name: "Tỉnh Quảng Trị" },
+          { code: 51, name: "Thừa Thiên Huế", full_name: "Tỉnh Thừa Thiên Huế" },
+          { code: 52, name: "Quảng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
+          { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
+          { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
+          { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
+          { code: 60, name: "Bình Thuận", full_name: "Tỉnh Bình Thuận" },
+          { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
+          { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
+          { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
+          { code: 67, name: "Đắk Nông", full_name: "Tỉnh Đắk Nông" },
+          { code: 68, name: "Lâm Đồng", full_name: "Tỉnh Lâm Đồng" },
+          { code: 70, name: "Bình Phước", full_name: "Tỉnh Bình Phước" },
+          { code: 72, name: "Tây Ninh", full_name: "Tỉnh Tây Ninh" },
+          { code: 74, name: "Bình Dương", full_name: "Tỉnh Bình Dương" },
+          { code: 75, name: "Đồng Nai", full_name: "Tỉnh Đồng Nai" },
+          { code: 77, name: "Bà Rịa - Vũng Tàu", full_name: "Tỉnh Bà Rịa - Vũng Tàu" },
+          { code: 80, name: "Long An", full_name: "Tỉnh Long An" },
+          { code: 82, name: "Tiền Giang", full_name: "Tỉnh Tiền Giang" },
+          { code: 83, name: "Bến Tre", full_name: "Tỉnh Bến Tre" },
+          { code: 84, name: "Trà Vinh", full_name: "Tỉnh Trà Vinh" },
+          { code: 86, name: "Vĩnh Long", full_name: "Tỉnh Vĩnh Long" },
+          { code: 87, name: "Đồng Tháp", full_name: "Tỉnh Đồng Tháp" },
+          { code: 89, name: "An Giang", full_name: "Tỉnh An Giang" },
+          { code: 91, name: "Kiên Giang", full_name: "Tỉnh Kiên Giang" },
+          { code: 93, name: "Hậu Giang", full_name: "Tỉnh Hậu Giang" },
+          { code: 94, name: "Sóc Trăng", full_name: "Tỉnh Sóc Trăng" },
+          { code: 95, name: "Bạc Liêu", full_name: "Tỉnh Bạc Liêu" },
+          { code: 96, name: "Cà Mau", full_name: "Tỉnh Cà Mau" },
         ]);
       }
     } finally {
@@ -509,7 +564,7 @@ export default function ProfilePage() {
 
   const handleChangePassword = async () => {
     if (passwordData.new_password !== passwordData.confirm_password) {
-      toast.error("Mật khẩu xác nhận không kh��p");
+      toast.error("Mật khẩu xác nhận không khớp");
       return;
     }
 
