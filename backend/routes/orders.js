@@ -289,10 +289,7 @@ router.post(
         shipping_address,
         billing_address,
         payment_method,
-        shipping_method = "standard",
         notes,
-        shipping_fee = 0,
-        discount_amount = 0,
       } = req.body;
 
       // Start transaction
