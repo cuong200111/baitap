@@ -777,8 +777,6 @@ router.post(
         shipping_address,
         billing_address,
         notes,
-        shipping_fee = 0,
-        discount_amount = 0,
       } = req.body;
 
       // Start transaction
