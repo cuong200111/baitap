@@ -12,7 +12,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { X, Upload, Search, Image as ImageIcon } from "lucide-react";
-import { mediaApi, getMediaUrl } from "@/config";
+import { mediaApi, getMediaUrl, MediaFile } from "@/config";
 import { toast } from "sonner";
 
 interface MediaFile {
