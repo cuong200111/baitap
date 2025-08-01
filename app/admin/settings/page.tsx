@@ -391,13 +391,16 @@ export default function SettingsPage() {
   };
 
   const loadSeoSettings = async () => {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
     try {
-      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`,{headers});
+      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
+        headers,
+      });
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
@@ -584,11 +587,12 @@ export default function SettingsPage() {
   const handleSaveSeoSettings = async () => {
     try {
       setSaving(true);
-       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
       const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
         method: "POST",
         headers,
@@ -612,15 +616,16 @@ export default function SettingsPage() {
 
   const generateSitemap = async () => {
     try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
       setSitemapGenerating(true);
       const response = await fetch(`${API_DOMAIN}/api/admin/generate-sitemap`, {
         method: "POST",
-        headers
+        headers,
       });
 
       const data = await response.json();
@@ -639,15 +644,16 @@ export default function SettingsPage() {
 
   const generateRobotsTxt = async () => {
     try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
       setRobotsGenerating(true);
       const response = await fetch(`${API_DOMAIN}/api/admin/generate-robots`, {
         method: "POST",
-        headers
+        headers,
       });
 
       const data = await response.json();
