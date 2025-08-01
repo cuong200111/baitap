@@ -269,6 +269,10 @@ router.put(
       .optional()
       .isMobilePhone("vi-VN")
       .withMessage("Invalid phone number"),
+    body("province_name").optional().trim(),
+    body("district_name").optional().trim(),
+    body("ward_name").optional().trim(),
+    body("address").optional().trim(),
   ],
   async (req, res) => {
     try {
@@ -281,8 +285,16 @@ router.put(
         });
       }
 
-      const { full_name, phone } = req.body;
+      const {
+        full_name,
+        phone,
+        province_name,
+        district_name,
+        ward_name,
+        address
+      } = req.body;
 
+      // Update basic user profile
       const updateFields = [];
       const updateValues = [];
 
@@ -296,19 +308,79 @@ router.put(
         updateValues.push(phone);
       }
 
-      if (updateFields.length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "No fields to update",
-        });
+      // Update user table if there are basic fields to update
+      if (updateFields.length > 0) {
+        updateValues.push(req.user.id);
+        await executeQuery(
+          `UPDATE users SET ${updateFields.join(", ")} WHERE id = ?`,
+          updateValues,
+        );
       }
 
-      updateValues.push(req.user.id);
+      // Update address in customer_addresses table if address data is provided
+      if (province_name || district_name || ward_name || address) {
+        try {
+          // Check if user already has an address
+          const existingAddresses = await executeQuery(
+            "SELECT * FROM customer_addresses WHERE user_id = ?",
+            [req.user.id],
+          );
 
-      await executeQuery(
-        `UPDATE users SET ${updateFields.join(", ")} WHERE id = ?`,
-        updateValues,
-      );
+          const addressData = {
+            full_name: full_name || req.user.full_name,
+            phone: phone || req.user.phone,
+            address_line_1: address || "Địa chỉ chi tiết",
+            address_line_2: null,
+            ward: ward_name || "",
+            district: district_name || "",
+            city: province_name || "",
+            is_default: true,
+          };
+
+          if (existingAddresses.length > 0) {
+            // UPDATE existing address
+            await executeQuery(
+              `UPDATE customer_addresses SET
+               full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?,
+               ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
+               WHERE user_id = ?`,
+              [
+                addressData.full_name,
+                addressData.phone,
+                addressData.address_line_1,
+                addressData.address_line_2,
+                addressData.ward,
+                addressData.district,
+                addressData.city,
+                addressData.is_default ? 1 : 0,
+                req.user.id,
+              ],
+            );
+          } else {
+            // INSERT new address
+            await executeQuery(
+              `INSERT INTO customer_addresses
+               (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+              [
+                req.user.id,
+                "default",
+                addressData.full_name,
+                addressData.phone,
+                addressData.address_line_1,
+                addressData.address_line_2,
+                addressData.ward,
+                addressData.district,
+                addressData.city,
+                addressData.is_default ? 1 : 0,
+              ],
+            );
+          }
+        } catch (addressError) {
+          console.error("Error updating address:", addressError);
+          // Continue without failing the entire update
+        }
+      }
 
       // Get updated user
       const updatedUser = await executeQuery(
@@ -316,10 +388,38 @@ router.put(
         [req.user.id],
       );
 
+      // Get updated address data
+      let userAddress = null;
+      try {
+        const addresses = await executeQuery(
+          "SELECT * FROM customer_addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC LIMIT 1",
+          [req.user.id],
+        );
+        if (addresses.length > 0) {
+          userAddress = addresses[0];
+        }
+      } catch (addressError) {
+        console.error("Error fetching updated address:", addressError);
+      }
+
+      // Merge user data with address data
+      const profileData = { ...updatedUser[0] };
+
+      // Add address data if available
+      if (userAddress) {
+        profileData.address = userAddress.address_line_1 || "";
+        profileData.province_name = userAddress.city || "";
+        profileData.district_name = userAddress.district || "";
+        profileData.ward_name = userAddress.ward || "";
+        profileData.address_line_2 = userAddress.address_line_2 || "";
+        profileData.address_full_name = userAddress.full_name || "";
+        profileData.address_phone = userAddress.phone || "";
+      }
+
       res.json({
         success: true,
         message: "Profile updated successfully",
-        data: updatedUser[0],
+        data: profileData,
       });
     } catch (error) {
       console.error("Update profile error:", error);
