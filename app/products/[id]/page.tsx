@@ -91,7 +91,7 @@ export default function ProductDetailPage() {
 
     setAddingToCart(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/cart`, {
+      const response = await fetch(`${API_DOMAIN}/api/cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
