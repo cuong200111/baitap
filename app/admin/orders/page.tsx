@@ -31,6 +31,7 @@ import { Search, Eye, Package, Plus } from "lucide-react";
 import Image from "next/image";
 import { formatPrice, getMediaUrl } from "@/config";
 import { toast } from "sonner";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface Order {
   id: number;
