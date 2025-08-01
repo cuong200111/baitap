@@ -20,6 +20,18 @@ router.post("/ensure-categories", debugController.ensureCategories);
 router.get("/featured-products", debugController.testFeaturedProducts);
 router.post("/add-sample-products", debugController.addSampleProducts);
 
+// Migration endpoints
+router.post("/migrate-addresses", async (req, res) => {
+  try {
+    const { createCustomerAddressesTable } = await import("../database/migrate-addresses.js");
+    await createCustomerAddressesTable();
+    res.json({ success: true, message: "Customer addresses table created successfully" });
+  } catch (error) {
+    console.error("Migration error:", error);
+    res.status(500).json({ success: false, message: "Migration failed", error: error.message });
+  }
+});
+
 // Reviews testing
 router.post("/add-sample-reviews", debugController.addSampleReviews);
 
