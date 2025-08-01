@@ -115,7 +115,7 @@ export default function AdminOrdersPage() {
     try {
       setUpdating(orderId);
       const token = localStorage.getItem("token");
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await fetch(`${API_DOMAIN}/api/orders/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
