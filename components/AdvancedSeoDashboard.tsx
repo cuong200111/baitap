@@ -45,6 +45,7 @@ import {
   Share2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Domain } from "@/config";
 
 interface PerformanceMetrics {
   overallHealth: number;
