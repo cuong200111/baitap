@@ -1387,15 +1387,20 @@ export default function ProfilePage() {
         return;
       }
 
-      // Update basic profile info only
+      // Update profile info and address data in single request
       const updateData = {
         full_name: formData.full_name.trim(),
         phone: formData.phone.trim() || null,
+        // Add address data
+        province_name: addressData.province_name || "",
+        district_name: addressData.district_name || "",
+        ward_name: addressData.ward_name || "",
+        address: formData.address.trim() || "",
       };
 
       console.log("Updating profile with data:", updateData);
 
-      // Update profile
+      // Update profile (now includes address data)
       const response = await fetch(`${Domain}/api/auth/profile`, {
         method: "PUT",
         headers: {
@@ -1415,16 +1420,21 @@ export default function ProfilePage() {
       if (data.success) {
         setProfile(data.data);
 
-        // Save address to customer_addresses table
-        try {
-          await saveAddress();
-          toast.success("Cập nhật thông tin và địa chỉ thành công");
-        } catch (addressError) {
-          console.error("Address save error:", addressError);
-          toast.success(
-            "Cập nhật thông tin thành công, nhưng có lỗi khi lưu địa chỉ",
-          );
-        }
+        // Update local form data with returned data
+        setFormData({
+          full_name: data.data.full_name || "",
+          phone: data.data.phone || "",
+          address: data.data.address || "",
+        });
+
+        // Update address data with returned data
+        setAddressData({
+          province_name: data.data.province_name || "",
+          district_name: data.data.district_name || "",
+          ward_name: data.data.ward_name || "",
+        });
+
+        toast.success("Cập nhật thông tin và địa chỉ thành công");
 
         // Refresh user context
         if (refreshUser) {
@@ -1445,7 +1455,7 @@ export default function ProfilePage() {
 
       // Handle specific error types
       if (error.message?.includes("body stream already read")) {
-        toast.error("Lỗi hệ thống. Vui lòng tải lại trang và thử lại");
+        toast.error("L��i hệ thống. Vui lòng tải lại trang và thử lại");
       } else if (
         error.message?.includes("Failed to fetch") ||
         error.message?.includes("NetworkError")
