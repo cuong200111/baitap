@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { formatPrice } from "@/config";
 import { toast } from "sonner";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SalesData {
   overview: {
@@ -838,7 +839,7 @@ export default function ReportsPage() {
                       </div>
                     )) || (
                     <div className="text-center py-4 text-gray-500">
-                      Không có dữ liệu khách hàng
+                      Không có dữ li���u khách hàng
                     </div>
                   )}
                 </div>
