@@ -226,6 +226,19 @@ export default function GuestCheckoutPage() {
         // Clear guest purchase data
         localStorage.removeItem("guest_purchase");
 
+        // Clear session cart if exists
+        const sessionId = localStorage.getItem("session_id");
+        if (sessionId) {
+          try {
+            await apiWrappers.cart.clear({ session_id: sessionId });
+          } catch (e) {
+            console.log("Session cart clear error:", e);
+          }
+        }
+
+        // Trigger cart update event
+        window.dispatchEvent(new Event("cartUpdated"));
+
         // Redirect to thank you page using correct response structure
         const orderId = data.data.order.id;
         const orderNumber = data.data.order_number;
