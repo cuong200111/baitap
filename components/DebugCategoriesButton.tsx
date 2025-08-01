@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 export function DebugCategoriesButton() {
   const [result, setResult] = useState<any>(null);
