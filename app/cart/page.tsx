@@ -106,7 +106,12 @@ export default function CartPage() {
             const quantity = parsedCart[productId];
             if (quantity > 0) {
               try {
-                const response = await fetch(`/api/products/${productId}`);
+                const token = localStorage.getItem("token");
+                const headers: HeadersInit = {
+                  "Content-Type": "application/json",
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                };
+                const response = await fetch(`${Domain}/api/products/${productId}`, { headers });
                 const data = await response.json();
 
                 if (data.success && data.data) {
