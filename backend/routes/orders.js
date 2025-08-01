@@ -115,15 +115,11 @@ router.get("/", authenticateToken, async (req, res) => {
       offset,
     ]);
 
-    // Parse JSON fields
+    // Format orders
     const formattedOrders = orders.map((order) => ({
       ...order,
-      billing_address: order.billing_address
-        ? JSON.parse(order.billing_address)
-        : null,
-      shipping_address: order.shipping_address
-        ? JSON.parse(order.shipping_address)
-        : null,
+      billing_address: order.billing_address,
+      shipping_address: order.shipping_address,
     }));
 
     const totalPages = Math.ceil(totalOrders / parseInt(limit));
@@ -216,15 +212,11 @@ router.get("/:identifier", authenticateToken, async (req, res) => {
       [order.id],
     );
 
-    // Parse JSON fields and format response
+    // Format response
     const formattedOrder = {
       ...order,
-      billing_address: order.billing_address
-        ? JSON.parse(order.billing_address)
-        : null,
-      shipping_address: order.shipping_address
-        ? JSON.parse(order.shipping_address)
-        : null,
+      billing_address: order.billing_address,
+      shipping_address: order.shipping_address,
       items: orderItems.map((item) => ({
         ...item,
         product_images: item.product_images
