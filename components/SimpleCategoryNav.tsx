@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface Category {
   id: number;
