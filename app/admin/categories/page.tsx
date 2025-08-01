@@ -173,6 +173,8 @@ export default function CategoriesPage() {
       if (response.success) {
         toast.success("Xóa danh mục thành công");
         loadCategories();
+      } else {
+        toast.error(response.message || "Không thể xóa danh mục");
       }
     } catch (error: any) {
       console.error("Failed to delete category:", error);
@@ -490,7 +492,7 @@ export default function CategoriesPage() {
                       <FolderTree className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                       <p>Chưa có danh mục nào</p>
                       <p className="text-sm">
-                        Thêm danh mục đầu tiên để bắt đầu
+                        Thêm danh mục đ��u tiên để bắt đầu
                       </p>
                     </div>
                   </TableCell>
