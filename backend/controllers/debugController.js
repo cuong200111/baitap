@@ -6,7 +6,7 @@ export const debugController = {
   async testAuth(req, res) {
     try {
       const authHeader = req.headers.authorization;
-      
+
       if (!authHeader) {
         return res.json({
           success: true,
@@ -26,25 +26,27 @@ export const debugController = {
 
       // Verify token
       const jwt = await import("jsonwebtoken");
-      const JWT_SECRET = process.env.JWT_SECRET || "zoxvn_jwt_secret_key_very_secure_2024_production_ready";
-      
+      const JWT_SECRET =
+        process.env.JWT_SECRET ||
+        "zoxvn_jwt_secret_key_very_secure_2024_production_ready";
+
       try {
         const decoded = jwt.verify(token, JWT_SECRET);
         res.json({
           success: true,
           message: "Token is valid",
-          data: { 
-            authenticated: true, 
-            user: decoded 
+          data: {
+            authenticated: true,
+            user: decoded,
           },
         });
       } catch (jwtError) {
         res.json({
           success: true,
           message: "Invalid token",
-          data: { 
-            authenticated: false, 
-            error: jwtError.message 
+          data: {
+            authenticated: false,
+            error: jwtError.message,
           },
         });
       }
@@ -62,7 +64,7 @@ export const debugController = {
     try {
       // Test basic connection
       const testQuery = await executeQuery("SELECT 1 as test");
-      
+
       // Count tables
       const tables = await executeQuery(`
         SELECT table_name 
@@ -73,10 +75,12 @@ export const debugController = {
       // Test each main table
       const tableChecks = {};
       const mainTables = ["users", "products", "categories", "orders"];
-      
+
       for (const table of mainTables) {
         try {
-          const count = await executeQuery(`SELECT COUNT(*) as count FROM ${table}`);
+          const count = await executeQuery(
+            `SELECT COUNT(*) as count FROM ${table}`,
+          );
           tableChecks[table] = {
             exists: true,
             count: count[0]?.count || 0,
@@ -112,14 +116,14 @@ export const debugController = {
   async testCategories(req, res) {
     try {
       const categories = await executeQuery(
-        "SELECT id, name, slug, parent_id, is_active FROM categories ORDER BY sort_order"
+        "SELECT id, name, slug, parent_id, is_active FROM categories ORDER BY sort_order",
       );
 
       const stats = {
         total: categories.length,
-        active: categories.filter(c => c.is_active).length,
-        root_categories: categories.filter(c => !c.parent_id).length,
-        sub_categories: categories.filter(c => c.parent_id).length,
+        active: categories.filter((c) => c.is_active).length,
+        root_categories: categories.filter((c) => !c.parent_id).length,
+        sub_categories: categories.filter((c) => c.parent_id).length,
       };
 
       res.json({
@@ -142,7 +146,7 @@ export const debugController = {
   async getRawCategories(req, res) {
     try {
       const categories = await executeQuery("SELECT * FROM categories");
-      
+
       res.json({
         success: true,
         data: categories,
@@ -160,7 +164,7 @@ export const debugController = {
   async getSimpleCategories(req, res) {
     try {
       const categories = await executeQuery(
-        "SELECT id, name, slug FROM categories WHERE is_active = 1 ORDER BY name"
+        "SELECT id, name, slug FROM categories WHERE is_active = 1 ORDER BY name",
       );
 
       res.json({
@@ -179,9 +183,13 @@ export const debugController = {
   // Count categories
   async countCategories(req, res) {
     try {
-      const count = await executeQuery("SELECT COUNT(*) as total FROM categories");
-      const activeCount = await executeQuery("SELECT COUNT(*) as active FROM categories WHERE is_active = 1");
-      
+      const count = await executeQuery(
+        "SELECT COUNT(*) as total FROM categories",
+      );
+      const activeCount = await executeQuery(
+        "SELECT COUNT(*) as active FROM categories WHERE is_active = 1",
+      );
+
       res.json({
         success: true,
         data: {
@@ -201,8 +209,10 @@ export const debugController = {
   // Ensure categories exist
   async ensureCategories(req, res) {
     try {
-      const existing = await executeQuery("SELECT COUNT(*) as count FROM categories");
-      
+      const existing = await executeQuery(
+        "SELECT COUNT(*) as count FROM categories",
+      );
+
       if (existing[0]?.count > 0) {
         return res.json({
           success: true,
@@ -213,9 +223,21 @@ export const debugController = {
 
       // Create default categories
       const defaultCategories = [
-        { name: "Laptop", slug: "laptop", description: "Laptop văn phòng và gaming" },
-        { name: "PC Gaming", slug: "pc-gaming", description: "Máy tính để bàn gaming" },
-        { name: "Linh kiện", slug: "linh-kien", description: "Linh kiện máy tính" },
+        {
+          name: "Laptop",
+          slug: "laptop",
+          description: "Laptop văn phòng và gaming",
+        },
+        {
+          name: "PC Gaming",
+          slug: "pc-gaming",
+          description: "Máy tính để bàn gaming",
+        },
+        {
+          name: "Linh kiện",
+          slug: "linh-kien",
+          description: "Linh kiện máy tính",
+        },
         { name: "Phụ kiện", slug: "phu-kien", description: "Phụ kiện gaming" },
       ];
 
@@ -224,7 +246,7 @@ export const debugController = {
         await executeQuery(
           `INSERT INTO categories (name, slug, description, is_active, created_at) 
            VALUES (?, ?, ?, 1, NOW())`,
-          [category.name, category.slug, category.description]
+          [category.name, category.slug, category.description],
         );
         created++;
       }
@@ -247,7 +269,7 @@ export const debugController = {
   async testFeaturedProducts(req, res) {
     try {
       const products = await executeQuery(
-        "SELECT id, name, price, sale_price, featured FROM products WHERE featured = 1 LIMIT 10"
+        "SELECT id, name, price, sale_price, featured FROM products WHERE featured = 1 LIMIT 10",
       );
 
       res.json({
@@ -303,7 +325,7 @@ export const debugController = {
         // Check if product already exists
         const existing = await executeQuery(
           "SELECT id FROM products WHERE slug = ?",
-          [product.slug]
+          [product.slug],
         );
 
         if (existing.length === 0) {
@@ -319,7 +341,7 @@ export const debugController = {
               product.sale_price,
               product.featured,
               product.stock_quantity,
-            ]
+            ],
           );
           created++;
         }
@@ -344,7 +366,7 @@ export const debugController = {
     try {
       // Get products first
       const products = await executeQuery("SELECT id FROM products LIMIT 5");
-      
+
       if (products.length === 0) {
         return res.json({
           success: false,
@@ -377,7 +399,7 @@ export const debugController = {
             `INSERT INTO reviews 
              (product_id, rating, comment, reviewer_name, created_at) 
              VALUES (?, ?, ?, ?, NOW())`,
-            [product.id, review.rating, review.comment, review.reviewer_name]
+            [product.id, review.rating, review.comment, review.reviewer_name],
           );
           created++;
         }
@@ -402,7 +424,7 @@ export const debugController = {
     try {
       // Get a test user or create one
       let testUser = await executeQuery(
-        "SELECT id FROM users WHERE email = 'test@example.com'"
+        "SELECT id FROM users WHERE email = 'test@example.com'",
       );
 
       if (testUser.length === 0) {
@@ -410,7 +432,7 @@ export const debugController = {
         const userResult = await executeQuery(
           `INSERT INTO users (email, password, full_name, role, is_active, created_at) 
            VALUES ('test@example.com', ?, 'Test User', 'user', 1, NOW())`,
-          [hashedPassword]
+          [hashedPassword],
         );
         testUser = [{ id: userResult.insertId }];
       }
@@ -420,7 +442,7 @@ export const debugController = {
         `INSERT INTO orders 
          (user_id, status, total_amount, shipping_fee, customer_name, customer_email, customer_phone, shipping_address, created_at) 
          VALUES (?, 'pending', 500000, 30000, 'Test Customer', 'test@example.com', '0123456789', '123 Test Street, Hanoi', NOW())`,
-        [testUser[0].id]
+        [testUser[0].id],
       );
 
       res.json({
@@ -442,7 +464,7 @@ export const debugController = {
     try {
       // Get a test user or create one
       let testUser = await executeQuery(
-        "SELECT id FROM users WHERE email = 'test@example.com'"
+        "SELECT id FROM users WHERE email = 'test@example.com'",
       );
 
       if (testUser.length === 0) {
@@ -450,14 +472,14 @@ export const debugController = {
         const userResult = await executeQuery(
           `INSERT INTO users (email, password, full_name, role, is_active, created_at)
            VALUES ('test@example.com', ?, 'Test User', 'user', 1, NOW())`,
-          [hashedPassword]
+          [hashedPassword],
         );
         testUser = [{ id: userResult.insertId }];
       }
 
       // Get some products to add to order
       const products = await executeQuery(
-        "SELECT id, name, sku, price, sale_price, images FROM products WHERE status = 'active' LIMIT 3"
+        "SELECT id, name, sku, price, sale_price, images FROM products WHERE status = 'active' LIMIT 3",
       );
 
       if (products.length === 0) {
@@ -469,7 +491,9 @@ export const debugController = {
 
       // Generate order number
       const timestamp = Date.now().toString();
-      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const random = Math.floor(Math.random() * 1000)
+        .toString()
+        .padStart(3, "0");
       const orderNumber = `HD${timestamp.slice(-6)}${random}`;
 
       // Calculate total
@@ -493,7 +517,7 @@ export const debugController = {
             } catch (e) {
               return product.images || null;
             }
-          })()
+          })(),
         };
       });
 
@@ -502,7 +526,7 @@ export const debugController = {
         `INSERT INTO orders
          (order_number, user_id, status, payment_method, total_amount, customer_name, customer_email, customer_phone, shipping_address, created_at)
          VALUES (?, ?, 'pending', 'cod', ?, 'Test Customer', 'test@example.com', '0123456789', '123 Test Street, Hanoi, Vietnam', NOW())`,
-        [orderNumber, testUser[0].id, totalAmount]
+        [orderNumber, testUser[0].id, totalAmount],
       );
 
       const orderId = orderResult.insertId;
@@ -521,15 +545,15 @@ export const debugController = {
             item.quantity,
             item.unit_price,
             item.total_price,
-            item.product_image
-          ]
+            item.product_image,
+          ],
         );
       }
 
       // Create status history
       await executeQuery(
         "INSERT INTO order_status_history (order_id, status, comment) VALUES (?, 'pending', 'Test order created')",
-        [orderId]
+        [orderId],
       );
 
       res.json({
@@ -539,7 +563,7 @@ export const debugController = {
           order_id: orderId,
           order_number: orderNumber,
           total_amount: totalAmount,
-          items_count: orderItems.length
+          items_count: orderItems.length,
         },
       });
     } catch (error) {
@@ -647,7 +671,7 @@ export const debugController = {
       // Update order status
       await executeQuery(
         "UPDATE orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-        [status, parseInt(orderId)]
+        [status, parseInt(orderId)],
       );
 
       res.json({

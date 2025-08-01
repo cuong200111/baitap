@@ -153,7 +153,7 @@ router.get("/", authenticateToken, async (req, res) => {
             // Fallback to product_image if it exists
             return item.product_image ? [item.product_image] : [];
           } catch (e) {
-            console.warn('Error parsing product images:', e);
+            console.warn("Error parsing product images:", e);
             return item.product_image ? [item.product_image] : [];
           }
         })(),
@@ -175,7 +175,9 @@ router.get("/", authenticateToken, async (req, res) => {
 
     const totalPages = Math.ceil(totalOrders / parseInt(limit));
 
-    console.log(`📋 Orders API: Returning ${formattedOrders.length} orders, total: ${totalOrders}`);
+    console.log(
+      `📋 Orders API: Returning ${formattedOrders.length} orders, total: ${totalOrders}`,
+    );
 
     res.json({
       success: true,
