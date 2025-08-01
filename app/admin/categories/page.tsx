@@ -126,6 +126,9 @@ export default function CategoriesPage() {
         });
         if (response.success) {
           toast.success("Cập nhật danh mục thành công");
+        } else {
+          toast.error(response.message || "Không thể cập nhật danh mục");
+          return;
         }
       } else {
         const response = await apiWrappers.categories.create({
@@ -134,6 +137,9 @@ export default function CategoriesPage() {
         });
         if (response.success) {
           toast.success("Tạo danh mục thành công");
+        } else {
+          toast.error(response.message || "Không thể tạo danh mục");
+          return;
         }
       }
 
