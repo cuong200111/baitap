@@ -301,9 +301,14 @@ export default function CheckoutPage() {
         if (userId) {
           // Clear database cart for authenticated users
           try {
-            await fetch("/api/cart", {
+            const token = localStorage.getItem("token");
+            const headers: HeadersInit = {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            };
+            await fetch(`${Domain}/api/cart`, {
               method: "DELETE",
-              headers: { "Content-Type": "application/json" },
+              headers,
               body: JSON.stringify({ user_id: userId, clear_all: true }),
             });
           } catch (e) {
