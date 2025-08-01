@@ -118,9 +118,10 @@ export default function DebugAdminPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <Button onClick={testBackendHealth}>Test Backend Health</Button>
-            <Button onClick={testLogin}>Test Login</Button>
+            <Button onClick={testLogin}>Test Wrapper Login</Button>
+            <Button onClick={testDirectLogin}>Test Direct Login</Button>
             <Button onClick={testCategories}>Test Get Categories</Button>
             <Button onClick={testCreateCategory}>Test Create Category</Button>
           </div>
