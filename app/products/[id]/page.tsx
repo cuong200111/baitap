@@ -83,35 +83,51 @@ export default function ProductDetailPage() {
   const addToCart = async () => {
     if (!product) return;
 
-    if (!isAuthenticated || !user?.id) {
-      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào gi�� hàng");
-      router.push("/login?message=Vui lòng đăng nhập để sử dụng giỏ hàng");
-      return;
-    }
-
     setAddingToCart(true);
     try {
+      // Generate session ID for guest users if not logged in
+      let sessionId = null;
+      if (!isAuthenticated || !user?.id) {
+        sessionId = localStorage.getItem('session_id');
+        if (!sessionId) {
+          sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('session_id', sessionId);
+        }
+      }
+
+      const requestBody: any = {
+        product_id: product.id,
+        quantity: quantity,
+      };
+
+      if (isAuthenticated && user?.id) {
+        requestBody.user_id = user.id;
+      } else {
+        requestBody.session_id = sessionId;
+      }
+
       const response = await fetch(`${API_DOMAIN}/api/cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user.id,
-          product_id: product.id,
-          quantity: quantity,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok && data.success) {
         toast.success(`Đã thêm ${quantity} ${product.name} vào giỏ hàng`);
         window.dispatchEvent(new Event("cartUpdated"));
       } else {
-        toast.error(data.message || "Có lỗi xảy ra khi thêm vào giỏ hàng");
+        // Handle specific error messages from backend
+        if (data.message) {
+          toast.error(data.message);
+        } else {
+          toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
+        }
       }
     } catch (error) {
       console.error("Add to cart error:", error);
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
+      toast.error("Không thể kết nối đến server");
     } finally {
       setAddingToCart(false);
     }
@@ -135,7 +151,7 @@ export default function ProductDetailPage() {
 
         const data = await response.json();
 
-        if (data.success) {
+        if (response.ok && data.success) {
           router.push("/checkout");
         } else {
           toast.error(data.message || "Có lỗi xảy ra");
