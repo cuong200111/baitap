@@ -179,7 +179,12 @@ export default function CheckoutPage() {
         }
       } else {
         // For authenticated users, use API
-        const response = await fetch(`/api/cart?user_id=${userId}`);
+        const token = localStorage.getItem("token");
+        const headers: HeadersInit = {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        };
+        const response = await fetch(`${Domain}/api/cart?user_id=${userId}`, { headers });
         const data = await response.json();
 
         if (data.success) {
