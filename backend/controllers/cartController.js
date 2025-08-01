@@ -118,10 +118,14 @@ export const cartController = {
         });
       }
 
-      if (productData.stock_quantity < quantity) {
+      // Convert stock_quantity to number to ensure proper comparison
+      const availableStock = parseInt(productData.stock_quantity) || 0;
+      const requestedQuantity = parseInt(quantity) || 1;
+
+      if (availableStock < requestedQuantity) {
         return res.status(400).json({
           success: false,
-          message: "Insufficient stock",
+          message: `Insufficient stock. Available: ${availableStock}, Requested: ${requestedQuantity}`,
         });
       }
 
@@ -142,12 +146,13 @@ export const cartController = {
       if (existingItems.length > 0) {
         // Update existing item
         const existingItem = existingItems[0];
-        const newQuantity = existingItem.quantity + quantity;
+        const currentQuantity = parseInt(existingItem.quantity) || 0;
+        const newQuantity = currentQuantity + requestedQuantity;
 
-        if (newQuantity > productData.stock_quantity) {
+        if (newQuantity > availableStock) {
           return res.status(400).json({
             success: false,
-            message: "Total quantity exceeds available stock",
+            message: `Total quantity exceeds available stock. Current in cart: ${currentQuantity}, Adding: ${requestedQuantity}, Available: ${availableStock}`,
           });
         }
 
