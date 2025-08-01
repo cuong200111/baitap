@@ -250,4 +250,42 @@ export const apiWrappers = {
         method: "DELETE",
       }),
   },
+
+  // Orders API
+  orders: {
+    getAll: (params: Record<string, any> = {}) => {
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+      return apiCall(`/api/orders?${searchParams}`);
+    },
+
+    getById: (id: number) => apiCall(`/api/orders/${id}`),
+
+    create: (data: any) =>
+      apiCall("/api/orders", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+
+    createGuest: (data: any) =>
+      apiCall("/api/orders/guest", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+
+    update: (id: number, data: any) =>
+      apiCall(`/api/orders/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }),
+
+    delete: (id: number) =>
+      apiCall(`/api/orders/${id}`, {
+        method: "DELETE",
+      }),
+  },
 };
