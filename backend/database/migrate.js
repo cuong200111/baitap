@@ -1,4 +1,4 @@
-import { executeQuery, testConnection } from "./connection.js";
+import { executeQuery } from "./connection.js";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 
@@ -6,7 +6,7 @@ dotenv.config();
 
 const createTables = async () => {
   try {
-    console.log("🚀 Starting MySQL database migration...");
+    console.log("���� Starting MySQL database migration...");
 
     // Test connection first
     await testConnection();
