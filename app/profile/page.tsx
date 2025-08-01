@@ -290,7 +290,7 @@ export default function ProfilePage() {
             { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
             { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
             { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
-            { code: 4, name: "Long Biên", full_name: "Quận Long Biên", province_code: 1 },
+            { code: 4, name: "Long Biên", full_name: "Quận Long Bi��n", province_code: 1 },
             { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
             { code: 6, name: "Đống Đa", full_name: "Quận Đống Đa", province_code: 1 },
             { code: 7, name: "Hai Bà Trưng", full_name: "Quận Hai Bà Trưng", province_code: 1 },
@@ -328,8 +328,22 @@ export default function ProfilePage() {
             { code: 919, name: "Cái Răng", full_name: "Quận Cái Răng", province_code: 92 },
             { code: 923, name: "Thốt Nốt", full_name: "Quận Thốt Nốt", province_code: 92 },
           ],
+          26: [ // Khánh Hòa
+            { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
+            { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
+            { code: 262, name: "Cam Lâm", full_name: "Huyện Cam Lâm", province_code: 26 },
+            { code: 263, name: "Vạn Ninh", full_name: "Huyện Vạn Ninh", province_code: 26 },
+            { code: 264, name: "Ninh Hòa", full_name: "Thị xã Ninh Hòa", province_code: 26 },
+            { code: 265, name: "Khánh Vĩnh", full_name: "Huyện Khánh Vĩnh", province_code: 26 },
+            { code: 266, name: "Diên Khánh", full_name: "Huyện Diên Khánh", province_code: 26 },
+          ],
         };
-        setDistricts(fallbackDistricts[provinceCode] || []);
+        setDistricts(fallbackDistricts[provinceCode] || [
+          // Generic fallback for any province
+          { code: provinceCode * 1000 + 1, name: "Huyện/Quận 1", full_name: "Huyện/Quận 1", province_code: provinceCode },
+          { code: provinceCode * 1000 + 2, name: "Huyện/Quận 2", full_name: "Huyện/Quận 2", province_code: provinceCode },
+          { code: provinceCode * 1000 + 3, name: "Huyện/Quận 3", full_name: "Huyện/Quận 3", province_code: provinceCode },
+        ]);
       }
     } catch (error: any) {
       console.error("Failed to load districts:", error);
@@ -720,7 +734,7 @@ export default function ProfilePage() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle className="text-center">Ảnh đại diện</CardTitle>
+                <CardTitle className="text-center">Ảnh đ��i diện</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <div className="relative inline-block">
@@ -1075,7 +1089,7 @@ export default function ProfilePage() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="new_password">Mật khẩu mới</Label>
+                              <Label htmlFor="new_password">Mật kh���u mới</Label>
                               <Input
                                 id="new_password"
                                 type="password"
