@@ -181,7 +181,7 @@ export const apiWrappers = {
     }),
   },
 
-  // Media API (if exists)
+  // Media API
   media: {
     getAll: (params: Record<string, any> = {}) => {
       const searchParams = new URLSearchParams();
@@ -192,12 +192,12 @@ export const apiWrappers = {
       });
       return apiCall(`/api/media?${searchParams}`);
     },
-    
+
     upload: async (file: File, entityType: string = 'general') => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('entity_type', entityType);
-      
+
       // Use fetch directly for file upload to avoid forcing JSON headers
       const url = `${Domain}/api/media`;
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -208,12 +208,18 @@ export const apiWrappers = {
           body: formData,
           headers, // Do not set 'Content-Type' for FormData
         });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         return {
           ...data,
           status: response.status,
         };
       } catch (error: any) {
+        console.error('Media upload error:', error);
         return {
           success: false,
           message: error.message || 'Network error occurred',
@@ -221,12 +227,12 @@ export const apiWrappers = {
         };
       }
     },
-    
+
     update: (id: number, data: any) => apiCall(`/api/media/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     }),
-    
+
     delete: (id: number) => apiCall(`/api/media/${id}`, {
       method: 'DELETE',
     }),
