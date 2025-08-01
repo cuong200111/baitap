@@ -438,18 +438,61 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      // Set wards immediately (Vietnam wards data)
-      setWards([
+      // Vietnam wards mapping for specific districts
+      const wardsMapping: { [key: number]: any[] } = {
+        // Điện Biên Phủ (Điện Biên)
+        110: [
+          { code: 3556, name: "Him Lam", full_name: "Phường Him Lam", district_code: 110 },
+          { code: 3559, name: "Noong Bua", full_name: "Phường Noong Bua", district_code: 110 },
+          { code: 3562, name: "Tân Thanh", full_name: "Phường Tân Thanh", district_code: 110 },
+          { code: 3565, name: "Thanh Bình", full_name: "Phường Thanh Bình", district_code: 110 },
+          { code: 3568, name: "Nam Thanh", full_name: "Phường Nam Thanh", district_code: 110 },
+          { code: 3571, name: "Thanh Trường", full_name: "Phường Thanh Trường", district_code: 110 },
+        ],
+        // Ba Đình (Hà Nội)
+        1: [
+          { code: 1, name: "Phúc Xá", full_name: "Phường Phúc Xá", district_code: 1 },
+          { code: 4, name: "Trúc Bạch", full_name: "Phường Trúc Bạch", district_code: 1 },
+          { code: 6, name: "Vĩnh Phúc", full_name: "Phường Vĩnh Phúc", district_code: 1 },
+          { code: 7, name: "Cống Vị", full_name: "Phường Cống Vị", district_code: 1 },
+          { code: 8, name: "Liễu Giai", full_name: "Phường Liễu Giai", district_code: 1 },
+          { code: 10, name: "Nguyễn Trung Trực", full_name: "Phường Nguyễn Trung Trực", district_code: 1 },
+        ],
+        // Quận 1 (TP.HCM)
+        760: [
+          { code: 26734, name: "Tân Định", full_name: "Phường Tân Định", district_code: 760 },
+          { code: 26737, name: "Đa Kao", full_name: "Phường Đa Kao", district_code: 760 },
+          { code: 26740, name: "Bến Nghé", full_name: "Phường Bến Nghé", district_code: 760 },
+          { code: 26743, name: "Bến Thành", full_name: "Phường Bến Thành", district_code: 760 },
+          { code: 26746, name: "Nguyễn Thái Bình", full_name: "Phường Nguyễn Thái Bình", district_code: 760 },
+          { code: 26749, name: "Phạm Ngũ Lão", full_name: "Phường Phạm Ngũ Lão", district_code: 760 },
+        ],
+        // Tam Kỳ (Quảng Nam)
+        200: [
+          { code: 6859, name: "Tân Thạnh", full_name: "Phường Tân Thạnh", district_code: 200 },
+          { code: 6862, name: "Phước Hòa", full_name: "Phường Phước Hòa", district_code: 200 },
+          { code: 6865, name: "An Mỹ", full_name: "Phường An Mỹ", district_code: 200 },
+          { code: 6868, name: "Hòa Hương", full_name: "Phường Hòa Hương", district_code: 200 },
+          { code: 6871, name: "An Xuân", full_name: "Phường An Xuân", district_code: 200 },
+          { code: 6874, name: "An Sơn", full_name: "Phường An Sơn", district_code: 200 },
+        ],
+        // Nha Trang (Khánh Hòa)
+        260: [
+          { code: 9304, name: "Vĩnh Hải", full_name: "Phường Vĩnh Hải", district_code: 260 },
+          { code: 9307, name: "Vĩnh Hòa", full_name: "Phường Vĩnh Hòa", district_code: 260 },
+          { code: 9310, name: "Vĩnh Phước", full_name: "Phường Vĩnh Phước", district_code: 260 },
+          { code: 9313, name: "Ngọc Hiệp", full_name: "Phường Ngọc Hiệp", district_code: 260 },
+          { code: 9316, name: "Vĩnh Thọ", full_name: "Phường Vĩnh Thọ", district_code: 260 },
+          { code: 9319, name: "Xương Huân", full_name: "Phường Xương Huân", district_code: 260 },
+        ],
+      };
+
+      setWards(wardsMapping[districtCode] || [
         { code: 1, name: "Phường 1", full_name: "Phường 1", district_code: districtCode },
         { code: 2, name: "Phường 2", full_name: "Phường 2", district_code: districtCode },
         { code: 3, name: "Phường 3", full_name: "Phường 3", district_code: districtCode },
         { code: 4, name: "Phường 4", full_name: "Phường 4", district_code: districtCode },
         { code: 5, name: "Phường 5", full_name: "Phường 5", district_code: districtCode },
-        { code: 6, name: "Phường 6", full_name: "Phường 6", district_code: districtCode },
-        { code: 7, name: "Phường 7", full_name: "Phường 7", district_code: districtCode },
-        { code: 8, name: "Phường 8", full_name: "Phường 8", district_code: districtCode },
-        { code: 9, name: "Phường 9", full_name: "Phường 9", district_code: districtCode },
-        { code: 10, name: "Phường 10", full_name: "Phường 10", district_code: districtCode },
       ]);
     } catch (error: any) {
       console.error("Failed to load wards:", error);
@@ -882,7 +925,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <User className="h-5 w-5" />
-                      Thông tin cơ bản
+                      Th��ng tin cơ bản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
