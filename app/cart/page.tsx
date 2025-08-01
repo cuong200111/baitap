@@ -83,7 +83,7 @@ export default function CartPage() {
       }
     } catch (error) {
       console.error("Failed to load cart:", error);
-      toast.error("Có lỗi xảy ra khi tải giỏ hàng");
+      toast.error("Có l��i xảy ra khi tải giỏ hàng");
     } finally {
       setLoading(false);
     }
@@ -166,9 +166,14 @@ export default function CartPage() {
       setUpdating(cartId);
 
       if (isAuthenticated && user?.id) {
-        const response = await fetch("/api/cart", {
+        const token = localStorage.getItem("token");
+        const headers: HeadersInit = {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        };
+        const response = await fetch(`${Domain}/api/cart`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers,
           body: JSON.stringify({ cart_id: cartId, quantity: newQuantity }),
         });
 
