@@ -202,7 +202,7 @@ export default function ReportsPage() {
 
       // Load products data
       try {
-        const productsResponse = await fetch("/api/admin/reports/products", {
+        const productsResponse = await fetch(`${API_DOMAIN}/api/admin/reports/products`, {
           headers,
         });
 
@@ -222,7 +222,7 @@ export default function ReportsPage() {
 
       // Load customers data
       try {
-        const customersResponse = await fetch("/api/admin/reports/customers", {
+        const customersResponse = await fetch(`${API_DOMAIN}/api/admin/reports/customers`, {
           headers,
         });
 
@@ -839,7 +839,7 @@ export default function ReportsPage() {
                       </div>
                     )) || (
                     <div className="text-center py-4 text-gray-500">
-                      Không có dữ li���u khách hàng
+                      Không có dữ liệu khách hàng
                     </div>
                   )}
                 </div>
