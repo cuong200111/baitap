@@ -28,6 +28,7 @@ import seoRoutes from "./routes/seo.js";
 import utilsRoutes from "./routes/utils.js";
 import configRoutes from "./routes/config.js";
 import sitemapRouter from "./routes/sitemap.js";
+import addressesRoutes from "./routes/addresses.js";
 dotenv.config();
 
 const app = express();
