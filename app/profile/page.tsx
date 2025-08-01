@@ -130,8 +130,8 @@ export default function ProfilePage() {
       return;
     }
     loadProfile();
-    // Only load provinces if user switches to API mode
-    // Default to manual mode, so no need to load provinces immediately
+    // Load provinces immediately for API mode functionality
+    loadProvinces();
   }, [user, router]);
 
   const loadProfile = async () => {
