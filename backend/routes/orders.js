@@ -344,7 +344,7 @@ router.post(
           }
         }
 
-        const totalAmount = subtotal + shipping_fee - discount_amount;
+        const totalAmount = subtotal;
 
         // Generate order number
         const orderNumber = generateOrderNumber();
@@ -833,7 +833,7 @@ router.post(
           }
         }
 
-        const totalAmount = subtotal + shipping_fee - discount_amount;
+        const totalAmount = subtotal;
 
         // Generate order number
         const orderNumber = generateOrderNumber();
