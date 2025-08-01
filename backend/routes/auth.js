@@ -204,9 +204,47 @@ router.get("/profile", authenticateToken, async (req, res) => {
       [req.user.id],
     );
 
+    if (!user.length) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const userData = user[0];
+
+    // Get user address from customer_addresses table
+    let userAddress = null;
+    try {
+      const addresses = await executeQuery(
+        "SELECT * FROM customer_addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC LIMIT 1",
+        [req.user.id],
+      );
+      if (addresses.length > 0) {
+        userAddress = addresses[0];
+      }
+    } catch (addressError) {
+      console.error("Error fetching user address:", addressError);
+      // Continue without address data if table doesn't exist
+    }
+
+    // Merge user data with address data
+    const profileData = { ...userData };
+
+    // Add address data if available
+    if (userAddress) {
+      profileData.address = userAddress.address_line_1 || "";
+      profileData.province_name = userAddress.city || "";
+      profileData.district_name = userAddress.district || "";
+      profileData.ward_name = userAddress.ward || "";
+      profileData.address_line_2 = userAddress.address_line_2 || "";
+      profileData.address_full_name = userAddress.full_name || "";
+      profileData.address_phone = userAddress.phone || "";
+    }
+
     res.json({
       success: true,
-      data: user[0],
+      data: profileData,
     });
   } catch (error) {
     console.error("Profile error:", error);
