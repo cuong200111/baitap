@@ -116,6 +116,11 @@ export const cartController = {
       }
 
       const productData = product[0];
+      console.log(`[DEBUG] Product ${product_id} data:`, {
+        stock_quantity: productData.stock_quantity,
+        status: productData.status,
+        type: typeof productData.stock_quantity
+      });
 
       if (productData.status !== "active") {
         return res.status(400).json({
@@ -124,9 +129,15 @@ export const cartController = {
         });
       }
 
-      // Convert stock_quantity to number to ensure proper comparison
-      const availableStock = parseInt(productData.stock_quantity) || 0;
-      const requestedQuantity = parseInt(quantity) || 1;
+      // Convert stock_quantity to number with proper null handling
+      const availableStock = productData.stock_quantity == null ? 0 : Math.max(0, parseInt(productData.stock_quantity) || 0);
+      const requestedQuantity = Math.max(1, parseInt(quantity) || 1);
+
+      console.log(`[DEBUG] Stock check:`, {
+        availableStock,
+        requestedQuantity,
+        hasStock: availableStock >= requestedQuantity
+      });
 
       if (availableStock < requestedQuantity) {
         return res.status(400).json({
@@ -153,8 +164,16 @@ export const cartController = {
       if (existingItems.length > 0) {
         // Update existing item
         const existingItem = existingItems[0];
-        const currentQuantity = parseInt(existingItem.quantity) || 0;
+        const currentQuantity = Math.max(0, parseInt(existingItem.quantity) || 0);
         const newQuantity = currentQuantity + requestedQuantity;
+
+        console.log(`[DEBUG] Updating existing cart item:`, {
+          currentQuantity,
+          requestedQuantity,
+          newQuantity,
+          availableStock,
+          willExceed: newQuantity > availableStock
+        });
 
         if (newQuantity > availableStock) {
           return res.status(400).json({
