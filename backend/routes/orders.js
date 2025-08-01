@@ -18,6 +18,15 @@ const generateOrderNumber = () => {
   return `HD${timestamp.slice(-6)}${random}`;
 };
 
+// Helper function to safely parse product images
+const safeParseImages = (images) => {
+  try {
+    return images ? JSON.parse(images)[0] : null;
+  } catch (e) {
+    return images || null;
+  }
+};
+
 // Get orders (Admin: all orders, User: own orders)
 router.get("/", authenticateToken, async (req, res) => {
   try {
