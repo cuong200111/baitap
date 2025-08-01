@@ -199,10 +199,9 @@ export default function ProfilePage() {
     } catch (error: any) {
       console.error("Failed to load provinces:", error);
 
-      // Only show error toast if it's not an abort error
-      if (error.name !== "AbortError") {
-        // Set fallback provinces for common areas
-        setProvinces([
+      // Always provide fallback provinces data
+      // Set fallback provinces for common areas
+      setProvinces([
           { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
           { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
           { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
@@ -267,7 +266,6 @@ export default function ProfilePage() {
           { code: 95, name: "Bạc Liêu", full_name: "Tỉnh Bạc Liêu" },
           { code: 96, name: "Cà Mau", full_name: "Tỉnh Cà Mau" },
         ]);
-      }
     } finally {
       setLoadingLocations(false);
     }
