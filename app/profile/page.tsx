@@ -249,7 +249,7 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       const response = await fetch(
-        `/api/locations?type=wards&district_code=${districtCode}`,
+        `${Domain}/api/locations?type=wards&district_code=${districtCode}`,
       );
 
       const data = await response.json();
