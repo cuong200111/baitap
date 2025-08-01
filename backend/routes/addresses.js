@@ -4,7 +4,7 @@ import { executeQuery } from "../database/connection.js";
 
 const router = express.Router();
 
-// Get all addresses for current user
+// Get address for current user (each user has only one address)
 router.get("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
