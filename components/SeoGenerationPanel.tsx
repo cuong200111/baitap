@@ -43,9 +43,8 @@ export default function SeoGenerationPanel() {
   const generateSitemap = async () => {
     setGeneratingSitemap(true);
     try {
-      const response = await fetch("/api/admin/generate-sitemap", {
+      const response = await authenticatedFetch(`${Domain}/api/admin/generate-sitemap`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
 
@@ -131,7 +130,7 @@ export default function SeoGenerationPanel() {
           SEO Files Generation
         </CardTitle>
         <p className="text-sm text-gray-600">
-          Tự động tạo sitemap.xml và robots.txt cho website của bạn
+          Tự đ��ng tạo sitemap.xml và robots.txt cho website của bạn
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
