@@ -42,6 +42,11 @@ export async function GET(request: NextRequest) {
           role: "admin",
           is_active: 1,
           created_at: new Date().toISOString(),
+          // Add empty address fields for consistency
+          address: "",
+          province_name: "",
+          district_name: "",
+          ward_name: "",
         },
       ];
     }
