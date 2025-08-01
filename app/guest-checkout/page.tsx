@@ -78,7 +78,9 @@ export default function GuestCheckoutPage() {
       // Try to load from session cart first
       const sessionId = localStorage.getItem("session_id");
       if (sessionId) {
-        const cartResponse = await apiWrappers.cart.getAll({ session_id: sessionId });
+        const cartResponse = await apiWrappers.cart.getAll({
+          session_id: sessionId,
+        });
         if (cartResponse.success && cartResponse.data?.items?.length > 0) {
           // Convert cart items to guest purchase format
           const cartItems = cartResponse.data.items;
@@ -88,20 +90,22 @@ export default function GuestCheckoutPage() {
             const guestPurchaseData: GuestPurchase = {
               product_id: item.product_id,
               product_name: item.product_name,
-              sku: item.sku || '',
+              sku: item.sku || "",
               price: item.price,
               sale_price: item.sale_price,
               final_price: item.final_price,
               quantity: item.quantity,
               images: item.images || [],
-              total: item.total_price
+              total: item.total_price,
             };
             setGuestPurchase(guestPurchaseData);
             setLoading(false);
             return;
           } else {
             // Multiple items - redirect to regular checkout
-            toast.info("Có nhiều sản phẩm trong giỏ hàng, chuyển đến trang thanh toán thông thường");
+            toast.info(
+              "Có nhiều sản phẩm trong giỏ hàng, chuyển đến trang thanh toán thông thường",
+            );
             router.push("/checkout");
             return;
           }

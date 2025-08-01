@@ -119,7 +119,7 @@ export const cartController = {
       console.log(`[DEBUG] Product ${product_id} data:`, {
         stock_quantity: productData.stock_quantity,
         status: productData.status,
-        type: typeof productData.stock_quantity
+        type: typeof productData.stock_quantity,
       });
 
       if (productData.status !== "active") {
@@ -130,13 +130,16 @@ export const cartController = {
       }
 
       // Convert stock_quantity to number with proper null handling
-      const availableStock = productData.stock_quantity == null ? 0 : Math.max(0, parseInt(productData.stock_quantity) || 0);
+      const availableStock =
+        productData.stock_quantity == null
+          ? 0
+          : Math.max(0, parseInt(productData.stock_quantity) || 0);
       const requestedQuantity = Math.max(1, parseInt(quantity) || 1);
 
       console.log(`[DEBUG] Stock check:`, {
         availableStock,
         requestedQuantity,
-        hasStock: availableStock >= requestedQuantity
+        hasStock: availableStock >= requestedQuantity,
       });
 
       if (availableStock < requestedQuantity) {
@@ -164,7 +167,10 @@ export const cartController = {
       if (existingItems.length > 0) {
         // Update existing item
         const existingItem = existingItems[0];
-        const currentQuantity = Math.max(0, parseInt(existingItem.quantity) || 0);
+        const currentQuantity = Math.max(
+          0,
+          parseInt(existingItem.quantity) || 0,
+        );
         const newQuantity = currentQuantity + requestedQuantity;
 
         console.log(`[DEBUG] Updating existing cart item:`, {
@@ -172,7 +178,7 @@ export const cartController = {
           requestedQuantity,
           newQuantity,
           availableStock,
-          willExceed: newQuantity > availableStock
+          willExceed: newQuantity > availableStock,
         });
 
         if (newQuantity > availableStock) {

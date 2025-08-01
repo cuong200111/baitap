@@ -160,7 +160,9 @@ export default function CheckoutPage() {
         const sessionId = localStorage.getItem("session_id");
         if (sessionId) {
           try {
-            const cartResponse = await apiWrappers.cart.getAll({ session_id: sessionId });
+            const cartResponse = await apiWrappers.cart.getAll({
+              session_id: sessionId,
+            });
             if (cartResponse.success && cartResponse.data?.items?.length > 0) {
               setCartItems(cartResponse.data.items);
               setSummary(cartResponse.data.summary);
