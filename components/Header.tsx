@@ -62,10 +62,13 @@ export function Header() {
         let retries = 2;
         while (retries > 0) {
           try {
-            const response = await fetch(`/api/cart?user_id=${user.id}`, {
-              headers: {
-                "Content-Type": "application/json",
-              },
+            const token = localStorage.getItem("token");
+            const headers: HeadersInit = {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            };
+            const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`, {
+              headers,
               signal: AbortSignal.timeout(10000), // 10 second timeout
             });
 
