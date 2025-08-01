@@ -210,7 +210,7 @@ export default function ProfilePage() {
           { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
           { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
           { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
-          { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
+          { code: 33, name: "Hải Ph��ng", full_name: "Thành phố Hải Phòng" },
           { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
           { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
           { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
@@ -226,7 +226,7 @@ export default function ProfilePage() {
           { code: 17, name: "Hoà Bình", full_name: "Tỉnh Hoà Bình" },
           { code: 19, name: "Thái Nguyên", full_name: "Tỉnh Thái Nguyên" },
           { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
-          { code: 24, name: "Bắc Giang", full_name: "Tỉnh Bắc Giang" },
+          { code: 24, name: "Bắc Giang", full_name: "Tỉnh B��c Giang" },
           { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
           { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
           { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
@@ -327,7 +327,7 @@ export default function ProfilePage() {
           { code: 111, name: "Mường Lay", full_name: "Thị xã Mường Lay", province_code: 11 },
           { code: 112, name: "Mường Nhé", full_name: "Huyện Mường Nhé", province_code: 11 },
           { code: 113, name: "Mường Chà", full_name: "Huyện Mường Chà", province_code: 11 },
-          { code: 114, name: "Tủa Chùa", full_name: "Huyện Tủa Chùa", province_code: 11 },
+          { code: 114, name: "Tủa Chùa", full_name: "Huyện T���a Chùa", province_code: 11 },
           { code: 115, name: "Tuần Giáo", full_name: "Huyện Tuần Giáo", province_code: 11 },
           { code: 116, name: "Điện Biên", full_name: "Huyện Điện Biên", province_code: 11 },
           { code: 117, name: "Điện Biên Đông", full_name: "Huyện Điện Biên Đông", province_code: 11 },
@@ -443,7 +443,7 @@ export default function ProfilePage() {
         { code: provinceCode * 1000 + 2, name: "Huyện/Quận 2", full_name: "Huyện/Quận 2", province_code: provinceCode },
         { code: provinceCode * 1000 + 3, name: "Huyện/Quận 3", full_name: "Huyện/Quận 3", province_code: provinceCode },
         { code: provinceCode * 1000 + 4, name: "Huyện/Quận 4", full_name: "Huyện/Quận 4", province_code: provinceCode },
-        { code: provinceCode * 1000 + 5, name: "Huyện/Qu���n 5", full_name: "Huyện/Quận 5", province_code: provinceCode },
+        { code: provinceCode * 1000 + 5, name: "Huyện/Quận 5", full_name: "Huyện/Quận 5", province_code: provinceCode },
       ]);
     } finally {
       setLoadingLocations(false);
@@ -454,7 +454,23 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      // Vietnam wards mapping for specific districts
+      // Call Vietnam API to get real wards
+      const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+
+      if (response.ok) {
+        const districtData = await response.json();
+        if (districtData && districtData.wards) {
+          setWards(districtData.wards.map((w: any) => ({
+            code: w.code,
+            name: w.name,
+            full_name: w.name,
+            district_code: districtCode,
+          })));
+          return;
+        }
+      }
+
+      // Fallback data if API fails
       const wardsMapping: { [key: number]: any[] } = {
         // Điện Biên Phủ (Điện Biên)
         110: [
@@ -462,7 +478,7 @@ export default function ProfilePage() {
           { code: 3559, name: "Noong Bua", full_name: "Phường Noong Bua", district_code: 110 },
           { code: 3562, name: "Tân Thanh", full_name: "Phường Tân Thanh", district_code: 110 },
           { code: 3565, name: "Thanh Bình", full_name: "Phường Thanh Bình", district_code: 110 },
-          { code: 3568, name: "Nam Thanh", full_name: "Phường Nam Thanh", district_code: 110 },
+          { code: 3568, name: "Nam Thanh", full_name: "Ph��ờng Nam Thanh", district_code: 110 },
           { code: 3571, name: "Thanh Trường", full_name: "Phường Thanh Trường", district_code: 110 },
         ],
         // Ba Đình (Hà Nội)
