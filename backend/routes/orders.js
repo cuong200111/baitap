@@ -96,21 +96,22 @@ router.get("/", authenticateToken, async (req, res) => {
     const countQuery = `
       SELECT COUNT(*) as total
       FROM orders o
-      JOIN users u ON o.user_id = u.id
+      LEFT JOIN users u ON o.user_id = u.id
       ${whereClause}
     `;
     const countResult = await executeQuery(countQuery, queryParams);
     const totalOrders = countResult[0].total;
 
-    // Get orders
+    // Get orders (including guest orders)
     const ordersQuery = `
-      SELECT 
+      SELECT
         o.*,
-        u.full_name as customer_name,
-        u.email as customer_email,
+        COALESCE(u.full_name, o.customer_name) as customer_name,
+        COALESCE(u.email, o.customer_email) as customer_email,
+        o.customer_phone,
         COUNT(oi.id) as items_count
       FROM orders o
-      JOIN users u ON o.user_id = u.id
+      LEFT JOIN users u ON o.user_id = u.id
       LEFT JOIN order_items oi ON o.id = oi.order_id
       ${whereClause}
       GROUP BY o.id
