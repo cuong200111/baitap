@@ -247,7 +247,7 @@ export default function ProfilePage() {
           { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
           { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
           { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
-          { code: 67, name: "Đắk Nông", full_name: "Tỉnh Đắk Nông" },
+          { code: 67, name: "��ắk Nông", full_name: "Tỉnh Đắk Nông" },
           { code: 68, name: "Lâm Đồng", full_name: "Tỉnh Lâm Đồng" },
           { code: 70, name: "Bình Phước", full_name: "Tỉnh Bình Phước" },
           { code: 72, name: "Tây Ninh", full_name: "Tỉnh Tây Ninh" },
@@ -349,7 +349,7 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       const response = await fetch(
-        `/api/locations?type=wards&district_code=${districtCode}`,
+        `http://localhost:4000/api/locations?type=wards&district_code=${districtCode}`,
       );
 
       const data = await response.json();
@@ -473,7 +473,7 @@ export default function ProfilePage() {
 
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Phiên ��ăng nhập đã hết hạn");
+        toast.error("Phiên đăng nhập đã hết hạn");
         return;
       }
 
