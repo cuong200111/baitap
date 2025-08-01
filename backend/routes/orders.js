@@ -355,21 +355,15 @@ router.post(
         const orderResult = await executeQuery(
           `
           INSERT INTO orders (
-            order_number, user_id, status, payment_method, payment_status,
-            shipping_method, subtotal, shipping_fee, discount_amount, total_amount,
+            order_number, user_id, status, payment_method, total_amount,
             billing_address, shipping_address, notes
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `,
           [
             orderNumber,
             req.user.id,
             "pending",
             payment_method,
-            "pending",
-            shipping_method,
-            subtotal,
-            shipping_fee,
-            discount_amount,
             totalAmount,
             JSON.stringify(billing_address || shipping_address),
             JSON.stringify(shipping_address),
