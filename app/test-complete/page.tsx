@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { apiWrappers } from "@/lib/api-wrapper";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 export default function TestCompletePage() {
   const [result, setResult] = useState("");
