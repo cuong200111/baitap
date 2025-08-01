@@ -4,6 +4,9 @@ import { API_CONFIG } from "./config-client";
 // Get the backend domain from config
 export const Domain = API_CONFIG.BASE_URL;
 
+// Export for easy import in components
+export const API_DOMAIN = Domain;
+
 // Helper function to construct full API URLs
 export function getApiUrl(endpoint: string): string {
   const cleanEndpoint = endpoint.startsWith("/api/") 
