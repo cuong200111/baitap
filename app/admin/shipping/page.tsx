@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatPrice } from "@/config";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface Province {
   code: number;
@@ -425,7 +426,7 @@ export default function AdminShippingPage() {
                         disabled={!warehouseForm.province_id}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn huyện" />
+                          <SelectValue placeholder="Ch��n huyện" />
                         </SelectTrigger>
                         <SelectContent>
                           {districts.map((district) => (
