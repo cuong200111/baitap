@@ -15,15 +15,7 @@ import { X, Upload, Search, Image as ImageIcon } from "lucide-react";
 import { mediaApi, getMediaUrl, MediaFile } from "@/config";
 import { toast } from "sonner";
 
-interface MediaFile {
-  id: number;
-  filename: string;
-  original_name: string;
-  url: string;
-  alt_text?: string;
-  title?: string;
-  created_at: string;
-}
+// MediaFile interface imported from config.ts
 
 interface MediaSelectorProps {
   selectedImage?: string;
