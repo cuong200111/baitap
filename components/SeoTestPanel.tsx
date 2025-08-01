@@ -17,7 +17,7 @@ import {
   Activity,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Domain } from "@/config";
+import { API_DOMAIN } from "@/lib/api-helpers";
 interface TestResult {
   success: boolean;
   message: string;
