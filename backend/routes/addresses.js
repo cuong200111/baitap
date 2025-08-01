@@ -251,4 +251,134 @@ router.delete("/:id", authenticateToken, async (req, res) => {
   }
 });
 
+// Update profile with address - UPSERT approach
+router.put("/profile", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const {
+      // User profile fields
+      full_name: profile_full_name,
+      phone: profile_phone,
+      // Address fields
+      address_full_name,
+      address_phone,
+      address_line_1,
+      address_line_2 = null,
+      ward,
+      district,
+      city,
+      type = "default",
+    } = req.body;
+
+    // Update user profile if profile fields are provided
+    if (profile_full_name || profile_phone) {
+      const updateFields = [];
+      const updateValues = [];
+
+      if (profile_full_name) {
+        updateFields.push("full_name = ?");
+        updateValues.push(profile_full_name);
+      }
+      if (profile_phone) {
+        updateFields.push("phone = ?");
+        updateValues.push(profile_phone);
+      }
+
+      updateValues.push(userId);
+
+      await executeQuery(
+        `UPDATE users SET ${updateFields.join(", ")}, updated_at = NOW() WHERE id = ?`,
+        updateValues,
+      );
+    }
+
+    // Handle address if address fields are provided
+    if (address_line_1 && ward && district && city) {
+      // Use address_full_name if provided, otherwise use profile_full_name
+      const addressFullName = address_full_name || profile_full_name;
+      const addressPhone = address_phone || profile_phone;
+
+      if (!addressFullName) {
+        return res.status(400).json({
+          success: false,
+          message: "Full name is required for address",
+        });
+      }
+
+      // Check if user already has an address
+      const existingAddress = await executeQuery(
+        `SELECT * FROM customer_addresses WHERE user_id = ?`,
+        [userId],
+      );
+
+      if (existingAddress.length > 0) {
+        // UPDATE existing address
+        await executeQuery(
+          `UPDATE customer_addresses SET
+           type = ?, full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?,
+           ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
+           WHERE user_id = ?`,
+          [
+            type,
+            addressFullName,
+            addressPhone,
+            address_line_1,
+            address_line_2,
+            ward,
+            district,
+            city,
+            1, // Always default
+            userId,
+          ],
+        );
+      } else {
+        // INSERT new address
+        await executeQuery(
+          `INSERT INTO customer_addresses
+           (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+          [
+            userId,
+            type,
+            addressFullName,
+            addressPhone,
+            address_line_1,
+            address_line_2,
+            ward,
+            district,
+            city,
+            1, // Always default
+          ],
+        );
+      }
+    }
+
+    // Get updated user profile and address
+    const userProfile = await executeQuery(
+      `SELECT id, email, full_name, phone, created_at, updated_at FROM users WHERE id = ?`,
+      [userId],
+    );
+
+    const userAddress = await executeQuery(
+      `SELECT * FROM customer_addresses WHERE user_id = ?`,
+      [userId],
+    );
+
+    res.json({
+      success: true,
+      message: "Profile updated successfully",
+      data: {
+        user: userProfile[0],
+        address: userAddress.length > 0 ? userAddress[0] : null,
+      },
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update profile",
+    });
+  }
+});
+
 export default router;
