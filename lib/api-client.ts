@@ -115,7 +115,7 @@ export const clientUtils = {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
-    }).format(price);
+    }).format(numPrice);
   },
 
   // Validate email on client (immediate)
