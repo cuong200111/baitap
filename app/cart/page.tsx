@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { formatPrice, getMediaUrl } from "@/config";
+import { formatPrice, getMediaUrl, Domain } from "@/config";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -58,7 +58,7 @@ export default function CartPage() {
       loadCart();
     } else {
       // Redirect to login if not authenticated
-      router.push("/login?message=Vui lòng đăng nhập để xem giỏ hàng");
+      router.push("/login?message=Vui lòng đăng nhập để xem giỏ h��ng");
     }
   }, [user, isAuthenticated, router]);
 
