@@ -322,7 +322,7 @@ export const locationsController = {
           ],
           79: [ // TP Hồ Chí Minh
             { code: 760, name: "Quận 1", full_name: "Quận 1", province_code: 79 },
-            { code: 761, name: "Quận 2", full_name: "Quận 2", province_code: 79 },
+            { code: 761, name: "Quận 2", full_name: "Qu���n 2", province_code: 79 },
             { code: 762, name: "Quận 3", full_name: "Quận 3", province_code: 79 },
             { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
             { code: 764, name: "Quận 5", full_name: "Quận 5", province_code: 79 },
@@ -362,6 +362,17 @@ export const locationsController = {
             { code: 926, name: "Phong Điền", full_name: "Huyện Phong Điền", province_code: 92 },
             { code: 927, name: "Thới Lai", full_name: "Huyện Thới Lai", province_code: 92 },
           ],
+          20: [ // Quảng Nam
+            { code: 200, name: "Tam Kỳ", full_name: "Thành phố Tam Kỳ", province_code: 20 },
+            { code: 201, name: "Hội An", full_name: "Thành phố Hội An", province_code: 20 },
+            { code: 202, name: "Duy Xuyên", full_name: "Huyện Duy Xuyên", province_code: 20 },
+            { code: 203, name: "Đại Lộc", full_name: "Huyện Đại Lộc", province_code: 20 },
+            { code: 204, name: "Điện Bàn", full_name: "Thị xã Điện Bàn", province_code: 20 },
+            { code: 205, name: "Thăng Bình", full_name: "Huyện Thăng Bình", province_code: 20 },
+            { code: 206, name: "Tiên Phước", full_name: "Huyện Tiên Phước", province_code: 20 },
+            { code: 207, name: "Bắc Trà My", full_name: "Huyện Bắc Trà My", province_code: 20 },
+            { code: 208, name: "Nam Trà My", full_name: "Huyện Nam Trà My", province_code: 20 },
+          ],
           26: [ // Khánh Hòa
             { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
             { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
@@ -385,7 +396,7 @@ export const locationsController = {
           77: [ // Quảng Ninh
             { code: 770, name: "Hạ Long", full_name: "Thành phố Hạ Long", province_code: 77 },
             { code: 771, name: "Móng Cái", full_name: "Thành phố Móng Cái", province_code: 77 },
-            { code: 772, name: "Cam Phả", full_name: "Thành phố Cam Phả", province_code: 77 },
+            { code: 772, name: "Cam Phả", full_name: "Thành ph�� Cam Phả", province_code: 77 },
             { code: 773, name: "Uông Bí", full_name: "Thành phố Uông Bí", province_code: 77 },
             { code: 774, name: "Quảng Yên", full_name: "Thị xã Quảng Yên", province_code: 77 },
             { code: 775, name: "Đông Triều", full_name: "Thị xã Đông Triều", province_code: 77 },
@@ -449,7 +460,7 @@ export const locationsController = {
             { code: 88, name: "Hàng Bài", full_name: "Phường Hàng Bài", district_code: 2 },
           ],
           760: [ // Quận 1 - HCMC
-            { code: 26734, name: "Tân Định", full_name: "Phường Tân Định", district_code: 760 },
+            { code: 26734, name: "Tân Định", full_name: "Phư��ng Tân Định", district_code: 760 },
             { code: 26737, name: "Đa Kao", full_name: "Phường Đa Kao", district_code: 760 },
             { code: 26740, name: "Bến Nghé", full_name: "Phường Bến Nghé", district_code: 760 },
             { code: 26743, name: "Bến Thành", full_name: "Phường Bến Thành", district_code: 760 },
