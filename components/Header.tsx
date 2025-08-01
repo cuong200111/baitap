@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Domain } from "@/config";
 
 export function Header() {
   const { user, logout, isAdmin, isAuthenticated } = useAuth();
