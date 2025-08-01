@@ -284,18 +284,7 @@ export default function CheckoutPage() {
         notes: customerInfo.notes,
       };
 
-      const token = localStorage.getItem("token");
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      const response = await fetch(`${Domain}/api/orders`, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(orderData),
-      });
-
-      const data = await response.json();
+      const data = await apiWrappers.orders.create(orderData);
 
       if (data.success) {
         toast.success("Đặt hàng thành công!");
