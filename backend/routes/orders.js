@@ -331,9 +331,7 @@ router.post(
             quantity: item.quantity,
             unit_price: finalPrice,
             total_price: totalPrice,
-            product_image: product.images
-              ? JSON.parse(product.images)[0]
-              : null,
+            product_image: safeParseImages(product.images),
           });
 
           // Update stock if managed
@@ -813,9 +811,7 @@ router.post(
             quantity: item.quantity,
             unit_price: finalPrice,
             total_price: totalPrice,
-            product_image: product.images
-              ? JSON.parse(product.images)[0]
-              : null,
+            product_image: safeParseImages(product.images),
           });
 
           // Update stock if managed
