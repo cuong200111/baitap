@@ -301,7 +301,7 @@ export default function ProfilePage() {
           { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
           { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
           { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
-          { code: 4, name: "Long Biên", full_name: "Quận Long Biên", province_code: 1 },
+          { code: 4, name: "Long Biên", full_name: "Quận Long Bi��n", province_code: 1 },
           { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
         ],
         20: [ // Quảng Nam
@@ -610,6 +610,46 @@ export default function ProfilePage() {
         ward_name: ward.name,
       }));
     }
+  };
+
+  const saveAddress = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found");
+    }
+
+    // Validate address fields
+    if (!addressData.province_name || !addressData.district_name || !addressData.ward_name) {
+      throw new Error("Vui lòng chọn đầy đủ tỉnh/thành, quận/huyện, phường/xã");
+    }
+
+    const addressPayload = {
+      type: "default",
+      full_name: formData.full_name.trim(),
+      phone: formData.phone.trim() || null,
+      address_line_1: formData.address.trim() || "Địa chỉ chi tiết",
+      address_line_2: null,
+      ward: addressData.ward_name.trim(),
+      district: addressData.district_name.trim(),
+      city: addressData.province_name.trim(),
+      is_default: true,
+    };
+
+    const response = await fetch(`${Domain}/api/addresses`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(addressPayload),
+    });
+
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error(data.message || "Failed to save address");
+    }
+
+    return data;
   };
 
   const handleUpdateProfile = async () => {
