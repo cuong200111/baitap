@@ -279,8 +279,8 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      // Use fallback data immediately (for testing)
-      const fallbackDistricts = {
+      // Use Vietnam districts data mapping
+      const districtsMapping = {
         1: [ // Hà Nội
           { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
           { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
