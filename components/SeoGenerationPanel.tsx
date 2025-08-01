@@ -96,7 +96,7 @@ export default function SeoGenerationPanel() {
   const validateSitemap = async () => {
     setValidatingXml(true);
     try {
-      const response = await fetch("/api/admin/validate-xml?url=/sitemap.xml");
+      const response = await authenticatedFetch(`${Domain}/api/admin/validate-xml?url=/sitemap.xml`);
       const data = await response.json();
 
       if (data.success) {
