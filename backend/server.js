@@ -98,6 +98,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/seo", seoRoutes);
 app.use("/api/utils", utilsRoutes);
 app.use("/api/config", configRoutes);
+app.use("/api/addresses", addressesRoutes);
 
 // Serve robots.txt and sitemap.xml
 app.use("/", sitemetaRoutes);
