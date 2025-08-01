@@ -739,4 +739,208 @@ router.put(
   },
 );
 
+// Create guest order (no authentication required)
+router.post(
+  "/guest",
+  [
+    body("items").isArray({ min: 1 }).withMessage("Order items required"),
+    body("items.*.product_id")
+      .isInt({ min: 1 })
+      .withMessage("Valid product ID required"),
+    body("items.*.quantity")
+      .isInt({ min: 1 })
+      .withMessage("Valid quantity required"),
+    body("customer_name").trim().notEmpty().withMessage("Customer name required"),
+    body("customer_email").isEmail().withMessage("Valid email required"),
+    body("customer_phone").trim().notEmpty().withMessage("Phone number required"),
+    body("shipping_address").trim().notEmpty().withMessage("Shipping address required"),
+    body("billing_address").optional().isString(),
+    body("notes").optional().isString(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation errors",
+          errors: errors.array(),
+        });
+      }
+
+      const {
+        items,
+        customer_name,
+        customer_email,
+        customer_phone,
+        shipping_address,
+        billing_address,
+        notes,
+        shipping_fee = 0,
+        discount_amount = 0,
+      } = req.body;
+
+      // Start transaction
+      await executeQuery("START TRANSACTION");
+
+      try {
+        // Validate products and calculate totals
+        let subtotal = 0;
+        const validatedItems = [];
+
+        for (const item of items) {
+          const products = await executeQuery(
+            "SELECT id, name, sku, price, sale_price, stock_quantity, manage_stock, images FROM products WHERE id = ? AND status = 'active'",
+            [item.product_id],
+          );
+
+          if (products.length === 0) {
+            throw new Error(`Product with ID ${item.product_id} not found`);
+          }
+
+          const product = products[0];
+          const finalPrice = item.price || product.sale_price || product.price;
+
+          // Check stock
+          if (product.manage_stock && product.stock_quantity < item.quantity) {
+            throw new Error(
+              `Insufficient stock for product ${product.name}. Available: ${product.stock_quantity}, Requested: ${item.quantity}`,
+            );
+          }
+
+          const totalPrice = finalPrice * item.quantity;
+          subtotal += totalPrice;
+
+          validatedItems.push({
+            product_id: product.id,
+            product_name: product.name,
+            product_sku: product.sku,
+            quantity: item.quantity,
+            unit_price: finalPrice,
+            total_price: totalPrice,
+            product_image: product.images
+              ? JSON.parse(product.images)[0]
+              : null,
+          });
+
+          // Update stock if managed
+          if (product.manage_stock) {
+            await executeQuery(
+              "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?",
+              [item.quantity, product.id],
+            );
+          }
+        }
+
+        const totalAmount = subtotal + shipping_fee - discount_amount;
+
+        // Generate order number
+        const orderNumber = generateOrderNumber();
+
+        // Create guest order (user_id = NULL)
+        const orderResult = await executeQuery(
+          `
+          INSERT INTO orders (
+            order_number, user_id, status, payment_method, payment_status,
+            shipping_method, subtotal, shipping_fee, discount_amount, total_amount,
+            billing_address, shipping_address, notes
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+          [
+            orderNumber,
+            null, // Guest order
+            "pending",
+            "cod", // Default to cash on delivery for guest orders
+            "pending",
+            "standard",
+            subtotal,
+            shipping_fee,
+            discount_amount,
+            totalAmount,
+            JSON.stringify({
+              customer_name,
+              customer_email,
+              customer_phone,
+              address: billing_address || shipping_address,
+            }),
+            JSON.stringify({
+              customer_name,
+              customer_email,
+              customer_phone,
+              address: shipping_address,
+            }),
+            notes || null,
+          ],
+        );
+
+        const orderId = orderResult.insertId;
+
+        // Create order items
+        for (const item of validatedItems) {
+          await executeQuery(
+            `
+            INSERT INTO order_items (
+              order_id, product_id, product_name, product_sku,
+              quantity, unit_price, total_price, product_image
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `,
+            [
+              orderId,
+              item.product_id,
+              item.product_name,
+              item.product_sku,
+              item.quantity,
+              item.unit_price,
+              item.total_price,
+              item.product_image,
+            ],
+          );
+        }
+
+        // Create initial status history (no user ID for guest orders)
+        await executeQuery(
+          "INSERT INTO order_status_history (order_id, status, comment) VALUES (?, ?, ?)",
+          [orderId, "pending", "Guest order created"],
+        );
+
+        // Commit transaction
+        await executeQuery("COMMIT");
+
+        // Get created order
+        const newOrder = await executeQuery(
+          "SELECT * FROM orders WHERE id = ?",
+          [orderId],
+        );
+
+        res.status(201).json({
+          success: true,
+          message: "Guest order created successfully",
+          data: {
+            order: {
+              ...newOrder[0],
+              billing_address: newOrder[0].billing_address
+                ? JSON.parse(newOrder[0].billing_address)
+                : null,
+              shipping_address: newOrder[0].shipping_address
+                ? JSON.parse(newOrder[0].shipping_address)
+                : null,
+            },
+            order_number: newOrder[0].order_number,
+          },
+        });
+      } catch (error) {
+        // Rollback transaction
+        await executeQuery("ROLLBACK");
+        throw error;
+      }
+    } catch (error) {
+      console.error("Create guest order error:", error);
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to create guest order",
+      });
+    }
+  },
+);
+
 export default router;
