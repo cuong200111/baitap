@@ -82,7 +82,7 @@ export default function AdminOrdersPage() {
 
       console.log("Loading orders with params:", params.toString());
       const token = localStorage.getItem("token");
-      const response = await fetch(`/api/orders?${params.toString()}`, {
+      const response = await fetch(`${API_DOMAIN}/api/orders?${params.toString()}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
