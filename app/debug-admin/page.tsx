@@ -84,6 +84,30 @@ export default function DebugAdminPage() {
     }
   };
 
+  const testGuestOrder = async () => {
+    try {
+      setResult("Testing guest order...");
+      const orderData = {
+        items: [
+          {
+            product_id: 1,
+            quantity: 1,
+            price: 100000
+          }
+        ],
+        customer_name: "Test Customer",
+        customer_email: "test@example.com",
+        customer_phone: "0123456789",
+        shipping_address: "123 Test Street, Test City",
+        notes: "Test order"
+      };
+      const data = await apiWrappers.orders.createGuest(orderData);
+      setResult(JSON.stringify(data, null, 2));
+    } catch (error: any) {
+      setResult("Error: " + error.message);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <Card>
