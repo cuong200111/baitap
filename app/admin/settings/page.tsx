@@ -397,7 +397,7 @@ export default function SettingsPage() {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           };
     try {
-      const response = await fetch(`${Domain}/api/admin/seo-settings`,{headers});
+      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`,{headers});
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
@@ -589,7 +589,7 @@ export default function SettingsPage() {
             "Content-Type": "application/json",
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           };
-      const response = await fetch(`${Domain}/api/admin/seo-settings`, {
+      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
         method: "POST",
         headers,
         body: JSON.stringify(seoSettings),
@@ -618,7 +618,7 @@ export default function SettingsPage() {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           };
       setSitemapGenerating(true);
-      const response = await fetch(`${Domain}/api/admin/generate-sitemap`, {
+      const response = await fetch(`${API_DOMAIN}/api/admin/generate-sitemap`, {
         method: "POST",
         headers
       });
@@ -645,7 +645,7 @@ export default function SettingsPage() {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           };
       setRobotsGenerating(true);
-      const response = await fetch(`${Domain}/api/admin/generate-robots`, {
+      const response = await fetch(`${API_DOMAIN}/api/admin/generate-robots`, {
         method: "POST",
         headers
       });
