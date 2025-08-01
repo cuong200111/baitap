@@ -48,6 +48,8 @@ export function MediaSelector({
       const response = await mediaApi.getAll();
       if (response.success && response.data) {
         setMediaFiles(response.data);
+      } else {
+        toast.error(response.message || "Không thể tải danh sách media");
       }
     } catch (error) {
       console.error("Failed to load media files:", error);
@@ -67,7 +69,7 @@ export function MediaSelector({
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Kích thước file không được vượt quá 5MB");
+      toast.error("K��ch thước file không được vượt quá 5MB");
       return;
     }
 
