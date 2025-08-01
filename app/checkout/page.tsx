@@ -295,7 +295,16 @@ export default function CheckoutPage() {
             console.log("Cart clear error:", e);
           }
         } else {
-          // Clear guest cart from localStorage
+          // Clear session cart for guest users
+          const sessionId = localStorage.getItem("session_id");
+          if (sessionId) {
+            try {
+              await apiWrappers.cart.clear({ session_id: sessionId });
+            } catch (e) {
+              console.log("Session cart clear error:", e);
+            }
+          }
+          // Also clear any legacy guest cart
           localStorage.removeItem("guest_cart");
         }
 
@@ -537,7 +546,7 @@ export default function CheckoutPage() {
             {/* Order Items */}
             <Card>
               <CardHeader>
-                <CardTitle>Đ��n hàng của bạn</CardTitle>
+                <CardTitle>����n hàng của bạn</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {cartItems.map((item) => (
