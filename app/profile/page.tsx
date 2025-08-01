@@ -184,7 +184,7 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      const response = await fetch(`${Domain}/api/locations?type=provinces`);
+      const response = await fetch("/api/locations?type=provinces");
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
