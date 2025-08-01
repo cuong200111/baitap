@@ -84,7 +84,7 @@ export default function ProductDetailPage() {
     if (!product) return;
 
     if (!isAuthenticated || !user?.id) {
-      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào gi�� hàng");
       router.push("/login?message=Vui lòng đăng nhập để sử dụng giỏ hàng");
       return;
     }
@@ -123,7 +123,7 @@ export default function ProductDetailPage() {
     setAddingToCart(true);
     try {
       if (isAuthenticated && user?.id) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/cart`, {
+        const response = await fetch(`${API_DOMAIN}/api/cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
