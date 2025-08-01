@@ -67,10 +67,10 @@ router.get("/", authenticateToken, async (req, res) => {
       queryParams.push(payment_status);
     }
 
-    // Search by order number or customer name
+    // Search by order number or customer name (including guest orders)
     if (search) {
       whereConditions.push(
-        "(o.order_number LIKE ? OR u.full_name LIKE ? OR u.email LIKE ?)",
+        "(o.order_number LIKE ? OR COALESCE(u.full_name, o.customer_name) LIKE ? OR COALESCE(u.email, o.customer_email) LIKE ?)",
       );
       const searchTerm = `%${search}%`;
       queryParams.push(searchTerm, searchTerm, searchTerm);
