@@ -434,7 +434,125 @@ router.post(
   },
 );
 
-// Update order status (Admin only)
+// Update order (Admin only) - General route
+router.put(
+  "/:id",
+  authenticateToken,
+  requireAdmin,
+  [
+    param("id").isInt().withMessage("Invalid order ID"),
+    body("status")
+      .optional()
+      .isIn([
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ])
+      .withMessage("Invalid status"),
+    body("payment_status")
+      .optional()
+      .isIn(["pending", "paid", "failed", "refunded"])
+      .withMessage("Invalid payment status"),
+    body("comment").optional().isString(),
+    body("tracking_number").optional().isString(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation errors",
+          errors: errors.array(),
+        });
+      }
+
+      const { id } = req.params;
+      const { status, payment_status, comment, tracking_number } = req.body;
+
+      // Check if order exists
+      const existingOrder = await executeQuery(
+        "SELECT * FROM orders WHERE id = ?",
+        [id],
+      );
+
+      if (existingOrder.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Order not found",
+        });
+      }
+
+      const order = existingOrder[0];
+      const updateFields = [];
+      const updateValues = [];
+
+      // Update status if provided
+      if (status) {
+        updateFields.push("status = ?");
+        updateValues.push(status);
+
+        if (status === "shipped" && tracking_number) {
+          updateFields.push("tracking_number = ?", "shipped_at = NOW()");
+          updateValues.push(tracking_number);
+        }
+
+        if (status === "delivered") {
+          updateFields.push("delivered_at = NOW()");
+        }
+
+        // Add status history
+        await executeQuery(
+          "INSERT INTO order_status_history (order_id, status, comment, created_by) VALUES (?, ?, ?, ?)",
+          [id, status, comment || null, req.user.id],
+        );
+      }
+
+      // Update payment status if provided
+      if (payment_status) {
+        updateFields.push("payment_status = ?");
+        updateValues.push(payment_status);
+
+        // Add payment status history
+        await executeQuery(
+          "INSERT INTO order_status_history (order_id, status, comment, created_by) VALUES (?, ?, ?, ?)",
+          [id, `payment_${payment_status}`, comment || null, req.user.id],
+        );
+      }
+
+      if (updateFields.length > 0) {
+        updateValues.push(id);
+        await executeQuery(
+          `UPDATE orders SET ${updateFields.join(", ")} WHERE id = ?`,
+          updateValues,
+        );
+      }
+
+      // Get updated order
+      const updatedOrder = await executeQuery(
+        "SELECT * FROM orders WHERE id = ?",
+        [id],
+      );
+
+      res.json({
+        success: true,
+        message: "Order updated successfully",
+        data: updatedOrder[0],
+      });
+    } catch (error) {
+      console.error("Update order error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+  },
+);
+
+// Update order status (Admin only) - Specific route
 router.put(
   "/:id/status",
   authenticateToken,
