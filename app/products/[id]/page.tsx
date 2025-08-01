@@ -142,43 +142,57 @@ export default function ProductDetailPage() {
 
     setAddingToCart(true);
     try {
+      // First add to cart (either authenticated or guest)
+      let sessionId = null;
+      if (!isAuthenticated || !user?.id) {
+        sessionId = localStorage.getItem("session_id");
+        if (!sessionId) {
+          sessionId =
+            "session_" +
+            Date.now() +
+            "_" +
+            Math.random().toString(36).substr(2, 9);
+          localStorage.setItem("session_id", sessionId);
+        }
+      }
+
+      const requestBody: any = {
+        product_id: product.id,
+        quantity: quantity,
+      };
+
       if (isAuthenticated && user?.id) {
-        const response = await fetch(`${API_DOMAIN}/api/cart`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            user_id: user.id,
-            product_id: product.id,
-            quantity: quantity,
-          }),
-        });
+        requestBody.user_id = user.id;
+      } else {
+        requestBody.session_id = sessionId;
+      }
 
-        const data = await response.json();
+      const response = await fetch(`${API_DOMAIN}/api/cart`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
 
-        if (response.ok && data.success) {
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Success - redirect to appropriate checkout page
+        if (isAuthenticated && user?.id) {
           router.push("/checkout");
         } else {
-          toast.error(data.message || "Có lỗi xảy ra");
+          router.push("/guest-checkout");
         }
       } else {
-        const guestPurchase = {
-          product_id: product.id,
-          product_name: product.name,
-          sku: product.sku,
-          price: product.price,
-          sale_price: product.sale_price,
-          final_price: product.sale_price || product.price,
-          quantity: quantity,
-          images: product.images,
-          total: (product.sale_price || product.price) * quantity,
-        };
-
-        localStorage.setItem("guest_purchase", JSON.stringify(guestPurchase));
-        router.push("/guest-checkout");
+        // Handle error messages from backend
+        if (data.message) {
+          toast.error(data.message);
+        } else {
+          toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
+        }
       }
     } catch (error) {
       console.error("Buy now error:", error);
-      toast.error("Có lỗi xảy ra");
+      toast.error("Không thể kết nối đến server");
     } finally {
       setAddingToCart(false);
     }
