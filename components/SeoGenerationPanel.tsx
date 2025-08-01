@@ -19,6 +19,18 @@ import {
   Settings,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Domain } from "@/config";
+
+// Helper function for authenticated API calls
+const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...options.headers,
+  };
+  return fetch(url, { ...options, headers });
+};
 
 export default function SeoGenerationPanel() {
   const [generatingSitemap, setGeneratingSitemap] = useState(false);
