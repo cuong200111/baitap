@@ -278,7 +278,7 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       const response = await fetch(
-        `/api/locations?type=districts&province_code=${provinceCode}`,
+        `http://localhost:4000/api/locations?type=districts&province_code=${provinceCode}`,
       );
 
       const data = await response.json();
@@ -473,7 +473,7 @@ export default function ProfilePage() {
 
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Phiên đăng nhập đã hết hạn");
+        toast.error("Phiên ��ăng nhập đã hết hạn");
         return;
       }
 
