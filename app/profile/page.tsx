@@ -193,10 +193,10 @@ export default function ProfilePage() {
 
       const provinces = await response.json();
       if (provinces && Array.isArray(provinces)) {
-        setProvinces(provinces.map(p => ({
+        setProvinces(provinces.map((p: any) => ({
           code: p.code,
           name: p.name,
-          full_name: p.name_with_type || p.name,
+          full_name: p.name,
         })));
       } else {
         throw new Error("Invalid provinces data");
@@ -204,7 +204,7 @@ export default function ProfilePage() {
     } catch (error: any) {
       console.error("Failed to load provinces:", error);
 
-      // Always provide fallback provinces data
+      // Fallback provinces data
       setProvinces([
           { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
           { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
@@ -373,7 +373,7 @@ export default function ProfilePage() {
             { code: 765, name: "Quận 6", full_name: "Quận 6", province_code: 79 },
             { code: 766, name: "Quận 7", full_name: "Quận 7", province_code: 79 },
             { code: 772, name: "Quận Bình Thạnh", full_name: "Quận Bình Thạnh", province_code: 79 },
-            { code: 773, name: "Quận Gò Vấp", full_name: "Quận Gò Vấp", province_code: 79 },
+            { code: 773, name: "Quận Gò Vấp", full_name: "Quận Gò V��p", province_code: 79 },
             { code: 774, name: "Quận Phú Nhuận", full_name: "Quận Phú Nhuận", province_code: 79 },
             { code: 775, name: "Quận Tân Bình", full_name: "Quận Tân Bình", province_code: 79 },
             { code: 776, name: "Quận Tân Phú", full_name: "Quận Tân Phú", province_code: 79 },
@@ -465,7 +465,7 @@ export default function ProfilePage() {
           { code: 26740, name: "Bến Nghé", full_name: "Phường Bến Nghé", district_code: 760 },
           { code: 26743, name: "Bến Thành", full_name: "Phường Bến Thành", district_code: 760 },
           { code: 26746, name: "Nguyễn Thái Bình", full_name: "Phường Nguyễn Thái Bình", district_code: 760 },
-          { code: 26749, name: "Phạm Ngũ Lão", full_name: "Phường Phạm Ngũ Lão", district_code: 760 },
+          { code: 26749, name: "Ph���m Ngũ Lão", full_name: "Phường Phạm Ngũ Lão", district_code: 760 },
         ],
         // Tam Kỳ (Quảng Nam)
         200: [
@@ -480,7 +480,7 @@ export default function ProfilePage() {
         260: [
           { code: 9304, name: "Vĩnh Hải", full_name: "Phường Vĩnh Hải", district_code: 260 },
           { code: 9307, name: "Vĩnh Hòa", full_name: "Phường Vĩnh Hòa", district_code: 260 },
-          { code: 9310, name: "Vĩnh Phước", full_name: "Phường Vĩnh Phước", district_code: 260 },
+          { code: 9310, name: "Vĩnh Phước", full_name: "Phường Vĩnh Phư��c", district_code: 260 },
           { code: 9313, name: "Ngọc Hiệp", full_name: "Phường Ngọc Hiệp", district_code: 260 },
           { code: 9316, name: "Vĩnh Thọ", full_name: "Phường Vĩnh Thọ", district_code: 260 },
           { code: 9319, name: "Xương Huân", full_name: "Phường Xương Huân", district_code: 260 },
@@ -595,7 +595,7 @@ export default function ProfilePage() {
 
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Phiên đăng nhập đã hết hạn");
+        toast.error("Phiên đăng nhập đã h���t hạn");
         return;
       }
 
@@ -771,7 +771,7 @@ export default function ProfilePage() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success("Đổi mật khẩu thành công");
+        toast.success("Đ��i mật khẩu thành công");
         setPasswordData({
           current_password: "",
           new_password: "",
@@ -925,7 +925,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <User className="h-5 w-5" />
-                      Th��ng tin cơ bản
+                      Thông tin cơ bản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
