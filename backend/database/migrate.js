@@ -6,10 +6,10 @@ dotenv.config();
 
 const createTables = async () => {
   try {
-    console.log("���� Starting MySQL database migration...");
+    console.log("🚀 Starting MySQL database migration...");
 
     // Test connection first
-    await testConnection();
+    await executeQuery("SELECT 1");
 
     // Create users table
     await executeQuery(`
