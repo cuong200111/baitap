@@ -354,8 +354,8 @@ router.post(
           `
           INSERT INTO orders (
             order_number, user_id, status, payment_method, total_amount,
-            billing_address, shipping_address, notes
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            billing_address, shipping_address, customer_name, customer_email, customer_phone, notes
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
           [
             orderNumber,
@@ -363,8 +363,11 @@ router.post(
             "pending",
             payment_method,
             totalAmount,
-            JSON.stringify(billing_address || shipping_address),
-            JSON.stringify(shipping_address),
+            billing_address || shipping_address,
+            shipping_address,
+            req.user.full_name,
+            req.user.email,
+            req.user.phone || "",
             notes || null,
           ],
         );
