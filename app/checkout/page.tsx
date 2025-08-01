@@ -270,7 +270,6 @@ export default function CheckoutPage() {
       const shippingAddress = `${customerInfo.address}, ${customerInfo.ward ? customerInfo.ward + ", " : ""}${customerInfo.district ? customerInfo.district + ", " : ""}${customerInfo.city}`;
 
       const orderData = {
-        user_id: userId, // null for guest orders
         items: cartItems.map((item) => ({
           product_id: item.product_id,
           quantity: item.quantity,
@@ -278,9 +277,7 @@ export default function CheckoutPage() {
         })),
         shipping_address: shippingAddress,
         billing_address: shippingAddress,
-        customer_name: customerInfo.name,
-        customer_email: customerInfo.email,
-        customer_phone: customerInfo.phone,
+        payment_method: "cod", // Default payment method
         notes: customerInfo.notes,
       };
 
