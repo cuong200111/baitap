@@ -45,7 +45,7 @@ export const cartController = {
       const cartItems = await executeQuery(query, params);
 
       // Process cart items
-      const processedItems = cartItems.map(item => ({
+      const processedItems = cartItems.map((item) => ({
         ...item,
         images: item.images ? JSON.parse(item.images) : [],
         final_price: item.sale_price || item.price,
@@ -53,8 +53,14 @@ export const cartController = {
       }));
 
       // Calculate totals
-      const subtotal = processedItems.reduce((sum, item) => sum + item.total_price, 0);
-      const itemCount = processedItems.reduce((sum, item) => sum + item.quantity, 0);
+      const subtotal = processedItems.reduce(
+        (sum, item) => sum + item.total_price,
+        0,
+      );
+      const itemCount = processedItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0,
+      );
 
       res.json({
         success: true,
@@ -99,7 +105,7 @@ export const cartController = {
       // Check if product exists and is available
       const product = await executeQuery(
         "SELECT id, name, price, sale_price, stock_quantity, status FROM products WHERE id = ?",
-        [product_id]
+        [product_id],
       );
 
       if (!product.length) {
@@ -130,7 +136,8 @@ export const cartController = {
       }
 
       // Check if item already exists in cart
-      let existingQuery = "SELECT id, quantity FROM cart_items WHERE product_id = ?";
+      let existingQuery =
+        "SELECT id, quantity FROM cart_items WHERE product_id = ?";
       let existingParams = [product_id];
 
       if (user_id) {
@@ -158,16 +165,16 @@ export const cartController = {
 
         await executeQuery(
           "UPDATE cart_items SET quantity = ?, updated_at = NOW() WHERE id = ?",
-          [newQuantity, existingItem.id]
+          [newQuantity, existingItem.id],
         );
 
         res.json({
           success: true,
           message: "Cart updated successfully",
-          data: { 
+          data: {
             cart_item_id: existingItem.id,
             quantity: newQuantity,
-            action: "updated"
+            action: "updated",
           },
         });
       } else {
@@ -175,16 +182,16 @@ export const cartController = {
         const result = await executeQuery(
           `INSERT INTO cart_items (product_id, quantity, session_id, user_id, created_at) 
            VALUES (?, ?, ?, ?, NOW())`,
-          [product_id, quantity, session_id || null, user_id || null]
+          [product_id, quantity, session_id || null, user_id || null],
         );
 
         res.json({
           success: true,
           message: "Product added to cart successfully",
-          data: { 
+          data: {
             cart_item_id: result.insertId,
             quantity: quantity,
-            action: "added"
+            action: "added",
           },
         });
       }
@@ -216,7 +223,7 @@ export const cartController = {
          FROM cart_items c
          JOIN products p ON c.product_id = p.id
          WHERE c.id = ?`,
-        [id]
+        [id],
       );
 
       if (!cartItem.length) {
@@ -245,7 +252,7 @@ export const cartController = {
       // Update quantity
       await executeQuery(
         "UPDATE cart_items SET quantity = ?, updated_at = NOW() WHERE id = ?",
-        [quantity, id]
+        [quantity, id],
       );
 
       res.json({
@@ -267,7 +274,9 @@ export const cartController = {
     try {
       const { id } = req.params;
 
-      const result = await executeQuery("DELETE FROM cart_items WHERE id = ?", [id]);
+      const result = await executeQuery("DELETE FROM cart_items WHERE id = ?", [
+        id,
+      ]);
 
       if (result.affectedRows === 0) {
         return res.status(404).json({
@@ -342,7 +351,7 @@ export const cartController = {
       // Get session cart items
       const sessionItems = await executeQuery(
         "SELECT product_id, quantity FROM cart_items WHERE session_id = ?",
-        [session_id]
+        [session_id],
       );
 
       if (sessionItems.length === 0) {
@@ -359,7 +368,7 @@ export const cartController = {
         // Check if user already has this product in cart
         const existingUserItem = await executeQuery(
           "SELECT id, quantity FROM cart_items WHERE user_id = ? AND product_id = ?",
-          [user_id, item.product_id]
+          [user_id, item.product_id],
         );
 
         if (existingUserItem.length > 0) {
@@ -367,20 +376,22 @@ export const cartController = {
           const newQuantity = existingUserItem[0].quantity + item.quantity;
           await executeQuery(
             "UPDATE cart_items SET quantity = ?, updated_at = NOW() WHERE id = ?",
-            [newQuantity, existingUserItem[0].id]
+            [newQuantity, existingUserItem[0].id],
           );
         } else {
           // Create new user cart item
           await executeQuery(
             "INSERT INTO cart_items (user_id, product_id, quantity, created_at) VALUES (?, ?, ?, NOW())",
-            [user_id, item.product_id, item.quantity]
+            [user_id, item.product_id, item.quantity],
           );
         }
         migrated++;
       }
 
       // Clear session cart
-      await executeQuery("DELETE FROM cart_items WHERE session_id = ?", [session_id]);
+      await executeQuery("DELETE FROM cart_items WHERE session_id = ?", [
+        session_id,
+      ]);
 
       res.json({
         success: true,
@@ -408,7 +419,8 @@ export const cartController = {
         });
       }
 
-      let query = "SELECT SUM(quantity) as total_items FROM cart_items WHERE 1=1";
+      let query =
+        "SELECT SUM(quantity) as total_items FROM cart_items WHERE 1=1";
       let params = [];
 
       if (user_id) {

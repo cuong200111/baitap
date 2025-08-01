@@ -88,10 +88,14 @@ export default function ProductDetailPage() {
       // Generate session ID for guest users if not logged in
       let sessionId = null;
       if (!isAuthenticated || !user?.id) {
-        sessionId = localStorage.getItem('session_id');
+        sessionId = localStorage.getItem("session_id");
         if (!sessionId) {
-          sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-          localStorage.setItem('session_id', sessionId);
+          sessionId =
+            "session_" +
+            Date.now() +
+            "_" +
+            Math.random().toString(36).substr(2, 9);
+          localStorage.setItem("session_id", sessionId);
         }
       }
 

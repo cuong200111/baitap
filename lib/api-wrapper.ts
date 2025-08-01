@@ -294,7 +294,7 @@ export const apiWrappers = {
     getAll: (params: Record<string, any> = {}) => {
       // Add session_id automatically for guest users
       if (typeof window !== "undefined" && !params.user_id) {
-        const sessionId = localStorage.getItem('session_id');
+        const sessionId = localStorage.getItem("session_id");
         if (sessionId) {
           params.session_id = sessionId;
         }
@@ -312,10 +312,14 @@ export const apiWrappers = {
     add: (data: any) => {
       // Add session_id automatically for guest users
       if (typeof window !== "undefined" && !data.user_id) {
-        let sessionId = localStorage.getItem('session_id');
+        let sessionId = localStorage.getItem("session_id");
         if (!sessionId) {
-          sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-          localStorage.setItem('session_id', sessionId);
+          sessionId =
+            "session_" +
+            Date.now() +
+            "_" +
+            Math.random().toString(36).substr(2, 9);
+          localStorage.setItem("session_id", sessionId);
         }
         data.session_id = sessionId;
       }
@@ -340,7 +344,7 @@ export const apiWrappers = {
     clear: (params: { user_id?: number; session_id?: string } = {}) => {
       // Add session_id automatically for guest users
       if (typeof window !== "undefined" && !params.user_id) {
-        const sessionId = localStorage.getItem('session_id');
+        const sessionId = localStorage.getItem("session_id");
         if (sessionId) {
           params.session_id = sessionId;
         }
@@ -361,7 +365,7 @@ export const apiWrappers = {
     getCount: (params: { user_id?: number; session_id?: string } = {}) => {
       // Add session_id automatically for guest users
       if (typeof window !== "undefined" && !params.user_id) {
-        const sessionId = localStorage.getItem('session_id');
+        const sessionId = localStorage.getItem("session_id");
         if (sessionId) {
           params.session_id = sessionId;
         }

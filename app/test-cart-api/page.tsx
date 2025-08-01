@@ -11,7 +11,12 @@ export default function TestCartAPIPage() {
   const [results, setResults] = useState<any[]>([]);
   const [testing, setTesting] = useState(false);
 
-  const addResult = (test: string, success: boolean, message: string, data?: any) => {
+  const addResult = (
+    test: string,
+    success: boolean,
+    message: string,
+    data?: any,
+  ) => {
     const result = {
       test,
       success,
@@ -19,12 +24,12 @@ export default function TestCartAPIPage() {
       data,
       timestamp: new Date().toLocaleTimeString(),
     };
-    setResults(prev => [...prev, result]);
+    setResults((prev) => [...prev, result]);
   };
 
   const testGuestCart = async () => {
-    const sessionId = 'test_session_' + Date.now();
-    
+    const sessionId = "test_session_" + Date.now();
+
     try {
       // Test adding to cart as guest
       const response = await fetch(`${API_DOMAIN}/api/cart`, {
@@ -38,21 +43,42 @@ export default function TestCartAPIPage() {
       });
 
       const data = await response.json();
-      
+
       if (response.ok && data.success) {
-        addResult("Guest Add to Cart", true, "Successfully added product to guest cart", data);
-        
+        addResult(
+          "Guest Add to Cart",
+          true,
+          "Successfully added product to guest cart",
+          data,
+        );
+
         // Test getting guest cart
-        const getResponse = await fetch(`${API_DOMAIN}/api/cart?session_id=${sessionId}`);
+        const getResponse = await fetch(
+          `${API_DOMAIN}/api/cart?session_id=${sessionId}`,
+        );
         const getdata = await getResponse.json();
-        
+
         if (getResponse.ok && getdata.success) {
-          addResult("Guest Get Cart", true, `Cart has ${getdata.data?.items?.length || 0} items`, getdata.data);
+          addResult(
+            "Guest Get Cart",
+            true,
+            `Cart has ${getdata.data?.items?.length || 0} items`,
+            getdata.data,
+          );
         } else {
-          addResult("Guest Get Cart", false, getdata.message || "Failed to get cart");
+          addResult(
+            "Guest Get Cart",
+            false,
+            getdata.message || "Failed to get cart",
+          );
         }
       } else {
-        addResult("Guest Add to Cart", false, data.message || "Unknown error", data);
+        addResult(
+          "Guest Add to Cart",
+          false,
+          data.message || "Unknown error",
+          data,
+        );
       }
     } catch (error: any) {
       addResult("Guest Cart Test", false, `Network error: ${error.message}`);
@@ -60,8 +86,8 @@ export default function TestCartAPIPage() {
   };
 
   const testStockValidation = async () => {
-    const sessionId = 'test_stock_' + Date.now();
-    
+    const sessionId = "test_stock_" + Date.now();
+
     try {
       // Test with large quantity to trigger stock validation
       const response = await fetch(`${API_DOMAIN}/api/cart`, {
@@ -75,18 +101,37 @@ export default function TestCartAPIPage() {
       });
 
       const data = await response.json();
-      
+
       if (!response.ok || !data.success) {
-        if (data.message && data.message.toLowerCase().includes('stock')) {
-          addResult("Stock Validation", true, "Stock validation working correctly", data);
+        if (data.message && data.message.toLowerCase().includes("stock")) {
+          addResult(
+            "Stock Validation",
+            true,
+            "Stock validation working correctly",
+            data,
+          );
         } else {
-          addResult("Stock Validation", false, "Stock validation may not be working", data);
+          addResult(
+            "Stock Validation",
+            false,
+            "Stock validation may not be working",
+            data,
+          );
         }
       } else {
-        addResult("Stock Validation", false, "Large quantity was accepted (stock validation may be broken)", data);
+        addResult(
+          "Stock Validation",
+          false,
+          "Large quantity was accepted (stock validation may be broken)",
+          data,
+        );
       }
     } catch (error: any) {
-      addResult("Stock Validation Test", false, `Network error: ${error.message}`);
+      addResult(
+        "Stock Validation Test",
+        false,
+        `Network error: ${error.message}`,
+      );
     }
   };
 
@@ -94,30 +139,34 @@ export default function TestCartAPIPage() {
     try {
       const response = await fetch(`${API_DOMAIN}/api/health`);
       const data = await response.json();
-      
+
       if (response.ok && data.success) {
         addResult("API Health", true, "Backend is healthy", data);
       } else {
         addResult("API Health", false, "Backend health check failed", data);
       }
     } catch (error: any) {
-      addResult("API Health", false, `Cannot connect to backend: ${error.message}`);
+      addResult(
+        "API Health",
+        false,
+        `Cannot connect to backend: ${error.message}`,
+      );
     }
   };
 
   const runAllTests = async () => {
     setTesting(true);
     setResults([]);
-    
+
     try {
       await testAPIHealth();
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       await testGuestCart();
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       await testStockValidation();
-      
+
       toast.success("All tests completed!");
     } catch (error) {
       toast.error("Test execution failed");
@@ -153,11 +202,13 @@ export default function TestCartAPIPage() {
 
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Test Results:</h2>
-          
+
           {results.length === 0 && (
             <Card>
               <CardContent className="pt-6">
-                <p className="text-muted-foreground">No tests run yet. Click "Run All Tests" to start.</p>
+                <p className="text-muted-foreground">
+                  No tests run yet. Click "Run All Tests" to start.
+                </p>
               </CardContent>
             </Card>
           )}
@@ -171,7 +222,9 @@ export default function TestCartAPIPage() {
                     <Badge variant={result.success ? "default" : "destructive"}>
                       {result.success ? "✅ PASS" : "❌ FAIL"}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">{result.timestamp}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {result.timestamp}
+                    </span>
                   </div>
                 </div>
               </CardHeader>
