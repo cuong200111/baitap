@@ -35,7 +35,7 @@ export const testAPI = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
@@ -47,7 +47,7 @@ export const testAPI = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
@@ -58,7 +58,7 @@ export const testAPI = {
     const response = await fetch(`${API_BASE}/api/categories/${id}`, {
       method: "DELETE",
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response.json();

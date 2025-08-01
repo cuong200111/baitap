@@ -750,10 +750,19 @@ router.post(
     body("items.*.quantity")
       .isInt({ min: 1 })
       .withMessage("Valid quantity required"),
-    body("customer_name").trim().notEmpty().withMessage("Customer name required"),
+    body("customer_name")
+      .trim()
+      .notEmpty()
+      .withMessage("Customer name required"),
     body("customer_email").isEmail().withMessage("Valid email required"),
-    body("customer_phone").trim().notEmpty().withMessage("Phone number required"),
-    body("shipping_address").trim().notEmpty().withMessage("Shipping address required"),
+    body("customer_phone")
+      .trim()
+      .notEmpty()
+      .withMessage("Phone number required"),
+    body("shipping_address")
+      .trim()
+      .notEmpty()
+      .withMessage("Shipping address required"),
     body("billing_address").optional().isString(),
     body("notes").optional().isString(),
   ],

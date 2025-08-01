@@ -86,7 +86,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     loadCategories();
   }, []);
- 
+
   const loadCategories = async () => {
     try {
       setLoading(true);
@@ -120,10 +120,13 @@ export default function CategoriesPage() {
     }
     try {
       if (editingCategory) {
-        const response = await apiWrappers.categories.update(editingCategory.id, {
-          ...formData,
-          parent_id: formData.parent_id || undefined,
-        });
+        const response = await apiWrappers.categories.update(
+          editingCategory.id,
+          {
+            ...formData,
+            parent_id: formData.parent_id || undefined,
+          },
+        );
         if (response.success) {
           toast.success("Cập nhật danh mục thành công");
         } else {
@@ -421,8 +424,7 @@ export default function CategoriesPage() {
                 <Label>Hình ảnh danh mục</Label>
                 <MediaSelector
                   selectedImage={formData.image}
-                  onSelect={(imageUrl) =>
-                   {
+                  onSelect={(imageUrl) => {
                     setFormData({ ...formData, image: imageUrl });
                     console.log("Selected image:", imageUrl);
                   }}

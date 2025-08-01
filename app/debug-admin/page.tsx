@@ -25,7 +25,7 @@ export default function DebugAdminPage() {
       setResult("Testing login...");
       const response = await apiWrappers.auth.login(email, password);
       setResult(JSON.stringify(response, null, 2));
-      
+
       if (response.success && response.data?.token) {
         localStorage.setItem("token", response.data.token);
         setToken(response.data.token);
@@ -51,7 +51,7 @@ export default function DebugAdminPage() {
       const response = await apiWrappers.categories.create({
         name: "Test Category " + Date.now(),
         description: "Test category",
-        sort_order: 999
+        sort_order: 999,
       });
       setResult(JSON.stringify(response, null, 2));
     } catch (error: any) {
@@ -92,14 +92,14 @@ export default function DebugAdminPage() {
           {
             product_id: 1,
             quantity: 1,
-            price: 100000
-          }
+            price: 100000,
+          },
         ],
         customer_name: "Test Customer",
         customer_email: "test@example.com",
         customer_phone: "0123456789",
         shipping_address: "123 Test Street, Test City",
-        notes: "Test order"
+        notes: "Test order",
       };
       const data = await apiWrappers.orders.createGuest(orderData);
       setResult(JSON.stringify(data, null, 2));
@@ -118,25 +118,22 @@ export default function DebugAdminPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label>Email:</label>
-              <Input 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div>
               <label>Password:</label>
-              <Input 
+              <Input
                 type="password"
-                value={password} 
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
-          
+
           <div>
             <label>Current Token:</label>
-            <Input 
-              value={token} 
+            <Input
+              value={token}
               onChange={(e) => setToken(e.target.value)}
               placeholder="JWT Token"
             />
