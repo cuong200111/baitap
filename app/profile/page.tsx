@@ -279,32 +279,39 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      // Use Vietnam districts data mapping
-      const districtsMapping = {
+      // Vietnam districts data mapping
+      const districtsMapping: { [key: number]: any[] } = {
         1: [ // Hà Nội
           { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
           { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
           { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
+          { code: 4, name: "Long Biên", full_name: "Quận Long Biên", province_code: 1 },
+          { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
         ],
         20: [ // Quảng Nam
           { code: 200, name: "Tam Kỳ", full_name: "Thành phố Tam Kỳ", province_code: 20 },
           { code: 201, name: "Hội An", full_name: "Thành phố Hội An", province_code: 20 },
           { code: 202, name: "Duy Xuyên", full_name: "Huyện Duy Xuyên", province_code: 20 },
+          { code: 203, name: "Đại Lộc", full_name: "Huyện Đại Lộc", province_code: 20 },
         ],
         26: [ // Khánh Hòa
           { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
           { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
           { code: 262, name: "Cam Lâm", full_name: "Huyện Cam Lâm", province_code: 26 },
+          { code: 263, name: "Vạn Ninh", full_name: "Huyện Vạn Ninh", province_code: 26 },
         ],
         79: [ // TP Hồ Chí Minh
           { code: 760, name: "Quận 1", full_name: "Quận 1", province_code: 79 },
           { code: 761, name: "Quận 2", full_name: "Quận 2", province_code: 79 },
           { code: 762, name: "Quận 3", full_name: "Quận 3", province_code: 79 },
+          { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
         ],
       };
-      setDistricts(fallbackDistricts[provinceCode] || [
+
+      setDistricts(districtsMapping[provinceCode] || [
         { code: provinceCode * 1000 + 1, name: "Huyện 1", full_name: "Huyện 1", province_code: provinceCode },
         { code: provinceCode * 1000 + 2, name: "Huyện 2", full_name: "Huyện 2", province_code: provinceCode },
+        { code: provinceCode * 1000 + 3, name: "Huyện 3", full_name: "Huyện 3", province_code: provinceCode },
       ]);
 
       // Skip API call for now
@@ -340,7 +347,7 @@ export default function ProfilePage() {
             { code: 776, name: "Quận Tân Phú", full_name: "Quận Tân Phú", province_code: 79 },
           ],
           48: [ // Đà Nẵng
-            { code: 490, name: "Hải Châu", full_name: "Quận Hải Châu", province_code: 48 },
+            { code: 490, name: "Hải Châu", full_name: "Quận H��i Châu", province_code: 48 },
             { code: 491, name: "Cam Lệ", full_name: "Quận Cam Lệ", province_code: 48 },
             { code: 492, name: "Thanh Khê", full_name: "Quận Thanh Khê", province_code: 48 },
             { code: 493, name: "Liên Chiểu", full_name: "Quận Liên Chiểu", province_code: 48 },
