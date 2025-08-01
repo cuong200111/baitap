@@ -249,7 +249,7 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       const response = await fetch(
-        `${Domain}/api/locations?type=wards&district_code=${districtCode}`,
+        `/api/locations?type=wards&district_code=${districtCode}`,
       );
 
       const data = await response.json();
@@ -509,7 +509,7 @@ export default function ProfilePage() {
 
   const handleChangePassword = async () => {
     if (passwordData.new_password !== passwordData.confirm_password) {
-      toast.error("Mật khẩu xác nhận không khớp");
+      toast.error("Mật khẩu xác nhận không kh��p");
       return;
     }
 
