@@ -314,11 +314,73 @@ export const categoriesApi = {
     });
   },
 };
-  export const  mediaApi = {
-    getAll(params: Record<string, any> = {}): Promise<ApiResponse<MediaFile[]>> {
-    const searchParams = new URLSearchParams(params);
+  // Media File Interface
+export interface MediaFile {
+  id: number;
+  filename: string;
+  original_name: string;
+  mime_type: string;
+  size: number;
+  path: string;
+  url: string;
+  alt_text?: string;
+  title?: string;
+  uploaded_by: number;
+  entity_type?: string;
+  entity_id?: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export const mediaApi = {
+  getAll(params: Record<string, any> = {}): Promise<ApiResponse<MediaFile[]>> {
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, String(value));
+      }
+    });
     return callApi(`${Domain}/api/media?${searchParams}`);
-  }
+  },
+
+  upload(file: File, entityType: string = 'general'): Promise<ApiResponse<MediaFile>> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('entity_type', entityType);
+
+    // Get token for authenticated upload
+    let headers: Record<string, string> = {};
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+
+    return fetch(`${Domain}/api/media`, {
+      method: 'POST',
+      body: formData,
+      headers, // Don't set Content-Type, browser will set it with boundary
+    }).then(response => response.json());
+  },
+
+  getById(id: number): Promise<ApiResponse<MediaFile>> {
+    return callApi(`${Domain}/api/media/${id}`);
+  },
+
+  update(id: number, data: Partial<MediaFile>): Promise<ApiResponse<MediaFile>> {
+    return callApi(`${Domain}/api/media/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  delete(id: number): Promise<ApiResponse<void>> {
+    return callApi(`${Domain}/api/media/${id}`, {
+      method: 'DELETE',
+    });
+  },
 }
 export interface Review {
   id: number;
