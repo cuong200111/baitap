@@ -66,7 +66,7 @@ import SeoSummaryStats from "@/components/SeoSummaryStats";
 import SeoSystemStatus from "@/components/SeoSystemStatus";
 import AdvancedSeoDashboard from "@/components/AdvancedSeoDashboard";
 import SeoGenerationPanel from "@/components/SeoGenerationPanel";
-import { Domain } from "@/config";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SeoSettings {
   general: {
