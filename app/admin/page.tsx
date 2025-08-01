@@ -12,7 +12,8 @@ import {
   DollarSign,
   Eye,
 } from "lucide-react";
-import { Domain, formatPrice } from "../../config";
+import { formatPrice } from "../../config";
+import { API_DOMAIN } from "@/lib/api-helpers";
 import { usersApi, productsApi, categoriesApi } from "../../config";
 
 interface DashboardStats {
