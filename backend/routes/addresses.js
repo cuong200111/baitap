@@ -8,10 +8,10 @@ const router = express.Router();
 router.get("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
-    
+
     const addresses = await executeQuery(
       `SELECT * FROM customer_addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC`,
-      [userId]
+      [userId],
     );
 
     res.json({
@@ -47,7 +47,8 @@ router.post("/", authenticateToken, async (req, res) => {
     if (!full_name || !address_line_1 || !ward || !district || !city) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields: full_name, address_line_1, ward, district, city",
+        message:
+          "Missing required fields: full_name, address_line_1, ward, district, city",
       });
     }
 
@@ -55,7 +56,7 @@ router.post("/", authenticateToken, async (req, res) => {
     if (is_default) {
       await executeQuery(
         `UPDATE customer_addresses SET is_default = 0 WHERE user_id = ?`,
-        [userId]
+        [userId],
       );
     }
 
@@ -63,13 +64,24 @@ router.post("/", authenticateToken, async (req, res) => {
       `INSERT INTO customer_addresses 
        (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-      [userId, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default ? 1 : 0]
+      [
+        userId,
+        type,
+        full_name,
+        phone,
+        address_line_1,
+        address_line_2,
+        ward,
+        district,
+        city,
+        is_default ? 1 : 0,
+      ],
     );
 
     // Get the created address
     const newAddress = await executeQuery(
       `SELECT * FROM customer_addresses WHERE id = ?`,
-      [result.insertId]
+      [result.insertId],
     );
 
     res.json({
@@ -106,7 +118,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
     // Check if address belongs to user
     const existingAddress = await executeQuery(
       `SELECT * FROM customer_addresses WHERE id = ? AND user_id = ?`,
-      [addressId, userId]
+      [addressId, userId],
     );
 
     if (existingAddress.length === 0) {
@@ -120,7 +132,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
     if (is_default) {
       await executeQuery(
         `UPDATE customer_addresses SET is_default = 0 WHERE user_id = ? AND id != ?`,
-        [userId, addressId]
+        [userId, addressId],
       );
     }
 
@@ -130,13 +142,25 @@ router.put("/:id", authenticateToken, async (req, res) => {
        type = ?, full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?, 
        ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
        WHERE id = ? AND user_id = ?`,
-      [type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default ? 1 : 0, addressId, userId]
+      [
+        type,
+        full_name,
+        phone,
+        address_line_1,
+        address_line_2,
+        ward,
+        district,
+        city,
+        is_default ? 1 : 0,
+        addressId,
+        userId,
+      ],
     );
 
     // Get updated address
     const updatedAddress = await executeQuery(
       `SELECT * FROM customer_addresses WHERE id = ?`,
-      [addressId]
+      [addressId],
     );
 
     res.json({
@@ -162,7 +186,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
     // Check if address belongs to user
     const existingAddress = await executeQuery(
       `SELECT * FROM customer_addresses WHERE id = ? AND user_id = ?`,
-      [addressId, userId]
+      [addressId, userId],
     );
 
     if (existingAddress.length === 0) {
@@ -174,7 +198,7 @@ router.delete("/:id", authenticateToken, async (req, res) => {
 
     await executeQuery(
       `DELETE FROM customer_addresses WHERE id = ? AND user_id = ?`,
-      [addressId, userId]
+      [addressId, userId],
     );
 
     res.json({

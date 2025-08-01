@@ -1,84 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Test Cascade Dropdown</title>
-</head>
-<body>
+  </head>
+  <body>
     <h2>Test Cascade Dropdown Logic</h2>
-    
+
     <h3>Provinces</h3>
     <select id="provinces" onchange="loadDistricts(this.value)">
-        <option value="">Chọn tỉnh</option>
-        <option value="1">Hà Nội</option>
-        <option value="20">Quảng Nam</option>
-        <option value="26">Khánh Hòa</option>
-        <option value="79">TP Hồ Chí Minh</option>
+      <option value="">Chọn tỉnh</option>
+      <option value="1">Hà Nội</option>
+      <option value="20">Quảng Nam</option>
+      <option value="26">Khánh Hòa</option>
+      <option value="79">TP Hồ Chí Minh</option>
     </select>
-    
+
     <h3>Districts</h3>
     <select id="districts" onchange="loadWards(this.value)">
-        <option value="">Chọn huyện</option>
+      <option value="">Chọn huyện</option>
     </select>
-    
+
     <h3>Wards</h3>
     <select id="wards">
-        <option value="">Chọn phường</option>
+      <option value="">Chọn phường</option>
     </select>
 
     <script>
-        const districtsData = {
-            1: [
-                {code: 1, name: "Ba Đình"},
-                {code: 2, name: "Hoàn Kiếm"},
-                {code: 3, name: "Tây Hồ"},
-            ],
-            20: [
-                {code: 200, name: "Tam Kỳ"},
-                {code: 201, name: "Hội An"},
-                {code: 202, name: "Duy Xuyên"},
-            ],
-            26: [
-                {code: 260, name: "Nha Trang"},
-                {code: 261, name: "Cam Ranh"},
-                {code: 262, name: "Cam Lâm"},
-            ],
-            79: [
-                {code: 760, name: "Quận 1"},
-                {code: 761, name: "Quận 2"},
-                {code: 762, name: "Quận 3"},
-            ]
-        };
-        
-        function loadDistricts(provinceCode) {
-            const districtSelect = document.getElementById('districts');
-            districtSelect.innerHTML = '<option value="">Chọn huyện</option>';
-            
-            const wardSelect = document.getElementById('wards');
-            wardSelect.innerHTML = '<option value="">Chọn phường</option>';
-            
-            if (provinceCode && districtsData[provinceCode]) {
-                districtsData[provinceCode].forEach(district => {
-                    const option = document.createElement('option');
-                    option.value = district.code;
-                    option.textContent = district.name;
-                    districtSelect.appendChild(option);
-                });
-            }
+      const districtsData = {
+        1: [
+          { code: 1, name: "Ba Đình" },
+          { code: 2, name: "Hoàn Kiếm" },
+          { code: 3, name: "Tây Hồ" },
+        ],
+        20: [
+          { code: 200, name: "Tam Kỳ" },
+          { code: 201, name: "Hội An" },
+          { code: 202, name: "Duy Xuyên" },
+        ],
+        26: [
+          { code: 260, name: "Nha Trang" },
+          { code: 261, name: "Cam Ranh" },
+          { code: 262, name: "Cam Lâm" },
+        ],
+        79: [
+          { code: 760, name: "Quận 1" },
+          { code: 761, name: "Quận 2" },
+          { code: 762, name: "Quận 3" },
+        ],
+      };
+
+      function loadDistricts(provinceCode) {
+        const districtSelect = document.getElementById("districts");
+        districtSelect.innerHTML = '<option value="">Chọn huyện</option>';
+
+        const wardSelect = document.getElementById("wards");
+        wardSelect.innerHTML = '<option value="">Chọn phường</option>';
+
+        if (provinceCode && districtsData[provinceCode]) {
+          districtsData[provinceCode].forEach((district) => {
+            const option = document.createElement("option");
+            option.value = district.code;
+            option.textContent = district.name;
+            districtSelect.appendChild(option);
+          });
         }
-        
-        function loadWards(districtCode) {
-            const wardSelect = document.getElementById('wards');
-            wardSelect.innerHTML = '<option value="">Chọn phường</option>';
-            
-            if (districtCode) {
-                for (let i = 1; i <= 5; i++) {
-                    const option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = `Phường ${i}`;
-                    wardSelect.appendChild(option);
-                }
-            }
+      }
+
+      function loadWards(districtCode) {
+        const wardSelect = document.getElementById("wards");
+        wardSelect.innerHTML = '<option value="">Chọn phường</option>';
+
+        if (districtCode) {
+          for (let i = 1; i <= 5; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = `Phường ${i}`;
+            wardSelect.appendChild(option);
+          }
         }
+      }
     </script>
-</body>
+  </body>
 </html>

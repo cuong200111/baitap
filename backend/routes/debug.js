@@ -23,12 +23,23 @@ router.post("/add-sample-products", debugController.addSampleProducts);
 // Migration endpoints
 router.post("/migrate-addresses", async (req, res) => {
   try {
-    const { createCustomerAddressesTable } = await import("../database/migrate-addresses.js");
+    const { createCustomerAddressesTable } = await import(
+      "../database/migrate-addresses.js"
+    );
     await createCustomerAddressesTable();
-    res.json({ success: true, message: "Customer addresses table created successfully" });
+    res.json({
+      success: true,
+      message: "Customer addresses table created successfully",
+    });
   } catch (error) {
     console.error("Migration error:", error);
-    res.status(500).json({ success: false, message: "Migration failed", error: error.message });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Migration failed",
+        error: error.message,
+      });
   }
 });
 
@@ -37,7 +48,10 @@ router.post("/add-sample-reviews", debugController.addSampleReviews);
 
 // Orders testing
 router.post("/create-test-order", debugController.createTestOrder);
-router.post("/create-test-order-complete", debugController.createCompleteTestOrder);
+router.post(
+  "/create-test-order-complete",
+  debugController.createCompleteTestOrder,
+);
 
 // Cart testing
 router.get("/cart-test", debugController.testCart);

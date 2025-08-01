@@ -38,7 +38,11 @@ import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
 import { Domain, getMediaUrl } from "@/config";
 import { toast } from "sonner";
-import { fetchProvinces, fetchDistricts, fetchWards } from "@/vietnam-locations";
+import {
+  fetchProvinces,
+  fetchDistricts,
+  fetchWards,
+} from "@/vietnam-locations";
 
 interface UserProfile {
   id: number;
@@ -193,11 +197,13 @@ export default function ProfilePage() {
 
       const provinces = await response.json();
       if (provinces && Array.isArray(provinces)) {
-        setProvinces(provinces.map((p: any) => ({
-          code: p.code,
-          name: p.name,
-          full_name: p.name,
-        })));
+        setProvinces(
+          provinces.map((p: any) => ({
+            code: p.code,
+            name: p.name,
+            full_name: p.name,
+          })),
+        );
       } else {
         throw new Error("Invalid provinces data");
       }
@@ -206,70 +212,78 @@ export default function ProfilePage() {
 
       // Fallback provinces data
       setProvinces([
-          { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
-          { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
-          { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
-          { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
-          { code: 33, name: "Hải Ph��ng", full_name: "Thành phố Hải Phòng" },
-          { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
-          { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
-          { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
-          { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
-          { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
-          { code: 6, name: "B��c Kạn", full_name: "Tỉnh Bắc Kạn" },
-          { code: 8, name: "Tuyên Quang", full_name: "Tỉnh Tuyên Quang" },
-          { code: 10, name: "Lào Cai", full_name: "Tỉnh Lào Cai" },
-          { code: 11, name: "Điện Biên", full_name: "Tỉnh Điện Biên" },
-          { code: 12, name: "Lai Châu", full_name: "Tỉnh Lai Châu" },
-          { code: 14, name: "Sơn La", full_name: "Tỉnh Sơn La" },
-          { code: 15, name: "Yên Bái", full_name: "Tỉnh Yên Bái" },
-          { code: 17, name: "Hoà Bình", full_name: "Tỉnh Hoà Bình" },
-          { code: 19, name: "Thái Nguyên", full_name: "Tỉnh Thái Nguyên" },
-          { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
-          { code: 24, name: "Bắc Giang", full_name: "Tỉnh B��c Giang" },
-          { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
-          { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
-          { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
-          { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
-          { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
-          { code: 36, name: "Thái Bình", full_name: "Tỉnh Th��i Bình" },
-          { code: 37, name: "Hà Nam", full_name: "Tỉnh Hà Nam" },
-          { code: 38, name: "Nam Định", full_name: "Tỉnh Nam Định" },
-          { code: 40, name: "Ninh Bình", full_name: "Tỉnh Ninh Bình" },
-          { code: 42, name: "Thanh Hóa", full_name: "Tỉnh Thanh Hóa" },
-          { code: 44, name: "Nghệ An", full_name: "Tỉnh Nghệ An" },
-          { code: 45, name: "Hà Tĩnh", full_name: "Tỉnh Hà Tĩnh" },
-          { code: 46, name: "Quảng Bình", full_name: "Tỉnh Quảng Bình" },
-          { code: 49, name: "Quảng Trị", full_name: "Tỉnh Quảng Trị" },
-          { code: 51, name: "Thừa Thiên Huế", full_name: "Tỉnh Thừa Thiên Huế" },
-          { code: 52, name: "Quảng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
-          { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
-          { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
-          { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
-          { code: 60, name: "Bình Thuận", full_name: "Tỉnh Bình Thuận" },
-          { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
-          { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
-          { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
-          { code: 67, name: "��ắk Nông", full_name: "Tỉnh Đắk Nông" },
-          { code: 68, name: "Lâm Đồng", full_name: "Tỉnh Lâm Đồng" },
-          { code: 70, name: "Bình Phước", full_name: "Tỉnh Bình Phước" },
-          { code: 72, name: "Tây Ninh", full_name: "Tỉnh Tây Ninh" },
-          { code: 74, name: "Bình Dương", full_name: "Tỉnh Bình Dương" },
-          { code: 75, name: "Đồng Nai", full_name: "Tỉnh Đồng Nai" },
-          { code: 77, name: "Bà Rịa - Vũng Tàu", full_name: "Tỉnh Bà Rịa - Vũng Tàu" },
-          { code: 80, name: "Long An", full_name: "Tỉnh Long An" },
-          { code: 82, name: "Tiền Giang", full_name: "Tỉnh Tiền Giang" },
-          { code: 83, name: "Bến Tre", full_name: "Tỉnh Bến Tre" },
-          { code: 84, name: "Trà Vinh", full_name: "Tỉnh Trà Vinh" },
-          { code: 86, name: "Vĩnh Long", full_name: "Tỉnh Vĩnh Long" },
-          { code: 87, name: "Đồng Tháp", full_name: "Tỉnh Đồng Tháp" },
-          { code: 89, name: "An Giang", full_name: "Tỉnh An Giang" },
-          { code: 91, name: "Kiên Giang", full_name: "Tỉnh Kiên Giang" },
-          { code: 93, name: "Hậu Giang", full_name: "Tỉnh Hậu Giang" },
-          { code: 94, name: "Sóc Trăng", full_name: "Tỉnh Sóc Trăng" },
-          { code: 95, name: "Bạc Liêu", full_name: "Tỉnh Bạc Liêu" },
-          { code: 96, name: "Cà Mau", full_name: "Tỉnh Cà Mau" },
-        ]);
+        { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
+        {
+          code: 79,
+          name: "TP Hồ Chí Minh",
+          full_name: "Thành phố Hồ Chí Minh",
+        },
+        { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
+        { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
+        { code: 33, name: "Hải Ph��ng", full_name: "Thành phố Hải Phòng" },
+        { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
+        { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
+        { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
+        { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
+        { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
+        { code: 6, name: "B��c Kạn", full_name: "Tỉnh Bắc Kạn" },
+        { code: 8, name: "Tuyên Quang", full_name: "Tỉnh Tuyên Quang" },
+        { code: 10, name: "Lào Cai", full_name: "Tỉnh Lào Cai" },
+        { code: 11, name: "Điện Biên", full_name: "Tỉnh Điện Biên" },
+        { code: 12, name: "Lai Châu", full_name: "Tỉnh Lai Châu" },
+        { code: 14, name: "Sơn La", full_name: "Tỉnh Sơn La" },
+        { code: 15, name: "Yên Bái", full_name: "Tỉnh Yên Bái" },
+        { code: 17, name: "Hoà Bình", full_name: "Tỉnh Hoà Bình" },
+        { code: 19, name: "Thái Nguyên", full_name: "Tỉnh Thái Nguyên" },
+        { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
+        { code: 24, name: "Bắc Giang", full_name: "Tỉnh B��c Giang" },
+        { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
+        { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
+        { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
+        { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
+        { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
+        { code: 36, name: "Thái Bình", full_name: "Tỉnh Th��i Bình" },
+        { code: 37, name: "Hà Nam", full_name: "Tỉnh Hà Nam" },
+        { code: 38, name: "Nam Định", full_name: "Tỉnh Nam Định" },
+        { code: 40, name: "Ninh Bình", full_name: "Tỉnh Ninh Bình" },
+        { code: 42, name: "Thanh Hóa", full_name: "Tỉnh Thanh Hóa" },
+        { code: 44, name: "Nghệ An", full_name: "Tỉnh Nghệ An" },
+        { code: 45, name: "Hà Tĩnh", full_name: "Tỉnh Hà Tĩnh" },
+        { code: 46, name: "Quảng Bình", full_name: "Tỉnh Quảng Bình" },
+        { code: 49, name: "Quảng Trị", full_name: "Tỉnh Quảng Trị" },
+        { code: 51, name: "Thừa Thiên Huế", full_name: "Tỉnh Thừa Thiên Huế" },
+        { code: 52, name: "Quảng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
+        { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
+        { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
+        { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
+        { code: 60, name: "Bình Thuận", full_name: "Tỉnh Bình Thuận" },
+        { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
+        { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
+        { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
+        { code: 67, name: "��ắk Nông", full_name: "Tỉnh Đắk Nông" },
+        { code: 68, name: "Lâm Đồng", full_name: "Tỉnh Lâm Đồng" },
+        { code: 70, name: "Bình Phước", full_name: "Tỉnh Bình Phước" },
+        { code: 72, name: "Tây Ninh", full_name: "Tỉnh Tây Ninh" },
+        { code: 74, name: "Bình Dương", full_name: "Tỉnh Bình Dương" },
+        { code: 75, name: "Đồng Nai", full_name: "Tỉnh Đồng Nai" },
+        {
+          code: 77,
+          name: "Bà Rịa - Vũng Tàu",
+          full_name: "Tỉnh Bà Rịa - Vũng Tàu",
+        },
+        { code: 80, name: "Long An", full_name: "Tỉnh Long An" },
+        { code: 82, name: "Tiền Giang", full_name: "Tỉnh Tiền Giang" },
+        { code: 83, name: "Bến Tre", full_name: "Tỉnh Bến Tre" },
+        { code: 84, name: "Trà Vinh", full_name: "Tỉnh Trà Vinh" },
+        { code: 86, name: "Vĩnh Long", full_name: "Tỉnh Vĩnh Long" },
+        { code: 87, name: "Đồng Tháp", full_name: "Tỉnh Đồng Tháp" },
+        { code: 89, name: "An Giang", full_name: "Tỉnh An Giang" },
+        { code: 91, name: "Kiên Giang", full_name: "Tỉnh Kiên Giang" },
+        { code: 93, name: "Hậu Giang", full_name: "Tỉnh Hậu Giang" },
+        { code: 94, name: "Sóc Trăng", full_name: "Tỉnh Sóc Trăng" },
+        { code: 95, name: "Bạc Liêu", full_name: "Tỉnh Bạc Liêu" },
+        { code: 96, name: "Cà Mau", full_name: "Tỉnh Cà Mau" },
+      ]);
     } finally {
       setLoadingLocations(false);
     }
@@ -280,170 +294,681 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       // Call Vietnam API to get real districts
-      const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+      const response = await fetch(
+        `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`,
+      );
 
       if (response.ok) {
         const provinceData = await response.json();
         if (provinceData && provinceData.districts) {
-          setDistricts(provinceData.districts.map((d: any) => ({
-            code: d.code,
-            name: d.name,
-            full_name: d.name,
-            province_code: provinceCode,
-          })));
+          setDistricts(
+            provinceData.districts.map((d: any) => ({
+              code: d.code,
+              name: d.name,
+              full_name: d.name,
+              province_code: provinceCode,
+            })),
+          );
           return;
         }
       }
 
       // Fallback data if API fails
       const districtsMapping: { [key: number]: any[] } = {
-        1: [ // Hà Nội
-          { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
-          { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
-          { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
-          { code: 4, name: "Long Biên", full_name: "Quận Long Biên", province_code: 1 },
-          { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
+        1: [
+          // Hà Nội
+          {
+            code: 1,
+            name: "Ba Đình",
+            full_name: "Quận Ba Đình",
+            province_code: 1,
+          },
+          {
+            code: 2,
+            name: "Hoàn Kiếm",
+            full_name: "Quận Hoàn Kiếm",
+            province_code: 1,
+          },
+          {
+            code: 3,
+            name: "Tây Hồ",
+            full_name: "Quận Tây Hồ",
+            province_code: 1,
+          },
+          {
+            code: 4,
+            name: "Long Biên",
+            full_name: "Quận Long Biên",
+            province_code: 1,
+          },
+          {
+            code: 5,
+            name: "Cầu Giấy",
+            full_name: "Quận Cầu Giấy",
+            province_code: 1,
+          },
         ],
-        20: [ // Quảng Nam
-          { code: 200, name: "Tam Kỳ", full_name: "Thành phố Tam Kỳ", province_code: 20 },
-          { code: 201, name: "Hội An", full_name: "Thành phố Hội An", province_code: 20 },
-          { code: 202, name: "Duy Xuyên", full_name: "Huyện Duy Xuyên", province_code: 20 },
-          { code: 203, name: "Đại Lộc", full_name: "Huyện Đại Lộc", province_code: 20 },
+        20: [
+          // Quảng Nam
+          {
+            code: 200,
+            name: "Tam Kỳ",
+            full_name: "Thành phố Tam Kỳ",
+            province_code: 20,
+          },
+          {
+            code: 201,
+            name: "Hội An",
+            full_name: "Thành phố Hội An",
+            province_code: 20,
+          },
+          {
+            code: 202,
+            name: "Duy Xuyên",
+            full_name: "Huyện Duy Xuyên",
+            province_code: 20,
+          },
+          {
+            code: 203,
+            name: "Đại Lộc",
+            full_name: "Huyện Đại Lộc",
+            province_code: 20,
+          },
         ],
-        26: [ // Khánh Hòa
-          { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
-          { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
-          { code: 262, name: "Cam Lâm", full_name: "Huyện Cam Lâm", province_code: 26 },
-          { code: 263, name: "Vạn Ninh", full_name: "Huyện Vạn Ninh", province_code: 26 },
+        26: [
+          // Khánh Hòa
+          {
+            code: 260,
+            name: "Nha Trang",
+            full_name: "Thành phố Nha Trang",
+            province_code: 26,
+          },
+          {
+            code: 261,
+            name: "Cam Ranh",
+            full_name: "Thành phố Cam Ranh",
+            province_code: 26,
+          },
+          {
+            code: 262,
+            name: "Cam Lâm",
+            full_name: "Huyện Cam Lâm",
+            province_code: 26,
+          },
+          {
+            code: 263,
+            name: "Vạn Ninh",
+            full_name: "Huyện Vạn Ninh",
+            province_code: 26,
+          },
         ],
-        79: [ // TP Hồ Chí Minh
+        79: [
+          // TP Hồ Chí Minh
           { code: 760, name: "Quận 1", full_name: "Quận 1", province_code: 79 },
           { code: 761, name: "Quận 2", full_name: "Quận 2", province_code: 79 },
           { code: 762, name: "Quận 3", full_name: "Quận 3", province_code: 79 },
           { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
         ],
-        11: [ // Điện Biên
-          { code: 110, name: "Điện Biên Phủ", full_name: "Thành phố Điện Biên Phủ", province_code: 11 },
-          { code: 111, name: "Mường Lay", full_name: "Thị xã Mường Lay", province_code: 11 },
-          { code: 112, name: "Mường Nhé", full_name: "Huyện Mường Nhé", province_code: 11 },
-          { code: 113, name: "Mường Chà", full_name: "Huyện Mường Chà", province_code: 11 },
-          { code: 114, name: "Tủa Chùa", full_name: "Huyện T���a Chùa", province_code: 11 },
-          { code: 115, name: "Tuần Giáo", full_name: "Huyện Tuần Giáo", province_code: 11 },
-          { code: 116, name: "Điện Biên", full_name: "Huyện Điện Biên", province_code: 11 },
-          { code: 117, name: "Điện Biên Đông", full_name: "Huyện Điện Biên Đông", province_code: 11 },
-          { code: 118, name: "Mường Ảng", full_name: "Huyện Mường Ảng", province_code: 11 },
-          { code: 119, name: "Nậm Pồ", full_name: "Huyện Nậm Pồ", province_code: 11 },
+        11: [
+          // Điện Biên
+          {
+            code: 110,
+            name: "Điện Biên Phủ",
+            full_name: "Thành phố Điện Biên Phủ",
+            province_code: 11,
+          },
+          {
+            code: 111,
+            name: "Mường Lay",
+            full_name: "Thị xã Mường Lay",
+            province_code: 11,
+          },
+          {
+            code: 112,
+            name: "Mường Nhé",
+            full_name: "Huyện Mường Nhé",
+            province_code: 11,
+          },
+          {
+            code: 113,
+            name: "Mường Chà",
+            full_name: "Huyện Mường Chà",
+            province_code: 11,
+          },
+          {
+            code: 114,
+            name: "Tủa Chùa",
+            full_name: "Huyện T���a Chùa",
+            province_code: 11,
+          },
+          {
+            code: 115,
+            name: "Tuần Giáo",
+            full_name: "Huyện Tuần Giáo",
+            province_code: 11,
+          },
+          {
+            code: 116,
+            name: "Điện Biên",
+            full_name: "Huyện Điện Biên",
+            province_code: 11,
+          },
+          {
+            code: 117,
+            name: "Điện Biên Đông",
+            full_name: "Huyện Điện Biên Đông",
+            province_code: 11,
+          },
+          {
+            code: 118,
+            name: "Mường Ảng",
+            full_name: "Huyện Mường Ảng",
+            province_code: 11,
+          },
+          {
+            code: 119,
+            name: "Nậm Pồ",
+            full_name: "Huyện Nậm Pồ",
+            province_code: 11,
+          },
         ],
-        48: [ // Đà Nẵng
-          { code: 490, name: "Hải Châu", full_name: "Quận Hải Châu", province_code: 48 },
-          { code: 491, name: "Cam Lệ", full_name: "Quận Cam Lệ", province_code: 48 },
-          { code: 492, name: "Thanh Khê", full_name: "Quận Thanh Khê", province_code: 48 },
-          { code: 493, name: "Liên Chiểu", full_name: "Quận Liên Chiểu", province_code: 48 },
-          { code: 494, name: "Ngũ Hành Sơn", full_name: "Quận Ngũ Hành Sơn", province_code: 48 },
-          { code: 495, name: "Sơn Trà", full_name: "Quận Sơn Trà", province_code: 48 },
-          { code: 496, name: "Hoà Vang", full_name: "Huyện Hoà Vang", province_code: 48 },
+        48: [
+          // Đà Nẵng
+          {
+            code: 490,
+            name: "Hải Châu",
+            full_name: "Quận Hải Châu",
+            province_code: 48,
+          },
+          {
+            code: 491,
+            name: "Cam Lệ",
+            full_name: "Quận Cam Lệ",
+            province_code: 48,
+          },
+          {
+            code: 492,
+            name: "Thanh Khê",
+            full_name: "Quận Thanh Khê",
+            province_code: 48,
+          },
+          {
+            code: 493,
+            name: "Liên Chiểu",
+            full_name: "Quận Liên Chiểu",
+            province_code: 48,
+          },
+          {
+            code: 494,
+            name: "Ngũ Hành Sơn",
+            full_name: "Quận Ngũ Hành Sơn",
+            province_code: 48,
+          },
+          {
+            code: 495,
+            name: "Sơn Trà",
+            full_name: "Quận Sơn Trà",
+            province_code: 48,
+          },
+          {
+            code: 496,
+            name: "Hoà Vang",
+            full_name: "Huyện Hoà Vang",
+            province_code: 48,
+          },
         ],
-        92: [ // Cần Thơ
-          { code: 916, name: "Ninh Kiều", full_name: "Quận Ninh Kiều", province_code: 92 },
-          { code: 917, name: "Ô Môn", full_name: "Quận Ô Môn", province_code: 92 },
-          { code: 918, name: "Bình Thuỷ", full_name: "Quận Bình Thuỷ", province_code: 92 },
-          { code: 919, name: "Cái Răng", full_name: "Quận Cái Răng", province_code: 92 },
-          { code: 920, name: "Thốt Nốt", full_name: "Quận Thốt Nốt", province_code: 92 },
-          { code: 921, name: "Vĩnh Thạnh", full_name: "Huyện Vĩnh Thạnh", province_code: 92 },
-          { code: 922, name: "Cờ Đỏ", full_name: "Huyện Cờ Đỏ", province_code: 92 },
-          { code: 923, name: "Phong Điền", full_name: "Huyện Phong Điền", province_code: 92 },
-          { code: 924, name: "Thới Lai", full_name: "Huyện Thới Lai", province_code: 92 },
+        92: [
+          // Cần Thơ
+          {
+            code: 916,
+            name: "Ninh Kiều",
+            full_name: "Quận Ninh Kiều",
+            province_code: 92,
+          },
+          {
+            code: 917,
+            name: "Ô Môn",
+            full_name: "Quận Ô Môn",
+            province_code: 92,
+          },
+          {
+            code: 918,
+            name: "Bình Thuỷ",
+            full_name: "Quận Bình Thuỷ",
+            province_code: 92,
+          },
+          {
+            code: 919,
+            name: "Cái Răng",
+            full_name: "Quận Cái Răng",
+            province_code: 92,
+          },
+          {
+            code: 920,
+            name: "Thốt Nốt",
+            full_name: "Quận Thốt Nốt",
+            province_code: 92,
+          },
+          {
+            code: 921,
+            name: "Vĩnh Thạnh",
+            full_name: "Huyện Vĩnh Thạnh",
+            province_code: 92,
+          },
+          {
+            code: 922,
+            name: "Cờ Đỏ",
+            full_name: "Huyện Cờ Đỏ",
+            province_code: 92,
+          },
+          {
+            code: 923,
+            name: "Phong Điền",
+            full_name: "Huyện Phong Điền",
+            province_code: 92,
+          },
+          {
+            code: 924,
+            name: "Thới Lai",
+            full_name: "Huyện Thới Lai",
+            province_code: 92,
+          },
         ],
       };
 
-      setDistricts(districtsMapping[provinceCode] || [
-        { code: provinceCode * 1000 + 1, name: "Huyện 1", full_name: "Huyện 1", province_code: provinceCode },
-        { code: provinceCode * 1000 + 2, name: "Huyện 2", full_name: "Huyện 2", province_code: provinceCode },
-        { code: provinceCode * 1000 + 3, name: "Huyện 3", full_name: "Huyện 3", province_code: provinceCode },
-      ]);
+      setDistricts(
+        districtsMapping[provinceCode] || [
+          {
+            code: provinceCode * 1000 + 1,
+            name: "Huyện 1",
+            full_name: "Huyện 1",
+            province_code: provinceCode,
+          },
+          {
+            code: provinceCode * 1000 + 2,
+            name: "Huyện 2",
+            full_name: "Huyện 2",
+            province_code: provinceCode,
+          },
+          {
+            code: provinceCode * 1000 + 3,
+            name: "Huyện 3",
+            full_name: "Huyện 3",
+            province_code: provinceCode,
+          },
+        ],
+      );
 
       // Skip API call for now
       if (false) {
         console.error("Failed to load districts:", data.message);
         // Provide fallback districts for major provinces
         const fallbackDistricts = {
-          1: [ // Hà Nội
-            { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
-            { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
-            { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
-            { code: 4, name: "Long Biên", full_name: "Quận Long Bi��n", province_code: 1 },
-            { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
-            { code: 6, name: "Đống Đa", full_name: "Quận Đống Đa", province_code: 1 },
-            { code: 7, name: "Hai Bà Trưng", full_name: "Quận Hai Bà Trưng", province_code: 1 },
-            { code: 8, name: "Hoàng Mai", full_name: "Quận Hoàng Mai", province_code: 1 },
-            { code: 9, name: "Thanh Xuân", full_name: "Quận Thanh Xuân", province_code: 1 },
-            { code: 19, name: "Nam Từ Liêm", full_name: "Quận Nam Từ Liêm", province_code: 1 },
-            { code: 250, name: "Bắc Từ Liêm", full_name: "Quận Bắc Từ Liêm", province_code: 1 },
+          1: [
+            // Hà Nội
+            {
+              code: 1,
+              name: "Ba Đình",
+              full_name: "Quận Ba Đình",
+              province_code: 1,
+            },
+            {
+              code: 2,
+              name: "Hoàn Kiếm",
+              full_name: "Quận Hoàn Kiếm",
+              province_code: 1,
+            },
+            {
+              code: 3,
+              name: "Tây Hồ",
+              full_name: "Quận Tây Hồ",
+              province_code: 1,
+            },
+            {
+              code: 4,
+              name: "Long Biên",
+              full_name: "Quận Long Bi��n",
+              province_code: 1,
+            },
+            {
+              code: 5,
+              name: "Cầu Giấy",
+              full_name: "Quận Cầu Giấy",
+              province_code: 1,
+            },
+            {
+              code: 6,
+              name: "Đống Đa",
+              full_name: "Quận Đống Đa",
+              province_code: 1,
+            },
+            {
+              code: 7,
+              name: "Hai Bà Trưng",
+              full_name: "Quận Hai Bà Trưng",
+              province_code: 1,
+            },
+            {
+              code: 8,
+              name: "Hoàng Mai",
+              full_name: "Quận Hoàng Mai",
+              province_code: 1,
+            },
+            {
+              code: 9,
+              name: "Thanh Xuân",
+              full_name: "Quận Thanh Xuân",
+              province_code: 1,
+            },
+            {
+              code: 19,
+              name: "Nam Từ Liêm",
+              full_name: "Quận Nam Từ Liêm",
+              province_code: 1,
+            },
+            {
+              code: 250,
+              name: "Bắc Từ Liêm",
+              full_name: "Quận Bắc Từ Liêm",
+              province_code: 1,
+            },
           ],
-          79: [ // TP Hồ Chí Minh
-            { code: 760, name: "Quận 1", full_name: "Quận 1", province_code: 79 },
-            { code: 761, name: "Quận 2", full_name: "Quận 2", province_code: 79 },
-            { code: 762, name: "Quận 3", full_name: "Quận 3", province_code: 79 },
-            { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
-            { code: 764, name: "Quận 5", full_name: "Quận 5", province_code: 79 },
-            { code: 765, name: "Quận 6", full_name: "Quận 6", province_code: 79 },
-            { code: 766, name: "Quận 7", full_name: "Quận 7", province_code: 79 },
-            { code: 772, name: "Quận Bình Thạnh", full_name: "Quận Bình Thạnh", province_code: 79 },
-            { code: 773, name: "Quận Gò Vấp", full_name: "Quận Gò V��p", province_code: 79 },
-            { code: 774, name: "Quận Phú Nhuận", full_name: "Quận Phú Nhuận", province_code: 79 },
-            { code: 775, name: "Quận Tân Bình", full_name: "Quận Tân Bình", province_code: 79 },
-            { code: 776, name: "Quận Tân Phú", full_name: "Quận Tân Phú", province_code: 79 },
+          79: [
+            // TP Hồ Chí Minh
+            {
+              code: 760,
+              name: "Quận 1",
+              full_name: "Quận 1",
+              province_code: 79,
+            },
+            {
+              code: 761,
+              name: "Quận 2",
+              full_name: "Quận 2",
+              province_code: 79,
+            },
+            {
+              code: 762,
+              name: "Quận 3",
+              full_name: "Quận 3",
+              province_code: 79,
+            },
+            {
+              code: 763,
+              name: "Quận 4",
+              full_name: "Quận 4",
+              province_code: 79,
+            },
+            {
+              code: 764,
+              name: "Quận 5",
+              full_name: "Quận 5",
+              province_code: 79,
+            },
+            {
+              code: 765,
+              name: "Quận 6",
+              full_name: "Quận 6",
+              province_code: 79,
+            },
+            {
+              code: 766,
+              name: "Quận 7",
+              full_name: "Quận 7",
+              province_code: 79,
+            },
+            {
+              code: 772,
+              name: "Quận Bình Thạnh",
+              full_name: "Quận Bình Thạnh",
+              province_code: 79,
+            },
+            {
+              code: 773,
+              name: "Quận Gò Vấp",
+              full_name: "Quận Gò V��p",
+              province_code: 79,
+            },
+            {
+              code: 774,
+              name: "Quận Phú Nhuận",
+              full_name: "Quận Phú Nhuận",
+              province_code: 79,
+            },
+            {
+              code: 775,
+              name: "Quận Tân Bình",
+              full_name: "Quận Tân Bình",
+              province_code: 79,
+            },
+            {
+              code: 776,
+              name: "Quận Tân Phú",
+              full_name: "Quận Tân Phú",
+              province_code: 79,
+            },
           ],
-          48: [ // Đà Nẵng
-            { code: 490, name: "Hải Châu", full_name: "Quận H��i Châu", province_code: 48 },
-            { code: 491, name: "Cam Lệ", full_name: "Quận Cam Lệ", province_code: 48 },
-            { code: 492, name: "Thanh Khê", full_name: "Quận Thanh Khê", province_code: 48 },
-            { code: 493, name: "Liên Chiểu", full_name: "Quận Liên Chiểu", province_code: 48 },
-            { code: 494, name: "Ngũ Hành Sơn", full_name: "Qu���n Ngũ Hành Sơn", province_code: 48 },
-            { code: 495, name: "Sơn Trà", full_name: "Quận Sơn Trà", province_code: 48 },
+          48: [
+            // Đà Nẵng
+            {
+              code: 490,
+              name: "Hải Châu",
+              full_name: "Quận H��i Châu",
+              province_code: 48,
+            },
+            {
+              code: 491,
+              name: "Cam Lệ",
+              full_name: "Quận Cam Lệ",
+              province_code: 48,
+            },
+            {
+              code: 492,
+              name: "Thanh Khê",
+              full_name: "Quận Thanh Khê",
+              province_code: 48,
+            },
+            {
+              code: 493,
+              name: "Liên Chiểu",
+              full_name: "Quận Liên Chiểu",
+              province_code: 48,
+            },
+            {
+              code: 494,
+              name: "Ngũ Hành Sơn",
+              full_name: "Qu���n Ngũ Hành Sơn",
+              province_code: 48,
+            },
+            {
+              code: 495,
+              name: "Sơn Trà",
+              full_name: "Quận Sơn Trà",
+              province_code: 48,
+            },
           ],
-          92: [ // Cần Thơ
-            { code: 916, name: "Ninh Kiều", full_name: "Quận Ninh Kiều", province_code: 92 },
-            { code: 917, name: "Ô Môn", full_name: "Quận Ô Môn", province_code: 92 },
-            { code: 918, name: "Bình Thuỷ", full_name: "Quận Bình Thuỷ", province_code: 92 },
-            { code: 919, name: "Cái Răng", full_name: "Quận Cái Răng", province_code: 92 },
-            { code: 923, name: "Thốt Nốt", full_name: "Quận Thốt Nốt", province_code: 92 },
+          92: [
+            // Cần Thơ
+            {
+              code: 916,
+              name: "Ninh Kiều",
+              full_name: "Quận Ninh Kiều",
+              province_code: 92,
+            },
+            {
+              code: 917,
+              name: "Ô Môn",
+              full_name: "Quận Ô Môn",
+              province_code: 92,
+            },
+            {
+              code: 918,
+              name: "Bình Thuỷ",
+              full_name: "Quận Bình Thuỷ",
+              province_code: 92,
+            },
+            {
+              code: 919,
+              name: "Cái Răng",
+              full_name: "Quận Cái Răng",
+              province_code: 92,
+            },
+            {
+              code: 923,
+              name: "Thốt Nốt",
+              full_name: "Quận Thốt Nốt",
+              province_code: 92,
+            },
           ],
-          20: [ // Quảng Nam
-            { code: 200, name: "Tam Kỳ", full_name: "Thành phố Tam Kỳ", province_code: 20 },
-            { code: 201, name: "Hội An", full_name: "Thành phố Hội An", province_code: 20 },
-            { code: 202, name: "Duy Xuyên", full_name: "Huyện Duy Xuyên", province_code: 20 },
-            { code: 203, name: "Đại Lộc", full_name: "Huyện Đại Lộc", province_code: 20 },
-            { code: 204, name: "Điện Bàn", full_name: "Thị xã Điện Bàn", province_code: 20 },
-            { code: 205, name: "Thăng Bình", full_name: "Huyện Thăng Bình", province_code: 20 },
-            { code: 206, name: "Tiên Phước", full_name: "Huyện Tiên Phước", province_code: 20 },
+          20: [
+            // Quảng Nam
+            {
+              code: 200,
+              name: "Tam Kỳ",
+              full_name: "Thành phố Tam Kỳ",
+              province_code: 20,
+            },
+            {
+              code: 201,
+              name: "Hội An",
+              full_name: "Thành phố Hội An",
+              province_code: 20,
+            },
+            {
+              code: 202,
+              name: "Duy Xuyên",
+              full_name: "Huyện Duy Xuyên",
+              province_code: 20,
+            },
+            {
+              code: 203,
+              name: "Đại Lộc",
+              full_name: "Huyện Đại Lộc",
+              province_code: 20,
+            },
+            {
+              code: 204,
+              name: "Điện Bàn",
+              full_name: "Thị xã Điện Bàn",
+              province_code: 20,
+            },
+            {
+              code: 205,
+              name: "Thăng Bình",
+              full_name: "Huyện Thăng Bình",
+              province_code: 20,
+            },
+            {
+              code: 206,
+              name: "Tiên Phước",
+              full_name: "Huyện Tiên Phước",
+              province_code: 20,
+            },
           ],
-          26: [ // Khánh Hòa
-            { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
-            { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
-            { code: 262, name: "Cam Lâm", full_name: "Huyện Cam Lâm", province_code: 26 },
-            { code: 263, name: "Vạn Ninh", full_name: "Huyện Vạn Ninh", province_code: 26 },
-            { code: 264, name: "Ninh Hòa", full_name: "Thị xã Ninh Hòa", province_code: 26 },
-            { code: 265, name: "Khánh Vĩnh", full_name: "Huyện Khánh Vĩnh", province_code: 26 },
-            { code: 266, name: "Diên Khánh", full_name: "Huyện Diên Khánh", province_code: 26 },
+          26: [
+            // Khánh Hòa
+            {
+              code: 260,
+              name: "Nha Trang",
+              full_name: "Thành phố Nha Trang",
+              province_code: 26,
+            },
+            {
+              code: 261,
+              name: "Cam Ranh",
+              full_name: "Thành phố Cam Ranh",
+              province_code: 26,
+            },
+            {
+              code: 262,
+              name: "Cam Lâm",
+              full_name: "Huyện Cam Lâm",
+              province_code: 26,
+            },
+            {
+              code: 263,
+              name: "Vạn Ninh",
+              full_name: "Huyện Vạn Ninh",
+              province_code: 26,
+            },
+            {
+              code: 264,
+              name: "Ninh Hòa",
+              full_name: "Thị xã Ninh Hòa",
+              province_code: 26,
+            },
+            {
+              code: 265,
+              name: "Khánh Vĩnh",
+              full_name: "Huyện Khánh Vĩnh",
+              province_code: 26,
+            },
+            {
+              code: 266,
+              name: "Diên Khánh",
+              full_name: "Huyện Diên Khánh",
+              province_code: 26,
+            },
           ],
         };
-        setDistricts(fallbackDistricts[provinceCode] || [
-          // Generic fallback for any province
-          { code: provinceCode * 1000 + 1, name: "Huyện/Quận 1", full_name: "Huyện/Quận 1", province_code: provinceCode },
-          { code: provinceCode * 1000 + 2, name: "Huyện/Quận 2", full_name: "Huyện/Quận 2", province_code: provinceCode },
-          { code: provinceCode * 1000 + 3, name: "Huyện/Quận 3", full_name: "Huyện/Quận 3", province_code: provinceCode },
-        ]);
+        setDistricts(
+          fallbackDistricts[provinceCode] || [
+            // Generic fallback for any province
+            {
+              code: provinceCode * 1000 + 1,
+              name: "Huyện/Quận 1",
+              full_name: "Huyện/Quận 1",
+              province_code: provinceCode,
+            },
+            {
+              code: provinceCode * 1000 + 2,
+              name: "Huyện/Quận 2",
+              full_name: "Huyện/Quận 2",
+              province_code: provinceCode,
+            },
+            {
+              code: provinceCode * 1000 + 3,
+              name: "Huyện/Quận 3",
+              full_name: "Huyện/Quận 3",
+              province_code: provinceCode,
+            },
+          ],
+        );
       }
     } catch (error: any) {
       console.error("Failed to load districts:", error);
       // Provide fallback districts when API fails
       setDistricts([
-        { code: provinceCode * 1000 + 1, name: "Huyện/Quận 1", full_name: "Huyện/Quận 1", province_code: provinceCode },
-        { code: provinceCode * 1000 + 2, name: "Huyện/Quận 2", full_name: "Huyện/Quận 2", province_code: provinceCode },
-        { code: provinceCode * 1000 + 3, name: "Huyện/Quận 3", full_name: "Huyện/Quận 3", province_code: provinceCode },
-        { code: provinceCode * 1000 + 4, name: "Huyện/Quận 4", full_name: "Huyện/Quận 4", province_code: provinceCode },
-        { code: provinceCode * 1000 + 5, name: "Huyện/Quận 5", full_name: "Huyện/Quận 5", province_code: provinceCode },
+        {
+          code: provinceCode * 1000 + 1,
+          name: "Huyện/Quận 1",
+          full_name: "Huyện/Quận 1",
+          province_code: provinceCode,
+        },
+        {
+          code: provinceCode * 1000 + 2,
+          name: "Huyện/Quận 2",
+          full_name: "Huyện/Quận 2",
+          province_code: provinceCode,
+        },
+        {
+          code: provinceCode * 1000 + 3,
+          name: "Huyện/Quận 3",
+          full_name: "Huyện/Quận 3",
+          province_code: provinceCode,
+        },
+        {
+          code: provinceCode * 1000 + 4,
+          name: "Huyện/Quận 4",
+          full_name: "Huyện/Quận 4",
+          province_code: provinceCode,
+        },
+        {
+          code: provinceCode * 1000 + 5,
+          name: "Huyện/Quận 5",
+          full_name: "Huyện/Quận 5",
+          province_code: provinceCode,
+        },
       ]);
     } finally {
       setLoadingLocations(false);
@@ -455,17 +980,21 @@ export default function ProfilePage() {
       setLoadingLocations(true);
 
       // Call Vietnam API to get real wards
-      const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+      const response = await fetch(
+        `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`,
+      );
 
       if (response.ok) {
         const districtData = await response.json();
         if (districtData && districtData.wards) {
-          setWards(districtData.wards.map((w: any) => ({
-            code: w.code,
-            name: w.name,
-            full_name: w.name,
-            district_code: districtCode,
-          })));
+          setWards(
+            districtData.wards.map((w: any) => ({
+              code: w.code,
+              name: w.name,
+              full_name: w.name,
+              district_code: districtCode,
+            })),
+          );
           return;
         }
       }
@@ -474,58 +1003,235 @@ export default function ProfilePage() {
       const wardsMapping: { [key: number]: any[] } = {
         // Điện Biên Phủ (Điện Biên)
         110: [
-          { code: 3556, name: "Him Lam", full_name: "Phường Him Lam", district_code: 110 },
-          { code: 3559, name: "Noong Bua", full_name: "Phường Noong Bua", district_code: 110 },
-          { code: 3562, name: "Tân Thanh", full_name: "Phường Tân Thanh", district_code: 110 },
-          { code: 3565, name: "Thanh Bình", full_name: "Phường Thanh Bình", district_code: 110 },
-          { code: 3568, name: "Nam Thanh", full_name: "Ph��ờng Nam Thanh", district_code: 110 },
-          { code: 3571, name: "Thanh Trường", full_name: "Phường Thanh Trường", district_code: 110 },
+          {
+            code: 3556,
+            name: "Him Lam",
+            full_name: "Phường Him Lam",
+            district_code: 110,
+          },
+          {
+            code: 3559,
+            name: "Noong Bua",
+            full_name: "Phường Noong Bua",
+            district_code: 110,
+          },
+          {
+            code: 3562,
+            name: "Tân Thanh",
+            full_name: "Phường Tân Thanh",
+            district_code: 110,
+          },
+          {
+            code: 3565,
+            name: "Thanh Bình",
+            full_name: "Phường Thanh Bình",
+            district_code: 110,
+          },
+          {
+            code: 3568,
+            name: "Nam Thanh",
+            full_name: "Ph��ờng Nam Thanh",
+            district_code: 110,
+          },
+          {
+            code: 3571,
+            name: "Thanh Trường",
+            full_name: "Phường Thanh Trường",
+            district_code: 110,
+          },
         ],
         // Ba Đình (Hà Nội)
         1: [
-          { code: 1, name: "Phúc Xá", full_name: "Phường Phúc Xá", district_code: 1 },
-          { code: 4, name: "Trúc Bạch", full_name: "Phường Trúc Bạch", district_code: 1 },
-          { code: 6, name: "Vĩnh Phúc", full_name: "Phường Vĩnh Phúc", district_code: 1 },
-          { code: 7, name: "Cống Vị", full_name: "Phường Cống Vị", district_code: 1 },
-          { code: 8, name: "Liễu Giai", full_name: "Phường Liễu Giai", district_code: 1 },
-          { code: 10, name: "Nguyễn Trung Trực", full_name: "Phường Nguyễn Trung Trực", district_code: 1 },
+          {
+            code: 1,
+            name: "Phúc Xá",
+            full_name: "Phường Phúc Xá",
+            district_code: 1,
+          },
+          {
+            code: 4,
+            name: "Trúc Bạch",
+            full_name: "Phường Trúc Bạch",
+            district_code: 1,
+          },
+          {
+            code: 6,
+            name: "Vĩnh Phúc",
+            full_name: "Phường Vĩnh Phúc",
+            district_code: 1,
+          },
+          {
+            code: 7,
+            name: "Cống Vị",
+            full_name: "Phường Cống Vị",
+            district_code: 1,
+          },
+          {
+            code: 8,
+            name: "Liễu Giai",
+            full_name: "Phường Liễu Giai",
+            district_code: 1,
+          },
+          {
+            code: 10,
+            name: "Nguyễn Trung Trực",
+            full_name: "Phường Nguyễn Trung Trực",
+            district_code: 1,
+          },
         ],
         // Quận 1 (TP.HCM)
         760: [
-          { code: 26734, name: "Tân Định", full_name: "Phường Tân Định", district_code: 760 },
-          { code: 26737, name: "Đa Kao", full_name: "Phường Đa Kao", district_code: 760 },
-          { code: 26740, name: "Bến Nghé", full_name: "Phường Bến Nghé", district_code: 760 },
-          { code: 26743, name: "Bến Thành", full_name: "Phường Bến Thành", district_code: 760 },
-          { code: 26746, name: "Nguyễn Thái Bình", full_name: "Phường Nguyễn Thái Bình", district_code: 760 },
-          { code: 26749, name: "Ph���m Ngũ Lão", full_name: "Phường Phạm Ngũ Lão", district_code: 760 },
+          {
+            code: 26734,
+            name: "Tân Định",
+            full_name: "Phường Tân Định",
+            district_code: 760,
+          },
+          {
+            code: 26737,
+            name: "Đa Kao",
+            full_name: "Phường Đa Kao",
+            district_code: 760,
+          },
+          {
+            code: 26740,
+            name: "Bến Nghé",
+            full_name: "Phường Bến Nghé",
+            district_code: 760,
+          },
+          {
+            code: 26743,
+            name: "Bến Thành",
+            full_name: "Phường Bến Thành",
+            district_code: 760,
+          },
+          {
+            code: 26746,
+            name: "Nguyễn Thái Bình",
+            full_name: "Phường Nguyễn Thái Bình",
+            district_code: 760,
+          },
+          {
+            code: 26749,
+            name: "Ph���m Ngũ Lão",
+            full_name: "Phường Phạm Ngũ Lão",
+            district_code: 760,
+          },
         ],
         // Tam Kỳ (Quảng Nam)
         200: [
-          { code: 6859, name: "Tân Thạnh", full_name: "Phường Tân Thạnh", district_code: 200 },
-          { code: 6862, name: "Phước Hòa", full_name: "Phường Phước Hòa", district_code: 200 },
-          { code: 6865, name: "An Mỹ", full_name: "Phường An Mỹ", district_code: 200 },
-          { code: 6868, name: "Hòa Hương", full_name: "Phường Hòa Hương", district_code: 200 },
-          { code: 6871, name: "An Xuân", full_name: "Phường An Xuân", district_code: 200 },
-          { code: 6874, name: "An Sơn", full_name: "Phường An Sơn", district_code: 200 },
+          {
+            code: 6859,
+            name: "Tân Thạnh",
+            full_name: "Phường Tân Thạnh",
+            district_code: 200,
+          },
+          {
+            code: 6862,
+            name: "Phước Hòa",
+            full_name: "Phường Phước Hòa",
+            district_code: 200,
+          },
+          {
+            code: 6865,
+            name: "An Mỹ",
+            full_name: "Phường An Mỹ",
+            district_code: 200,
+          },
+          {
+            code: 6868,
+            name: "Hòa Hương",
+            full_name: "Phường Hòa Hương",
+            district_code: 200,
+          },
+          {
+            code: 6871,
+            name: "An Xuân",
+            full_name: "Phường An Xuân",
+            district_code: 200,
+          },
+          {
+            code: 6874,
+            name: "An Sơn",
+            full_name: "Phường An Sơn",
+            district_code: 200,
+          },
         ],
         // Nha Trang (Khánh Hòa)
         260: [
-          { code: 9304, name: "Vĩnh Hải", full_name: "Phường Vĩnh Hải", district_code: 260 },
-          { code: 9307, name: "Vĩnh Hòa", full_name: "Phường Vĩnh Hòa", district_code: 260 },
-          { code: 9310, name: "Vĩnh Phước", full_name: "Phường Vĩnh Phư��c", district_code: 260 },
-          { code: 9313, name: "Ngọc Hiệp", full_name: "Phường Ngọc Hiệp", district_code: 260 },
-          { code: 9316, name: "Vĩnh Thọ", full_name: "Phường Vĩnh Thọ", district_code: 260 },
-          { code: 9319, name: "Xương Huân", full_name: "Phường Xương Huân", district_code: 260 },
+          {
+            code: 9304,
+            name: "Vĩnh Hải",
+            full_name: "Phường Vĩnh Hải",
+            district_code: 260,
+          },
+          {
+            code: 9307,
+            name: "Vĩnh Hòa",
+            full_name: "Phường Vĩnh Hòa",
+            district_code: 260,
+          },
+          {
+            code: 9310,
+            name: "Vĩnh Phước",
+            full_name: "Phường Vĩnh Phư��c",
+            district_code: 260,
+          },
+          {
+            code: 9313,
+            name: "Ngọc Hiệp",
+            full_name: "Phường Ngọc Hiệp",
+            district_code: 260,
+          },
+          {
+            code: 9316,
+            name: "Vĩnh Thọ",
+            full_name: "Phường Vĩnh Thọ",
+            district_code: 260,
+          },
+          {
+            code: 9319,
+            name: "Xương Huân",
+            full_name: "Phường Xương Huân",
+            district_code: 260,
+          },
         ],
       };
 
-      setWards(wardsMapping[districtCode] || [
-        { code: 1, name: "Phường 1", full_name: "Phường 1", district_code: districtCode },
-        { code: 2, name: "Phường 2", full_name: "Phường 2", district_code: districtCode },
-        { code: 3, name: "Phường 3", full_name: "Phư��ng 3", district_code: districtCode },
-        { code: 4, name: "Phường 4", full_name: "Phường 4", district_code: districtCode },
-        { code: 5, name: "Phường 5", full_name: "Phường 5", district_code: districtCode },
-      ]);
+      setWards(
+        wardsMapping[districtCode] || [
+          {
+            code: 1,
+            name: "Phường 1",
+            full_name: "Phường 1",
+            district_code: districtCode,
+          },
+          {
+            code: 2,
+            name: "Phường 2",
+            full_name: "Phường 2",
+            district_code: districtCode,
+          },
+          {
+            code: 3,
+            name: "Phường 3",
+            full_name: "Phư��ng 3",
+            district_code: districtCode,
+          },
+          {
+            code: 4,
+            name: "Phường 4",
+            full_name: "Phường 4",
+            district_code: districtCode,
+          },
+          {
+            code: 5,
+            name: "Phường 5",
+            full_name: "Phường 5",
+            district_code: districtCode,
+          },
+        ],
+      );
     } catch (error: any) {
       console.error("Failed to load wards:", error);
       // Only show error if it's not an abort error
@@ -619,7 +1325,11 @@ export default function ProfilePage() {
     }
 
     // Validate address fields
-    if (!addressData.province_name || !addressData.district_name || !addressData.ward_name) {
+    if (
+      !addressData.province_name ||
+      !addressData.district_name ||
+      !addressData.ward_name
+    ) {
       throw new Error("Vui lòng chọn đầy đủ tỉnh/thành, quận/huyện, phường/xã");
     }
 
@@ -711,7 +1421,9 @@ export default function ProfilePage() {
           toast.success("Cập nhật thông tin và địa chỉ thành công");
         } catch (addressError) {
           console.error("Address save error:", addressError);
-          toast.success("Cập nhật thông tin thành công, nhưng có lỗi khi lưu địa chỉ");
+          toast.success(
+            "Cập nhật thông tin thành công, nhưng có lỗi khi lưu địa chỉ",
+          );
         }
 
         // Refresh user context
@@ -1270,7 +1982,9 @@ export default function ProfilePage() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="new_password">Mật kh���u mới</Label>
+                              <Label htmlFor="new_password">
+                                Mật kh���u mới
+                              </Label>
                               <Input
                                 id="new_password"
                                 type="password"

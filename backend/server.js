@@ -4,7 +4,6 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 
-
 // Import routes
 import authRoutes from "./routes/auth.js";
 import categoryRoutes from "./routes/categories.js";
@@ -33,8 +32,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-
-
 
 // Security middleware
 // app.use(helmet());
@@ -159,8 +156,8 @@ if (process.env.NODE_ENV !== "production") {
   app.use("/api/dev", devRoutes);
   app.use("/api/debug", debugRoutes);
 }
- 
-  app.use("/api", sitemapRouter);
+
+app.use("/api", sitemapRouter);
 // 404 handler
 app.use("/api/*", (req, res) => {
   res.status(404).json({
@@ -209,12 +206,12 @@ app.use((error, req, res, next) => {
 
 // Start server
 const startServer = async () => {
-     app.listen(PORT, () => {
-      console.log(`🚀 HACOM Backend API running on port ${PORT}`);
-      console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
-    });
+  app.listen(PORT, () => {
+    console.log(`🚀 HACOM Backend API running on port ${PORT}`);
+    console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+  });
 };
 
 // Handle graceful shutdown

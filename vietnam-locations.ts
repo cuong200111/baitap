@@ -28,7 +28,7 @@ export const fetchProvinces = async (): Promise<Province[]> => {
   try {
     const response = await fetch(`${VN_API_BASE}/p/`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    
+
     const provinces = await response.json();
     return provinces.map((p: any) => ({
       code: p.code,
@@ -47,11 +47,13 @@ export const fetchProvinces = async (): Promise<Province[]> => {
   }
 };
 
-export const fetchDistricts = async (provinceCode: number): Promise<District[]> => {
+export const fetchDistricts = async (
+  provinceCode: number,
+): Promise<District[]> => {
   try {
     const response = await fetch(`${VN_API_BASE}/p/${provinceCode}?depth=2`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    
+
     const provinceData = await response.json();
     if (provinceData && provinceData.districts) {
       return provinceData.districts.map((d: any) => ({
@@ -66,9 +68,24 @@ export const fetchDistricts = async (provinceCode: number): Promise<District[]> 
     console.error("Failed to fetch districts:", error);
     // Return fallback districts
     return [
-      { code: provinceCode * 1000 + 1, name: "Huyện 1", full_name: "Huyện 1", province_code: provinceCode },
-      { code: provinceCode * 1000 + 2, name: "Huyện 2", full_name: "Huyện 2", province_code: provinceCode },
-      { code: provinceCode * 1000 + 3, name: "Huyện 3", full_name: "Huyện 3", province_code: provinceCode },
+      {
+        code: provinceCode * 1000 + 1,
+        name: "Huyện 1",
+        full_name: "Huyện 1",
+        province_code: provinceCode,
+      },
+      {
+        code: provinceCode * 1000 + 2,
+        name: "Huyện 2",
+        full_name: "Huyện 2",
+        province_code: provinceCode,
+      },
+      {
+        code: provinceCode * 1000 + 3,
+        name: "Huyện 3",
+        full_name: "Huyện 3",
+        province_code: provinceCode,
+      },
     ];
   }
 };
@@ -77,7 +94,7 @@ export const fetchWards = async (districtCode: number): Promise<Ward[]> => {
   try {
     const response = await fetch(`${VN_API_BASE}/d/${districtCode}?depth=2`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    
+
     const districtData = await response.json();
     if (districtData && districtData.wards) {
       return districtData.wards.map((w: any) => ({
@@ -92,11 +109,36 @@ export const fetchWards = async (districtCode: number): Promise<Ward[]> => {
     console.error("Failed to fetch wards:", error);
     // Return fallback wards
     return [
-      { code: 1, name: "Phường 1", full_name: "Phường 1", district_code: districtCode },
-      { code: 2, name: "Phường 2", full_name: "Phường 2", district_code: districtCode },
-      { code: 3, name: "Phường 3", full_name: "Phường 3", district_code: districtCode },
-      { code: 4, name: "Phường 4", full_name: "Phường 4", district_code: districtCode },
-      { code: 5, name: "Phường 5", full_name: "Phường 5", district_code: districtCode },
+      {
+        code: 1,
+        name: "Phường 1",
+        full_name: "Phường 1",
+        district_code: districtCode,
+      },
+      {
+        code: 2,
+        name: "Phường 2",
+        full_name: "Phường 2",
+        district_code: districtCode,
+      },
+      {
+        code: 3,
+        name: "Phường 3",
+        full_name: "Phường 3",
+        district_code: districtCode,
+      },
+      {
+        code: 4,
+        name: "Phường 4",
+        full_name: "Phường 4",
+        district_code: districtCode,
+      },
+      {
+        code: 5,
+        name: "Phường 5",
+        full_name: "Phường 5",
+        district_code: districtCode,
+      },
     ];
   }
 };

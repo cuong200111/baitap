@@ -29,9 +29,10 @@ async function createCustomerAddressesTable() {
     console.log("✅ customer_addresses table created successfully");
 
     // Check if table exists and has data
-    const result = await executeQuery("SELECT COUNT(*) as count FROM customer_addresses");
+    const result = await executeQuery(
+      "SELECT COUNT(*) as count FROM customer_addresses",
+    );
     console.log(`📊 customer_addresses table has ${result[0].count} records`);
-
   } catch (error) {
     console.error("❌ Error creating customer_addresses table:", error);
     throw error;
