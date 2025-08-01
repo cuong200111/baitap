@@ -228,9 +228,13 @@ router.get("/:identifier", authenticateToken, async (req, res) => {
       shipping_address: order.shipping_address,
       items: orderItems.map((item) => ({
         ...item,
-        product_images: item.product_images
-          ? JSON.parse(item.product_images)
-          : [],
+        product_images: (() => {
+          try {
+            return item.product_images ? JSON.parse(item.product_images) : [];
+          } catch (e) {
+            return [];
+          }
+        })(),
       })),
       status_history: statusHistory,
     };
