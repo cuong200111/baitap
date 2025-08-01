@@ -23,14 +23,14 @@ const createSlug = (name) => {
 // Get all categories (hierarchical)
 router.get("/", async (req, res) => {
   try {
-    const { parent_id, flat } = req.query;
+    const { parent_id, flat, mega_menu } = req.query;
 
     let query = `
-      SELECT c.*, 
+      SELECT c.*,
              (SELECT COUNT(*) FROM categories WHERE parent_id = c.id) as children_count,
              (SELECT COUNT(*) FROM product_categories pc WHERE pc.category_id = c.id) as products_count
       FROM categories c
-                              WHERE c.is_active = TRUE
+      WHERE c.is_active = TRUE
     `;
     const params = [];
 
@@ -67,6 +67,18 @@ router.get("/", async (req, res) => {
 
     const hierarchicalCategories = buildHierarchy(categories);
 
+    // For mega_menu=true, ensure we include all child levels for proper menu structure
+    if (mega_menu === "true") {
+      // Return only top-level categories with their full hierarchy
+      const topLevelCategories = hierarchicalCategories.filter(cat => !cat.parent_id);
+
+      return res.json({
+        success: true,
+        data: topLevelCategories,
+        message: "Categories for mega menu loaded successfully"
+      });
+    }
+
     res.json({
       success: true,
       data: hierarchicalCategories,
@@ -76,6 +88,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal server error",
+      error: error.message
     });
   }
 });
