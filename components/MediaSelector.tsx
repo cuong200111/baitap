@@ -12,7 +12,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { X, Upload, Search, Image as ImageIcon } from "lucide-react";
-import { mediaApi, getMediaUrl, MediaFile } from "@/config";
+import { getMediaUrl, MediaFile } from "@/config";
+import { apiWrappers } from "@/lib/api-wrapper";
 import { toast } from "sonner";
 
 // MediaFile interface imported from config.ts
@@ -69,7 +70,7 @@ export function MediaSelector({
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("K��ch thước file không được vượt quá 5MB");
+      toast.error("Kích thước file không được vượt quá 5MB");
       return;
     }
 
