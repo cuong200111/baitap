@@ -214,8 +214,14 @@ export default function CartPage() {
   const removeItem = async (cartId: number) => {
     try {
       if (isAuthenticated && user?.id) {
-        const response = await fetch(`/api/cart?cart_id=${cartId}`, {
+        const token = localStorage.getItem("token");
+        const headers: HeadersInit = {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        };
+        const response = await fetch(`${Domain}/api/cart?cart_id=${cartId}`, {
           method: "DELETE",
+          headers,
         });
 
         const data = await response.json();
