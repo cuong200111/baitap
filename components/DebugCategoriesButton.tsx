@@ -10,7 +10,7 @@ export function DebugCategoriesButton() {
   const testCategories = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/debug/categories-test");
+      const response = await fetch(`${API_DOMAIN}/api/debug/categories-test`);
       const data = await response.json();
       setResult(data);
     } catch (error) {
@@ -23,7 +23,7 @@ export function DebugCategoriesButton() {
   const ensureCategories = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/debug/ensure-categories", {
+      const response = await fetch(`${API_DOMAIN}/api/debug/ensure-categories`, {
         method: "POST",
       });
       const data = await response.json();
@@ -38,7 +38,7 @@ export function DebugCategoriesButton() {
   const testMegaMenu = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/categories?mega_menu=true");
+      const response = await fetch(`${API_DOMAIN}/api/categories?mega_menu=true`);
       const data = await response.json();
       setResult(data);
     } catch (error) {
@@ -51,7 +51,7 @@ export function DebugCategoriesButton() {
   const addSampleReviews = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/debug/add-sample-reviews", {
+      const response = await fetch(`${API_DOMAIN}/api/debug/add-sample-reviews`, {
         method: "POST",
       });
       const data = await response.json();
@@ -66,7 +66,7 @@ export function DebugCategoriesButton() {
   const addSampleProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/debug/add-sample-products", {
+      const response = await fetch(`${API_DOMAIN}/api/debug/add-sample-products`, {
         method: "POST",
       });
       const data = await response.json();
@@ -82,17 +82,17 @@ export function DebugCategoriesButton() {
     setLoading(true);
     try {
       // Populate categories first
-      await fetch("/api/debug/ensure-categories", { method: "POST" });
+      await fetch(`${API_DOMAIN}/api/debug/ensure-categories`, { method: "POST" });
 
       // Then products
-      await fetch("/api/debug/add-sample-products", { method: "POST" });
+      await fetch(`${API_DOMAIN}/api/debug/add-sample-products`, { method: "POST" });
 
       // Then reviews
-      await fetch("/api/debug/add-sample-reviews", { method: "POST" });
+      await fetch(`${API_DOMAIN}/api/debug/add-sample-reviews`, { method: "POST" });
 
       // Finally test orders
-      await fetch("/api/debug/create-test-order", { method: "POST" });
-      await fetch("/api/debug/create-test-order", { method: "POST" });
+      await fetch(`${API_DOMAIN}/api/debug/create-test-order`, { method: "POST" });
+      await fetch(`${API_DOMAIN}/api/debug/create-test-order`, { method: "POST" });
 
       setResult({ message: "All sample data populated successfully!" });
     } catch (error) {
@@ -105,7 +105,7 @@ export function DebugCategoriesButton() {
   const createTestOrder = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/debug/create-test-order", {
+      const response = await fetch(`${API_DOMAIN}/api/debug/create-test-order`, {
         method: "POST",
       });
       const data = await response.json();
