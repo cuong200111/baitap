@@ -12,15 +12,15 @@ export default function TestCompletePage() {
       setResult("Testing backend connection and new APIs...");
 
       // Test health endpoint
-      const healthResponse = await fetch("http://localhost:4000/api/health");
+      const healthResponse = await fetch(`${API_DOMAIN}/api/health`);
       const healthData = await healthResponse.json();
 
       // Test config endpoint
-      const configResponse = await fetch("http://localhost:4000/api/config");
+      const configResponse = await fetch(`${API_DOMAIN}/api/config`);
       const configData = await configResponse.json();
 
       // Test utils endpoint
-      const utilsResponse = await fetch("http://localhost:4000/api/utils/format", {
+      const utilsResponse = await fetch(`${API_DOMAIN}/api/utils/format`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: 'price', value: 1000000 })
