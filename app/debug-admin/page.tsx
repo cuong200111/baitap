@@ -62,9 +62,23 @@ export default function DebugAdminPage() {
   const testBackendHealth = async () => {
     try {
       setResult("Testing backend health...");
-      const response = await fetch("http://localhost:4000/api/health");
-      const data = await response.json();
+      const data = await testAPI.health();
       setResult(JSON.stringify(data, null, 2));
+    } catch (error: any) {
+      setResult("Error: " + error.message);
+    }
+  };
+
+  const testDirectLogin = async () => {
+    try {
+      setResult("Testing direct login...");
+      const data = await testAPI.login(email, password);
+      setResult(JSON.stringify(data, null, 2));
+
+      if (data.success && data.data?.token) {
+        localStorage.setItem("token", data.data.token);
+        setToken(data.data.token);
+      }
     } catch (error: any) {
       setResult("Error: " + error.message);
     }
