@@ -286,7 +286,52 @@ export default function ProfilePage() {
         setDistricts(data.data);
       } else {
         console.error("Failed to load districts:", data.message);
-        // Don't show error toast for external API failures
+        // Provide fallback districts for major provinces
+        const fallbackDistricts = {
+          1: [ // Hà Nội
+            { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
+            { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
+            { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
+            { code: 4, name: "Long Biên", full_name: "Quận Long Biên", province_code: 1 },
+            { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
+            { code: 6, name: "Đống Đa", full_name: "Quận Đống Đa", province_code: 1 },
+            { code: 7, name: "Hai Bà Trưng", full_name: "Quận Hai Bà Trưng", province_code: 1 },
+            { code: 8, name: "Hoàng Mai", full_name: "Quận Hoàng Mai", province_code: 1 },
+            { code: 9, name: "Thanh Xuân", full_name: "Quận Thanh Xuân", province_code: 1 },
+            { code: 19, name: "Nam Từ Liêm", full_name: "Quận Nam Từ Liêm", province_code: 1 },
+            { code: 250, name: "Bắc Từ Liêm", full_name: "Quận Bắc Từ Liêm", province_code: 1 },
+          ],
+          79: [ // TP Hồ Chí Minh
+            { code: 760, name: "Quận 1", full_name: "Quận 1", province_code: 79 },
+            { code: 761, name: "Quận 2", full_name: "Quận 2", province_code: 79 },
+            { code: 762, name: "Quận 3", full_name: "Quận 3", province_code: 79 },
+            { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
+            { code: 764, name: "Quận 5", full_name: "Quận 5", province_code: 79 },
+            { code: 765, name: "Quận 6", full_name: "Quận 6", province_code: 79 },
+            { code: 766, name: "Quận 7", full_name: "Quận 7", province_code: 79 },
+            { code: 772, name: "Quận Bình Thạnh", full_name: "Quận Bình Thạnh", province_code: 79 },
+            { code: 773, name: "Quận Gò Vấp", full_name: "Quận Gò Vấp", province_code: 79 },
+            { code: 774, name: "Quận Phú Nhuận", full_name: "Quận Phú Nhuận", province_code: 79 },
+            { code: 775, name: "Quận Tân Bình", full_name: "Quận Tân Bình", province_code: 79 },
+            { code: 776, name: "Quận Tân Phú", full_name: "Quận Tân Phú", province_code: 79 },
+          ],
+          48: [ // Đà Nẵng
+            { code: 490, name: "Hải Châu", full_name: "Quận Hải Châu", province_code: 48 },
+            { code: 491, name: "Cam Lệ", full_name: "Quận Cam Lệ", province_code: 48 },
+            { code: 492, name: "Thanh Khê", full_name: "Quận Thanh Khê", province_code: 48 },
+            { code: 493, name: "Liên Chiểu", full_name: "Quận Liên Chiểu", province_code: 48 },
+            { code: 494, name: "Ngũ Hành Sơn", full_name: "Quận Ngũ Hành Sơn", province_code: 48 },
+            { code: 495, name: "Sơn Trà", full_name: "Quận Sơn Trà", province_code: 48 },
+          ],
+          92: [ // Cần Thơ
+            { code: 916, name: "Ninh Kiều", full_name: "Quận Ninh Kiều", province_code: 92 },
+            { code: 917, name: "Ô Môn", full_name: "Quận Ô Môn", province_code: 92 },
+            { code: 918, name: "Bình Thuỷ", full_name: "Quận Bình Thuỷ", province_code: 92 },
+            { code: 919, name: "Cái Răng", full_name: "Quận Cái Răng", province_code: 92 },
+            { code: 923, name: "Thốt Nốt", full_name: "Quận Thốt Nốt", province_code: 92 },
+          ],
+        };
+        setDistricts(fallbackDistricts[provinceCode] || []);
       }
     } catch (error: any) {
       console.error("Failed to load districts:", error);
