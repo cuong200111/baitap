@@ -122,7 +122,7 @@ export default function ProductDetailPage() {
     setAddingToCart(true);
     try {
       if (isAuthenticated && user?.id) {
-        const response = await fetch("/api/cart", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/cart`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
