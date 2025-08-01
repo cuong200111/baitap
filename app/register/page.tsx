@@ -45,7 +45,7 @@ export default function RegisterPage() {
     }
 
     if (formData.password.length < 6) {
-      setError("Mật khẩu phải có ít nhất 6 ký tự");
+      setError("Mật kh���u phải có ít nhất 6 ký tự");
       return false;
     }
 
@@ -119,7 +119,7 @@ export default function RegisterPage() {
                         size="sm"
                         onClick={async () => {
                           try {
-                            const response = await fetch("/api/debug/auth", {
+                            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/debug/auth`, {
                               method: "POST",
                               headers: { "Content-Type": "application/json" },
                               body: JSON.stringify({ action: "reset" }),
