@@ -47,7 +47,8 @@ export const CLIENT_CONFIG = {
   },
   seo: {
     default_title: "ZOXVN - Máy tính, Laptop, Gaming Gear",
-    default_description: "ZOXVN - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất.",
+    default_description:
+      "ZOXVN - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất.",
     site_name: "ZOXVN",
     twitter_site: "@zoxvn_official",
     og_type: "website",
@@ -90,7 +91,7 @@ export function getClientEnv(key: string, defaultValue: string = ""): string {
   if (typeof window === "undefined") {
     return defaultValue;
   }
-  
+
   // Only NEXT_PUBLIC_ variables are available on client
   return process.env[`NEXT_PUBLIC_${key}`] || defaultValue;
 }
@@ -99,7 +100,7 @@ export function getClientEnv(key: string, defaultValue: string = ""): string {
 export const storage = {
   get: (key: string): any => {
     if (typeof window === "undefined") return null;
-    
+
     try {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
@@ -111,7 +112,7 @@ export const storage = {
 
   set: (key: string, value: any): boolean => {
     if (typeof window === "undefined") return false;
-    
+
     try {
       localStorage.setItem(key, JSON.stringify(value));
       return true;
@@ -123,7 +124,7 @@ export const storage = {
 
   remove: (key: string): boolean => {
     if (typeof window === "undefined") return false;
-    
+
     try {
       localStorage.removeItem(key);
       return true;
@@ -135,7 +136,7 @@ export const storage = {
 
   clear: (): boolean => {
     if (typeof window === "undefined") return false;
-    
+
     try {
       localStorage.clear();
       return true;
@@ -150,7 +151,7 @@ export const storage = {
 export const sessionStorage = {
   get: (key: string): any => {
     if (typeof window === "undefined") return null;
-    
+
     try {
       const item = window.sessionStorage.getItem(key);
       return item ? JSON.parse(item) : null;
@@ -162,7 +163,7 @@ export const sessionStorage = {
 
   set: (key: string, value: any): boolean => {
     if (typeof window === "undefined") return false;
-    
+
     try {
       window.sessionStorage.setItem(key, JSON.stringify(value));
       return true;
@@ -174,7 +175,7 @@ export const sessionStorage = {
 
   remove: (key: string): boolean => {
     if (typeof window === "undefined") return false;
-    
+
     try {
       window.sessionStorage.removeItem(key);
       return true;

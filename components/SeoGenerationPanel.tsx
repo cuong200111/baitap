@@ -23,7 +23,8 @@ import { Domain } from "@/config";
 
 // Helper function for authenticated API calls
 const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -43,9 +44,12 @@ export default function SeoGenerationPanel() {
   const generateSitemap = async () => {
     setGeneratingSitemap(true);
     try {
-      const response = await authenticatedFetch(`${Domain}/api/admin/generate-sitemap`, {
-        method: "POST",
-      });
+      const response = await authenticatedFetch(
+        `${Domain}/api/admin/generate-sitemap`,
+        {
+          method: "POST",
+        },
+      );
       const data = await response.json();
 
       if (data.success) {
@@ -67,9 +71,12 @@ export default function SeoGenerationPanel() {
   const generateRobots = async () => {
     setGeneratingRobots(true);
     try {
-      const response = await authenticatedFetch(`${Domain}/api/admin/generate-robots`, {
-        method: "POST",
-      });
+      const response = await authenticatedFetch(
+        `${Domain}/api/admin/generate-robots`,
+        {
+          method: "POST",
+        },
+      );
       const data = await response.json();
 
       if (data.success) {
@@ -96,7 +103,9 @@ export default function SeoGenerationPanel() {
   const validateSitemap = async () => {
     setValidatingXml(true);
     try {
-      const response = await authenticatedFetch(`${Domain}/api/admin/validate-xml?url=/sitemap.xml`);
+      const response = await authenticatedFetch(
+        `${Domain}/api/admin/validate-xml?url=/sitemap.xml`,
+      );
       const data = await response.json();
 
       if (data.success) {

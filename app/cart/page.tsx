@@ -72,7 +72,9 @@ export default function CartPage() {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
-      const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`, { headers });
+      const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`, {
+        headers,
+      });
       const data = await response.json();
 
       if (data.success) {
@@ -111,7 +113,10 @@ export default function CartPage() {
                   "Content-Type": "application/json",
                   ...(token ? { Authorization: `Bearer ${token}` } : {}),
                 };
-                const response = await fetch(`${Domain}/api/products/${productId}`, { headers });
+                const response = await fetch(
+                  `${Domain}/api/products/${productId}`,
+                  { headers },
+                );
                 const data = await response.json();
 
                 if (data.success && data.data) {

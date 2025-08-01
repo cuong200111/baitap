@@ -47,15 +47,18 @@ export default function SeoSystemStatus() {
   const runSystemTest = async () => {
     setLoading(true);
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
       const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
 
-      const response = await fetch(`${Domain}/api/admin/seo-test-all`, { headers });
+      const response = await fetch(`${Domain}/api/admin/seo-test-all`, {
+        headers,
+      });
       const data = await response.json();
-      
+
       if (data.success) {
         setStatus(data.data);
         setLastChecked(new Date());
@@ -74,19 +77,22 @@ export default function SeoSystemStatus() {
   const autoFixIssues = async () => {
     setAutoFixing(true);
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
       const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
       const response = await fetch(`${Domain}/api/admin/seo-auto-fix`, {
         method: "POST",
-        headers
+        headers,
       });
       const data = await response.json();
-      
+
       if (data.success) {
-        toast.success(`Auto-fix completed: ${data.data.summary.fixed} issues fixed`);
+        toast.success(
+          `Auto-fix completed: ${data.data.summary.fixed} issues fixed`,
+        );
         // Re-run test after auto-fix
         setTimeout(() => runSystemTest(), 1000);
       } else {
@@ -102,17 +108,18 @@ export default function SeoSystemStatus() {
 
   const generateSitemap = async () => {
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
       const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
       const response = await fetch(`${Domain}/api/admin/generate-sitemap`, {
         method: "POST",
-        headers
+        headers,
       });
       const data = await response.json();
-      
+
       if (data.success) {
         toast.success(`Sitemap generated with ${data.urlCount} URLs`);
       } else {
@@ -125,17 +132,18 @@ export default function SeoSystemStatus() {
 
   const generateRobots = async () => {
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
       const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
       const response = await fetch(`${Domain}/api/admin/generate-robots`, {
         method: "POST",
-        headers
+        headers,
       });
       const data = await response.json();
-      
+
       if (data.success) {
         toast.success("Robots.txt generated successfully");
       } else {
@@ -160,7 +168,8 @@ export default function SeoSystemStatus() {
   const getScoreBadge = (score: number) => {
     if (score >= 90) return { variant: "default" as const, label: "Excellent" };
     if (score >= 75) return { variant: "secondary" as const, label: "Good" };
-    if (score >= 50) return { variant: "outline" as const, label: "Needs Work" };
+    if (score >= 50)
+      return { variant: "outline" as const, label: "Needs Work" };
     return { variant: "destructive" as const, label: "Critical" };
   };
 
@@ -188,7 +197,7 @@ export default function SeoSystemStatus() {
                 )}
                 {loading ? "Testing..." : "Re-test"}
               </Button>
-              
+
               <Button
                 onClick={autoFixIssues}
                 disabled={autoFixing || loading}
@@ -210,7 +219,9 @@ export default function SeoSystemStatus() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {/* Overall Score */}
               <div className="text-center">
-                <div className={`text-3xl font-bold ${getScoreColor(status.overallScore)}`}>
+                <div
+                  className={`text-3xl font-bold ${getScoreColor(status.overallScore)}`}
+                >
                   {status.overallScore}%
                 </div>
                 <div className="text-sm text-gray-600">Overall Score</div>
@@ -230,15 +241,21 @@ export default function SeoSystemStatus() {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
-                  <div className="text-green-600 font-semibold">{status.passed}</div>
+                  <div className="text-green-600 font-semibold">
+                    {status.passed}
+                  </div>
                   <div className="text-xs text-gray-600">Passed</div>
                 </div>
                 <div>
-                  <div className="text-yellow-600 font-semibold">{status.warnings}</div>
+                  <div className="text-yellow-600 font-semibold">
+                    {status.warnings}
+                  </div>
                   <div className="text-xs text-gray-600">Warnings</div>
                 </div>
                 <div>
-                  <div className="text-red-600 font-semibold">{status.failed}</div>
+                  <div className="text-red-600 font-semibold">
+                    {status.failed}
+                  </div>
                   <div className="text-xs text-gray-600">Failed</div>
                 </div>
               </div>
@@ -262,7 +279,7 @@ export default function SeoSystemStatus() {
                 <FileText className="h-3 w-3" />
                 Generate Sitemap
               </Button>
-              
+
               <Button
                 onClick={generateRobots}
                 size="sm"
@@ -272,7 +289,7 @@ export default function SeoSystemStatus() {
                 <Search className="h-3 w-3" />
                 Generate Robots
               </Button>
-              
+
               <Button
                 onClick={() => window.open("/sitemap.xml", "_blank")}
                 size="sm"
@@ -282,7 +299,7 @@ export default function SeoSystemStatus() {
                 <Link className="h-3 w-3" />
                 View Sitemap
               </Button>
-              
+
               <Button
                 onClick={() => window.open("/robots.txt", "_blank")}
                 size="sm"
@@ -302,7 +319,9 @@ export default function SeoSystemStatus() {
                   <strong>Recommendations:</strong>
                   <ul className="list-disc list-inside mt-2 space-y-1">
                     {status.recommendations.map((rec, index) => (
-                      <li key={index} className="text-sm">{rec}</li>
+                      <li key={index} className="text-sm">
+                        {rec}
+                      </li>
                     ))}
                   </ul>
                 </AlertDescription>
@@ -327,29 +346,33 @@ export default function SeoSystemStatus() {
                 <div
                   key={index}
                   className={`border rounded-lg p-4 ${
-                    result.status === 'passed' ? 'border-green-200 bg-green-50' :
-                    result.status === 'warning' ? 'border-yellow-200 bg-yellow-50' :
-                    'border-red-200 bg-red-50'
+                    result.status === "passed"
+                      ? "border-green-200 bg-green-50"
+                      : result.status === "warning"
+                        ? "border-yellow-200 bg-yellow-50"
+                        : "border-red-200 bg-red-50"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-sm">{result.name}</h4>
-                    {result.status === 'passed' ? (
+                    {result.status === "passed" ? (
                       <CheckCircle className="h-4 w-4 text-green-600" />
-                    ) : result.status === 'warning' ? (
+                    ) : result.status === "warning" ? (
                       <AlertTriangle className="h-4 w-4 text-yellow-600" />
                     ) : (
                       <XCircle className="h-4 w-4 text-red-600" />
                     )}
                   </div>
-                  
+
                   <p className="text-xs text-gray-600 mb-2">{result.message}</p>
-                  
+
                   <Badge
                     variant={
-                      result.status === 'passed' ? 'default' :
-                      result.status === 'warning' ? 'secondary' :
-                      'destructive'
+                      result.status === "passed"
+                        ? "default"
+                        : result.status === "warning"
+                          ? "secondary"
+                          : "destructive"
                     }
                     className="text-xs"
                   >
@@ -358,7 +381,7 @@ export default function SeoSystemStatus() {
 
                   {result.details && (
                     <div className="mt-2 text-xs text-gray-500">
-                      {typeof result.details === 'object' ? (
+                      {typeof result.details === "object" ? (
                         Object.entries(result.details).map(([key, value]) => (
                           <div key={key}>
                             <strong>{key}:</strong> {String(value)}

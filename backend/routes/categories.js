@@ -70,12 +70,14 @@ router.get("/", async (req, res) => {
     // For mega_menu=true, ensure we include all child levels for proper menu structure
     if (mega_menu === "true") {
       // Return only top-level categories with their full hierarchy
-      const topLevelCategories = hierarchicalCategories.filter(cat => !cat.parent_id);
+      const topLevelCategories = hierarchicalCategories.filter(
+        (cat) => !cat.parent_id,
+      );
 
       return res.json({
         success: true,
         data: topLevelCategories,
-        message: "Categories for mega menu loaded successfully"
+        message: "Categories for mega menu loaded successfully",
       });
     }
 
@@ -88,7 +90,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal server error",
-      error: error.message
+      error: error.message,
     });
   }
 });

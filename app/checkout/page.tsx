@@ -184,7 +184,9 @@ export default function CheckoutPage() {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         };
-        const response = await fetch(`${Domain}/api/cart?user_id=${userId}`, { headers });
+        const response = await fetch(`${Domain}/api/cart?user_id=${userId}`, {
+          headers,
+        });
         const data = await response.json();
 
         if (data.success) {

@@ -67,10 +67,13 @@ export function Header() {
               "Content-Type": "application/json",
               ...(token ? { Authorization: `Bearer ${token}` } : {}),
             };
-            const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`, {
-              headers,
-              signal: AbortSignal.timeout(10000), // 10 second timeout
-            });
+            const response = await fetch(
+              `${Domain}/api/cart?user_id=${user.id}`,
+              {
+                headers,
+                signal: AbortSignal.timeout(10000), // 10 second timeout
+              },
+            );
 
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);

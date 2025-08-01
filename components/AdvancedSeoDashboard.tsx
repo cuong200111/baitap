@@ -49,7 +49,8 @@ import { Domain } from "@/config";
 
 // Helper function for authenticated API calls
 const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -84,17 +85,17 @@ interface CoreWebVitals {
   fcp: number;
   ttfb: number;
   score: number;
-  status: 'good' | 'needs_improvement' | 'poor';
+  status: "good" | "needs_improvement" | "poor";
 }
 
 interface AIRecommendation {
   id: string;
-  type: 'content' | 'technical' | 'keywords' | 'links' | 'performance';
-  priority: 'high' | 'medium' | 'low';
+  type: "content" | "technical" | "keywords" | "links" | "performance";
+  priority: "high" | "medium" | "low";
   title: string;
   description: string;
   impact: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
   estimatedTimeToComplete: string;
   potentialTrafficIncrease: string;
   actionItems: string[];
@@ -117,12 +118,17 @@ interface ContentAnalysis {
 
 export default function AdvancedSeoDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [performance, setPerformance] = useState<PerformanceMetrics | null>(null);
-  const [aiRecommendations, setAIRecommendations] = useState<AIRecommendation[]>([]);
-  const [contentAnalysis, setContentAnalysis] = useState<ContentAnalysis | null>(null);
+  const [performance, setPerformance] = useState<PerformanceMetrics | null>(
+    null,
+  );
+  const [aiRecommendations, setAIRecommendations] = useState<
+    AIRecommendation[]
+  >([]);
+  const [contentAnalysis, setContentAnalysis] =
+    useState<ContentAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState("30d");
-  
+
   // Content analysis form
   const [contentToAnalyze, setContentToAnalyze] = useState("");
   const [targetKeywords, setTargetKeywords] = useState("");
@@ -134,10 +140,7 @@ export default function AdvancedSeoDashboard() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      await Promise.all([
-        loadPerformanceMetrics(),
-        loadAIRecommendations(),
-      ]);
+      await Promise.all([loadPerformanceMetrics(), loadAIRecommendations()]);
     } catch (error) {
       console.error("Failed to load dashboard data:", error);
       toast.error("Failed to load dashboard data");
@@ -148,7 +151,9 @@ export default function AdvancedSeoDashboard() {
 
   const loadPerformanceMetrics = async () => {
     try {
-      const response = await authenticatedFetch(`${Domain}/api/admin/seo-performance?range=${selectedTimeRange}&competitors=true`);
+      const response = await authenticatedFetch(
+        `${Domain}/api/admin/seo-performance?range=${selectedTimeRange}&competitors=true`,
+      );
       const data = await response.json();
       if (data.success) {
         setPerformance(data.data);
@@ -160,10 +165,16 @@ export default function AdvancedSeoDashboard() {
 
   const loadAIRecommendations = async () => {
     try {
-      const response = await authenticatedFetch(`${Domain}/api/admin/seo-ai-recommendations`, {
-        method: "POST",
-        body: JSON.stringify({ analysisType: "all", timeframe: selectedTimeRange })
-      });
+      const response = await authenticatedFetch(
+        `${Domain}/api/admin/seo-ai-recommendations`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            analysisType: "all",
+            timeframe: selectedTimeRange,
+          }),
+        },
+      );
       const data = await response.json();
       if (data.success) {
         setAIRecommendations(data.data.recommendations || []);
@@ -181,15 +192,21 @@ export default function AdvancedSeoDashboard() {
 
     setLoading(true);
     try {
-      const response = await authenticatedFetch(`${Domain}/api/admin/seo-content-analysis`, {
-        method: "POST",
-        body: JSON.stringify({
-          content: contentToAnalyze,
-          targetKeywords: targetKeywords.split(",").map(k => k.trim()).filter(k => k),
-          pageType: "custom"
-        })
-      });
-      
+      const response = await authenticatedFetch(
+        `${Domain}/api/admin/seo-content-analysis`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            content: contentToAnalyze,
+            targetKeywords: targetKeywords
+              .split(",")
+              .map((k) => k.trim())
+              .filter((k) => k),
+            pageType: "custom",
+          }),
+        },
+      );
+
       const data = await response.json();
       if (data.success) {
         setContentAnalysis(data.data);
@@ -213,28 +230,40 @@ export default function AdvancedSeoDashboard() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600 bg-red-50 border-red-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case "high":
+        return "text-red-600 bg-red-50 border-red-200";
+      case "medium":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "low":
+        return "text-green-600 bg-green-50 border-green-200";
+      default:
+        return "text-gray-600 bg-gray-50 border-gray-200";
     }
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'text-green-600';
-      case 'medium': return 'text-yellow-600';
-      case 'hard': return 'text-red-600';
-      default: return 'text-gray-600';
+      case "easy":
+        return "text-green-600";
+      case "medium":
+        return "text-yellow-600";
+      case "hard":
+        return "text-red-600";
+      default:
+        return "text-gray-600";
     }
   };
 
   const getVitalsColor = (status: string) => {
     switch (status) {
-      case 'good': return 'text-green-600 bg-green-50';
-      case 'needs_improvement': return 'text-yellow-600 bg-yellow-50';
-      case 'poor': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case "good":
+        return "text-green-600 bg-green-50";
+      case "needs_improvement":
+        return "text-yellow-600 bg-yellow-50";
+      case "poor":
+        return "text-red-600 bg-red-50";
+      default:
+        return "text-gray-600 bg-gray-50";
     }
   };
 
@@ -244,7 +273,9 @@ export default function AdvancedSeoDashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Advanced SEO Dashboard</h1>
-          <p className="text-gray-600">AI-powered SEO optimization and performance monitoring</p>
+          <p className="text-gray-600">
+            AI-powered SEO optimization and performance monitoring
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <select
@@ -257,7 +288,11 @@ export default function AdvancedSeoDashboard() {
             <option value="90d">Last 90 days</option>
           </select>
           <Button onClick={loadDashboardData} disabled={loading} size="sm">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="h-4 w-4" />
+            )}
             Refresh
           </Button>
         </div>
@@ -271,10 +306,16 @@ export default function AdvancedSeoDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Overall Health</p>
-                  <p className="text-2xl font-bold">{performance.overallHealth}%</p>
+                  <p className="text-2xl font-bold">
+                    {performance.overallHealth}%
+                  </p>
                 </div>
-                <div className={`p-2 rounded-lg ${performance.overallHealth >= 80 ? 'bg-green-50' : performance.overallHealth >= 60 ? 'bg-yellow-50' : 'bg-red-50'}`}>
-                  <Activity className={`h-5 w-5 ${performance.overallHealth >= 80 ? 'text-green-600' : performance.overallHealth >= 60 ? 'text-yellow-600' : 'text-red-600'}`} />
+                <div
+                  className={`p-2 rounded-lg ${performance.overallHealth >= 80 ? "bg-green-50" : performance.overallHealth >= 60 ? "bg-yellow-50" : "bg-red-50"}`}
+                >
+                  <Activity
+                    className={`h-5 w-5 ${performance.overallHealth >= 80 ? "text-green-600" : performance.overallHealth >= 60 ? "text-yellow-600" : "text-red-600"}`}
+                  />
                 </div>
               </div>
               <Progress value={performance.overallHealth} className="mt-2" />
@@ -286,14 +327,21 @@ export default function AdvancedSeoDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Keywords Tracked</p>
-                  <p className="text-2xl font-bold">{performance.keywordRankings.length}</p>
+                  <p className="text-2xl font-bold">
+                    {performance.keywordRankings.length}
+                  </p>
                 </div>
                 <div className="p-2 rounded-lg bg-blue-50">
                   <Target className="h-5 w-5 text-blue-600" />
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {performance.keywordRankings.filter(k => k.currentPosition <= 10).length} in top 10
+                {
+                  performance.keywordRankings.filter(
+                    (k) => k.currentPosition <= 10,
+                  ).length
+                }{" "}
+                in top 10
               </p>
             </CardContent>
           </Card>
@@ -303,14 +351,20 @@ export default function AdvancedSeoDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Core Web Vitals</p>
-                  <p className="text-2xl font-bold">{performance.coreWebVitals.score}/100</p>
+                  <p className="text-2xl font-bold">
+                    {performance.coreWebVitals.score}/100
+                  </p>
                 </div>
-                <div className={`p-2 rounded-lg ${getVitalsColor(performance.coreWebVitals.status)}`}>
+                <div
+                  className={`p-2 rounded-lg ${getVitalsColor(performance.coreWebVitals.status)}`}
+                >
                   <Gauge className="h-5 w-5" />
                 </div>
               </div>
-              <Badge className={`mt-1 ${getVitalsColor(performance.coreWebVitals.status)}`}>
-                {performance.coreWebVitals.status.replace('_', ' ')}
+              <Badge
+                className={`mt-1 ${getVitalsColor(performance.coreWebVitals.status)}`}
+              >
+                {performance.coreWebVitals.status.replace("_", " ")}
               </Badge>
             </CardContent>
           </Card>
@@ -321,7 +375,8 @@ export default function AdvancedSeoDashboard() {
                 <div>
                   <p className="text-sm text-gray-600">Pages Indexed</p>
                   <p className="text-2xl font-bold">
-                    {performance.indexingStatus.indexedPages}/{performance.indexingStatus.totalPages}
+                    {performance.indexingStatus.indexedPages}/
+                    {performance.indexingStatus.totalPages}
                   </p>
                 </div>
                 <div className="p-2 rounded-lg bg-purple-50">
@@ -329,7 +384,12 @@ export default function AdvancedSeoDashboard() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {Math.round((performance.indexingStatus.indexedPages / performance.indexingStatus.totalPages) * 100)}% indexed
+                {Math.round(
+                  (performance.indexingStatus.indexedPages /
+                    performance.indexingStatus.totalPages) *
+                    100,
+                )}
+                % indexed
               </p>
             </CardContent>
           </Card>
@@ -362,31 +422,65 @@ export default function AdvancedSeoDashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Largest Contentful Paint (LCP)</span>
+                      <span className="text-sm">
+                        Largest Contentful Paint (LCP)
+                      </span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm">{performance.coreWebVitals.lcp}s</span>
-                        <Badge variant={performance.coreWebVitals.lcp <= 2.5 ? "default" : "destructive"}>
-                          {performance.coreWebVitals.lcp <= 2.5 ? "Good" : "Poor"}
+                        <span className="font-mono text-sm">
+                          {performance.coreWebVitals.lcp}s
+                        </span>
+                        <Badge
+                          variant={
+                            performance.coreWebVitals.lcp <= 2.5
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {performance.coreWebVitals.lcp <= 2.5
+                            ? "Good"
+                            : "Poor"}
                         </Badge>
                       </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="text-sm">First Input Delay (FID)</span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm">{performance.coreWebVitals.fid}ms</span>
-                        <Badge variant={performance.coreWebVitals.fid <= 100 ? "default" : "destructive"}>
-                          {performance.coreWebVitals.fid <= 100 ? "Good" : "Poor"}
+                        <span className="font-mono text-sm">
+                          {performance.coreWebVitals.fid}ms
+                        </span>
+                        <Badge
+                          variant={
+                            performance.coreWebVitals.fid <= 100
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {performance.coreWebVitals.fid <= 100
+                            ? "Good"
+                            : "Poor"}
                         </Badge>
                       </div>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
-                      <span className="text-sm">Cumulative Layout Shift (CLS)</span>
+                      <span className="text-sm">
+                        Cumulative Layout Shift (CLS)
+                      </span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm">{performance.coreWebVitals.cls}</span>
-                        <Badge variant={performance.coreWebVitals.cls <= 0.1 ? "default" : "destructive"}>
-                          {performance.coreWebVitals.cls <= 0.1 ? "Good" : "Poor"}
+                        <span className="font-mono text-sm">
+                          {performance.coreWebVitals.cls}
+                        </span>
+                        <Badge
+                          variant={
+                            performance.coreWebVitals.cls <= 0.1
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {performance.coreWebVitals.cls <= 0.1
+                            ? "Good"
+                            : "Poor"}
                         </Badge>
                       </div>
                     </div>
@@ -404,20 +498,37 @@ export default function AdvancedSeoDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {performance.keywordRankings.slice(0, 5).map((keyword, index) => (
-                      <div key={index} className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">{keyword.keyword}</p>
-                          <p className="text-xs text-gray-500">Vol: {keyword.searchVolume.toLocaleString()}</p>
+                    {performance.keywordRankings
+                      .slice(0, 5)
+                      .map((keyword, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between"
+                        >
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">
+                              {keyword.keyword}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Vol: {keyword.searchVolume.toLocaleString()}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {getRankingChangeIcon(keyword.change)}
+                            <Badge
+                              variant={
+                                keyword.currentPosition <= 3
+                                  ? "default"
+                                  : keyword.currentPosition <= 10
+                                    ? "secondary"
+                                    : "outline"
+                              }
+                            >
+                              #{keyword.currentPosition}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          {getRankingChangeIcon(keyword.change)}
-                          <Badge variant={keyword.currentPosition <= 3 ? "default" : keyword.currentPosition <= 10 ? "secondary" : "outline"}>
-                            #{keyword.currentPosition}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </CardContent>
               </Card>
@@ -436,7 +547,10 @@ export default function AdvancedSeoDashboard() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {aiRecommendations
-                    .filter(rec => rec.difficulty === 'easy' && rec.priority === 'high')
+                    .filter(
+                      (rec) =>
+                        rec.difficulty === "easy" && rec.priority === "high",
+                    )
                     .slice(0, 4)
                     .map((rec, index) => (
                       <div key={index} className="border rounded-lg p-4">
@@ -446,12 +560,18 @@ export default function AdvancedSeoDashboard() {
                             {rec.priority}
                           </Badge>
                         </div>
-                        <p className="text-xs text-gray-600 mb-3">{rec.description}</p>
+                        <p className="text-xs text-gray-600 mb-3">
+                          {rec.description}
+                        </p>
                         <div className="flex items-center justify-between text-xs">
-                          <span className={`font-medium ${getDifficultyColor(rec.difficulty)}`}>
+                          <span
+                            className={`font-medium ${getDifficultyColor(rec.difficulty)}`}
+                          >
                             {rec.difficulty}
                           </span>
-                          <span className="text-gray-500">{rec.estimatedTimeToComplete}</span>
+                          <span className="text-gray-500">
+                            {rec.estimatedTimeToComplete}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -489,32 +609,50 @@ export default function AdvancedSeoDashboard() {
                         <tr key={index} className="border-b hover:bg-gray-50">
                           <td className="p-2 font-medium">{keyword.keyword}</td>
                           <td className="p-2">
-                            <Badge variant={keyword.currentPosition <= 3 ? "default" : keyword.currentPosition <= 10 ? "secondary" : "outline"}>
+                            <Badge
+                              variant={
+                                keyword.currentPosition <= 3
+                                  ? "default"
+                                  : keyword.currentPosition <= 10
+                                    ? "secondary"
+                                    : "outline"
+                              }
+                            >
                               #{keyword.currentPosition}
                             </Badge>
                           </td>
                           <td className="p-2">
                             <div className="flex items-center gap-1">
                               {getRankingChangeIcon(keyword.change)}
-                              <span className={`text-sm ${keyword.change > 0 ? 'text-green-600' : keyword.change < 0 ? 'text-red-600' : 'text-gray-600'}`}>
-                                {keyword.change > 0 ? '+' : ''}{keyword.change}
+                              <span
+                                className={`text-sm ${keyword.change > 0 ? "text-green-600" : keyword.change < 0 ? "text-red-600" : "text-gray-600"}`}
+                              >
+                                {keyword.change > 0 ? "+" : ""}
+                                {keyword.change}
                               </span>
                             </div>
                           </td>
-                          <td className="p-2 text-sm">{keyword.searchVolume.toLocaleString()}</td>
+                          <td className="p-2 text-sm">
+                            {keyword.searchVolume.toLocaleString()}
+                          </td>
                           <td className="p-2">
                             <div className="flex items-center gap-1">
-                              <span className="text-sm">{keyword.difficulty}%</span>
+                              <span className="text-sm">
+                                {keyword.difficulty}%
+                              </span>
                               <div className="w-12 h-2 bg-gray-200 rounded">
-                                <div 
-                                  className={`h-2 rounded ${keyword.difficulty < 30 ? 'bg-green-500' : keyword.difficulty < 70 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                                  style={{width: `${keyword.difficulty}%`}}
+                                <div
+                                  className={`h-2 rounded ${keyword.difficulty < 30 ? "bg-green-500" : keyword.difficulty < 70 ? "bg-yellow-500" : "bg-red-500"}`}
+                                  style={{ width: `${keyword.difficulty}%` }}
                                 />
                               </div>
                             </div>
                           </td>
                           <td className="p-2">
-                            <a href={keyword.url} className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1">
+                            <a
+                              href={keyword.url}
+                              className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
+                            >
                               <ExternalLink className="h-3 w-3" />
                               View
                             </a>
@@ -551,9 +689,11 @@ export default function AdvancedSeoDashboard() {
                     className="mt-1"
                   />
                 </div>
-                
+
                 <div>
-                  <Label htmlFor="keywords">Target Keywords (comma separated)</Label>
+                  <Label htmlFor="keywords">
+                    Target Keywords (comma separated)
+                  </Label>
                   <Input
                     id="keywords"
                     placeholder="laptop gaming, PC cao cấp, máy tính..."
@@ -562,9 +702,13 @@ export default function AdvancedSeoDashboard() {
                     className="mt-1"
                   />
                 </div>
-                
+
                 <Button onClick={analyzeContent} disabled={loading}>
-                  {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Brain className="h-4 w-4 mr-2" />}
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <Brain className="h-4 w-4 mr-2" />
+                  )}
                   Analyze Content
                 </Button>
               </div>
@@ -575,25 +719,41 @@ export default function AdvancedSeoDashboard() {
                     <Card>
                       <CardContent className="p-4">
                         <h4 className="font-medium mb-2">Overall Score</h4>
-                        <div className="text-2xl font-bold">{contentAnalysis.score}/100</div>
-                        <Progress value={contentAnalysis.score} className="mt-2" />
+                        <div className="text-2xl font-bold">
+                          {contentAnalysis.score}/100
+                        </div>
+                        <Progress
+                          value={contentAnalysis.score}
+                          className="mt-2"
+                        />
                       </CardContent>
                     </Card>
-                    
+
                     <Card>
                       <CardContent className="p-4">
                         <h4 className="font-medium mb-2">Readability</h4>
-                        <div className="text-2xl font-bold">{Math.round(contentAnalysis.readabilityScore)}/100</div>
-                        <Progress value={contentAnalysis.readabilityScore} className="mt-2" />
+                        <div className="text-2xl font-bold">
+                          {Math.round(contentAnalysis.readabilityScore)}/100
+                        </div>
+                        <Progress
+                          value={contentAnalysis.readabilityScore}
+                          className="mt-2"
+                        />
                       </CardContent>
                     </Card>
-                    
+
                     <Card>
                       <CardContent className="p-4">
                         <h4 className="font-medium mb-2">Word Count</h4>
-                        <div className="text-2xl font-bold">{contentAnalysis.contentLength}</div>
+                        <div className="text-2xl font-bold">
+                          {contentAnalysis.contentLength}
+                        </div>
                         <p className="text-xs text-gray-500 mt-1">
-                          {contentAnalysis.contentLength < 300 ? 'Too short' : contentAnalysis.contentLength > 2000 ? 'Very long' : 'Good length'}
+                          {contentAnalysis.contentLength < 300
+                            ? "Too short"
+                            : contentAnalysis.contentLength > 2000
+                              ? "Very long"
+                              : "Good length"}
                         </p>
                       </CardContent>
                     </Card>
@@ -606,17 +766,34 @@ export default function AdvancedSeoDashboard() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {Object.entries(contentAnalysis.keywordDensity).map(([keyword, density]) => (
-                          <div key={keyword} className="flex items-center justify-between">
-                            <span className="font-medium">{keyword}</span>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm">{density}%</span>
-                              <Badge variant={density >= 1 && density <= 3 ? "default" : density > 3 ? "destructive" : "secondary"}>
-                                {density >= 1 && density <= 3 ? "Good" : density > 3 ? "High" : "Low"}
-                              </Badge>
+                        {Object.entries(contentAnalysis.keywordDensity).map(
+                          ([keyword, density]) => (
+                            <div
+                              key={keyword}
+                              className="flex items-center justify-between"
+                            >
+                              <span className="font-medium">{keyword}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm">{density}%</span>
+                                <Badge
+                                  variant={
+                                    density >= 1 && density <= 3
+                                      ? "default"
+                                      : density > 3
+                                        ? "destructive"
+                                        : "secondary"
+                                  }
+                                >
+                                  {density >= 1 && density <= 3
+                                    ? "Good"
+                                    : density > 3
+                                      ? "High"
+                                      : "Low"}
+                                </Badge>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ),
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -624,16 +801,20 @@ export default function AdvancedSeoDashboard() {
                   {/* Suggestions */}
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Optimization Suggestions</CardTitle>
+                      <CardTitle className="text-lg">
+                        Optimization Suggestions
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
-                        {contentAnalysis.suggestions.map((suggestion, index) => (
-                          <Alert key={index}>
-                            <AlertCircle className="h-4 w-4" />
-                            <AlertDescription>{suggestion}</AlertDescription>
-                          </Alert>
-                        ))}
+                        {contentAnalysis.suggestions.map(
+                          (suggestion, index) => (
+                            <Alert key={index}>
+                              <AlertCircle className="h-4 w-4" />
+                              <AlertDescription>{suggestion}</AlertDescription>
+                            </Alert>
+                          ),
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -659,7 +840,9 @@ export default function AdvancedSeoDashboard() {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
                         <h4 className="font-medium mb-1">{rec.title}</h4>
-                        <p className="text-sm text-gray-600 mb-2">{rec.description}</p>
+                        <p className="text-sm text-gray-600 mb-2">
+                          {rec.description}
+                        </p>
                         <div className="flex items-center gap-4 text-xs text-gray-500">
                           <span>Impact: {rec.impact}</span>
                           <span>Time: {rec.estimatedTimeToComplete}</span>
@@ -670,7 +853,10 @@ export default function AdvancedSeoDashboard() {
                         <Badge className={getPriorityColor(rec.priority)}>
                           {rec.priority}
                         </Badge>
-                        <Badge variant="outline" className={getDifficultyColor(rec.difficulty)}>
+                        <Badge
+                          variant="outline"
+                          className={getDifficultyColor(rec.difficulty)}
+                        >
                           {rec.difficulty}
                         </Badge>
                         <div className="text-xs text-gray-500">
@@ -678,12 +864,17 @@ export default function AdvancedSeoDashboard() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="mt-3">
-                      <h5 className="font-medium text-sm mb-2">Action Items:</h5>
+                      <h5 className="font-medium text-sm mb-2">
+                        Action Items:
+                      </h5>
                       <ul className="space-y-1">
                         {rec.actionItems.map((item, itemIndex) => (
-                          <li key={itemIndex} className="text-sm text-gray-600 flex items-start gap-2">
+                          <li
+                            key={itemIndex}
+                            className="text-sm text-gray-600 flex items-start gap-2"
+                          >
                             <CheckCircle className="h-3 w-3 mt-0.5 text-green-500 flex-shrink-0" />
                             {item}
                           </li>
@@ -711,55 +902,102 @@ export default function AdvancedSeoDashboard() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-medium mb-3">Core Web Vitals Breakdown</h4>
+                      <h4 className="font-medium mb-3">
+                        Core Web Vitals Breakdown
+                      </h4>
                       <div className="space-y-3">
                         <div>
                           <div className="flex justify-between mb-1">
-                            <span className="text-sm">LCP (Largest Contentful Paint)</span>
-                            <span className="text-sm font-mono">{performance.coreWebVitals.lcp}s</span>
+                            <span className="text-sm">
+                              LCP (Largest Contentful Paint)
+                            </span>
+                            <span className="text-sm font-mono">
+                              {performance.coreWebVitals.lcp}s
+                            </span>
                           </div>
-                          <Progress value={(4 - performance.coreWebVitals.lcp) / 4 * 100} />
-                          <p className="text-xs text-gray-500 mt-1">Target: ≤ 2.5s</p>
+                          <Progress
+                            value={
+                              ((4 - performance.coreWebVitals.lcp) / 4) * 100
+                            }
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Target: ≤ 2.5s
+                          </p>
                         </div>
-                        
+
                         <div>
                           <div className="flex justify-between mb-1">
-                            <span className="text-sm">FID (First Input Delay)</span>
-                            <span className="text-sm font-mono">{performance.coreWebVitals.fid}ms</span>
+                            <span className="text-sm">
+                              FID (First Input Delay)
+                            </span>
+                            <span className="text-sm font-mono">
+                              {performance.coreWebVitals.fid}ms
+                            </span>
                           </div>
-                          <Progress value={(300 - performance.coreWebVitals.fid) / 300 * 100} />
-                          <p className="text-xs text-gray-500 mt-1">Target: ≤ 100ms</p>
+                          <Progress
+                            value={
+                              ((300 - performance.coreWebVitals.fid) / 300) *
+                              100
+                            }
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Target: ≤ 100ms
+                          </p>
                         </div>
-                        
+
                         <div>
                           <div className="flex justify-between mb-1">
-                            <span className="text-sm">CLS (Cumulative Layout Shift)</span>
-                            <span className="text-sm font-mono">{performance.coreWebVitals.cls}</span>
+                            <span className="text-sm">
+                              CLS (Cumulative Layout Shift)
+                            </span>
+                            <span className="text-sm font-mono">
+                              {performance.coreWebVitals.cls}
+                            </span>
                           </div>
-                          <Progress value={(0.25 - performance.coreWebVitals.cls) / 0.25 * 100} />
-                          <p className="text-xs text-gray-500 mt-1">Target: ≤ 0.1</p>
+                          <Progress
+                            value={
+                              ((0.25 - performance.coreWebVitals.cls) / 0.25) *
+                              100
+                            }
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Target: ≤ 0.1
+                          </p>
                         </div>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium mb-3">Indexing Status</h4>
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Total Pages</span>
-                          <span className="font-mono">{performance.indexingStatus.totalPages}</span>
+                          <span className="font-mono">
+                            {performance.indexingStatus.totalPages}
+                          </span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Indexed Pages</span>
-                          <span className="font-mono text-green-600">{performance.indexingStatus.indexedPages}</span>
+                          <span className="font-mono text-green-600">
+                            {performance.indexingStatus.indexedPages}
+                          </span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Crawl Errors</span>
-                          <span className="font-mono text-red-600">{performance.indexingStatus.crawlErrors}</span>
+                          <span className="font-mono text-red-600">
+                            {performance.indexingStatus.crawlErrors}
+                          </span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm">Sitemap Status</span>
-                          <Badge variant={performance.indexingStatus.sitemapStatus === 'processed' ? "default" : "destructive"}>
+                          <Badge
+                            variant={
+                              performance.indexingStatus.sitemapStatus ===
+                              "processed"
+                                ? "default"
+                                : "destructive"
+                            }
+                          >
                             {performance.indexingStatus.sitemapStatus}
                           </Badge>
                         </div>
@@ -792,16 +1030,33 @@ export default function AdvancedSeoDashboard() {
                           </tr>
                         </thead>
                         <tbody>
-                          {performance.trafficTrends.slice(0, 10).map((day, index) => (
-                            <tr key={index} className="border-b hover:bg-gray-50">
-                              <td className="p-2 font-mono text-sm">{day.date}</td>
-                              <td className="p-2 font-mono">{day.organicTraffic.toLocaleString()}</td>
-                              <td className="p-2 font-mono">{day.impressions.toLocaleString()}</td>
-                              <td className="p-2 font-mono">{day.clicks.toLocaleString()}</td>
-                              <td className="p-2 font-mono">{day.ctr.toFixed(2)}%</td>
-                              <td className="p-2 font-mono">{day.avgPosition.toFixed(1)}</td>
-                            </tr>
-                          ))}
+                          {performance.trafficTrends
+                            .slice(0, 10)
+                            .map((day, index) => (
+                              <tr
+                                key={index}
+                                className="border-b hover:bg-gray-50"
+                              >
+                                <td className="p-2 font-mono text-sm">
+                                  {day.date}
+                                </td>
+                                <td className="p-2 font-mono">
+                                  {day.organicTraffic.toLocaleString()}
+                                </td>
+                                <td className="p-2 font-mono">
+                                  {day.impressions.toLocaleString()}
+                                </td>
+                                <td className="p-2 font-mono">
+                                  {day.clicks.toLocaleString()}
+                                </td>
+                                <td className="p-2 font-mono">
+                                  {day.ctr.toFixed(2)}%
+                                </td>
+                                <td className="p-2 font-mono">
+                                  {day.avgPosition.toFixed(1)}
+                                </td>
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
                     </div>
@@ -825,7 +1080,8 @@ export default function AdvancedSeoDashboard() {
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  Competitor analysis data will be available soon. This feature requires integration with SEO analysis APIs.
+                  Competitor analysis data will be available soon. This feature
+                  requires integration with SEO analysis APIs.
                 </AlertDescription>
               </Alert>
             </CardContent>
