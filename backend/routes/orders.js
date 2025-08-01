@@ -175,6 +175,8 @@ router.get("/", authenticateToken, async (req, res) => {
 
     const totalPages = Math.ceil(totalOrders / parseInt(limit));
 
+    console.log(`📋 Orders API: Returning ${formattedOrders.length} orders, total: ${totalOrders}`);
+
     res.json({
       success: true,
       data: {
