@@ -166,7 +166,6 @@ export default function GuestCheckoutPage() {
       const shippingAddress = `${customerInfo.address}, ${customerInfo.ward ? customerInfo.ward + ", " : ""}${customerInfo.district ? customerInfo.district + ", " : ""}${customerInfo.city}`;
 
       const orderData = {
-        user_id: null, // Guest order
         items: [
           {
             product_id: guestPurchase.product_id,
@@ -174,32 +173,17 @@ export default function GuestCheckoutPage() {
             price: guestPurchase.final_price,
           },
         ],
-        shipping_address: shippingAddress,
-        billing_address: shippingAddress,
         customer_name: customerInfo.name,
         customer_email: customerInfo.email,
         customer_phone: customerInfo.phone,
+        shipping_address: shippingAddress,
+        billing_address: shippingAddress,
         notes: customerInfo.notes,
       };
 
       console.log("Sending order data:", orderData);
 
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("HTTP error response:", errorData);
-        toast.error(
-          errorData.message || `Lỗi ${response.status}: Không thể đặt hàng`,
-        );
-        return;
-      }
-
-      const data = await response.json();
+      const data = await apiWrappers.orders.createGuest(orderData);
       console.log("Order response:", data);
 
       if (data.success && data.data && data.data.order) {
@@ -225,7 +209,7 @@ export default function GuestCheckoutPage() {
       }
     } catch (error) {
       console.error("Order submission error:", error);
-      toast.error("Có lỗi xảy ra khi đặt hàng");
+      toast.error("Có lỗi xảy ra khi ��ặt hàng");
     } finally {
       setSubmitting(false);
     }
@@ -299,7 +283,7 @@ export default function GuestCheckoutPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  Thông tin kh��ch hàng
+                  Thông tin khách hàng
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
