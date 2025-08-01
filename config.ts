@@ -77,10 +77,7 @@ export interface ApiResponse<T = any> {
   status?: number;
 }
 // Helper function to call API with optional token
-async function callApi<T>(
-  url: string,
-  options: RequestInit = {},
-): Promise<T> {
+async function callApi<T>(url: string, options: RequestInit = {}): Promise<T> {
   let headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),
@@ -151,10 +148,10 @@ export const productsApi = {
         status: data.status ?? 200,
       };
     } catch (error: any) {
-      console.error('Products API error:', error);
+      console.error("Products API error:", error);
       return {
         success: false,
-        message: error.message || 'Failed to fetch products',
+        message: error.message || "Failed to fetch products",
         status: 500,
       };
     }
@@ -171,7 +168,10 @@ export const productsApi = {
     });
   },
 
-  update(id: number, productData: Partial<Product>): Promise<ApiResponse<Product>> {
+  update(
+    id: number,
+    productData: Partial<Product>,
+  ): Promise<ApiResponse<Product>> {
     return callApi(`${Domain}/api/products/${id}`, {
       method: "PUT",
       body: JSON.stringify(productData),
@@ -216,10 +216,13 @@ export const authApi = {
       user: User;
     }>
   > {
-    const data = await callApi<ApiResponse<any>>(`${Domain}/api/auth/register`, {
-      method: "POST",
-      body: JSON.stringify(userData),
-    });
+    const data = await callApi<ApiResponse<any>>(
+      `${Domain}/api/auth/register`,
+      {
+        method: "POST",
+        body: JSON.stringify(userData),
+      },
+    );
     return {
       ...data,
       status: data.status ?? 200,
@@ -257,9 +260,12 @@ export const authApi = {
       };
     }
 
-    const data = await callApi<ApiResponse<User>>(`${Domain}/api/auth/verify-token`, {
-      method: "POST",
-    });
+    const data = await callApi<ApiResponse<User>>(
+      `${Domain}/api/auth/verify-token`,
+      {
+        method: "POST",
+      },
+    );
     return {
       ...data,
       status: data.status ?? 200,
@@ -281,10 +287,10 @@ export const categoriesApi = {
         status: data.status ?? 200,
       };
     } catch (error: any) {
-      console.error('Categories API error:', error);
+      console.error("Categories API error:", error);
       return {
         success: false,
-        message: error.message || 'Failed to fetch categories',
+        message: error.message || "Failed to fetch categories",
         status: 500,
       };
     }
@@ -301,7 +307,10 @@ export const categoriesApi = {
     });
   },
 
-  update(id: number, categoryData: Partial<Category>): Promise<ApiResponse<Category>> {
+  update(
+    id: number,
+    categoryData: Partial<Category>,
+  ): Promise<ApiResponse<Category>> {
     return callApi(`${Domain}/api/categories/${id}`, {
       method: "PUT",
       body: JSON.stringify(categoryData),
@@ -314,7 +323,7 @@ export const categoriesApi = {
     });
   },
 };
-  // Media File Interface
+// Media File Interface
 export interface MediaFile {
   id: number;
   filename: string;
@@ -344,44 +353,50 @@ export const mediaApi = {
     return callApi(`${Domain}/api/media?${searchParams}`);
   },
 
-  upload(file: File, entityType: string = 'general'): Promise<ApiResponse<MediaFile>> {
+  upload(
+    file: File,
+    entityType: string = "general",
+  ): Promise<ApiResponse<MediaFile>> {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('entity_type', entityType);
+    formData.append("file", file);
+    formData.append("entity_type", entityType);
 
     // Get token for authenticated upload
     let headers: Record<string, string> = {};
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
       if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        headers["Authorization"] = `Bearer ${token}`;
       }
     }
 
     return fetch(`${Domain}/api/media`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
       headers, // Don't set Content-Type, browser will set it with boundary
-    }).then(response => response.json());
+    }).then((response) => response.json());
   },
 
   getById(id: number): Promise<ApiResponse<MediaFile>> {
     return callApi(`${Domain}/api/media/${id}`);
   },
 
-  update(id: number, data: Partial<MediaFile>): Promise<ApiResponse<MediaFile>> {
+  update(
+    id: number,
+    data: Partial<MediaFile>,
+  ): Promise<ApiResponse<MediaFile>> {
     return callApi(`${Domain}/api/media/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     });
   },
 
   delete(id: number): Promise<ApiResponse<void>> {
     return callApi(`${Domain}/api/media/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   },
-}
+};
 export interface Review {
   id: number;
   user_id: number;
@@ -454,13 +469,10 @@ export const reviewsApi = {
     images?: string[];
   }): Promise<ApiResponse<Review>> {
     try {
-      const data = await callApi<ApiResponse<any>>(
-        `${Domain}/api/reviews`,
-        {
-          method: "POST",
-          body: JSON.stringify(reviewData),
-        },
-      );
+      const data = await callApi<ApiResponse<any>>(`${Domain}/api/reviews`, {
+        method: "POST",
+        body: JSON.stringify(reviewData),
+      });
       return {
         ...data,
         status: data.status ?? 200,
