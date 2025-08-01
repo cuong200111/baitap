@@ -362,6 +362,36 @@ export const locationsController = {
             { code: 926, name: "Phong Điền", full_name: "Huyện Phong Điền", province_code: 92 },
             { code: 927, name: "Thới Lai", full_name: "Huyện Thới Lai", province_code: 92 },
           ],
+          26: [ // Khánh Hòa
+            { code: 260, name: "Nha Trang", full_name: "Thành phố Nha Trang", province_code: 26 },
+            { code: 261, name: "Cam Ranh", full_name: "Thành phố Cam Ranh", province_code: 26 },
+            { code: 262, name: "Cam Lâm", full_name: "Huyện Cam Lâm", province_code: 26 },
+            { code: 263, name: "Vạn Ninh", full_name: "Huyện Vạn Ninh", province_code: 26 },
+            { code: 264, name: "Ninh Hòa", full_name: "Thị xã Ninh Hòa", province_code: 26 },
+            { code: 265, name: "Khánh Vĩnh", full_name: "Huyện Khánh Vĩnh", province_code: 26 },
+            { code: 266, name: "Diên Khánh", full_name: "Huyện Diên Khánh", province_code: 26 },
+            { code: 267, name: "Khánh Sơn", full_name: "Huyện Khánh Sơn", province_code: 26 },
+            { code: 268, name: "Trường Sa", full_name: "Huyện Trường Sa", province_code: 26 },
+          ],
+          33: [ // Hải Phòng
+            { code: 330, name: "Hồng Bàng", full_name: "Quận Hồng Bàng", province_code: 33 },
+            { code: 331, name: "Ngô Quyền", full_name: "Quận Ngô Quyền", province_code: 33 },
+            { code: 332, name: "Lê Chân", full_name: "Quận Lê Chân", province_code: 33 },
+            { code: 333, name: "Hải An", full_name: "Quận Hải An", province_code: 33 },
+            { code: 334, name: "Kiến An", full_name: "Quận Kiến An", province_code: 33 },
+            { code: 335, name: "Đồ Sơn", full_name: "Quận Đồ Sơn", province_code: 33 },
+            { code: 336, name: "Dương Kinh", full_name: "Quận Dương Kinh", province_code: 33 },
+          ],
+          77: [ // Quảng Ninh
+            { code: 770, name: "Hạ Long", full_name: "Thành phố Hạ Long", province_code: 77 },
+            { code: 771, name: "Móng Cái", full_name: "Thành phố Móng Cái", province_code: 77 },
+            { code: 772, name: "Cam Phả", full_name: "Thành phố Cam Phả", province_code: 77 },
+            { code: 773, name: "Uông Bí", full_name: "Thành phố Uông Bí", province_code: 77 },
+            { code: 774, name: "Quảng Yên", full_name: "Thị xã Quảng Yên", province_code: 77 },
+            { code: 775, name: "Đông Triều", full_name: "Thị xã Đông Triều", province_code: 77 },
+            { code: 776, name: "Ba Chẽ", full_name: "Huyện Ba Chẽ", province_code: 77 },
+            { code: 777, name: "Vân Đồn", full_name: "Huyện Vân Đồn", province_code: 77 },
+          ],
         };
 
         const districts = districtsData[province_code] || [
