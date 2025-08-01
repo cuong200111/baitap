@@ -27,7 +27,7 @@ router.get("/", authenticateToken, async (req, res) => {
   }
 });
 
-// Create new address
+// Create or Update address (UPSERT) - each user can only have one address
 router.post("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -40,7 +40,7 @@ router.post("/", authenticateToken, async (req, res) => {
       ward,
       district,
       city,
-      is_default = false,
+      is_default = true, // Always default since user has only one address
     } = req.body;
 
     // Validate required fields
@@ -52,48 +52,85 @@ router.post("/", authenticateToken, async (req, res) => {
       });
     }
 
-    // If this is set as default, unset all other default addresses
-    if (is_default) {
+    // Check if user already has an address
+    const existingAddress = await executeQuery(
+      `SELECT * FROM customer_addresses WHERE user_id = ?`,
+      [userId],
+    );
+
+    let result;
+    let message;
+    let addressData;
+
+    if (existingAddress.length > 0) {
+      // UPDATE existing address
       await executeQuery(
-        `UPDATE customer_addresses SET is_default = 0 WHERE user_id = ?`,
+        `UPDATE customer_addresses SET
+         type = ?, full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?,
+         ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
+         WHERE user_id = ?`,
+        [
+          type,
+          full_name,
+          phone,
+          address_line_1,
+          address_line_2,
+          ward,
+          district,
+          city,
+          1, // Always default
+          userId,
+        ],
+      );
+
+      // Get updated address
+      const updatedAddress = await executeQuery(
+        `SELECT * FROM customer_addresses WHERE user_id = ?`,
         [userId],
       );
+
+      addressData = updatedAddress[0];
+      message = "Address updated successfully";
+    } else {
+      // INSERT new address
+      result = await executeQuery(
+        `INSERT INTO customer_addresses
+         (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        [
+          userId,
+          type,
+          full_name,
+          phone,
+          address_line_1,
+          address_line_2,
+          ward,
+          district,
+          city,
+          1, // Always default
+        ],
+      );
+
+      // Get the created address
+      const newAddress = await executeQuery(
+        `SELECT * FROM customer_addresses WHERE id = ?`,
+        [result.insertId],
+      );
+
+      addressData = newAddress[0];
+      message = "Address created successfully";
     }
-
-    const result = await executeQuery(
-      `INSERT INTO customer_addresses 
-       (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-      [
-        userId,
-        type,
-        full_name,
-        phone,
-        address_line_1,
-        address_line_2,
-        ward,
-        district,
-        city,
-        is_default ? 1 : 0,
-      ],
-    );
-
-    // Get the created address
-    const newAddress = await executeQuery(
-      `SELECT * FROM customer_addresses WHERE id = ?`,
-      [result.insertId],
-    );
 
     res.json({
       success: true,
-      message: "Address created successfully",
-      data: newAddress[0],
+      message: message,
+      data: addressData,
     });
   } catch (error) {
-    console.error("Create address error:", error);
+    console.error("Create/Update address error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to create address",
+      message: "Failed to save address",
     });
   }
 });
