@@ -160,9 +160,8 @@ export default function AdvancedSeoDashboard() {
 
   const loadAIRecommendations = async () => {
     try {
-      const response = await fetch("/api/admin/seo-ai-recommendations", {
+      const response = await authenticatedFetch(`${Domain}/api/admin/seo-ai-recommendations`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ analysisType: "all", timeframe: selectedTimeRange })
       });
       const data = await response.json();
