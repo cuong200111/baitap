@@ -58,7 +58,7 @@ export default function CartPage() {
       loadCart();
     } else {
       // Redirect to login if not authenticated
-      router.push("/login?message=Vui lòng đăng nhập để xem giỏ h��ng");
+      router.push("/login?message=Vui lòng đăng nhập để xem giỏ hàng");
     }
   }, [user, isAuthenticated, router]);
 
@@ -67,7 +67,12 @@ export default function CartPage() {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/cart?user_id=${user.id}`);
+      const token = localStorage.getItem("token");
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+      const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`, { headers });
       const data = await response.json();
 
       if (data.success) {
