@@ -279,7 +279,7 @@ export default function AdminOrdersPage() {
                   <TableCell>
                     <div className="font-medium">{order.order_number}</div>
                     <div className="text-sm text-gray-500">
-                      {order.items.length} sản phẩm
+                      {order.items?.length || 0} sản phẩm
                     </div>
                   </TableCell>
                   <TableCell>
