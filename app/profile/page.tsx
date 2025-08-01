@@ -279,7 +279,23 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      // Vietnam districts data mapping
+      // Call Vietnam API to get real districts
+      const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+
+      if (response.ok) {
+        const provinceData = await response.json();
+        if (provinceData && provinceData.districts) {
+          setDistricts(provinceData.districts.map((d: any) => ({
+            code: d.code,
+            name: d.name,
+            full_name: d.name,
+            province_code: provinceCode,
+          })));
+          return;
+        }
+      }
+
+      // Fallback data if API fails
       const districtsMapping: { [key: number]: any[] } = {
         1: [ // Hà Nội
           { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
@@ -427,7 +443,7 @@ export default function ProfilePage() {
         { code: provinceCode * 1000 + 2, name: "Huyện/Quận 2", full_name: "Huyện/Quận 2", province_code: provinceCode },
         { code: provinceCode * 1000 + 3, name: "Huyện/Quận 3", full_name: "Huyện/Quận 3", province_code: provinceCode },
         { code: provinceCode * 1000 + 4, name: "Huyện/Quận 4", full_name: "Huyện/Quận 4", province_code: provinceCode },
-        { code: provinceCode * 1000 + 5, name: "Huyện/Quận 5", full_name: "Huyện/Quận 5", province_code: provinceCode },
+        { code: provinceCode * 1000 + 5, name: "Huyện/Qu���n 5", full_name: "Huyện/Quận 5", province_code: provinceCode },
       ]);
     } finally {
       setLoadingLocations(false);
