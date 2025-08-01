@@ -21,9 +21,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Domain, formatPrice, getMediaUrl } from "@/config";
+import { formatPrice, getMediaUrl } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { apiWrappers } from "@/lib/api-wrapper";
 
 interface CartItem {
   id: number;
