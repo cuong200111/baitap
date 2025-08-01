@@ -440,15 +440,107 @@ export const debugController = {
   // Complete test order workflow
   async createCompleteTestOrder(req, res) {
     try {
-      // This would create a full order with products
-      const result = await this.createTestOrder(req, res);
-      
-      // Add order items if order was created
-      // This is a simplified version
+      // Get a test user or create one
+      let testUser = await executeQuery(
+        "SELECT id FROM users WHERE email = 'test@example.com'"
+      );
+
+      if (testUser.length === 0) {
+        const hashedPassword = await bcrypt.hash("password123", 12);
+        const userResult = await executeQuery(
+          `INSERT INTO users (email, password, full_name, role, is_active, created_at)
+           VALUES ('test@example.com', ?, 'Test User', 'user', 1, NOW())`,
+          [hashedPassword]
+        );
+        testUser = [{ id: userResult.insertId }];
+      }
+
+      // Get some products to add to order
+      const products = await executeQuery(
+        "SELECT id, name, sku, price, sale_price, images FROM products WHERE status = 'active' LIMIT 3"
+      );
+
+      if (products.length === 0) {
+        return res.json({
+          success: false,
+          message: "No products found. Please add products first.",
+        });
+      }
+
+      // Generate order number
+      const timestamp = Date.now().toString();
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      const orderNumber = `HD${timestamp.slice(-6)}${random}`;
+
+      // Calculate total
+      let totalAmount = 0;
+      const orderItems = products.map((product, index) => {
+        const price = product.sale_price || product.price;
+        const quantity = index + 1; // Different quantities
+        const total = price * quantity;
+        totalAmount += total;
+
+        return {
+          product_id: product.id,
+          product_name: product.name,
+          product_sku: product.sku,
+          quantity: quantity,
+          unit_price: price,
+          total_price: total,
+          product_image: (() => {
+            try {
+              return product.images ? JSON.parse(product.images)[0] : null;
+            } catch (e) {
+              return product.images || null;
+            }
+          })()
+        };
+      });
+
+      // Create test order
+      const orderResult = await executeQuery(
+        `INSERT INTO orders
+         (order_number, user_id, status, payment_method, total_amount, customer_name, customer_email, customer_phone, shipping_address, created_at)
+         VALUES (?, ?, 'pending', 'cod', ?, 'Test Customer', 'test@example.com', '0123456789', '123 Test Street, Hanoi, Vietnam', NOW())`,
+        [orderNumber, testUser[0].id, totalAmount]
+      );
+
+      const orderId = orderResult.insertId;
+
+      // Add order items
+      for (const item of orderItems) {
+        await executeQuery(
+          `INSERT INTO order_items
+           (order_id, product_id, product_name, product_sku, quantity, unit_price, total_price, product_image)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            orderId,
+            item.product_id,
+            item.product_name,
+            item.product_sku,
+            item.quantity,
+            item.unit_price,
+            item.total_price,
+            item.product_image
+          ]
+        );
+      }
+
+      // Create status history
+      await executeQuery(
+        "INSERT INTO order_status_history (order_id, status, comment) VALUES (?, 'pending', 'Test order created')",
+        [orderId]
+      );
+
       res.json({
         success: true,
-        message: "Complete test order workflow finished",
-        data: result.data || {},
+        message: "Complete test order created successfully",
+        data: {
+          order_id: orderId,
+          order_number: orderNumber,
+          total_amount: totalAmount,
+          items_count: orderItems.length
+        },
       });
     } catch (error) {
       console.error("Complete test order error:", error);
