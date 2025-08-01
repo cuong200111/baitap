@@ -120,9 +120,7 @@ router.post(
 router.post(
   "/login",
   [
-    body("email")
-      .isEmail()
-      .withMessage("Valid email required"),
+    body("email").isEmail().withMessage("Valid email required"),
     body("password").notEmpty().withMessage("Password required"),
   ],
   async (req, res) => {
@@ -291,7 +289,7 @@ router.put(
         province_name,
         district_name,
         ward_name,
-        address
+        address,
       } = req.body;
 
       // Update basic user profile
@@ -572,14 +570,14 @@ router.post("/create-admin", async (req, res) => {
     // Check if admin user exists
     const existing = await executeQuery(
       "SELECT id, email, role FROM users WHERE email = ?",
-      ["admin@zoxvn.com"]
+      ["admin@zoxvn.com"],
     );
 
     if (existing.length > 0) {
       return res.json({
         success: true,
         message: "Admin user already exists",
-        user: existing[0]
+        user: existing[0],
       });
     }
 
@@ -605,14 +603,13 @@ router.post("/create-admin", async (req, res) => {
       user: {
         id: result.insertId,
         email: "admin@zoxvn.com",
-        role: "admin"
+        role: "admin",
       },
       credentials: {
         email: "admin@zoxvn.com",
-        password: "admin123"
-      }
+        password: "admin123",
+      },
     });
-
   } catch (error) {
     console.error("Create admin error:", error);
     res.status(500).json({

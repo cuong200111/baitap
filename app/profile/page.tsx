@@ -1318,8 +1318,6 @@ export default function ProfilePage() {
     }
   };
 
-
-
   const handleUpdateProfile = async () => {
     // Use ref-based check to prevent race conditions
     if (updateInProgress.current) {
