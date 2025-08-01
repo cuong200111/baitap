@@ -148,6 +148,7 @@ export default function DebugAdminPage() {
             <Button onClick={testDirectLogin}>Test Direct Login</Button>
             <Button onClick={testCategories}>Test Get Categories</Button>
             <Button onClick={testCreateCategory}>Test Create Category</Button>
+            <Button onClick={testGuestOrder}>Test Guest Order</Button>
           </div>
 
           <div>
