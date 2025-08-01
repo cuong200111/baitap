@@ -46,7 +46,7 @@ export function MediaSelector({
   const loadMediaFiles = async () => {
     setLoading(true);
     try {
-      const response = await mediaApi.getAll();
+      const response = await apiWrappers.media.getAll();
       if (response.success && response.data) {
         setMediaFiles(response.data);
       } else {
