@@ -281,9 +281,14 @@ export default function CheckoutPage() {
         notes: customerInfo.notes,
       };
 
-      const response = await fetch("/api/orders", {
+      const token = localStorage.getItem("token");
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+      const response = await fetch(`${Domain}/api/orders`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(orderData),
       });
 
