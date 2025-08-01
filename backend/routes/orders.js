@@ -905,15 +905,7 @@ router.post(
           success: true,
           message: "Guest order created successfully",
           data: {
-            order: {
-              ...newOrder[0],
-              billing_address: newOrder[0].billing_address
-                ? JSON.parse(newOrder[0].billing_address)
-                : null,
-              shipping_address: newOrder[0].shipping_address
-                ? JSON.parse(newOrder[0].shipping_address)
-                : null,
-            },
+            order: newOrder[0],
             order_number: newOrder[0].order_number,
           },
         });
