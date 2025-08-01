@@ -23,6 +23,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, getMediaUrl } from "@/config";
 import { toast } from "sonner";
+import { apiWrappers } from "@/lib/api-wrapper";
 
 interface GuestPurchase {
   product_id: number;
@@ -298,7 +299,7 @@ export default function GuestCheckoutPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  Thông tin khách hàng
+                  Thông tin kh��ch hàng
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
