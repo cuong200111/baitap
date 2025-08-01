@@ -301,7 +301,7 @@ export default function ProfilePage() {
           { code: 1, name: "Ba Đình", full_name: "Quận Ba Đình", province_code: 1 },
           { code: 2, name: "Hoàn Kiếm", full_name: "Quận Hoàn Kiếm", province_code: 1 },
           { code: 3, name: "Tây Hồ", full_name: "Quận Tây Hồ", province_code: 1 },
-          { code: 4, name: "Long Biên", full_name: "Quận Long Bi��n", province_code: 1 },
+          { code: 4, name: "Long Biên", full_name: "Quận Long Biên", province_code: 1 },
           { code: 5, name: "Cầu Giấy", full_name: "Quận Cầu Giấy", province_code: 1 },
         ],
         20: [ // Quảng Nam
@@ -522,7 +522,7 @@ export default function ProfilePage() {
       setWards(wardsMapping[districtCode] || [
         { code: 1, name: "Phường 1", full_name: "Phường 1", district_code: districtCode },
         { code: 2, name: "Phường 2", full_name: "Phường 2", district_code: districtCode },
-        { code: 3, name: "Phường 3", full_name: "Phường 3", district_code: districtCode },
+        { code: 3, name: "Phường 3", full_name: "Phư��ng 3", district_code: districtCode },
         { code: 4, name: "Phường 4", full_name: "Phường 4", district_code: districtCode },
         { code: 5, name: "Phường 5", full_name: "Phường 5", district_code: districtCode },
       ]);
@@ -677,31 +677,22 @@ export default function ProfilePage() {
         return;
       }
 
-      // Always store only names in database
+      // Update basic profile info only
       const updateData = {
         full_name: formData.full_name.trim(),
         phone: formData.phone.trim() || null,
-        address: formData.address.trim() || null,
-        province_name: addressData.province_name.trim() || null,
-        district_name: addressData.district_name.trim() || null,
-        ward_name: addressData.ward_name.trim() || null,
       };
 
-      console.log("Updating profile with data:", {
-        mode: isManualAddressMode ? "manual" : "api",
-        updateData,
-      });
+      console.log("Updating profile with data:", updateData);
 
-      // Create request body once and reuse
-      const requestBody = JSON.stringify(updateData);
-
+      // Update profile
       const response = await fetch(`${Domain}/api/auth/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: requestBody,
+        body: JSON.stringify(updateData),
       });
 
       if (!response.ok) {
@@ -713,7 +704,15 @@ export default function ProfilePage() {
 
       if (data.success) {
         setProfile(data.data);
-        toast.success("Cập nhật thông tin thành công");
+
+        // Save address to customer_addresses table
+        try {
+          await saveAddress();
+          toast.success("Cập nhật thông tin và địa chỉ thành công");
+        } catch (addressError) {
+          console.error("Address save error:", addressError);
+          toast.success("Cập nhật thông tin thành công, nhưng có lỗi khi lưu địa chỉ");
+        }
 
         // Refresh user context
         if (refreshUser) {
