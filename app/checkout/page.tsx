@@ -156,27 +156,48 @@ export default function CheckoutPage() {
       setLoading(true);
 
       if (!userId) {
-        // For guest users, check localStorage cart
-        const guestCart = localStorage.getItem("guest_cart");
-        if (!guestCart) {
-          toast.error("Giỏ hàng trống");
-          router.push("/cart");
-          return;
-        }
-
-        try {
-          const cartData = JSON.parse(guestCart);
-          if (!cartData.items || cartData.items.length === 0) {
+        // For guest users, try to get from session cart first
+        const sessionId = localStorage.getItem("session_id");
+        if (sessionId) {
+          try {
+            const cartResponse = await apiWrappers.cart.getAll({ session_id: sessionId });
+            if (cartResponse.success && cartResponse.data?.items?.length > 0) {
+              setCartItems(cartResponse.data.items);
+              setSummary(cartResponse.data.summary);
+            } else {
+              toast.error("Giỏ hàng trống");
+              router.push("/cart");
+              return;
+            }
+          } catch (error) {
+            console.error("Failed to load session cart:", error);
+            toast.error("Không thể tải giỏ hàng");
+            router.push("/cart");
+            return;
+          }
+        } else {
+          // Fallback to localStorage guest cart
+          const guestCart = localStorage.getItem("guest_cart");
+          if (!guestCart) {
             toast.error("Giỏ hàng trống");
             router.push("/cart");
             return;
           }
-          setCartItems(cartData.items);
-          setSummary(cartData.summary);
-        } catch (error) {
-          toast.error("Lỗi giỏ hàng, vui lòng thử lại");
-          router.push("/cart");
-          return;
+
+          try {
+            const cartData = JSON.parse(guestCart);
+            if (!cartData.items || cartData.items.length === 0) {
+              toast.error("Giỏ hàng trống");
+              router.push("/cart");
+              return;
+            }
+            setCartItems(cartData.items);
+            setSummary(cartData.summary);
+          } catch (error) {
+            toast.error("Lỗi giỏ hàng, vui lòng thử lại");
+            router.push("/cart");
+            return;
+          }
         }
       } else {
         // For authenticated users, use API
