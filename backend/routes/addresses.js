@@ -135,13 +135,13 @@ router.post("/", authenticateToken, async (req, res) => {
   }
 });
 
-// Update address
+// Update address (user can only update their single address)
 router.put("/:id", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const addressId = req.params.id;
     const {
-      type,
+      type = "default",
       full_name,
       phone,
       address_line_1,
@@ -149,7 +149,6 @@ router.put("/:id", authenticateToken, async (req, res) => {
       ward,
       district,
       city,
-      is_default,
     } = req.body;
 
     // Check if address belongs to user
@@ -165,18 +164,19 @@ router.put("/:id", authenticateToken, async (req, res) => {
       });
     }
 
-    // If this is set as default, unset all other default addresses
-    if (is_default) {
-      await executeQuery(
-        `UPDATE customer_addresses SET is_default = 0 WHERE user_id = ? AND id != ?`,
-        [userId, addressId],
-      );
+    // Validate required fields
+    if (!full_name || !address_line_1 || !ward || !district || !city) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Missing required fields: full_name, address_line_1, ward, district, city",
+      });
     }
 
-    // Update address
+    // Update address (always set as default since user has only one address)
     await executeQuery(
-      `UPDATE customer_addresses SET 
-       type = ?, full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?, 
+      `UPDATE customer_addresses SET
+       type = ?, full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?,
        ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
        WHERE id = ? AND user_id = ?`,
       [
@@ -188,7 +188,7 @@ router.put("/:id", authenticateToken, async (req, res) => {
         ward,
         district,
         city,
-        is_default ? 1 : 0,
+        1, // Always default since user has only one address
         addressId,
         userId,
       ],
