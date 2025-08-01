@@ -73,8 +73,42 @@ export default function GuestCheckoutPage() {
     loadSavedCustomerInfo();
   }, []);
 
-  const loadGuestPurchase = () => {
+  const loadGuestPurchase = async () => {
     try {
+      // Try to load from session cart first
+      const sessionId = localStorage.getItem("session_id");
+      if (sessionId) {
+        const cartResponse = await apiWrappers.cart.getAll({ session_id: sessionId });
+        if (cartResponse.success && cartResponse.data?.items?.length > 0) {
+          // Convert cart items to guest purchase format
+          const cartItems = cartResponse.data.items;
+          if (cartItems.length === 1) {
+            // Single product purchase
+            const item = cartItems[0];
+            const guestPurchaseData: GuestPurchase = {
+              product_id: item.product_id,
+              product_name: item.product_name,
+              sku: item.sku || '',
+              price: item.price,
+              sale_price: item.sale_price,
+              final_price: item.final_price,
+              quantity: item.quantity,
+              images: item.images || [],
+              total: item.total_price
+            };
+            setGuestPurchase(guestPurchaseData);
+            setLoading(false);
+            return;
+          } else {
+            // Multiple items - redirect to regular checkout
+            toast.info("Có nhiều sản phẩm trong giỏ hàng, chuyển đến trang thanh toán thông thường");
+            router.push("/checkout");
+            return;
+          }
+        }
+      }
+
+      // Fallback to localStorage guest_purchase (legacy)
       const guestPurchaseData = localStorage.getItem("guest_purchase");
       if (guestPurchaseData) {
         setGuestPurchase(JSON.parse(guestPurchaseData));
