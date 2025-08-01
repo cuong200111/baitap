@@ -12,6 +12,7 @@ import {
   Menu,
 } from "lucide-react";
 import { fetchWithRetry, getErrorMessage } from "@/lib/network";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface ApiCategory {
   id: number;
