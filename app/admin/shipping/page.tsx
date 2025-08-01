@@ -140,9 +140,9 @@ export default function AdminShippingPage() {
     try {
       setLoading(true);
       const [warehousesRes, zonesRes, ratesRes] = await Promise.all([
-        fetch("/api/admin/warehouses"),
-        fetch("/api/admin/shipping-zones"),
-        fetch("/api/admin/shipping-rates"),
+        fetch(`${API_DOMAIN}/api/admin/warehouses`),
+        fetch(`${API_DOMAIN}/api/admin/shipping-zones`),
+        fetch(`${API_DOMAIN}/api/admin/shipping-rates`),
       ]);
 
       const [warehousesData, zonesData, ratesData] = await Promise.all([
@@ -156,7 +156,7 @@ export default function AdminShippingPage() {
       if (ratesData.success) setRates(ratesData.data);
     } catch (error) {
       console.error("Failed to load shipping data:", error);
-      toast.error("Không thể tải dữ liệu shipping");
+      toast.error("Không thể tải d�� liệu shipping");
     } finally {
       setLoading(false);
     }
@@ -164,7 +164,7 @@ export default function AdminShippingPage() {
 
   const loadProvinces = async () => {
     try {
-      const response = await fetch("/api/locations?type=provinces");
+      const response = await fetch(`${API_DOMAIN}/api/locations?type=provinces`);
       const data = await response.json();
       if (data.success) {
         setProvinces(data.data);
@@ -202,7 +202,7 @@ export default function AdminShippingPage() {
         return;
       }
 
-      const response = await fetch("/api/admin/warehouses", {
+      const response = await fetch(`${API_DOMAIN}/api/admin/warehouses`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -238,7 +238,7 @@ export default function AdminShippingPage() {
 
   const handleCreateZone = async () => {
     try {
-      const response = await fetch("/api/admin/shipping-zones", {
+      const response = await fetch(`${API_DOMAIN}/api/admin/shipping-zones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -269,7 +269,7 @@ export default function AdminShippingPage() {
 
   const handleCreateRate = async () => {
     try {
-      const response = await fetch("/api/admin/shipping-rates", {
+      const response = await fetch(`${API_DOMAIN}/api/admin/shipping-rates`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -426,7 +426,7 @@ export default function AdminShippingPage() {
                         disabled={!warehouseForm.province_id}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Ch��n huyện" />
+                          <SelectValue placeholder="Chọn huy���n" />
                         </SelectTrigger>
                         <SelectContent>
                           {districts.map((district) => (
