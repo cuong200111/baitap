@@ -184,23 +184,26 @@ export default function ProfilePage() {
     try {
       setLoadingLocations(true);
 
-      const response = await fetch("http://localhost:4000/api/locations?type=provinces");
+      const response = await fetch("https://provinces.open-api.vn/api/p/");
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
 
-      const data = await response.json();
-      if (data.success && data.data) {
-        setProvinces(data.data);
+      const provinces = await response.json();
+      if (provinces && Array.isArray(provinces)) {
+        setProvinces(provinces.map(p => ({
+          code: p.code,
+          name: p.name,
+          full_name: p.name_with_type || p.name,
+        })));
       } else {
-        throw new Error(data.message || "No data received");
+        throw new Error("Invalid provinces data");
       }
     } catch (error: any) {
       console.error("Failed to load provinces:", error);
 
       // Always provide fallback provinces data
-      // Set fallback provinces for common areas
       setProvinces([
           { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
           { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
@@ -1181,7 +1184,7 @@ export default function ProfilePage() {
                         onClick={logout}
                         className="w-full md:w-auto"
                       >
-                        Đăng xuất khỏi tất cả thiết bị
+                        Đăng xuất khỏi t��t cả thiết bị
                       </Button>
                     </div>
                   </CardContent>
