@@ -230,7 +230,7 @@ export const locationsController = {
       if (type === 'provinces') {
         const provinces = [
           { code: 1, name: "Hà Nội", full_name: "Thành phố Hà Nội" },
-          { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố Hồ Chí Minh" },
+          { code: 79, name: "TP Hồ Chí Minh", full_name: "Thành phố H��� Chí Minh" },
           { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
           { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
           { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
@@ -364,7 +364,14 @@ export const locationsController = {
           ],
         };
 
-        const districts = districtsData[province_code] || [];
+        const districts = districtsData[province_code] || [
+          // Generic districts for provinces that don't have specific data
+          { code: parseInt(province_code) * 1000 + 1, name: "Huyện 1", full_name: "Huyện 1", province_code: parseInt(province_code) },
+          { code: parseInt(province_code) * 1000 + 2, name: "Huyện 2", full_name: "Huyện 2", province_code: parseInt(province_code) },
+          { code: parseInt(province_code) * 1000 + 3, name: "Huyện 3", full_name: "Huyện 3", province_code: parseInt(province_code) },
+          { code: parseInt(province_code) * 1000 + 4, name: "Huyện 4", full_name: "Huyện 4", province_code: parseInt(province_code) },
+          { code: parseInt(province_code) * 1000 + 5, name: "Huyện 5", full_name: "Huyện 5", province_code: parseInt(province_code) },
+        ];
         return res.json({
           success: true,
           data: districts,
