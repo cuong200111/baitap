@@ -260,11 +260,12 @@ router.post(
       .isInt({ min: 1 })
       .withMessage("Valid quantity required"),
     body("shipping_address")
-      .isObject()
+      .trim()
+      .notEmpty()
       .withMessage("Shipping address required"),
     body("billing_address")
       .optional()
-      .isObject()
+      .isString()
       .withMessage("Invalid billing address"),
     body("payment_method")
       .isIn(["cod", "bank_transfer", "credit_card", "e_wallet"])
