@@ -850,34 +850,21 @@ router.post(
         const orderResult = await executeQuery(
           `
           INSERT INTO orders (
-            order_number, user_id, status, payment_method, payment_status,
-            shipping_method, subtotal, shipping_fee, discount_amount, total_amount,
-            billing_address, shipping_address, notes
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            order_number, user_id, status, payment_method, total_amount,
+            billing_address, shipping_address, customer_name, customer_email, customer_phone, notes
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
           [
             orderNumber,
             null, // Guest order
             "pending",
             "cod", // Default to cash on delivery for guest orders
-            "pending",
-            "standard",
-            subtotal,
-            shipping_fee,
-            discount_amount,
             totalAmount,
-            JSON.stringify({
-              customer_name,
-              customer_email,
-              customer_phone,
-              address: billing_address || shipping_address,
-            }),
-            JSON.stringify({
-              customer_name,
-              customer_email,
-              customer_phone,
-              address: shipping_address,
-            }),
+            billing_address || shipping_address,
+            shipping_address,
+            customer_name,
+            customer_email,
+            customer_phone,
             notes || null,
           ],
         );
