@@ -90,7 +90,7 @@ export default function SeoTestPanel() {
   };
   // Helper to get full URL and auth headers
   const getApiUrlAndHeaders = (endpoint: string, expectJson: boolean = true) => {
-    const url = endpoint.startsWith("http") ? endpoint : `${Domain}${endpoint}`;
+    const url = endpoint.startsWith("http") ? endpoint : `${API_DOMAIN}${endpoint}`;
     let headers: HeadersInit = expectJson
       ? { "Content-Type": "application/json" }
       : {};
