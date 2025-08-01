@@ -21,17 +21,23 @@ router.post("/populate-categories", adminController.populateCategories);
 
 // SEO Management
 router.get("/seo-status", seoController.getSeoStatus);
+router.get("/seo-audit", seoController.performSeoAudit);
 router.post("/seo-audit", seoController.performSeoAudit);
 router.get("/seo-settings", seoController.getSeoSettings);
 router.put("/seo-settings", seoController.updateSeoSettings);
-router.post("/seo-settings",seoController.saveSeoSettings);
+router.post("/seo-settings", seoController.saveSeoSettings);
+router.get("/seo-content-analysis", seoController.analyzeContent);
 router.post("/seo-content-analysis", seoController.analyzeContent);
 router.get("/seo-performance", seoController.getPerformanceMetrics);
 router.get("/seo-ai-recommendations", seoController.getAiRecommendations);
+router.post("/seo-ai-recommendations", seoController.getAiRecommendations);
 router.post("/seo-auto-fix", seoController.autoFixSeoIssues);
+router.get("/seo-bulk-update", seoController.bulkUpdateSeo);
 router.post("/seo-bulk-update", seoController.bulkUpdateSeo);
 router.get("/seo-international", seoController.getInternationalSeo);
+router.get("/seo-link-optimization", seoController.optimizeLinks);
 router.post("/seo-link-optimization", seoController.optimizeLinks);
+router.get("/seo-test-all", seoController.testAllSeo);
 router.post("/seo-test-all", seoController.testAllSeo);
 
 // Robots & Sitemap
