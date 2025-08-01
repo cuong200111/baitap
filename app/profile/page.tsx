@@ -1318,49 +1318,7 @@ export default function ProfilePage() {
     }
   };
 
-  const saveAddress = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("No token found");
-    }
 
-    // Validate address fields
-    if (
-      !addressData.province_name ||
-      !addressData.district_name ||
-      !addressData.ward_name
-    ) {
-      throw new Error("Vui lòng chọn đầy đủ tỉnh/thành, quận/huyện, phường/xã");
-    }
-
-    const addressPayload = {
-      type: "default",
-      full_name: formData.full_name.trim(),
-      phone: formData.phone.trim() || null,
-      address_line_1: formData.address.trim() || "Địa chỉ chi tiết",
-      address_line_2: null,
-      ward: addressData.ward_name.trim(),
-      district: addressData.district_name.trim(),
-      city: addressData.province_name.trim(),
-      is_default: true,
-    };
-
-    const response = await fetch(`${Domain}/api/addresses`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(addressPayload),
-    });
-
-    const data = await response.json();
-    if (!data.success) {
-      throw new Error(data.message || "Failed to save address");
-    }
-
-    return data;
-  };
 
   const handleUpdateProfile = async () => {
     // Use ref-based check to prevent race conditions
@@ -1931,7 +1889,7 @@ export default function ProfilePage() {
                       ) : (
                         <Save className="h-4 w-4 mr-2" />
                       )}
-                      {updating ? "Đang cập nhật..." : "Lưu thay đổi"}
+                      {updating ? "Đang cập nhật..." : "Lưu thay đ���i"}
                     </Button>
                   </CardContent>
                 </Card>
