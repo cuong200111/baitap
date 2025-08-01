@@ -20,6 +20,7 @@ import Image from "next/image";
 import { formatPrice, getMediaUrl, Domain } from "@/config";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { apiWrappers } from "@/lib/api-wrapper";
 
 interface CartItem {
   id: number;
