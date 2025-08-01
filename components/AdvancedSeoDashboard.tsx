@@ -181,9 +181,8 @@ export default function AdvancedSeoDashboard() {
 
     setLoading(true);
     try {
-      const response = await fetch("/api/admin/seo-content-analysis", {
+      const response = await authenticatedFetch(`${Domain}/api/admin/seo-content-analysis`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           content: contentToAnalyze,
           targetKeywords: targetKeywords.split(",").map(k => k.trim()).filter(k => k),
