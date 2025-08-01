@@ -148,12 +148,7 @@ export default function AdvancedSeoDashboard() {
 
   const loadPerformanceMetrics = async () => {
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      const response = await fetch(`${Domain}/api/admin/seo-performance?range=${selectedTimeRange}&competitors=true`, { headers });
+      const response = await authenticatedFetch(`${Domain}/api/admin/seo-performance?range=${selectedTimeRange}&competitors=true`);
       const data = await response.json();
       if (data.success) {
         setPerformance(data.data);
