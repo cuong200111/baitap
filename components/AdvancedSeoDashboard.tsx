@@ -47,6 +47,17 @@ import {
 import { toast } from "sonner";
 import { Domain } from "@/config";
 
+// Helper function for authenticated API calls
+const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...options.headers,
+  };
+  return fetch(url, { ...options, headers });
+};
+
 interface PerformanceMetrics {
   overallHealth: number;
   keywordRankings: KeywordRanking[];
@@ -715,7 +726,7 @@ export default function AdvancedSeoDashboard() {
                             <span className="text-sm font-mono">{performance.coreWebVitals.lcp}s</span>
                           </div>
                           <Progress value={(4 - performance.coreWebVitals.lcp) / 4 * 100} />
-                          <p className="text-xs text-gray-500 mt-1">Target: ��� 2.5s</p>
+                          <p className="text-xs text-gray-500 mt-1">Target: ≤ 2.5s</p>
                         </div>
                         
                         <div>
