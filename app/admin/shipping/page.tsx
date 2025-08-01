@@ -164,7 +164,9 @@ export default function AdminShippingPage() {
 
   const loadProvinces = async () => {
     try {
-      const response = await fetch(`${API_DOMAIN}/api/locations?type=provinces`);
+      const response = await fetch(
+        `${API_DOMAIN}/api/locations?type=provinces`,
+      );
       const data = await response.json();
       if (data.success) {
         setProvinces(data.data);

@@ -120,11 +120,14 @@ export default function RegisterPage() {
                         size="sm"
                         onClick={async () => {
                           try {
-                            const response = await fetch(`${API_DOMAIN}/api/debug/auth`, {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ action: "reset" }),
-                            });
+                            const response = await fetch(
+                              `${API_DOMAIN}/api/debug/auth`,
+                              {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ action: "reset" }),
+                              },
+                            );
                             const result = await response.json();
                             if (result.success) {
                               setError(

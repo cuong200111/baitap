@@ -9,12 +9,12 @@ export const API_DOMAIN = Domain;
 
 // Helper function to construct full API URLs
 export function getApiUrl(endpoint: string): string {
-  const cleanEndpoint = endpoint.startsWith("/api/") 
+  const cleanEndpoint = endpoint.startsWith("/api/")
     ? endpoint.substring(4) // Remove /api/ prefix
-    : endpoint.startsWith("/") 
-    ? endpoint.substring(1) // Remove / prefix
-    : endpoint;
-  
+    : endpoint.startsWith("/")
+      ? endpoint.substring(1) // Remove / prefix
+      : endpoint;
+
   return `${Domain}/api/${cleanEndpoint}`;
 }
 
@@ -22,14 +22,14 @@ export function getApiUrl(endpoint: string): string {
 export function getApiUrlAndHeaders(endpoint: string) {
   const url = getApiUrl(endpoint);
   const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   // Add authentication token if available
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("token");
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
   }
 
@@ -37,9 +37,12 @@ export function getApiUrlAndHeaders(endpoint: string) {
 }
 
 // Helper function to make authenticated fetch calls
-export async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
+export async function fetchWithAuth(
+  endpoint: string,
+  options: RequestInit = {},
+) {
   const { url, headers } = getApiUrlAndHeaders(endpoint);
-  
+
   return fetch(url, {
     ...options,
     headers: {
@@ -53,22 +56,21 @@ export async function fetchWithAuth(endpoint: string, options: RequestInit = {})
 export const apiHelpers = {
   // GET request with auth
   get: (endpoint: string) => fetchWithAuth(endpoint),
-  
+
   // POST request with auth and JSON body
-  post: (endpoint: string, data: any) => 
+  post: (endpoint: string, data: any) =>
     fetchWithAuth(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
     }),
-  
+
   // PUT request with auth and JSON body
-  put: (endpoint: string, data: any) => 
+  put: (endpoint: string, data: any) =>
     fetchWithAuth(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     }),
-  
+
   // DELETE request with auth
-  delete: (endpoint: string) => 
-    fetchWithAuth(endpoint, { method: 'DELETE' }),
+  delete: (endpoint: string) => fetchWithAuth(endpoint, { method: "DELETE" }),
 };

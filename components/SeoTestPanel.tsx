@@ -39,7 +39,10 @@ export default function SeoTestPanel() {
     try {
       const response = await fetch(endpoint, {
         method,
-        headers: expectJson &&expectJson!==true ?expectJson  : { "Content-Type": "application/json" },
+        headers:
+          expectJson && expectJson !== true
+            ? expectJson
+            : { "Content-Type": "application/json" },
       });
 
       let data: any;
@@ -89,8 +92,13 @@ export default function SeoTestPanel() {
     }
   };
   // Helper to get full URL and auth headers
-  const getApiUrlAndHeaders = (endpoint: string, expectJson: boolean = true) => {
-    const url = endpoint.startsWith("http") ? endpoint : `${API_DOMAIN}${endpoint}`;
+  const getApiUrlAndHeaders = (
+    endpoint: string,
+    expectJson: boolean = true,
+  ) => {
+    const url = endpoint.startsWith("http")
+      ? endpoint
+      : `${API_DOMAIN}${endpoint}`;
     let headers: HeadersInit = expectJson
       ? { "Content-Type": "application/json" }
       : {};
@@ -106,78 +114,102 @@ export default function SeoTestPanel() {
     return { url, headers };
   };
   const testSitemap = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/generate-sitemap");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/generate-sitemap",
+    );
     return testApiEndpoint(url, "POST", "Sitemap Generation", headers);
   };
   const testRobots = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/generate-robots");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/generate-robots",
+    );
     return testApiEndpoint(url, "POST", "Robots.txt Generation", headers);
   };
   const testSeoSettings = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-settings");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-settings",
+    );
     return testApiEndpoint(url, "GET", "SEO Settings API", headers);
   };
   const testSeoStatus = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-status");
-    console.log(headers)
+    const { url, headers }: any = getApiUrlAndHeaders("/api/admin/seo-status");
+    console.log(headers);
     return testApiEndpoint(url, "GET", "SEO Status Check", headers);
   };
   const testSeoAudit = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-audit");
+    const { url, headers }: any = getApiUrlAndHeaders("/api/admin/seo-audit");
     return testApiEndpoint(url, "GET", "SEO Audit", headers);
   };
   const testSitemapXml = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/sitemap.xml", false);
+    const { url, headers }: any = getApiUrlAndHeaders("/sitemap.xml", false);
     return testApiEndpoint(url, "GET", "Sitemap XML", headers);
   };
   const testRobotsTxt = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/robots.txt", false);
+    const { url, headers }: any = getApiUrlAndHeaders("/robots.txt", false);
     return testApiEndpoint(url, "GET", "Robots.txt", headers);
   };
 
   // Advanced SEO API tests
   const testContentAnalysis = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-content-analysis");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-content-analysis",
+    );
     return testApiEndpoint(url, "GET", "Content Analysis API", headers);
   };
   const testPerformance = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-performance");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-performance",
+    );
     return testApiEndpoint(url, "GET", "Performance API", headers);
   };
   const testAIRecommendations = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-ai-recommendations");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-ai-recommendations",
+    );
     return testApiEndpoint(url, "GET", "AI Recommendations", headers);
   };
   const testCoreWebVitals = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/core-web-vitals");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/core-web-vitals",
+    );
     return testApiEndpoint(url, "GET", "Core Web Vitals", headers);
   };
   const testLinkOptimization = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-link-optimization");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-link-optimization",
+    );
     return testApiEndpoint(url, "GET", "Link Optimization", headers);
   };
   const testInternational = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-international");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-international",
+    );
     return testApiEndpoint(url, "GET", "International SEO", headers);
   };
   const testAutoFix = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-auto-fix");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-auto-fix",
+    );
     return testApiEndpoint(url, "POST", "Auto-Fix API", headers);
   };
   const testBulkUpdate = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-bulk-update");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-bulk-update",
+    );
     return testApiEndpoint(url, "GET", "Bulk Update API", headers);
   };
   const testAllSeoAPI = () => {
-    const { url, headers }:any = getApiUrlAndHeaders("/api/admin/seo-test-all");
+    const { url, headers }: any = getApiUrlAndHeaders(
+      "/api/admin/seo-test-all",
+    );
     return testApiEndpoint(url, "GET", "SEO Test All", headers);
   };
   const testXmlValidation = async () => {
     const testName = "XML Validation";
     setTesting(testName);
     try {
-      const { url, headers }:any = getApiUrlAndHeaders(
-        "/api/admin/validate-xml?url=/sitemap.xml"
+      const { url, headers }: any = getApiUrlAndHeaders(
+        "/api/admin/validate-xml?url=/sitemap.xml",
       );
       const response = await fetch(url, {
         method: "GET",

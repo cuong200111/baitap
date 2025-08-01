@@ -142,12 +142,15 @@ export default function AdminOrdersPage() {
 
   const createTestOrder = async () => {
     try {
-      const response = await fetch(`${API_DOMAIN}/api/debug/create-test-order-complete`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${API_DOMAIN}/api/debug/create-test-order-complete`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       const data = await response.json();
 
