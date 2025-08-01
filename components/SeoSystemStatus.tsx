@@ -21,6 +21,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Domain } from "@/config";
 
 interface SystemStatus {
   overallScore: number;
