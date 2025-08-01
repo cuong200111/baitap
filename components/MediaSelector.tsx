@@ -76,7 +76,7 @@ export function MediaSelector({
 
     setUploading(true);
     try {
-      const response = await mediaApi.upload(file, "category");
+      const response = await apiWrappers.media.upload(file, "category");
       if (response.success && response.data) {
         toast.success("Upload hình ảnh thành công");
         await loadMediaFiles(); // Reload media list
