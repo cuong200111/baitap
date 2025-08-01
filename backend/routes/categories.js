@@ -151,7 +151,7 @@ router.post(
     body("description").optional().trim(),
     body("parent_id").optional().isInt().withMessage("Invalid parent ID"),
     body("sort_order").optional().isInt().withMessage("Invalid sort order"),
-    body("image").optional().isURL().withMessage("Invalid image URL"),
+    body("image").optional().trim(),
   ],
   async (req, res) => {
     try {
@@ -249,7 +249,7 @@ router.put(
     body("description").optional().trim(),
     body("parent_id").optional().isInt().withMessage("Invalid parent ID"),
     body("sort_order").optional().isInt().withMessage("Invalid sort order"),
-    body("image").optional().isURL().withMessage("Invalid image URL"),
+    body("image").optional().trim(),
     body("is_active")
       .optional()
       .isBoolean()
