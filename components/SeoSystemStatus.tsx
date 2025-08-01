@@ -74,9 +74,14 @@ export default function SeoSystemStatus() {
   const autoFixIssues = async () => {
     setAutoFixing(true);
     try {
-      const response = await fetch("/api/admin/seo-auto-fix", {
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+      const response = await fetch(`${Domain}/api/admin/seo-auto-fix`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" }
+        headers
       });
       const data = await response.json();
       
