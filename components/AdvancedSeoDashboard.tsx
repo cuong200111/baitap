@@ -1113,7 +1113,7 @@ export default function AdvancedSeoDashboard() {
                           </tr>
                         </thead>
                         <tbody>
-                          {performance.trafficTrends
+                          {(performance.trafficTrends || [])
                             .slice(0, 10)
                             .map((day, index) => (
                               <tr
