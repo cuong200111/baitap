@@ -85,49 +85,13 @@ export default function ProductDetailPage() {
 
     setAddingToCart(true);
     try {
-      // Generate session ID for guest users if not logged in
-      let sessionId = null;
-      if (!isAuthenticated || !user?.id) {
-        sessionId = localStorage.getItem("session_id");
-        if (!sessionId) {
-          sessionId =
-            "session_" +
-            Date.now() +
-            "_" +
-            Math.random().toString(36).substr(2, 9);
-          localStorage.setItem("session_id", sessionId);
-        }
-      }
+      const result = await cartApi.addToCart(product.id, quantity);
 
-      const requestBody: any = {
-        product_id: product.id,
-        quantity: quantity,
-      };
-
-      if (isAuthenticated && user?.id) {
-        requestBody.user_id = user.id;
-      } else {
-        requestBody.session_id = sessionId;
-      }
-
-      const response = await fetch(`${API_DOMAIN}/api/cart`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (result.success) {
         toast.success(`Đã thêm ${quantity} ${product.name} vào giỏ hàng`);
-        window.dispatchEvent(new Event("cartUpdated"));
+        cartUtils.triggerCartUpdate();
       } else {
-        // Handle specific error messages from backend
-        if (data.message) {
-          toast.error(data.message);
-        } else {
-          toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
-        }
+        toast.error(result.message || "Có lỗi xảy ra khi thêm vào giỏ hàng");
       }
     } catch (error) {
       console.error("Add to cart error:", error);
