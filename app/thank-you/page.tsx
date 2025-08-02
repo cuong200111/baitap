@@ -415,9 +415,9 @@ export default function ThankYouPage() {
               <CardContent>
                 <div className="space-y-4">
                   {order.items && order.items.length > 0 ? (
-                    order.items.map((item) => (
+                    order.items.map((item, index) => (
                       <div
-                        key={item.id}
+                        key={item.id || index}
                         className="flex gap-4 pb-4 border-b border-gray-100 last:border-b-0"
                       >
                         <div className="relative w-16 h-16 flex-shrink-0">
@@ -425,24 +425,26 @@ export default function ThankYouPage() {
                             src={getMediaUrl(
                               (item.images && item.images[0]) || "",
                             )}
-                            alt={item.product_name}
+                            alt={item.product_name || "Sản phẩm"}
                             fill
                             className="object-cover rounded-lg"
                           />
                         </div>
                         <div className="flex-1">
                           <h4 className="font-medium text-gray-900">
-                            {item.product_name}
+                            {item.product_name || "Tên sản phẩm"}
                           </h4>
-                          <p className="text-sm text-gray-500">
-                            SKU: {item.sku}
-                          </p>
+                          {item.sku && (
+                            <p className="text-sm text-gray-500">
+                              SKU: {item.sku}
+                            </p>
+                          )}
                           <div className="flex items-center justify-between mt-2">
                             <span className="text-sm text-gray-600">
-                              Số lượng: {item.quantity}
+                              Số lượng: {item.quantity || 1}
                             </span>
                             <span className="font-semibold">
-                              {formatPrice(item.total)}
+                              {formatPrice(item.total || item.price || 0)}
                             </span>
                           </div>
                         </div>
@@ -450,7 +452,7 @@ export default function ThankYouPage() {
                     ))
                   ) : (
                     <div className="text-center py-4 text-gray-500">
-                      Không có sản phẩm trong đơn hàng này
+                      Đang tải thông tin sản phẩm...
                     </div>
                   )}
                 </div>
