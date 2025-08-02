@@ -767,7 +767,7 @@ export default function ProfilePage() {
             {
               code: 490,
               name: "Hải Châu",
-              full_name: "Quận H��i Châu",
+              full_name: "Quận Hải Châu",
               province_code: 48,
             },
             {
@@ -1188,7 +1188,7 @@ export default function ProfilePage() {
           {
             code: 9310,
             name: "Vĩnh Phước",
-            full_name: "Phường Vĩnh Phư����c",
+            full_name: "Phường Vĩnh Phư��c",
             district_code: 260,
           },
           {
