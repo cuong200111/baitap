@@ -53,6 +53,7 @@ export default function OrdersPage() {
   const { user, isAuthenticated } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Check if redirected from successful order
   const isSuccess = searchParams.get("success") === "true";
