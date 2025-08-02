@@ -64,6 +64,7 @@ export default function CheckoutPage() {
   });
 
   const [saveInfo, setSaveInfo] = useState(false);
+  const [addressLoadedFromProfile, setAddressLoadedFromProfile] = useState(false);
 
   useEffect(() => {
     loadCart();
@@ -152,6 +153,7 @@ export default function CheckoutPage() {
             district: address.district || "",
             ward: address.ward || "",
           }));
+          setAddressLoadedFromProfile(true);
           console.log("✅ Loaded user address:", address);
         }
       }
