@@ -662,7 +662,7 @@ export function ProductManagement() {
                   </Select>
                 </div>
                 <div>
-                  <Label htmlFor="status">Tr���ng thái</Label>
+                  <Label htmlFor="status">Trạng thái</Label>
                   <Select
                     value={formData.status}
                     onValueChange={(value: "active" | "inactive" | "draft") =>
