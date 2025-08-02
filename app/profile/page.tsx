@@ -330,7 +330,7 @@ export default function ProfilePage() {
       // Fallback data if API fails
       const districtsMapping: { [key: number]: any[] } = {
         1: [
-          // Hà N��i
+          // Hà Nội
           {
             code: 1,
             name: "Ba Đình",
@@ -1975,7 +1975,7 @@ export default function ProfilePage() {
                             </div>
                             <div>
                               <Label htmlFor="new_password">
-                                Mật kh���u mới
+                                Mật khẩu mới
                               </Label>
                               <Input
                                 id="new_password"
