@@ -1,4 +1,4 @@
-import { API_DOMAIN } from "@/lib/api-helpers";
+import { Domain } from "@/config";
 
 export interface SeoSettings {
   general: {
@@ -48,7 +48,7 @@ export async function getSeoSettings(): Promise<SeoSettings> {
   }
 
   try {
-    const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
+    const response = await fetch(`${Domain}/api/admin/seo-settings`, {
       next: { revalidate: 300 } // Revalidate every 5 minutes
     });
 

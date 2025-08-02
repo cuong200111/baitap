@@ -1,5 +1,5 @@
 import { generateProductMetadata } from "@/lib/seo-service";
-import { API_DOMAIN } from "@/lib/api-helpers";
+import { Domain } from "@/config";
 
 interface ProductPageProps {
   params: { id: string };
@@ -8,7 +8,7 @@ interface ProductPageProps {
 export async function generateMetadata({ params }: ProductPageProps) {
   try {
     // Fetch product data
-    const response = await fetch(`${API_DOMAIN}/api/products/${params.id}`, {
+    const response = await fetch(`${Domain}/api/products/${params.id}`, {
       next: { revalidate: 300 } // Revalidate every 5 minutes
     });
 

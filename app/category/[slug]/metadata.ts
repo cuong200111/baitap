@@ -1,5 +1,5 @@
 import { generateCategoryMetadata } from "@/lib/seo-service";
-import { API_DOMAIN } from "@/lib/api-helpers";
+import { Domain } from "@/config";
 
 interface CategoryPageProps {
   params: { slug: string };
@@ -8,7 +8,7 @@ interface CategoryPageProps {
 export async function generateMetadata({ params }: CategoryPageProps) {
   try {
     // Fetch category data
-    const response = await fetch(`${API_DOMAIN}/api/categories/${params.slug}`, {
+    const response = await fetch(`${Domain}/api/categories/${params.slug}`, {
       next: { revalidate: 300 } // Revalidate every 5 minutes
     });
 
