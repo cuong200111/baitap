@@ -115,7 +115,7 @@ export default function CustomSitemapManager({
           const normalizedData = data.data.map((sitemap: any) => ({
             ...sitemap,
             priority: Number(sitemap.priority) || 0.2,
-            mobile_friendly: Boolean(sitemap.mobile_friendly)
+            mobile_friendly: Boolean(sitemap.mobile_friendly),
           }));
           setSitemaps(normalizedData);
         } else {
