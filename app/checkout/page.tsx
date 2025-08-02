@@ -1,7 +1,5 @@
 "use client";
 
-export { generateMetadata } from "./metadata";
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -497,7 +495,7 @@ export default function CheckoutPage() {
             {/* Order Items */}
             <Card>
               <CardHeader>
-                <CardTitle>Đơn hàng của bạn</CardTitle>
+                <CardTitle>��ơn hàng của bạn</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

@@ -1,7 +1,5 @@
 "use client";
 
-export { generateMetadata } from "./metadata";
-
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -844,7 +842,7 @@ export default function ProfilePage() {
             {
               code: 202,
               name: "Duy Xuyên",
-              full_name: "Huyện Duy Xuyên",
+              full_name: "Huy��n Duy Xuyên",
               province_code: 20,
             },
             {
@@ -1539,7 +1537,7 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error("Change password error:", error);
-      toast.error("Có lỗi xảy ra khi đ��i mật khẩu");
+      toast.error("Có lỗi xảy ra khi đổi mật khẩu");
     }
   };
 

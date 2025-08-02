@@ -1,7 +1,5 @@
 "use client";
 
-export { generateMetadata } from "./metadata";
-
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";

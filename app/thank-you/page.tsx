@@ -1,7 +1,5 @@
 "use client";
 
-export { generateMetadata } from "./metadata";
-
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -316,7 +314,7 @@ export default function ThankYouPage() {
                 <Button asChild variant="outline" className="w-full">
                   <Link href="/products">
                     <ShoppingBag className="h-4 w-4 mr-2" />
-                    Tiếp tục mua sắm
+                    Ti���p tục mua sắm
                   </Link>
                 </Button>
 
