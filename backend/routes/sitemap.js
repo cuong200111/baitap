@@ -118,11 +118,11 @@ router.get("/sitemap.xml", async (req, res) => {
 `;
     });
 
-    // 4. Category
+    // 4. Categories với thông tin chi tiết
     const categories = await executeQuery(`
-      SELECT slug, updated_at 
-      FROM categories 
-      WHERE is_active = 1 
+      SELECT slug, name, description, updated_at, image, parent_id
+      FROM categories
+      WHERE is_active = 1
       ORDER BY sort_order, name
       LIMIT 100
     `);
@@ -130,14 +130,33 @@ router.get("/sitemap.xml", async (req, res) => {
     if (Array.isArray(categories)) {
       categories.forEach((category) => {
         const lastmod = category.updated_at
-          ? new Date(category.updated_at).toISOString().split("T")[0]
-          : new Date().toISOString().split("T")[0];
+          ? new Date(category.updated_at).toISOString()
+          : new Date().toISOString();
+
+        // Priority cao hơn cho category gốc (không có parent)
+        const priority = category.parent_id ? "0.7" : "0.8";
 
         xml += `  <url>
     <loc>${escapeXml(baseUrl)}/category/${escapeXml(category.slug)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>${priority}</priority>
+    <mobile:mobile/>`;
+
+        // Thêm image nếu có và includeImages = true
+        if (includeImages && category.image) {
+          const imageUrl = category.image.startsWith("http")
+            ? category.image
+            : `${baseUrl}${category.image}`;
+          xml += `
+    <image:image>
+      <image:loc>${escapeXml(imageUrl)}</image:loc>
+      <image:title>${escapeXml(category.name || "")}</image:title>
+      <image:caption>${escapeXml((category.description || category.name || "") + " - HACOM")}</image:caption>
+    </image:image>`;
+        }
+
+        xml += `
   </url>
 `;
       });
