@@ -254,6 +254,9 @@ ${customContent}
 
     if (enableSitemap) {
       robotsContent += `Sitemap: ${baseUrl}/sitemap.xml
+Sitemap: ${baseUrl}/categories-sitemap.xml
+Sitemap: ${baseUrl}/products-sitemap.xml
+Sitemap: ${baseUrl}/all-sitemap.xml
 `;
     }
 
