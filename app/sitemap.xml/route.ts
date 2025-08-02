@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 // Escape XML special characters
 function escapeXml(unsafe: string) {
@@ -16,13 +16,18 @@ export async function GET(request: NextRequest) {
   try {
     // Get base URL from request
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
-    
+
     // Fetch data from backend API
     const [categoriesRes, productsRes, seoSettingsRes] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN || 'http://localhost:4000'}/api/categories`),
-      fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN || 'http://localhost:4000'}/api/products`),
-      fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN || 'http://localhost:4000'}/api/admin/seo-settings`)
-        .catch(() => null), // Handle auth errors gracefully
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/categories`,
+      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/products`,
+      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/admin/seo-settings`,
+      ).catch(() => null), // Handle auth errors gracefully
     ]);
 
     let categories: any[] = [];
@@ -50,7 +55,8 @@ export async function GET(request: NextRequest) {
     if (seoSettingsRes?.ok) {
       const seoData = await seoSettingsRes.json();
       if (seoData.success && seoData.data) {
-        includeImages = seoData.data.technical?.sitemap_include_images !== false;
+        includeImages =
+          seoData.data.technical?.sitemap_include_images !== false;
         maxUrls = parseInt(seoData.data.technical?.sitemap_max_urls) || 50000;
       }
     }
@@ -62,9 +68,10 @@ export async function GET(request: NextRequest) {
     if (includeImages) {
       xml += ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"';
     }
-    
-    xml += ' xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">\n';
-    
+
+    xml +=
+      ' xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">\n';
+
     xml += `  <!-- Generated automatically on ${new Date().toISOString()} -->
   <!-- HACOM E-commerce Sitemap -->
 `;
@@ -114,8 +121,8 @@ export async function GET(request: NextRequest) {
 
       // Add category image if available
       if (includeImages && category.image) {
-        const imageUrl = category.image.startsWith("http") 
-          ? category.image 
+        const imageUrl = category.image.startsWith("http")
+          ? category.image
           : `${baseUrl}${category.image}`;
         xml += `
     <image:image>
@@ -154,11 +161,12 @@ export async function GET(request: NextRequest) {
               const fullImageUrl = imageUrl.startsWith("http")
                 ? imageUrl
                 : `${baseUrl}${imageUrl}`;
-              
-              const imageTitle = index === 0 
-                ? `${product.name} - HACOM`
-                : `${product.name} - Hình ${index + 1}`;
-                
+
+              const imageTitle =
+                index === 0
+                  ? `${product.name} - HACOM`
+                  : `${product.name} - Hình ${index + 1}`;
+
               xml += `
     <image:image>
       <image:loc>${escapeXml(fullImageUrl)}</image:loc>
@@ -184,17 +192,16 @@ export async function GET(request: NextRequest) {
     return new NextResponse(xml, {
       status: 200,
       headers: {
-        'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600, s-maxage=7200',
-        'Expires': new Date(Date.now() + 3600000).toUTCString(),
-        'Last-Modified': new Date().toUTCString(),
-        'X-Robots-Tag': 'noindex, nofollow',
-        'Vary': 'Accept-Encoding',
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=3600, s-maxage=7200",
+        Expires: new Date(Date.now() + 3600000).toUTCString(),
+        "Last-Modified": new Date().toUTCString(),
+        "X-Robots-Tag": "noindex, nofollow",
+        Vary: "Accept-Encoding",
       },
     });
-
   } catch (error) {
-    console.error('Failed to generate sitemap:', error);
+    console.error("Failed to generate sitemap:", error);
 
     // Fallback sitemap
     const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -222,8 +229,8 @@ export async function GET(request: NextRequest) {
     return new NextResponse(fallbackXml, {
       status: 200,
       headers: {
-        'Content-Type': 'application/xml; charset=utf-8',
-        'Cache-Control': 'public, max-age=1800',
+        "Content-Type": "application/xml; charset=utf-8",
+        "Cache-Control": "public, max-age=1800",
       },
     });
   }

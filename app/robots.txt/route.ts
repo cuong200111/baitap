@@ -1,17 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
     // Get base URL from request
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
-    
+
     // Try to fetch SEO settings from backend
     let customContent = "";
     let enableSitemap = true;
     let siteUrl = baseUrl;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN || 'http://localhost:4000'}/api/admin/seo-settings`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/admin/seo-settings`,
+      );
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
@@ -22,7 +24,7 @@ export async function GET(request: NextRequest) {
       }
     } catch (e) {
       // Use defaults if backend is not available
-      console.log('Using default robots.txt settings');
+      console.log("Using default robots.txt settings");
     }
 
     // Generate robots.txt content
@@ -282,16 +284,15 @@ Cache-delay: 86400
     return new NextResponse(robotsContent, {
       status: 200,
       headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-        'Expires': new Date(Date.now() + 86400000).toUTCString(),
-        'Last-Modified': new Date().toUTCString(),
-        'X-Robots-Tag': 'noindex, nofollow',
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=86400, s-maxage=86400",
+        Expires: new Date(Date.now() + 86400000).toUTCString(),
+        "Last-Modified": new Date().toUTCString(),
+        "X-Robots-Tag": "noindex, nofollow",
       },
     });
-
   } catch (error) {
-    console.error('Failed to generate robots.txt:', error);
+    console.error("Failed to generate robots.txt:", error);
 
     // Fallback robots.txt content
     const fallbackContent = `# HACOM Robots.txt - Fallback Version
@@ -335,9 +336,9 @@ Host: ${request.nextUrl.host}
     return new NextResponse(fallbackContent, {
       status: 200,
       headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'public, max-age=86400',
-        'X-Robots-Tag': 'noindex, nofollow',
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "public, max-age=86400",
+        "X-Robots-Tag": "noindex, nofollow",
       },
     });
   }

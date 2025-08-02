@@ -313,11 +313,13 @@ export const adminController = {
             url: `${frontendUrl}/robots.txt`,
             size: robotsContent.length,
             lastGenerated: new Date().toISOString(),
-            note: "Generated dynamically by Next.js frontend"
+            note: "Generated dynamically by Next.js frontend",
           },
         });
       } else {
-        throw new Error(`Frontend robots.txt not accessible: ${response.status}`);
+        throw new Error(
+          `Frontend robots.txt not accessible: ${response.status}`,
+        );
       }
     } catch (error) {
       console.error("Generate robots error:", error);
@@ -360,7 +362,7 @@ export const adminController = {
             urlCount: urlCount,
             size: sitemapContent.length,
             lastGenerated: new Date().toISOString(),
-            note: "Generated dynamically by Next.js frontend"
+            note: "Generated dynamically by Next.js frontend",
           },
         });
       } else {

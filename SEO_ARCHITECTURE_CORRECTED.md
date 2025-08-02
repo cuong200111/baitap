@@ -3,6 +3,7 @@
 ## ✅ **KIẾN TRÚC CHÍNH XÁC**
 
 ### **🎯 Nguyên tắc phân chia:**
+
 - **Frontend (Next.js - Port 3000)**: Serve robots.txt và sitemap.xml
 - **Backend (Express - Port 4000)**: Chỉ cung cấp APIs để lấy dữ liệu
 - **Không có APIs trong Next.js**: Next.js chỉ làm frontend và route handlers
@@ -10,6 +11,7 @@
 ## 📁 **CẤU TRÚC FILES**
 
 ### **Frontend (Next.js) - Port 3000:**
+
 ```
 app/
 ├── robots.txt/
@@ -19,6 +21,7 @@ app/
 ```
 
 ### **Backend (Express) - Port 4000:**
+
 ```
 backend/
 ├── routes/
@@ -32,8 +35,9 @@ backend/
 ## 🔄 **LUỒNG HOẠT ĐỘNG**
 
 ### **1. User Request Robots.txt:**
+
 ```
-User → GET /robots.txt 
+User → GET /robots.txt
      → Next.js route handler (app/robots.txt/route.ts)
      → Gọi Backend API để lấy SEO settings
      → Tạo robots.txt content
@@ -41,9 +45,10 @@ User → GET /robots.txt
 ```
 
 ### **2. User Request Sitemap.xml:**
+
 ```
 User → GET /sitemap.xml
-     → Next.js route handler (app/sitemap.xml/route.ts)  
+     → Next.js route handler (app/sitemap.xml/route.ts)
      → Gọi Backend APIs:
         - /api/categories (lấy categories)
         - /api/products (lấy products)
@@ -53,6 +58,7 @@ User → GET /sitemap.xml
 ```
 
 ### **3. Admin Panel Generation:**
+
 ```
 Admin → Click "Generate Sitemap" button
       → Frontend gọi Backend API: POST /api/admin/generate-sitemap
@@ -63,11 +69,13 @@ Admin → Click "Generate Sitemap" button
 ## 🌐 **URL ACCESS**
 
 ### **Production URLs:**
+
 - ✅ `https://yourdomain.com/robots.txt` (Frontend)
-- ✅ `https://yourdomain.com/sitemap.xml` (Frontend)  
+- ✅ `https://yourdomain.com/sitemap.xml` (Frontend)
 - 🔒 `https://api.yourdomain.com/api/*` (Backend APIs)
 
 ### **Development URLs:**
+
 - ✅ `http://localhost:3000/robots.txt` (Frontend)
 - ✅ `http://localhost:3000/sitemap.xml` (Frontend)
 - 🔒 `http://localhost:4000/api/*` (Backend APIs)
@@ -75,13 +83,15 @@ Admin → Click "Generate Sitemap" button
 ## 💾 **DATA SOURCES**
 
 ### **Backend APIs cung cấp data:**
+
 - `/api/categories` → Categories data cho sitemap
-- `/api/products` → Products data cho sitemap  
+- `/api/products` → Products data cho sitemap
 - `/api/admin/seo-settings` → SEO config cho robots + sitemap
 - `/api/admin/generate-sitemap` → Test và analytics
 - `/api/admin/generate-robots` → Test và analytics
 
 ### **Frontend xử lý:**
+
 - Gọi Backend APIs để lấy data
 - Format thành XML/TXT
 - Add headers tối ưu SEO
@@ -90,10 +100,11 @@ Admin → Click "Generate Sitemap" button
 ## 🔧 **ADMIN PANEL INTEGRATION**
 
 ### **Admin Functions:**
+
 ```javascript
 // Admin clicks "Generate Sitemap"
 POST /api/admin/generate-sitemap
-→ Backend test GET http://localhost:3000/sitemap.xml  
+→ Backend test GET http://localhost:3000/sitemap.xml
 → Return: {
     success: true,
     message: "Sitemap accessible with 150 URLs",
@@ -109,6 +120,7 @@ POST /api/admin/generate-sitemap
 ## ⚡ **PERFORMANCE & CACHING**
 
 ### **Frontend Caching:**
+
 ```typescript
 // In route.ts files
 headers: {
@@ -119,6 +131,7 @@ headers: {
 ```
 
 ### **Backend Data Caching:**
+
 - Database queries có thể cache
 - SEO settings cache trong memory
 - Analytics logging tự động
@@ -126,11 +139,12 @@ headers: {
 ## 🧪 **TESTING APPROACH**
 
 ### **Frontend Testing:**
+
 ```bash
 # Test robots.txt
 curl http://localhost:3000/robots.txt
 
-# Test sitemap.xml  
+# Test sitemap.xml
 curl http://localhost:3000/sitemap.xml
 
 # Test via browser
@@ -139,6 +153,7 @@ open http://localhost:3000/sitemap.xml
 ```
 
 ### **Backend API Testing:**
+
 ```bash
 # Test data APIs
 curl http://localhost:4000/api/categories
@@ -149,6 +164,7 @@ curl -X POST http://localhost:4000/api/admin/generate-sitemap
 ```
 
 ### **Integration Testing:**
+
 ```bash
 # Run comprehensive test
 node test-seo-validation.js
@@ -157,6 +173,7 @@ node test-seo-validation.js
 ## 🚀 **DEPLOYMENT CONSIDERATIONS**
 
 ### **Production Setup:**
+
 1. **Frontend**: Deploy Next.js to Vercel/Netlify
 2. **Backend**: Deploy Express to server/cloud
 3. **Environment Variables**:
@@ -166,6 +183,7 @@ node test-seo-validation.js
    ```
 
 ### **SEO Benefits:**
+
 - ✅ **Correct URLs**: robots.txt và sitemap.xml từ main domain
 - ✅ **Fast Loading**: Next.js optimization
 - ✅ **Dynamic Content**: Real-time data từ database
@@ -175,6 +193,7 @@ node test-seo-validation.js
 ## 📋 **TESTING CHECKLIST**
 
 ### **Manual Testing:**
+
 1. ✅ Truy cập `http://localhost:3000/robots.txt`
 2. ✅ Truy cập `http://localhost:3000/sitemap.xml`
 3. ✅ Test admin panel: `/admin/settings` → SEO Status tab
@@ -183,11 +202,13 @@ node test-seo-validation.js
 6. ✅ Verify thông báo success
 
 ### **Automated Testing:**
+
 ```bash
 node test-seo-validation.js
 ```
 
 ### **Expected Results:**
+
 - ✅ Robots.txt: Comprehensive rules, multiple user-agents
 - ✅ Sitemap.xml: All products, categories, proper XML format
 - ✅ Admin panel: Success messages, URL counts

@@ -10,7 +10,9 @@ const FRONTEND_BASE = "http://localhost:3000";
 
 async function testSeoFiles() {
   console.log("🔍 HACOM SEO FILES VALIDATION");
-  console.log("🌐 Testing Frontend URLs (where SEO files should be accessible)");
+  console.log(
+    "🌐 Testing Frontend URLs (where SEO files should be accessible)",
+  );
   console.log("=".repeat(50));
 
   const tests = [
