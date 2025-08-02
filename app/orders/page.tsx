@@ -59,22 +59,11 @@ export default function OrdersPage() {
   const orderNumber = searchParams.get("order_number");
 
   useEffect(() => {
-    // Wait for auth to complete before deciding whether to redirect
-    if (authLoading) {
-      return; // Still loading, don't do anything yet
-    }
-
-    if (!isAuthenticated || !user) {
-      // Auth completed and user is not authenticated
-      router.push("/login");
-      return;
-    }
-
-    // User is authenticated, load orders
-    if (user?.id) {
+    // Only load orders if user is authenticated (AuthGuard handles auth)
+    if (user?.id && isAuthenticated) {
       loadOrders();
     }
-  }, [user, authLoading, isAuthenticated, router]);
+  }, [user, isAuthenticated]);
 
   const loadOrders = async () => {
     if (!user?.id) {
@@ -97,7 +86,7 @@ export default function OrdersPage() {
       }
     } catch (error) {
       console.error("Failed to load orders:", error);
-      toast.error("Có lỗi xảy ra khi tải đơn h��ng");
+      toast.error("Có lỗi xảy ra khi tải đơn hàng");
     } finally {
       setLoading(false);
     }
