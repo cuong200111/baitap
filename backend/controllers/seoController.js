@@ -526,10 +526,12 @@ export const seoController = {
 
       // Calculate keyword density for target keywords
       const keywordDensity = {};
-      keywords.forEach(keyword => {
-        const keywordRegex = new RegExp(keyword, 'gi');
+      keywords.forEach((keyword) => {
+        const keywordRegex = new RegExp(keyword, "gi");
         const matches = content.match(keywordRegex) || [];
-        keywordDensity[keyword] = parseFloat(((matches.length / wordCount) * 100).toFixed(1));
+        keywordDensity[keyword] = parseFloat(
+          ((matches.length / wordCount) * 100).toFixed(1),
+        );
       });
 
       // Add some default keyword analysis
@@ -545,34 +547,49 @@ export const seoController = {
       const h3Count = (content.match(/<h3[^>]*>/gi) || []).length;
 
       // Calculate scores
-      const readabilityScore = Math.min(100, Math.max(0, 100 - Math.floor(wordCount / 50)));
-      const score = Math.round((
+      const readabilityScore = Math.min(
+        100,
+        Math.max(0, 100 - Math.floor(wordCount / 50)),
+      );
+      const score = Math.round(
         (wordCount > 300 ? 25 : (wordCount / 300) * 25) +
-        (h1Count > 0 ? 15 : 0) +
-        (h2Count > 0 ? 15 : 0) +
-        (Object.values(keywordDensity).some(d => d >= 1 && d <= 3) ? 20 : 10) +
-        (readabilityScore / 4)
-      ));
+          (h1Count > 0 ? 15 : 0) +
+          (h2Count > 0 ? 15 : 0) +
+          (Object.values(keywordDensity).some((d) => d >= 1 && d <= 3)
+            ? 20
+            : 10) +
+          readabilityScore / 4,
+      );
 
       const suggestions = [];
       if (wordCount < 300) {
-        suggestions.push("Nội dung quá ngắn. Khuyến nghị tối thiểu 300 từ để tối ưu SEO.");
+        suggestions.push(
+          "Nội dung quá ngắn. Khuyến nghị tối thiểu 300 từ để tối ưu SEO.",
+        );
       }
       if (h1Count === 0) {
         suggestions.push("Thiếu thẻ H1. Thêm một thẻ H1 chính cho trang.");
       }
       if (h1Count > 1) {
-        suggestions.push("Có nhiều hơn 1 thẻ H1. Nên chỉ có 1 thẻ H1 duy nhất trên mỗi trang.");
+        suggestions.push(
+          "Có nhiều hơn 1 thẻ H1. Nên chỉ có 1 thẻ H1 duy nhất trên mỗi trang.",
+        );
       }
       if (h2Count < 2) {
-        suggestions.push("Nên thêm ít nhất 2 thẻ H2 để cải thiện cấu trúc nội dung.");
+        suggestions.push(
+          "Nên thêm ít nhất 2 thẻ H2 để cải thiện cấu trúc nội dung.",
+        );
       }
 
       Object.entries(keywordDensity).forEach(([keyword, density]) => {
         if (density < 1) {
-          suggestions.push(`Từ khóa "${keyword}" có mật độ thấp (${density}%). Khuyến nghị 1-3%.`);
+          suggestions.push(
+            `Từ khóa "${keyword}" có mật độ thấp (${density}%). Khuyến nghị 1-3%.`,
+          );
         } else if (density > 3) {
-          suggestions.push(`Từ khóa "${keyword}" có mật độ cao (${density}%). Khuyến nghị giảm xuống 1-3%.`);
+          suggestions.push(
+            `Từ khóa "${keyword}" có mật độ cao (${density}%). Khuyến nghị giảm xuống 1-3%.`,
+          );
         }
       });
 
@@ -589,9 +606,9 @@ export const seoController = {
           h1Count,
           h2Count,
           h3Count,
-          hasH1: h1Count > 0
+          hasH1: h1Count > 0,
         },
-        suggestions
+        suggestions,
       };
 
       res.json({
@@ -620,7 +637,7 @@ export const seoController = {
             change: 2,
             searchVolume: 12000,
             difficulty: 65,
-            url: "/category/laptop-gaming"
+            url: "/category/laptop-gaming",
           },
           {
             keyword: "máy tính gaming",
@@ -629,7 +646,7 @@ export const seoController = {
             change: 1,
             searchVolume: 8500,
             difficulty: 70,
-            url: "/category/pc-gaming"
+            url: "/category/pc-gaming",
           },
           {
             keyword: "linh kiện máy tính",
@@ -638,8 +655,8 @@ export const seoController = {
             change: 3,
             searchVolume: 6200,
             difficulty: 45,
-            url: "/category/linh-kien"
-          }
+            url: "/category/linh-kien",
+          },
         ],
         trafficTrends: [
           {
@@ -648,7 +665,7 @@ export const seoController = {
             impressions: 25000,
             clicks: 850,
             ctr: 3.4,
-            avgPosition: 8.2
+            avgPosition: 8.2,
           },
           {
             date: "2024-01-14",
@@ -656,8 +673,8 @@ export const seoController = {
             impressions: 24200,
             clicks: 820,
             ctr: 3.39,
-            avgPosition: 8.5
-          }
+            avgPosition: 8.5,
+          },
         ],
         coreWebVitals: {
           lcp: 2.1,
@@ -666,19 +683,19 @@ export const seoController = {
           fcp: 1.8,
           ttfb: 0.5,
           score: 85,
-          status: "good"
+          status: "good",
         },
         indexingStatus: {
           totalPages: 150,
           indexedPages: 142,
           crawlErrors: 3,
-          sitemapStatus: "processed"
+          sitemapStatus: "processed",
         },
         recommendations: [
           "Optimize images on homepage for better LCP",
           "Add more internal links to improve crawlability",
-          "Update meta descriptions for product pages"
-        ]
+          "Update meta descriptions for product pages",
+        ],
       };
 
       res.json({
@@ -703,7 +720,8 @@ export const seoController = {
           type: "technical",
           priority: "high",
           title: "Optimize Core Web Vitals",
-          description: "Improve LCP scores by optimizing images and reducing server response time",
+          description:
+            "Improve LCP scores by optimizing images and reducing server response time",
           impact: "High traffic increase",
           difficulty: "medium",
           estimatedTimeToComplete: "2-3 hours",
@@ -713,8 +731,8 @@ export const seoController = {
             "Compress and convert images to WebP format",
             "Implement lazy loading for below-fold images",
             "Optimize server response time",
-            "Minify CSS and JavaScript files"
-          ]
+            "Minify CSS and JavaScript files",
+          ],
         },
         {
           id: "rec-002",
@@ -731,8 +749,8 @@ export const seoController = {
             "Research target keywords for each page",
             "Update title tags to include primary keywords",
             "Ensure titles are under 60 characters",
-            "Make titles compelling for click-through"
-          ]
+            "Make titles compelling for click-through",
+          ],
         },
         {
           id: "rec-003",
@@ -749,15 +767,16 @@ export const seoController = {
             "Conduct keyword research for product categories",
             "Create content targeting long-tail keywords",
             "Optimize existing pages for secondary keywords",
-            "Monitor keyword performance and adjust"
-          ]
+            "Monitor keyword performance and adjust",
+          ],
         },
         {
           id: "rec-004",
           type: "links",
           priority: "medium",
           title: "Improve Internal Linking Structure",
-          description: "Add more strategic internal links to boost page authority",
+          description:
+            "Add more strategic internal links to boost page authority",
           impact: "Low-medium traffic increase",
           difficulty: "easy",
           estimatedTimeToComplete: "2-3 hours",
@@ -767,9 +786,9 @@ export const seoController = {
             "Audit current internal linking structure",
             "Add contextual links between related products",
             "Create hub pages for main categories",
-            "Link from high-authority pages to important pages"
-          ]
-        }
+            "Link from high-authority pages to important pages",
+          ],
+        },
       ];
 
       res.json({
@@ -778,11 +797,12 @@ export const seoController = {
           recommendations,
           totalRecommendations: recommendations.length,
           priorityBreakdown: {
-            high: recommendations.filter(r => r.priority === "high").length,
-            medium: recommendations.filter(r => r.priority === "medium").length,
-            low: recommendations.filter(r => r.priority === "low").length
-          }
-        }
+            high: recommendations.filter((r) => r.priority === "high").length,
+            medium: recommendations.filter((r) => r.priority === "medium")
+              .length,
+            low: recommendations.filter((r) => r.priority === "low").length,
+          },
+        },
       });
     } catch (error) {
       console.error("AI recommendations error:", error);

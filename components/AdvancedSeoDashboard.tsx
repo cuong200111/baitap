@@ -175,8 +175,12 @@ export default function AdvancedSeoDashboard() {
         // Ensure all required fields exist with defaults
         const performanceData: PerformanceMetrics = {
           overallHealth: data.data.overallHealth || 75,
-          keywordRankings: Array.isArray(data.data.keywordRankings) ? data.data.keywordRankings : [],
-          trafficTrends: Array.isArray(data.data.trafficTrends) ? data.data.trafficTrends : [],
+          keywordRankings: Array.isArray(data.data.keywordRankings)
+            ? data.data.keywordRankings
+            : [],
+          trafficTrends: Array.isArray(data.data.trafficTrends)
+            ? data.data.trafficTrends
+            : [],
           coreWebVitals: data.data.coreWebVitals || {
             lcp: 2.1,
             fid: 45,
@@ -184,15 +188,17 @@ export default function AdvancedSeoDashboard() {
             fcp: 1.8,
             ttfb: 0.5,
             score: 85,
-            status: "good" as const
+            status: "good" as const,
           },
           indexingStatus: data.data.indexingStatus || {
             totalPages: 150,
             indexedPages: 142,
             crawlErrors: 3,
-            sitemapStatus: "processed"
+            sitemapStatus: "processed",
           },
-          recommendations: Array.isArray(data.data.recommendations) ? data.data.recommendations : []
+          recommendations: Array.isArray(data.data.recommendations)
+            ? data.data.recommendations
+            : [],
         };
         setPerformance(performanceData);
       } else {
@@ -208,15 +214,15 @@ export default function AdvancedSeoDashboard() {
             fcp: 1.8,
             ttfb: 0.5,
             score: 85,
-            status: "good"
+            status: "good",
           },
           indexingStatus: {
             totalPages: 150,
             indexedPages: 142,
             crawlErrors: 3,
-            sitemapStatus: "processed"
+            sitemapStatus: "processed",
           },
-          recommendations: []
+          recommendations: [],
         });
       }
     } catch (error) {
@@ -233,15 +239,15 @@ export default function AdvancedSeoDashboard() {
           fcp: 1.8,
           ttfb: 0.5,
           score: 85,
-          status: "good"
+          status: "good",
         },
         indexingStatus: {
           totalPages: 150,
           indexedPages: 142,
           crawlErrors: 3,
-          sitemapStatus: "processed"
+          sitemapStatus: "processed",
         },
-        recommendations: []
+        recommendations: [],
       });
     }
   };
@@ -419,11 +425,9 @@ export default function AdvancedSeoDashboard() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {
-                  performance.keywordRankings?.filter(
-                    (k) => k.currentPosition <= 10,
-                  ).length || 0
-                }{" "}
+                {performance.keywordRankings?.filter(
+                  (k) => k.currentPosition <= 10,
+                ).length || 0}{" "}
                 in top 10
               </p>
             </CardContent>
@@ -688,60 +692,64 @@ export default function AdvancedSeoDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {(performance.keywordRankings || []).map((keyword, index) => (
-                        <tr key={index} className="border-b hover:bg-gray-50">
-                          <td className="p-2 font-medium">{keyword.keyword}</td>
-                          <td className="p-2">
-                            <Badge
-                              variant={
-                                keyword.currentPosition <= 3
-                                  ? "default"
-                                  : keyword.currentPosition <= 10
-                                    ? "secondary"
-                                    : "outline"
-                              }
-                            >
-                              #{keyword.currentPosition}
-                            </Badge>
-                          </td>
-                          <td className="p-2">
-                            <div className="flex items-center gap-1">
-                              {getRankingChangeIcon(keyword.change)}
-                              <span
-                                className={`text-sm ${keyword.change > 0 ? "text-green-600" : keyword.change < 0 ? "text-red-600" : "text-gray-600"}`}
+                      {(performance.keywordRankings || []).map(
+                        (keyword, index) => (
+                          <tr key={index} className="border-b hover:bg-gray-50">
+                            <td className="p-2 font-medium">
+                              {keyword.keyword}
+                            </td>
+                            <td className="p-2">
+                              <Badge
+                                variant={
+                                  keyword.currentPosition <= 3
+                                    ? "default"
+                                    : keyword.currentPosition <= 10
+                                      ? "secondary"
+                                      : "outline"
+                                }
                               >
-                                {keyword.change > 0 ? "+" : ""}
-                                {keyword.change}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="p-2 text-sm">
-                            {keyword.searchVolume.toLocaleString()}
-                          </td>
-                          <td className="p-2">
-                            <div className="flex items-center gap-1">
-                              <span className="text-sm">
-                                {keyword.difficulty}%
-                              </span>
-                              <div className="w-12 h-2 bg-gray-200 rounded">
-                                <div
-                                  className={`h-2 rounded ${keyword.difficulty < 30 ? "bg-green-500" : keyword.difficulty < 70 ? "bg-yellow-500" : "bg-red-500"}`}
-                                  style={{ width: `${keyword.difficulty}%` }}
-                                />
+                                #{keyword.currentPosition}
+                              </Badge>
+                            </td>
+                            <td className="p-2">
+                              <div className="flex items-center gap-1">
+                                {getRankingChangeIcon(keyword.change)}
+                                <span
+                                  className={`text-sm ${keyword.change > 0 ? "text-green-600" : keyword.change < 0 ? "text-red-600" : "text-gray-600"}`}
+                                >
+                                  {keyword.change > 0 ? "+" : ""}
+                                  {keyword.change}
+                                </span>
                               </div>
-                            </div>
-                          </td>
-                          <td className="p-2">
-                            <a
-                              href={keyword.url}
-                              className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                              View
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                            <td className="p-2 text-sm">
+                              {keyword.searchVolume.toLocaleString()}
+                            </td>
+                            <td className="p-2">
+                              <div className="flex items-center gap-1">
+                                <span className="text-sm">
+                                  {keyword.difficulty}%
+                                </span>
+                                <div className="w-12 h-2 bg-gray-200 rounded">
+                                  <div
+                                    className={`h-2 rounded ${keyword.difficulty < 30 ? "bg-green-500" : keyword.difficulty < 70 ? "bg-yellow-500" : "bg-red-500"}`}
+                                    style={{ width: `${keyword.difficulty}%` }}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-2">
+                              <a
+                                href={keyword.url}
+                                className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
+                              >
+                                <ExternalLink className="h-3 w-3" />
+                                View
+                              </a>
+                            </td>
+                          </tr>
+                        ),
+                      )}
                     </tbody>
                   </table>
                 </div>
