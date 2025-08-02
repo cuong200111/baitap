@@ -111,7 +111,13 @@ export default function CustomSitemapManager({
         const data = await response.json();
         console.log("Response data:", data);
         if (data.success) {
-          setSitemaps(data.data);
+          // Normalize data to ensure priority is number
+          const normalizedData = data.data.map((sitemap: any) => ({
+            ...sitemap,
+            priority: Number(sitemap.priority) || 0.2,
+            mobile_friendly: Boolean(sitemap.mobile_friendly)
+          }));
+          setSitemaps(normalizedData);
         } else {
           console.error("API returned success: false", data);
           toast.error(data.message || "Không thể tải sitemap");
