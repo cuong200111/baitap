@@ -1347,7 +1347,7 @@ export default function ProfilePage() {
 
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Phiên đăng nhập đã h���t hạn");
+        toast.error("Phiên đăng nhập đã hết hạn");
         return;
       }
 
