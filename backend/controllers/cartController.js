@@ -45,8 +45,39 @@ export const cartController = {
 
       const cartItems = await executeQuery(query, params);
 
-      // Process cart items with proper pricing
-      const processedItems = cartItems.map((item) => {
+      // Check stock and remove items that exceed available stock
+      const itemsToRemove = [];
+      const validItems = [];
+
+      for (const item of cartItems) {
+        const availableStock = Math.max(0, parseInt(item.stock_quantity) || 0);
+        const requestedQuantity = parseInt(item.quantity) || 0;
+
+        if (requestedQuantity > availableStock) {
+          // Mark for removal if no stock available or exceeds stock
+          itemsToRemove.push({
+            cart_id: item.id,
+            product_name: item.product_name,
+            requested: requestedQuantity,
+            available: availableStock,
+          });
+        } else {
+          // Keep items with sufficient stock
+          validItems.push(item);
+        }
+      }
+
+      // Remove items with insufficient stock
+      if (itemsToRemove.length > 0) {
+        console.log(`🗑️ Removing ${itemsToRemove.length} cart items with insufficient stock:`, itemsToRemove);
+
+        for (const item of itemsToRemove) {
+          await executeQuery("DELETE FROM cart_items WHERE id = ?", [item.cart_id]);
+        }
+      }
+
+      // Process remaining valid cart items
+      const processedItems = validItems.map((item) => {
         const finalPrice = item.sale_price || item.price;
         const totalPrice = finalPrice * item.quantity;
 
