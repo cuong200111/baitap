@@ -19,19 +19,40 @@ export function AuthGuard({
   redirectTo = "/login",
   showLoader = true,
 }: AuthGuardProps) {
-  const { user, loading: authLoading, isAuthenticated } = useAuth();
+  const {
+    user,
+    loading: authLoading,
+    initializing,
+    isAuthenticated,
+    hasToken
+  } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Wait for auth to complete before deciding whether to redirect
-    if (authLoading) {
-      return; // Still loading, don't do anything yet
+    // Don't redirect while initializing or loading
+    if (initializing || authLoading) {
+      return;
     }
 
-    if (requireAuth && (!isAuthenticated || !user)) {
-      // Auth completed and user is not authenticated
-      router.push(redirectTo);
-      return;
+    if (requireAuth) {
+      // If no token at all, redirect immediately
+      if (!hasToken) {
+        // Store current path for redirect after login
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('redirect_after_login', window.location.pathname);
+        }
+        router.push(redirectTo);
+        return;
+      }
+
+      // If we have token but no user (token invalid), redirect
+      if (!isAuthenticated || !user) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('redirect_after_login', window.location.pathname);
+        }
+        router.push(redirectTo);
+        return;
+      }
     }
 
     if (requireAdmin && user?.role !== "admin") {
@@ -41,7 +62,9 @@ export function AuthGuard({
     }
   }, [
     authLoading,
+    initializing,
     isAuthenticated,
+    hasToken,
     user,
     requireAuth,
     requireAdmin,
@@ -50,7 +73,7 @@ export function AuthGuard({
   ]);
 
   // Show loading screen while authentication is in progress
-  if (authLoading && showLoader) {
+  if ((initializing || authLoading) && showLoader) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -65,11 +88,11 @@ export function AuthGuard({
   }
 
   // Don't render anything while redirecting or if auth requirements aren't met
-  if (authLoading) {
+  if (initializing || authLoading) {
     return null;
   }
 
-  if (requireAuth && (!isAuthenticated || !user)) {
+  if (requireAuth && (!hasToken || !isAuthenticated || !user)) {
     return null;
   }
 
