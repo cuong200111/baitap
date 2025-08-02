@@ -8,7 +8,7 @@ async function testUserPasswordChange() {
   try {
     // First, we need to login as admin to get a token
     console.log("\n1. Logging in as admin...");
-    
+
     const loginResponse = await fetch(`${API_BASE}/api/auth/login`, {
       method: "POST",
       headers: {
@@ -34,10 +34,10 @@ async function testUserPasswordChange() {
 
     // Get list of users to find a user ID for testing
     console.log("\n2. Getting users list...");
-    
+
     const usersResponse = await fetch(`${API_BASE}/api/users`, {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -45,33 +45,44 @@ async function testUserPasswordChange() {
     const usersResult = await usersResponse.json();
     console.log("Users Response:", usersResult);
 
-    if (!usersResult.success || !usersResult.data || usersResult.data.length === 0) {
+    if (
+      !usersResult.success ||
+      !usersResult.data ||
+      usersResult.data.length === 0
+    ) {
       console.log("❌ No users found to test password change");
       return;
     }
 
     // Find a regular user (not admin) for testing
-    const testUser = usersResult.data.find(user => user.role === "user");
+    const testUser = usersResult.data.find((user) => user.role === "user");
     if (!testUser) {
-      console.log("❌ No regular user found for testing. Using first user instead...");
+      console.log(
+        "❌ No regular user found for testing. Using first user instead...",
+      );
       testUser = usersResult.data[0];
     }
 
-    console.log(`✅ Found test user: ${testUser.full_name} (ID: ${testUser.id})`);
+    console.log(
+      `✅ Found test user: ${testUser.full_name} (ID: ${testUser.id})`,
+    );
 
     // Test password change
     console.log("\n3. Testing password change...");
-    
-    const passwordChangeResponse = await fetch(`${API_BASE}/api/users/${testUser.id}/password`, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
+
+    const passwordChangeResponse = await fetch(
+      `${API_BASE}/api/users/${testUser.id}/password`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          new_password: "newpassword123",
+        }),
       },
-      body: JSON.stringify({
-        new_password: "newpassword123",
-      }),
-    });
+    );
 
     const passwordChangeResult = await passwordChangeResponse.json();
     console.log("Password Change Response:", passwordChangeResult);
@@ -84,17 +95,20 @@ async function testUserPasswordChange() {
 
     // Test with invalid data
     console.log("\n4. Testing password change with invalid data...");
-    
-    const invalidPasswordResponse = await fetch(`${API_BASE}/api/users/${testUser.id}/password`, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
+
+    const invalidPasswordResponse = await fetch(
+      `${API_BASE}/api/users/${testUser.id}/password`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          new_password: "123", // Too short
+        }),
       },
-      body: JSON.stringify({
-        new_password: "123", // Too short
-      }),
-    });
+    );
 
     const invalidPasswordResult = await invalidPasswordResponse.json();
     console.log("Invalid Password Response:", invalidPasswordResult);
@@ -112,7 +126,6 @@ async function testUserPasswordChange() {
     console.log("   ✅ User list retrieval");
     console.log("   ✅ Password change API call");
     console.log("   ✅ Validation testing");
-
   } catch (error) {
     console.error("❌ Test failed with error:", error.message);
     console.log("\n🔧 Troubleshooting tips:");

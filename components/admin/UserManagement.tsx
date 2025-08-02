@@ -209,7 +209,10 @@ export function UserManagement() {
 
     setSubmitting(true);
     try {
-      console.log("🔑 Attempting to change password for user ID:", passwordData.userId);
+      console.log(
+        "🔑 Attempting to change password for user ID:",
+        passwordData.userId,
+      );
 
       const response = await usersApi.changePassword(passwordData.userId, {
         new_password: passwordData.newPassword,
@@ -226,7 +229,9 @@ export function UserManagement() {
       }
     } catch (error) {
       console.error("Failed to change password:", error);
-      toast.error("Đổi mật khẩu thất bại - " + (error.message || "Lỗi kết nối"));
+      toast.error(
+        "Đổi mật khẩu thất bại - " + (error.message || "Lỗi kết nối"),
+      );
     } finally {
       setSubmitting(false);
     }

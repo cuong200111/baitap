@@ -140,7 +140,10 @@ export const usersApi = {
     });
   },
 
-  changePassword(id: number, passwordData: { new_password: string }): Promise<ApiResponse<void>> {
+  changePassword(
+    id: number,
+    passwordData: { new_password: string },
+  ): Promise<ApiResponse<void>> {
     return callApi(`${Domain}/api/users/${id}/password`, {
       method: "PUT",
       body: JSON.stringify(passwordData),
