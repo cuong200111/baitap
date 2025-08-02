@@ -18,15 +18,23 @@ export async function GET(request: NextRequest) {
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
 
     console.log("🌍 All-sitemap.xml: Generating custom sitemap...");
+    // Get API URL with fallback
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000";
     console.log(
       "🔗 API URL:",
-      `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/custom-sitemaps`,
+      `${apiUrl}/api/custom-sitemaps`,
     );
 
-    // Fetch custom sitemaps from backend API
+    // Fetch custom sitemaps from backend API with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const customSitemapsRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/custom-sitemaps`,
+      `${apiUrl}/api/custom-sitemaps`,
+      { signal: controller.signal }
     );
+
+    clearTimeout(timeoutId);
 
     console.log("📡 Backend response status:", customSitemapsRes.status);
 
