@@ -29,6 +29,7 @@ import utilsRoutes from "./routes/utils.js";
 import configRoutes from "./routes/config.js";
 import sitemapRouter from "./routes/sitemap.js";
 import addressesRoutes from "./routes/addresses.js";
+import initRoutes from "./routes/init.js";
 dotenv.config();
 
 const app = express();
@@ -98,6 +99,7 @@ app.use("/api/seo", seoRoutes);
 app.use("/api/utils", utilsRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/addresses", addressesRoutes);
+app.use("/api/init", initRoutes);
 
 // Serve robots.txt and sitemap.xml
 app.use("/", sitemetaRoutes);
