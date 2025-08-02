@@ -19,7 +19,7 @@ router.get("/sitemap.xml", async (req, res) => {
   try {
     // 1. Lấy base URL từ seo_settings
     const baseUrlResult = await executeQuery(`
-      SELECT setting_value FROM seo_settings 
+      SELECT setting_value FROM seo_settings
       WHERE setting_key = 'site_url' AND is_active = 1
     `);
 
@@ -28,23 +28,34 @@ router.get("/sitemap.xml", async (req, res) => {
         ? baseUrlResult[0].setting_value
         : "https://hacom.vn";
 
-    // 2. Lấy config sitemap
+    // 2. Lấy config sitemap với nhiều options hơn
     const sitemapSettings = await executeQuery(`
-      SELECT setting_key, setting_value FROM seo_settings 
-      WHERE setting_key IN ('sitemap_include_images', 'sitemap_max_urls')
+      SELECT setting_key, setting_value FROM seo_settings
+      WHERE setting_key IN ('sitemap_include_images', 'sitemap_include_videos', 'sitemap_max_urls', 'enable_sitemap')
       AND is_active = 1
     `);
 
-    let includeImages = false;
+    let includeImages = true;
+    let includeVideos = true;
     let maxUrls = 50000;
+    let enableSitemap = true;
+
     if (Array.isArray(sitemapSettings)) {
       sitemapSettings.forEach((setting) => {
         if (setting.setting_key === "sitemap_include_images") {
-          includeImages = setting.setting_value === "1";
+          includeImages = setting.setting_value !== "0";
+        } else if (setting.setting_key === "sitemap_include_videos") {
+          includeVideos = setting.setting_value !== "0";
         } else if (setting.setting_key === "sitemap_max_urls") {
           maxUrls = parseInt(setting.setting_value) || 50000;
+        } else if (setting.setting_key === "enable_sitemap") {
+          enableSitemap = setting.setting_value !== "0";
         }
       });
+    }
+
+    if (!enableSitemap) {
+      return res.status(404).send("Sitemap is disabled");
     }
 
     // 3. Tạo XML
