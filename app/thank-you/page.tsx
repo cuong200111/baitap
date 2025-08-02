@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice, getMediaUrl } from "@/config";
+import { formatPrice, getMediaUrl, Domain } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface OrderItem {
