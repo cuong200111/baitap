@@ -69,7 +69,7 @@ export default function ThankYouPage() {
     if (orderId || orderNumber) {
       loadOrderDetails();
     } else {
-      setError("Không tìm thấy thông tin đơn hàng. Vui lòng kiểm tra URL hoặc liên hệ hỗ trợ.");
+      // Show basic success without details if no parameters
       setLoading(false);
     }
   }, [orderId, orderNumber]);
@@ -224,7 +224,7 @@ export default function ThankYouPage() {
                 <Button asChild variant="outline" className="w-full">
                   <Link href={`/track-order?order_number=${orderNumber}`}>
                     <Package className="h-4 w-4 mr-2" />
-                    Tra cứu đ��n hàng
+                    Tra cứu đơn hàng
                   </Link>
                 </Button>
 
@@ -396,7 +396,7 @@ export default function ThankYouPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  Thông tin khách hàng
+                  Thông tin kh��ch hàng
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
