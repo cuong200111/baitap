@@ -126,12 +126,19 @@ export default function CheckoutPage() {
   };
 
   const loadUserAddress = async () => {
-    if (!isAuthenticated || !user?.id) return;
+    if (!isAuthenticated || !user?.id) {
+      console.log("📍 No authenticated user, skipping address load");
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
-      if (!token) return;
+      if (!token) {
+        console.log("📍 No token found, skipping address load");
+        return;
+      }
 
+      console.log("📍 Loading user address from API...");
       const response = await fetch(`${API_CONFIG.BASE_URL}/api/addresses`, {
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -139,11 +146,17 @@ export default function CheckoutPage() {
         },
       });
 
+      console.log("📍 Address API response status:", response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log("📍 Address API data:", data);
+
         if (data.success && data.data?.length > 0) {
           // Get the default or first address
           const address = data.data[0];
+          console.log("📍 Using address:", address);
+
           setCustomerInfo((prev) => ({
             ...prev,
             name: address.full_name || prev.name,
@@ -154,11 +167,16 @@ export default function CheckoutPage() {
             ward: address.ward || "",
           }));
           setAddressLoadedFromProfile(true);
-          console.log("✅ Loaded user address:", address);
+          console.log("✅ Successfully loaded and applied user address");
+          toast.success("Địa chỉ đã được tải từ hồ sơ của bạn");
+        } else {
+          console.log("📍 No addresses found for user");
         }
+      } else {
+        console.log("📍 Address API request failed:", response.status, response.statusText);
       }
     } catch (error) {
-      console.error("Failed to load user address:", error);
+      console.error("❌ Failed to load user address:", error);
     }
   };
 
