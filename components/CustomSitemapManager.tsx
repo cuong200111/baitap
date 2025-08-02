@@ -561,7 +561,7 @@ export default function CustomSitemapManager({
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary">
-                        {sitemap.priority.toFixed(1)}
+                        {Number(sitemap.priority || 0).toFixed(1)}
                       </Badge>
                     </TableCell>
                     <TableCell>
