@@ -47,6 +47,12 @@ export default function CartPage() {
       if (result.success && result.data) {
         setCartItems(result.data.items);
         setSummary(result.data.summary);
+
+        // Show notification if items were removed due to insufficient stock
+        if (result.removed_items && result.removed_items.length > 0) {
+          const removedNames = result.removed_items.map(item => item.product_name).join(", ");
+          toast.warning(`Đã tự động xóa khỏi giỏ hàng: ${removedNames} (không đủ số lượng trong kho)`);
+        }
       } else {
         setCartItems([]);
         setSummary({
