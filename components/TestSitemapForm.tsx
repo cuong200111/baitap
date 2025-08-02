@@ -97,6 +97,29 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
     }
   };
 
+  const handleTestPublic = async () => {
+    try {
+      console.log("🌐 Testing public endpoint...");
+
+      const response = await fetch(`${Domain}/api/test-sitemap/public`);
+      const data = await response.json();
+
+      console.log("🌐 Public endpoint response:", data);
+
+      if (response.ok && data.success) {
+        toast.success(`🌐 Public endpoint works: ${data.data?.data?.length || 0} items`);
+        if (data.data?.data?.length > 0) {
+          setResults(data.data.data);
+        }
+      } else {
+        toast.error(`❌ Public endpoint failed: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("🚨 Public endpoint test error:", error);
+      toast.error("❌ Public endpoint error occurred");
+    }
+  };
+
   if (!authToken) {
     return (
       <Card>
