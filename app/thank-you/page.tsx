@@ -187,17 +187,47 @@ export default function ThankYouPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <Card className="max-w-md mx-auto text-center">
+          <Card className="max-w-lg mx-auto text-center">
             <CardContent className="pt-6">
               <div className="text-red-500 mb-4">
                 <Package className="h-16 w-16 mx-auto" />
               </div>
-              <h2 className="text-xl font-semibold mb-2">Có lỗi xảy ra</h2>
-              <p className="text-gray-600 mb-4">{error}</p>
-              <Button onClick={() => router.push("/")} className="w-full">
-                <Home className="h-4 w-4 mr-2" />
-                Về trang chủ
-              </Button>
+              <h2 className="text-xl font-semibold mb-2">Có vấn đề khi tải thông tin đơn hàng</h2>
+              <p className="text-gray-600 mb-6">{error}</p>
+
+              <div className="space-y-3">
+                {orderNumber && (
+                  <p className="text-sm text-gray-500 mb-4">
+                    Mã đơn hàng của bạn: <strong>{orderNumber}</strong>
+                  </p>
+                )}
+
+                <Button onClick={loadOrderDetails} variant="outline" className="w-full">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Thử lại
+                </Button>
+
+                {orderNumber && (
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href={`/track-order?order_number=${orderNumber}`}>
+                      <Package className="h-4 w-4 mr-2" />
+                      Tra cứu đơn hàng
+                    </Link>
+                  </Button>
+                )}
+
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/orders">
+                    <Package className="h-4 w-4 mr-2" />
+                    Xem đơn hàng của tôi
+                  </Link>
+                </Button>
+
+                <Button onClick={() => router.push("/")} className="w-full">
+                  <Home className="h-4 w-4 mr-2" />
+                  Về trang chủ
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
