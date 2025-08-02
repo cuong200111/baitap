@@ -129,6 +129,8 @@ export default function CustomSitemapManager({
   useEffect(() => {
     if (authToken) {
       fetchSitemaps();
+    } else {
+      setLoading(false);
     }
   }, [authToken]);
 
