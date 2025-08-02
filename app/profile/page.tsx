@@ -274,7 +274,7 @@ export default function ProfilePage() {
         { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
         { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
         { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
-        { code: 67, name: "��ắk Nông", full_name: "Tỉnh Đắk Nông" },
+        { code: 67, name: "Đắk Nông", full_name: "Tỉnh Đắk Nông" },
         { code: 68, name: "Lâm Đồng", full_name: "Tỉnh Lâm Đồng" },
         { code: 70, name: "Bình Phước", full_name: "Tỉnh Bình Phước" },
         { code: 72, name: "Tây Ninh", full_name: "Tỉnh Tây Ninh" },
@@ -1137,7 +1137,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phường Tân Thạnh",
+            full_name: "Phường Tân Th��nh",
             district_code: 200,
           },
           {
@@ -1182,7 +1182,7 @@ export default function ProfilePage() {
           {
             code: 9307,
             name: "Vĩnh Hòa",
-            full_name: "Phư���ng Vĩnh Hòa",
+            full_name: "Phường Vĩnh Hòa",
             district_code: 260,
           },
           {
