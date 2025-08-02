@@ -252,7 +252,7 @@ export default function ProfilePage() {
         { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
         { code: 24, name: "Bắc Giang", full_name: "Tỉnh Bắc Giang" },
         { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
-        { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
+        { code: 27, name: "Vĩnh Ph��c", full_name: "Tỉnh Vĩnh Phúc" },
         { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
         { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
         { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
@@ -373,7 +373,7 @@ export default function ProfilePage() {
           {
             code: 201,
             name: "Hội An",
-            full_name: "Thành phố Hội An",
+            full_name: "Thành ph��� Hội An",
             province_code: 20,
           },
           {
@@ -424,7 +424,7 @@ export default function ProfilePage() {
           { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
         ],
         11: [
-          // ��iện Biên
+          // Điện Biên
           {
             code: 110,
             name: "Điện Biên Phủ",
@@ -709,7 +709,7 @@ export default function ProfilePage() {
             },
             {
               code: 763,
-              name: "Quận 4",
+              name: "Qu���n 4",
               full_name: "Quận 4",
               province_code: 79,
             },
@@ -943,7 +943,7 @@ export default function ProfilePage() {
             {
               code: provinceCode * 1000 + 3,
               name: "Huyện/Quận 3",
-              full_name: "Huyện/Qu���n 3",
+              full_name: "Huyện/Quận 3",
               province_code: provinceCode,
             },
           ],
@@ -1142,7 +1142,7 @@ export default function ProfilePage() {
           },
           {
             code: 6862,
-            name: "Phư��c Hòa",
+            name: "Phước Hòa",
             full_name: "Phường Phước Hòa",
             district_code: 200,
           },
@@ -1182,7 +1182,7 @@ export default function ProfilePage() {
           {
             code: 9307,
             name: "Vĩnh Hòa",
-            full_name: "Phường Vĩnh Hòa",
+            full_name: "Ph��ờng Vĩnh Hòa",
             district_code: 260,
           },
           {
@@ -1431,7 +1431,7 @@ export default function ProfilePage() {
         error.message?.includes("NetworkError")
       ) {
         toast.error(
-          "Không thể kết nối đến server. Vui l��ng kiểm tra kết nối mạng",
+          "Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng",
         );
       } else {
         toast.error("Có l��i xảy ra khi cập nhật thông tin. Vui lòng thử lại");
@@ -1542,7 +1542,7 @@ export default function ProfilePage() {
         });
         setIsPasswordDialogOpen(false);
       } else {
-        toast.error(data.message || "Có lỗi xảy ra");
+        toast.error(data.message || "Có l���i xảy ra");
       }
     } catch (error) {
       console.error("Change password error:", error);
@@ -1589,7 +1589,7 @@ export default function ProfilePage() {
             </h2>
             <Button onClick={() => router.push("/")} variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              V��� trang chủ
+              Về trang chủ
             </Button>
           </CardContent>
         </Card>
