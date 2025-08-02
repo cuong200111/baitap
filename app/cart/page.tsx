@@ -99,7 +99,9 @@ export default function CartPage() {
       // Try to load from session cart first
       const sessionId = localStorage.getItem("session_id");
       if (sessionId) {
-        const response = await fetch(`${Domain}/api/cart?session_id=${sessionId}`);
+        const response = await fetch(
+          `${Domain}/api/cart?session_id=${sessionId}`,
+        );
         const data = await response.json();
 
         if (data.success && data.data?.items) {

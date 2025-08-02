@@ -189,7 +189,8 @@ export default function TestCartOpsPage() {
                     ) || 0}
                   </p>
                   <p>
-                    <strong>Subtotal:</strong> {cartContents.summary?.subtotal || 0}₫
+                    <strong>Subtotal:</strong>{" "}
+                    {cartContents.summary?.subtotal || 0}₫
                   </p>
                   {cartContents.items?.map((item: any, index: number) => (
                     <div key={index} className="border p-2 rounded">

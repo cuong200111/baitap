@@ -8,16 +8,16 @@ async function apiCall(endpoint: string, options: RequestInit = {}) {
   // Get token from localStorage if available (client-side only)
   let token: string | null = null;
   if (typeof window !== "undefined") {
-    token = localStorage.getItem('token');
+    token = localStorage.getItem("token");
   }
 
-  const headers:any = {
-    'Content-Type': 'application/json',
+  const headers: any = {
+    "Content-Type": "application/json",
     ...options.headers,
   };
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const defaultOptions: RequestInit = {
@@ -30,74 +30,73 @@ async function apiCall(endpoint: string, options: RequestInit = {}) {
     const data = await response.json();
 
     if (!data.success) {
-      throw new Error(data.message || 'API call failed');
+      throw new Error(data.message || "API call failed");
     }
 
     return data.data;
   } catch (error) {
-    console.error('API call error:', error);
+    console.error("API call error:", error);
     throw error;
   }
 }
 
 // Config API calls
 export const configApi = {
-  getAll: () => apiCall('/config'),
+  getAll: () => apiCall("/config"),
   getSection: (section: string) => apiCall(`/config/${section}`),
 };
 
 // Utils API calls
 export const utilsApi = {
-  format: (type: string, value: any, options?: any) => 
-    apiCall('/utils/format', {
-      method: 'POST',
+  format: (type: string, value: any, options?: any) =>
+    apiCall("/utils/format", {
+      method: "POST",
       body: JSON.stringify({ type, value, options }),
     }),
-  
+
   validate: (type: string, value: any) =>
-    apiCall('/utils/validate', {
-      method: 'POST', 
+    apiCall("/utils/validate", {
+      method: "POST",
       body: JSON.stringify({ type, value }),
     }),
-    
+
   generate: (type: string, options?: any) =>
-    apiCall('/utils/generate', {
-      method: 'POST',
+    apiCall("/utils/generate", {
+      method: "POST",
       body: JSON.stringify({ type, options }),
     }),
-    
+
   calculate: (type: string, values: any) =>
-    apiCall('/utils/calculate', {
-      method: 'POST',
+    apiCall("/utils/calculate", {
+      method: "POST",
       body: JSON.stringify({ type, values }),
     }),
-    
+
   parse: (type: string, value: any) =>
-    apiCall('/utils/parse', {
-      method: 'POST',
+    apiCall("/utils/parse", {
+      method: "POST",
       body: JSON.stringify({ type, value }),
     }),
-    
+
   healthCheck: (url: string) =>
     apiCall(`/utils/health-check?url=${encodeURIComponent(url)}`),
 };
 
-// SEO API calls  
+// SEO API calls
 export const seoApi = {
   getHealth: () => {
- 
-    return apiCall('/seo/health');
+    return apiCall("/seo/health");
   },
-  
+
   generateMetaTags: (pageType: string, entityId?: number) =>
-    apiCall('/seo/meta-tags', {
-      method: 'POST',
+    apiCall("/seo/meta-tags", {
+      method: "POST",
       body: JSON.stringify({ pageType, entityId }),
     }),
-    
+
   generateSchema: (type: string, data: any) =>
-    apiCall('/seo/schema', {
-      method: 'POST',
+    apiCall("/seo/schema", {
+      method: "POST",
       body: JSON.stringify({ type, data }),
     }),
 };
@@ -106,12 +105,13 @@ export const seoApi = {
 export const clientUtils = {
   // Format price on client (immediate)
   formatPrice: (price: number | string | null | undefined): string => {
-    if (price == null || price === '' || isNaN(Number(price))) {
-      return '0₫';
+    if (price == null || price === "" || isNaN(Number(price))) {
+      return "0₫";
     }
 
-    const numPrice = typeof price === 'number' ? price : parseFloat(price.toString());
-    if (isNaN(numPrice)) return '0₫';
+    const numPrice =
+      typeof price === "number" ? price : parseFloat(price.toString());
+    if (isNaN(numPrice)) return "0₫";
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
@@ -126,7 +126,7 @@ export const clientUtils = {
 
   // Generate slug on client (immediate)
   generateSlug: (text: string): string => {
-    if (!text) return '';
+    if (!text) return "";
     return text
       .toLowerCase()
       .normalize("NFD")
@@ -141,7 +141,7 @@ export const clientUtils = {
   // Truncate text on client (immediate)
   truncate: (text: string, length: number = 100): string => {
     if (!text || text.length <= length) return text;
-    return text.substring(0, length) + '...';
+    return text.substring(0, length) + "...";
   },
 
   // Storage utilities
