@@ -31,6 +31,7 @@ import sitemapRouter from "./routes/sitemap.js";
 import sitemapIndexRouter from "./routes/sitemap-index.js";
 import addressesRoutes from "./routes/addresses.js";
 import initRoutes from "./routes/init.js";
+import customSitemapsRoutes from "./routes/custom-sitemaps.js";
 dotenv.config();
 
 const app = express();
