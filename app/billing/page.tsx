@@ -65,7 +65,7 @@ interface BillingAddress {
 
 export default function BillingPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
 
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [billingAddresses, setBillingAddresses] = useState<BillingAddress[]>(
