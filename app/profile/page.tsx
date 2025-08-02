@@ -1044,7 +1044,7 @@ export default function ProfilePage() {
           {
             code: 3568,
             name: "Nam Thanh",
-            full_name: "Ph��ờng Nam Thanh",
+            full_name: "Phường Nam Thanh",
             district_code: 110,
           },
           {
