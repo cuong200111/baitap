@@ -337,9 +337,9 @@ export default function AdvancedSeoDashboard() {
               </div>
               <p className="text-xs text-gray-500 mt-1">
                 {
-                  performance.keywordRankings.filter(
+                  performance.keywordRankings?.filter(
                     (k) => k.currentPosition <= 10,
-                  ).length
+                  ).length || 0
                 }{" "}
                 in top 10
               </p>
