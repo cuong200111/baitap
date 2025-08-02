@@ -270,7 +270,7 @@ export default function ProfilePage() {
         { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
         { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
         { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thu��n" },
-        { code: 60, name: "Bình Thuận", full_name: "Tỉnh Bình Thuận" },
+        { code: 60, name: "Bình Thu��n", full_name: "Tỉnh Bình Thuận" },
         { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
         { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
         { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
@@ -758,7 +758,7 @@ export default function ProfilePage() {
             {
               code: 776,
               name: "Quận Tân Phú",
-              full_name: "Qu��n Tân Phú",
+              full_name: "Quận Tân Phú",
               province_code: 79,
             },
           ],
@@ -851,7 +851,7 @@ export default function ProfilePage() {
             {
               code: 202,
               name: "Duy Xuyên",
-              full_name: "Huyện Duy Xuyên",
+              full_name: "Huyện Duy Xuy��n",
               province_code: 20,
             },
             {
@@ -1137,7 +1137,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phường Tân Thạnh",
+            full_name: "Ph��ờng Tân Thạnh",
             district_code: 200,
           },
           {
@@ -1717,7 +1717,7 @@ export default function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="phone">Số đi��n thoại</Label>
+                        <Label htmlFor="phone">Số điện thoại</Label>
                         <Input
                           id="phone"
                           value={formData.phone}
