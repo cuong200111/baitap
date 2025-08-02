@@ -138,6 +138,18 @@ export const executeQuery = async (query, params = []) => {
   }
 };
 
+// Get MySQL connection from pool
+const mysqlGetConnection = async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log("✅ MySQL connection acquired");
+    return connection;
+  } catch (error) {
+    console.error("❌ MySQL connection failed:", error.message);
+    throw error;
+  }
+};
+
 // Get connection from pool
 export const getConnection = async () => {
   try {
@@ -147,5 +159,8 @@ export const getConnection = async () => {
     throw error;
   }
 };
+
+// Export pool for direct use
+export { pool };
 
 export default pool;
