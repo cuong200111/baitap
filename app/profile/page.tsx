@@ -472,7 +472,7 @@ export default function ProfilePage() {
           },
           {
             code: 119,
-            name: "Nậm Pồ",
+            name: "Nậm P��",
             full_name: "Huyện Nậm Pồ",
             province_code: 11,
           },
@@ -1128,7 +1128,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phư���ng Tân Thạnh",
+            full_name: "Phường Tân Thạnh",
             district_code: 200,
           },
           {
@@ -1971,7 +1971,7 @@ export default function ProfilePage() {
                             </div>
                             <div>
                               <Label htmlFor="confirm_password">
-                                Xác nhận m���t khẩu mới
+                                Xác nhận mật khẩu mới
                               </Label>
                               <Input
                                 id="confirm_password"
