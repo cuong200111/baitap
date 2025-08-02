@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { getSeoSettings } from '@/lib/seo-service';
 
@@ -75,10 +75,4 @@ export default function Analytics() {
       )}
     </>
   );
-}
-
-function useState<T>(initialValue: T): [T, (value: T) => void] {
-  // Simple useState implementation for server-side compatibility
-  let value = initialValue;
-  return [value, (newValue: T) => { value = newValue; }];
 }

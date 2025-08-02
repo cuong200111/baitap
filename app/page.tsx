@@ -1,5 +1,7 @@
 "use client";
 
+export { generateMetadata } from "./metadata";
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -322,7 +324,7 @@ export default function HomePage() {
             ) : (
               <div className="text-center py-8">
                 <p className="text-gray-600">
-                  Chưa có sản phẩm nổi bật nào. Hãy thêm sản phẩm và đánh dấu
+                  Chưa c�� sản phẩm nổi bật nào. Hãy thêm sản phẩm và đánh dấu
                   &quot;n��i bật&quot; trong trang quản trị.
                 </p>
                 <Link href="/admin/products">
