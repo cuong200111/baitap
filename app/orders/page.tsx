@@ -58,13 +58,22 @@ export default function OrdersPage() {
   const orderNumber = searchParams.get("order_number");
 
   useEffect(() => {
+    // Wait for auth to complete before deciding whether to redirect
+    if (authLoading) {
+      return; // Still loading, don't do anything yet
+    }
+
+    if (!isAuthenticated || !user) {
+      // Auth completed and user is not authenticated
+      router.push("/login");
+      return;
+    }
+
+    // User is authenticated, load orders
     if (user?.id) {
       loadOrders();
-    } else if (user === null) {
-      // User is not authenticated, redirect to login
-      router.push("/login");
     }
-  }, [user, router]);
+  }, [user, authLoading, isAuthenticated, router]);
 
   const loadOrders = async () => {
     if (!user?.id) {
