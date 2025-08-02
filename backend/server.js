@@ -101,7 +101,12 @@ app.use("/api/config", configRoutes);
 app.use("/api/addresses", addressesRoutes);
 app.use("/api/init", initRoutes);
 
-// Serve robots.txt and sitemap.xml
+// Serve robots.txt and sitemap.xml directly from root
+app.use("/", robotsRoutes);
+app.use("/", sitemapRouter);
+app.use("/api", sitemapRouter); // Also serve from /api for admin access
+
+// Legacy sitemeta routes
 app.use("/", sitemetaRoutes);
 
 // Test order update endpoint (should be moved to debug in production)
