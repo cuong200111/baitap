@@ -102,13 +102,10 @@ app.use("/api/config", configRoutes);
 app.use("/api/addresses", addressesRoutes);
 app.use("/api/init", initRoutes);
 
-// Serve robots.txt and sitemap.xml directly from root
-app.use("/", robotsRoutes);
-app.use("/", sitemapRouter);
-app.use("/", sitemapIndexRouter);
-app.use("/api", sitemapRouter); // Also serve from /api for admin access
+// Note: robots.txt and sitemap.xml are now served by Next.js frontend
+// Backend only provides data APIs
 
-// Legacy sitemeta routes
+// Legacy sitemeta routes (kept for compatibility)
 app.use("/", sitemetaRoutes);
 
 // Test order update endpoint (should be moved to debug in production)
