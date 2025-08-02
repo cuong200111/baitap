@@ -69,10 +69,15 @@ export const cartController = {
 
       // Remove items with insufficient stock
       if (itemsToRemove.length > 0) {
-        console.log(`🗑️ Removing ${itemsToRemove.length} cart items with insufficient stock:`, itemsToRemove);
+        console.log(
+          `🗑️ Removing ${itemsToRemove.length} cart items with insufficient stock:`,
+          itemsToRemove,
+        );
 
         for (const item of itemsToRemove) {
-          await executeQuery("DELETE FROM cart_items WHERE id = ?", [item.cart_id]);
+          await executeQuery("DELETE FROM cart_items WHERE id = ?", [
+            item.cart_id,
+          ]);
         }
       }
 

@@ -12,7 +12,7 @@ async function testStockManagement() {
     console.log("\n1. Checking Current Product Stock...");
     const productResponse = await fetch(`${API_BASE}/api/products/1`);
     const productResult = await productResponse.json();
-    
+
     if (productResult.success) {
       const product = productResult.data;
       console.log(`✅ Product: ${product.name}`);
@@ -26,7 +26,7 @@ async function testStockManagement() {
     // Test 2: Test Add to Cart with valid quantity
     console.log("\n2. Testing Add to Cart (Valid Quantity)...");
     const sessionId = "test_stock_" + Date.now();
-    
+
     const addToCartResponse = await fetch(`${API_BASE}/api/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,7 +48,7 @@ async function testStockManagement() {
 
     // Test 3: Test Add to Cart with excessive quantity
     console.log("\n3. Testing Add to Cart (Excessive Quantity)...");
-    
+
     const excessiveQtyResponse = await fetch(`${API_BASE}/api/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -72,7 +72,7 @@ async function testStockManagement() {
 
     // Test 4: Test Buy Now with valid quantity
     console.log("\n4. Testing Buy Now (Valid Quantity)...");
-    
+
     const buyNowResponse = await fetch(`${API_BASE}/api/buy-now`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -96,7 +96,7 @@ async function testStockManagement() {
 
     // Test 5: Test Buy Now with excessive quantity
     console.log("\n5. Testing Buy Now (Excessive Quantity)...");
-    
+
     const buyNowExcessResponse = await fetch(`${API_BASE}/api/buy-now`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -120,22 +120,35 @@ async function testStockManagement() {
 
     // Test 6: Test Cart Retrieval (should auto-remove invalid items)
     console.log("\n6. Testing Cart Auto-Cleanup...");
-    
-    const getCartResponse = await fetch(`${API_BASE}/api/cart?session_id=${sessionId}`);
+
+    const getCartResponse = await fetch(
+      `${API_BASE}/api/cart?session_id=${sessionId}`,
+    );
     const getCartResult = await getCartResponse.json();
-    
+
     console.log("Cart Retrieval Response:", getCartResult);
-    
+
     if (getCartResult.success) {
-      console.log(`✅ Cart loaded with ${getCartResult.data.items.length} items`);
-      
-      if (getCartResult.removed_items && getCartResult.removed_items.length > 0) {
-        console.log(`🗑️ Auto-removed ${getCartResult.removed_items.length} items due to stock issues`);
-        getCartResult.removed_items.forEach(item => {
-          console.log(`   - ${item.product_name}: requested ${item.requested}, available ${item.available}`);
+      console.log(
+        `✅ Cart loaded with ${getCartResult.data.items.length} items`,
+      );
+
+      if (
+        getCartResult.removed_items &&
+        getCartResult.removed_items.length > 0
+      ) {
+        console.log(
+          `🗑️ Auto-removed ${getCartResult.removed_items.length} items due to stock issues`,
+        );
+        getCartResult.removed_items.forEach((item) => {
+          console.log(
+            `   - ${item.product_name}: requested ${item.requested}, available ${item.available}`,
+          );
         });
       } else {
-        console.log("📋 No items auto-removed (all items have sufficient stock)");
+        console.log(
+          "📋 No items auto-removed (all items have sufficient stock)",
+        );
       }
     } else {
       console.log("❌ Failed to load cart");
@@ -145,11 +158,10 @@ async function testStockManagement() {
     console.log("🎉 Stock Management Test Completed!");
     console.log("📋 Test Summary:");
     console.log("   ✅ Stock validation for add to cart");
-    console.log("   ✅ Stock validation for buy now"); 
+    console.log("   ✅ Stock validation for buy now");
     console.log("   ✅ Excessive quantity rejection");
     console.log("   ✅ Cart auto-cleanup functionality");
     console.log("   ✅ Detailed error messages with stock status");
-
   } catch (error) {
     console.error("❌ Test failed with error:", error.message);
   }
@@ -162,15 +174,26 @@ async function testOutOfStockScenarios() {
 
   try {
     // First, let's try to find a product with 0 stock or create a test scenario
-    console.log("\n📝 Note: To fully test out-of-stock scenarios, manually set a product's stock_quantity to 0 in the database.");
-    console.log("Then test adding that product to cart or buy now - should get 'out_of_stock' status.");
-    
-    console.log("\n🔍 Expected behaviors:");
-    console.log("   - Add to cart with stock_quantity = 0: Should return 'out_of_stock' status");
-    console.log("   - Buy now with stock_quantity = 0: Should return 'out_of_stock' status");
-    console.log("   - Cart retrieval: Should auto-remove items with stock_quantity = 0");
-    console.log("   - Order creation: Should subtract stock and prevent overselling");
+    console.log(
+      "\n📝 Note: To fully test out-of-stock scenarios, manually set a product's stock_quantity to 0 in the database.",
+    );
+    console.log(
+      "Then test adding that product to cart or buy now - should get 'out_of_stock' status.",
+    );
 
+    console.log("\n🔍 Expected behaviors:");
+    console.log(
+      "   - Add to cart with stock_quantity = 0: Should return 'out_of_stock' status",
+    );
+    console.log(
+      "   - Buy now with stock_quantity = 0: Should return 'out_of_stock' status",
+    );
+    console.log(
+      "   - Cart retrieval: Should auto-remove items with stock_quantity = 0",
+    );
+    console.log(
+      "   - Order creation: Should subtract stock and prevent overselling",
+    );
   } catch (error) {
     console.error("❌ Out of stock test failed:", error.message);
   }

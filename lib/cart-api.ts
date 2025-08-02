@@ -274,9 +274,7 @@ export const cartApi = {
   },
 
   // Migrate cart from session to user (called when user logs in)
-  async migrateCart(
-    userId: number,
-  ): Promise<{
+  async migrateCart(userId: number): Promise<{
     success: boolean;
     message?: string;
     data?: { migrated: number };
