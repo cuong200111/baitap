@@ -83,12 +83,15 @@ export default function OrdersPage() {
         return;
       }
 
-      const response = await fetch(`${Domain}/api/orders?user_id=${user.id}&limit=50`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${Domain}/api/orders?user_id=${user.id}&limit=50`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -207,7 +210,9 @@ export default function OrdersPage() {
                 onClick={loadOrders}
                 disabled={loading}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                <RefreshCw
+                  className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`}
+                />
                 Làm mới
               </Button>
               <Button variant="outline" onClick={() => router.push("/")}>
