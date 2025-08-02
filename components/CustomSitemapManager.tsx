@@ -251,7 +251,7 @@ export default function CustomSitemapManager({
       url: sitemap.url,
       title: sitemap.title || "",
       description: sitemap.description || "",
-      priority: sitemap.priority,
+      priority: Number(sitemap.priority) || 0.2,
       changefreq: sitemap.changefreq,
       last_modified: sitemap.last_modified
         ? sitemap.last_modified.split("T")[0]
