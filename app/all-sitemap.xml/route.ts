@@ -62,6 +62,9 @@ export async function GET(request: NextRequest) {
   <!-- HACOM E-commerce Custom URLs -->
 `;
 
+    // Add debug comment in XML
+    xml += `  <!-- Debug: Found ${customSitemaps.length} custom sitemaps -->\n`;
+
     // Custom sitemap entries
     customSitemaps.forEach((sitemap) => {
       const lastmod = sitemap.last_modified
