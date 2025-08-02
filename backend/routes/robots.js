@@ -1,174 +1,362 @@
-// import { executeQuery } from "../database/connection.js";
-// const router = express.Router();
+import express from "express";
+import { executeQuery } from "../database/connection.js";
 
+const router = express.Router();
 
-// router.get("/robots", async (req, res) => {
-//   try {
-//     // Lấy setting site_url và robots_txt_custom
-//     const robotsSettings = await executeQuery(`
-//       SELECT setting_key, setting_value FROM seo_settings 
-//       WHERE setting_key IN ('site_url', 'robots_txt_custom')
-//       AND is_active = 1
-//     `);
+// GET /robots.txt - Serve optimized robots.txt for SEO
+router.get("/robots.txt", async (req, res) => {
+  try {
+    // 1. Lấy SEO settings từ database
+    const robotsSettings = await executeQuery(`
+      SELECT setting_key, setting_value FROM seo_settings 
+      WHERE setting_key IN ('site_url', 'robots_txt_custom', 'enable_sitemap')
+      AND is_active = 1
+    `);
 
-//     let baseUrl = "https://hacom.vn";
-//     let customContent = "";
+    let baseUrl = "https://hacom.vn";
+    let customContent = "";
+    let enableSitemap = true;
 
-//     if (Array.isArray(robotsSettings)) {
-//       robotsSettings.forEach((setting) => {
-//         if (setting.setting_key === "site_url") {
-//           baseUrl = setting.setting_value;
-//         } else if (setting.setting_key === "robots_txt_custom") {
-//           customContent = setting.setting_value || "";
-//         }
-//       });
-//     }
+    if (Array.isArray(robotsSettings)) {
+      robotsSettings.forEach((setting) => {
+        if (setting.setting_key === "site_url") {
+          baseUrl = setting.setting_value || baseUrl;
+        } else if (setting.setting_key === "robots_txt_custom") {
+          customContent = setting.setting_value || "";
+        } else if (setting.setting_key === "enable_sitemap") {
+          enableSitemap = setting.setting_value !== "0";
+        }
+      });
+    }
 
-//     let robotsContent = `# Robots.txt for HACOM E-commerce
-// # Generated automatically on ${new Date().toISOString()}
+    // 2. Tạo robots.txt content tối ưu SEO 100%
+    let robotsContent = `# Robots.txt for HACOM E-commerce Platform
+# Generated automatically on ${new Date().toISOString()}
+# Optimized for maximum SEO performance
 
-// # Allow all crawlers for main content
-// User-agent: *
-// Allow: /
+# ===========================================
+# MAIN CRAWLERS - FULL ACCESS
+# ===========================================
 
-// # Disallow admin areas and sensitive paths
-// Disallow: /admin/
-// Disallow: /api/
-// Disallow: /login
-// Disallow: /register
-// Disallow: /profile
-// Disallow: /checkout
-// Disallow: /cart
-// Disallow: /orders
-// Disallow: /debug*
-// Disallow: /test*
-// Disallow: /_next/
-// Disallow: /uploads/temp/
-// Disallow: /search?*
-// Disallow: /*?*add-to-cart*
-// Disallow: /*?*remove*
-// Disallow: /*?*utm_*
-// Disallow: /*?*fbclid*
-// Disallow: /*?*gclid*
+# Google Search Engine
+User-agent: Googlebot
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Allow: /api/sitemap*
+Crawl-delay: 1
 
-// # Allow specific important paths
-// Allow: /products/
-// Allow: /category/
-// Allow: /api/sitemap
-// Allow: /uploads/
+# Bing Search Engine  
+User-agent: Bingbot
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 2
 
-// # Specific rules for major search engines
-// User-agent: Googlebot
-// Allow: /
-// Crawl-delay: 1
+# Yahoo Search Engine
+User-agent: Slurp
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 3
 
-// User-agent: Bingbot
-// Allow: /
-// Crawl-delay: 2
+# Yandex Search Engine
+User-agent: YandexBot
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 2
 
-// User-agent: Slurp
-// Allow: /
-// Crawl-delay: 3
+# DuckDuckGo Search Engine
+User-agent: DuckDuckBot
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 1
 
-// # Social media crawlers
-// User-agent: facebookexternalhit
-// Allow: /
+# ===========================================
+# SOCIAL MEDIA CRAWLERS
+# ===========================================
 
-// User-agent: Twitterbot
-// Allow: /
+# Facebook Crawler
+User-agent: facebookexternalhit/
+Allow: /
+Allow: /products/
+Allow: /category/
 
-// User-agent: LinkedInBot
-// Allow: /
+# Twitter Crawler
+User-agent: Twitterbot
+Allow: /
+Allow: /products/
+Allow: /category/
 
-// # Block bad bots and scrapers
-// User-agent: SemrushBot
-// Disallow: /
+# LinkedIn Crawler
+User-agent: LinkedInBot
+Allow: /
+Allow: /products/
+Allow: /category/
 
-// User-agent: AhrefsBot
-// Disallow: /
+# WhatsApp Crawler
+User-agent: WhatsApp
+Allow: /
+Allow: /products/
+Allow: /category/
 
-// User-agent: MJ12bot
-// Disallow: /
+# Telegram Crawler
+User-agent: TelegramBot
+Allow: /
+Allow: /products/
+Allow: /category/
 
-// User-agent: DotBot
-// Disallow: /
+# ===========================================
+# GENERAL CRAWLERS - RESTRICTED ACCESS  
+# ===========================================
 
-// User-agent: BLEXBot
-// Disallow: /
+User-agent: *
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
 
-// User-agent: PetalBot
-// Disallow: /
+# Block admin and sensitive areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /debug*
+Disallow: /test*
+Disallow: /setup*
+Disallow: /status*
 
-// # E-commerce specific rules
-// Disallow: /*sort=*
-// Disallow: /*filter=*
-// Disallow: /*page=*
-// Disallow: /*limit=*
-// Disallow: /products?*
-// Disallow: /category/*/*
+# Block user-specific pages
+Disallow: /login*
+Disallow: /register*
+Disallow: /profile*
+Disallow: /checkout*
+Disallow: /cart*
+Disallow: /orders*
+Disallow: /billing*
+Disallow: /thank-you*
+Disallow: /track-order*
 
-// # Security
-// Disallow: /*.sql$
-// Disallow: /*.log$
-// Disallow: /*.env$
-// Disallow: /*.backup$
-// Disallow: /*backup*
-// Disallow: /*temp*
-// Disallow: /*.tmp$
+# Block dynamic/filtered URLs that cause duplicate content
+Disallow: /*?*sort=*
+Disallow: /*?*filter=*
+Disallow: /*?*page=*
+Disallow: /*?*limit=*
+Disallow: /*?*search=*
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid*
+Disallow: /*?*gclid*
+Disallow: /*?*add-to-cart*
+Disallow: /*?*remove*
+Disallow: /*?*quantity*
 
-// # Performance - Disallow resource-heavy crawling
-// Disallow: /api/debug/
-// Disallow: /api/test/
+# Block file types that shouldn't be indexed
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /*.env$
+Disallow: /*.backup$
+Disallow: /*.tmp$
+Disallow: /*.cache$
+Disallow: /*backup*
+Disallow: /*temp*
+Disallow: /*cache*
 
-// `;
+# Block development and staging areas
+Disallow: /dev/
+Disallow: /staging/
+Disallow: /beta/
 
-//     if (customContent.trim()) {
-//       robotsContent += `
-// # Custom Rules
-// ${customContent}
+# ===========================================
+# BAD BOTS AND SCRAPERS - BLOCKED
+# ===========================================
 
-// `;
-//     }
+# SEO Tools Bots (consume bandwidth without value)
+User-agent: SemrushBot
+Disallow: /
 
-//     robotsContent += `# Sitemaps
-// Sitemap: ${baseUrl}/sitemap.xml
+User-agent: AhrefsBot  
+Disallow: /
 
-// # Host directive
-// Host: ${baseUrl.replace(/^https?:\/\//, "")}
+User-agent: MJ12bot
+Disallow: /
 
-// # Cache directive for better performance
-// Cache-delay: 86400
-// `;
+User-agent: DotBot
+Disallow: /
 
-//     res.set({
-//       "Content-Type": "text/plain",
-//       "Cache-Control": "public, max-age=86400",
-//     });
-//     return res.send(robotsContent);
-//   } catch (error) {
-//     console.error("Failed to generate robots.txt:", error);
+User-agent: BLEXBot
+Disallow: /
 
-//     const fallbackContent = `User-agent: *
-// Allow: /
+User-agent: PetalBot
+Disallow: /
 
-// Disallow: /admin/
-// Disallow: /api/
-// Disallow: /login
-// Disallow: /register
-// Disallow: /profile
-// Disallow: /checkout
-// Disallow: /cart
-// Disallow: /orders
+User-agent: SeznamBot
+Disallow: /
 
-// Sitemap: https://hacom.vn/sitemap.xml
-// `;
+User-agent: MauiBot
+Disallow: /
 
-//     res.set({
-//       "Content-Type": "text/plain",
-//       "Cache-Control": "public, max-age=86400",
-//     });
-//     return res.send(fallbackContent);
-//   }
-// });
+# Aggressive crawlers
+User-agent: ia_archiver
+Disallow: /
 
-// export default router;
+User-agent: ScoutJet
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot/2.0
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+# Email collectors and spammers
+User-agent: EmailCollector
+Disallow: /
+
+User-agent: EmailSiphon
+Disallow: /
+
+User-agent: WebBandit
+Disallow: /
+
+User-agent: EmailWolf
+Disallow: /
+
+`;
+
+    // 3. Thêm custom content nếu có
+    if (customContent.trim()) {
+      robotsContent += `
+# ===========================================
+# CUSTOM RULES
+# ===========================================
+${customContent}
+
+`;
+    }
+
+    // 4. Thêm sitemap và directives cuối
+    robotsContent += `# ===========================================
+# SITEMAPS
+# ===========================================
+`;
+
+    if (enableSitemap) {
+      robotsContent += `Sitemap: ${baseUrl}/sitemap.xml
+Sitemap: ${baseUrl}/api/sitemap.xml
+`;
+    }
+
+    robotsContent += `
+# ===========================================
+# TECHNICAL DIRECTIVES
+# ===========================================
+
+# Host directive for canonical domain
+Host: ${baseUrl.replace(/^https?:\/\//, "")}
+
+# Request rate (microseconds between requests)
+Request-rate: 1/10
+
+# Visit time (seconds crawler should wait between visits)
+Visit-time: 0600-1800
+
+# Cache directive for robots.txt itself
+Cache-delay: 86400
+
+# ===========================================
+# END OF ROBOTS.TXT
+# Last updated: ${new Date().toISOString()}
+# ===========================================
+`;
+
+    // 5. Log sitemap generation to analytics
+    try {
+      await executeQuery(
+        `INSERT INTO seo_analytics (url_path, date, page_views, created_at) 
+         VALUES ('robots_generation', CURDATE(), 1, NOW())
+         ON DUPLICATE KEY UPDATE 
+         page_views = page_views + 1, updated_at = NOW()`
+      );
+    } catch (logError) {
+      console.log("Analytics logging failed:", logError.message);
+    }
+
+    // 6. Trả về response với headers tối ưu
+    res.set({
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=86400, s-maxage=86400",
+      "Expires": new Date(Date.now() + 86400000).toUTCString(),
+      "Last-Modified": new Date().toUTCString(),
+      "X-Robots-Tag": "noindex, nofollow"
+    });
+    
+    return res.send(robotsContent);
+
+  } catch (error) {
+    console.error("Failed to generate robots.txt:", error);
+
+    // Fallback robots.txt content
+    const fallbackContent = `# HACOM Robots.txt - Fallback Version
+# Generated: ${new Date().toISOString()}
+
+User-agent: *
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login*
+Disallow: /register*
+Disallow: /profile*
+Disallow: /checkout*
+Disallow: /cart*
+Disallow: /orders*
+Disallow: /_next/
+Disallow: /debug*
+Disallow: /test*
+
+# Block bad bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap
+Sitemap: https://hacom.vn/sitemap.xml
+
+# Host
+Host: hacom.vn
+`;
+
+    res.set({
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=86400",
+      "X-Robots-Tag": "noindex, nofollow"
+    });
+    
+    return res.send(fallbackContent);
+  }
+});
+
+export default router;
