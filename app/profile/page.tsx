@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { WithAuth } from "@/components/AuthGuard";
 import { Domain, getMediaUrl } from "@/config";
 import { toast } from "sonner";
 import {
@@ -234,7 +235,7 @@ export default function ProfilePage() {
         },
         { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
         { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
-        { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
+        { code: 33, name: "Hải Phòng", full_name: "Thành phố H��i Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
         { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
@@ -1122,7 +1123,7 @@ export default function ProfilePage() {
           {
             code: 26746,
             name: "Nguyễn Thái Bình",
-            full_name: "Phường Nguyễn Thái Bình",
+            full_name: "Phường Nguyễn Th��i Bình",
             district_code: 760,
           },
           {
