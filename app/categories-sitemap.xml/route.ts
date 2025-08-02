@@ -18,17 +18,19 @@ export async function GET(request: NextRequest) {
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
 
     // Get API URL with fallback
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000";
+    const apiUrl =
+      process.env.NEXT_PUBLIC_API_URL ||
+      process.env.NEXT_PUBLIC_API_DOMAIN ||
+      "http://localhost:4000";
     console.log("🔗 Fetching categories from:", `${apiUrl}/api/categories`);
 
     // Fetch categories from backend API with timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-    const categoriesRes = await fetch(
-      `${apiUrl}/api/categories`,
-      { signal: controller.signal }
-    );
+    const categoriesRes = await fetch(`${apiUrl}/api/categories`, {
+      signal: controller.signal,
+    });
 
     clearTimeout(timeoutId);
 
@@ -37,7 +39,10 @@ export async function GET(request: NextRequest) {
     // Parse categories
     if (categoriesRes?.ok) {
       const categoriesData = await categoriesRes.json();
-      console.log("📦 Categories API response:", { success: categoriesData.success, count: categoriesData.data?.length });
+      console.log("📦 Categories API response:", {
+        success: categoriesData.success,
+        count: categoriesData.data?.length,
+      });
 
       if (categoriesData.success && Array.isArray(categoriesData.data)) {
         categories = categoriesData.data;
@@ -46,7 +51,9 @@ export async function GET(request: NextRequest) {
         console.log("❌ Invalid categories data structure:", categoriesData);
       }
     } else {
-      console.log(`❌ Categories API failed: ${categoriesRes.status} ${categoriesRes.statusText}`);
+      console.log(
+        `❌ Categories API failed: ${categoriesRes.status} ${categoriesRes.statusText}`,
+      );
       const errorText = await categoriesRes.text();
       console.log("❌ Error response:", errorText);
     }
