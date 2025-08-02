@@ -288,24 +288,41 @@ export const adminController = {
   // Generate Robots.txt
   async generateRobots(req, res) {
     try {
-      const robotsContent = `User-agent: *
-Allow: /
+      // Trigger robots.txt generation by making internal request
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-# Sitemap
-Sitemap: ${req.protocol}://${req.get("host")}/sitemap.xml
+      // Test robots.txt accessibility
+      const response = await fetch(`${baseUrl}/robots.txt`);
 
-# Crawl-delay
-Crawl-delay: 1`;
+      if (response.ok) {
+        const robotsContent = await response.text();
 
-      res.json({
-        success: true,
-        data: { content: robotsContent },
-      });
+        // Log generation to analytics
+        await executeQuery(
+          `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
+           VALUES ('robots_generation', CURDATE(), 1, NOW())
+           ON DUPLICATE KEY UPDATE
+           page_views = page_views + 1, updated_at = NOW()`
+        );
+
+        res.json({
+          success: true,
+          message: "Robots.txt generated successfully",
+          data: {
+            content: robotsContent,
+            url: `${baseUrl}/robots.txt`,
+            size: robotsContent.length,
+            lastGenerated: new Date().toISOString()
+          },
+        });
+      } else {
+        throw new Error(`Failed to generate robots.txt: ${response.status}`);
+      }
     } catch (error) {
       console.error("Generate robots error:", error);
       res.status(500).json({
         success: false,
-        message: "Failed to generate robots.txt",
+        message: "Failed to generate robots.txt: " + error.message,
       });
     }
   },
