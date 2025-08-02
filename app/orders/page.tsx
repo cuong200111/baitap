@@ -50,7 +50,7 @@ interface OrderItem {
 export default function OrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, loading: authLoading, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -102,7 +102,7 @@ export default function OrdersPage() {
         description: "Đơn hàng đang được xử lý",
       },
       confirmed: {
-        label: "Đã xác nhận",
+        label: "Đã xác nh���n",
         icon: CheckCircle,
         color: "text-blue-600",
         bgColor: "bg-blue-50",
