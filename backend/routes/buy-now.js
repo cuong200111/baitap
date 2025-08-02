@@ -51,10 +51,24 @@ router.post("/", async (req, res) => {
 
     const availableStock = Math.max(0, parseInt(product.stock_quantity) || 0);
 
+    // Check if product is out of stock
+    if (availableStock === 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Sản phẩm "${product.name}" hiện đã hết hàng.`,
+        stock_status: "out_of_stock",
+        available_stock: 0,
+      });
+    }
+
+    // Check if requested quantity exceeds available stock
     if (requestedQuantity > availableStock) {
       return res.status(400).json({
         success: false,
-        message: `Insufficient stock. Available: ${availableStock}, Requested: ${requestedQuantity}`,
+        message: `Không đủ số lượng trong kho cho sản phẩm "${product.name}". Còn lại: ${availableStock}, Yêu cầu: ${requestedQuantity}`,
+        stock_status: "insufficient_stock",
+        available_stock: availableStock,
+        requested_quantity: requestedQuantity,
       });
     }
 
