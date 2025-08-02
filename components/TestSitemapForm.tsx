@@ -107,7 +107,9 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
       console.log("🌐 Public endpoint response:", data);
 
       if (response.ok && data.success) {
-        toast.success(`🌐 Public endpoint works: ${data.data?.data?.length || 0} items`);
+        toast.success(
+          `🌐 Public endpoint works: ${data.data?.data?.length || 0} items`,
+        );
         if (data.data?.data?.length > 0) {
           setResults(data.data.data);
         }
@@ -189,7 +191,11 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
           <Button onClick={handleTestCreate} className="col-span-1">
             🧪 Test Create
           </Button>
-          <Button onClick={handleTestList} variant="outline" className="col-span-1">
+          <Button
+            onClick={handleTestList}
+            variant="outline"
+            className="col-span-1"
+          >
             📋 Test List
           </Button>
         </div>

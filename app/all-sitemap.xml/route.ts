@@ -17,39 +17,45 @@ export async function GET(request: NextRequest) {
     // Get base URL from request
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
 
-    console.log('🌍 All-sitemap.xml: Generating custom sitemap...');
-    console.log('🔗 API URL:', `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/custom-sitemaps`);
+    console.log("🌍 All-sitemap.xml: Generating custom sitemap...");
+    console.log(
+      "🔗 API URL:",
+      `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/custom-sitemaps`,
+    );
 
     // Fetch custom sitemaps from backend API
     const customSitemapsRes = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/custom-sitemaps`,
     );
 
-    console.log('📡 Backend response status:', customSitemapsRes.status);
+    console.log("📡 Backend response status:", customSitemapsRes.status);
 
     let customSitemaps: any[] = [];
 
     // Parse custom sitemaps
     if (customSitemapsRes?.ok) {
       const customSitemapsData = await customSitemapsRes.json();
-      console.log('📦 Backend response data:', customSitemapsData);
+      console.log("📦 Backend response data:", customSitemapsData);
 
       if (
         customSitemapsData.success &&
         Array.isArray(customSitemapsData.data)
       ) {
         customSitemaps = customSitemapsData.data;
-        console.log('✅ Found custom sitemaps:', customSitemaps.length);
+        console.log("✅ Found custom sitemaps:", customSitemaps.length);
       } else {
-        console.log('❌ Backend response not success or data not array:', customSitemapsData);
+        console.log(
+          "❌ Backend response not success or data not array:",
+          customSitemapsData,
+        );
       }
     } else {
-      console.log('❌ Backend response not ok:', customSitemapsRes.status);
+      console.log("❌ Backend response not ok:", customSitemapsRes.status);
       try {
         const errorData = await customSitemapsRes.text();
-        console.log('❌ Error response:', errorData);
+        console.log("❌ Error response:", errorData);
       } catch (e) {
-        console.log('❌ Could not read error response');
+        console.log("❌ Could not read error response");
       }
     }
 

@@ -8,15 +8,15 @@ const router = express.Router();
 // Get all custom sitemaps (public - for generating XML)
 router.get("/", async (req, res) => {
   try {
-    console.log('📋 Public custom sitemaps endpoint called');
+    console.log("📋 Public custom sitemaps endpoint called");
 
     const [rows] = await pool.execute(
       "SELECT * FROM custom_sitemaps WHERE status = ? ORDER BY priority DESC, created_at ASC",
       ["active"],
     );
 
-    console.log('📊 Found active custom sitemaps:', rows.length);
-    console.log('📝 Custom sitemaps data:', rows);
+    console.log("📊 Found active custom sitemaps:", rows.length);
+    console.log("📝 Custom sitemaps data:", rows);
 
     res.json({
       success: true,
