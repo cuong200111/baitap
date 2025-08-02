@@ -83,7 +83,13 @@ interface Ward {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, loading: authLoading, logout, refreshUser, isAuthenticated } = useAuth();
+  const {
+    user,
+    loading: authLoading,
+    logout,
+    refreshUser,
+    isAuthenticated,
+  } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Robust request handling to prevent "body stream already read" errors
   const updateInProgress = useRef<boolean>(false);

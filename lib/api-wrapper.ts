@@ -41,7 +41,9 @@ export async function apiCall<T = any>(
         headers,
       };
 
-      console.log(`🌐 API Call: ${options.method || 'GET'} ${endpoint} (attempt ${retryCount + 1})`);
+      console.log(
+        `🌐 API Call: ${options.method || "GET"} ${endpoint} (attempt ${retryCount + 1})`,
+      );
 
       const response = await fetch(url, defaultOptions);
 
@@ -62,7 +64,7 @@ export async function apiCall<T = any>(
             success: false,
             message: data.message || `HTTP ${response.status}`,
             status: response.status,
-            code: data.code
+            code: data.code,
           };
         }
 
@@ -70,7 +72,9 @@ export async function apiCall<T = any>(
         if (response.status >= 500 && retryCount < maxRetries - 1) {
           retryCount++;
           console.log(`🔄 Retrying ${endpoint} (attempt ${retryCount + 1})`);
-          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+          await new Promise((resolve) =>
+            setTimeout(resolve, 1000 * retryCount),
+          );
           continue;
         }
 
@@ -87,13 +91,18 @@ export async function apiCall<T = any>(
         status: response.status,
       };
     } catch (error: any) {
-      console.error(`❌ API Error for ${endpoint} (attempt ${retryCount + 1}):`, error.message);
+      console.error(
+        `❌ API Error for ${endpoint} (attempt ${retryCount + 1}):`,
+        error.message,
+      );
 
       // For network errors, retry
       if (retryCount < maxRetries - 1) {
         retryCount++;
-        console.log(`🔄 Retrying ${endpoint} due to network error (attempt ${retryCount + 1})`);
-        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        console.log(
+          `🔄 Retrying ${endpoint} due to network error (attempt ${retryCount + 1})`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000 * retryCount));
         continue;
       }
 

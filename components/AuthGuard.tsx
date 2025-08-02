@@ -39,7 +39,15 @@ export function AuthGuard({
       router.push("/");
       return;
     }
-  }, [authLoading, isAuthenticated, user, requireAuth, requireAdmin, redirectTo, router]);
+  }, [
+    authLoading,
+    isAuthenticated,
+    user,
+    requireAuth,
+    requireAdmin,
+    redirectTo,
+    router,
+  ]);
 
   // Show loading screen while authentication is in progress
   if (authLoading && showLoader) {
@@ -48,7 +56,9 @@ export function AuthGuard({
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red-600 mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">Đang xác thực...</p>
-          <p className="text-gray-500 text-sm mt-2">Vui lòng chờ trong giây lát</p>
+          <p className="text-gray-500 text-sm mt-2">
+            Vui lòng chờ trong giây lát
+          </p>
         </div>
       </div>
     );
@@ -77,5 +87,9 @@ export function WithAuth({ children }: { children: React.ReactNode }) {
 
 // Helper component for admin pages
 export function WithAdminAuth({ children }: { children: React.ReactNode }) {
-  return <AuthGuard requireAuth={true} requireAdmin={true}>{children}</AuthGuard>;
+  return (
+    <AuthGuard requireAuth={true} requireAdmin={true}>
+      {children}
+    </AuthGuard>
+  );
 }

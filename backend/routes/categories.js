@@ -58,14 +58,17 @@ router.get("/", async (req, res) => {
         break;
       } catch (error) {
         retryCount++;
-        console.error(`❌ Categories query attempt ${retryCount} failed:`, error.message);
+        console.error(
+          `❌ Categories query attempt ${retryCount} failed:`,
+          error.message,
+        );
 
         if (retryCount >= maxRetries) {
           throw error;
         }
 
         // Wait before retry
-        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        await new Promise((resolve) => setTimeout(resolve, 1000 * retryCount));
       }
     }
 

@@ -89,7 +89,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           removeToken();
           setUser(null);
         } else {
-          console.log("🔄 Profile fetch failed but token might be valid, keeping it");
+          console.log(
+            "🔄 Profile fetch failed but token might be valid, keeping it",
+          );
           // Keep token for server errors - might be temporary
         }
       }
@@ -145,7 +147,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         throw new Error(response.message || "Login failed");
       }
     } catch (error: any) {
-
       // Handle different error formats
       let errorMessage = "Đăng nhập thất bại";
 

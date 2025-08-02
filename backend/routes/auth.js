@@ -206,7 +206,7 @@ router.get("/profile", async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Access token required",
-        code: "NO_TOKEN"
+        code: "NO_TOKEN",
       });
     }
 
@@ -219,13 +219,13 @@ router.get("/profile", async (req, res) => {
         return res.status(401).json({
           success: false,
           message: "Token expired",
-          code: "TOKEN_EXPIRED"
+          code: "TOKEN_EXPIRED",
         });
       }
       return res.status(403).json({
         success: false,
         message: "Invalid token",
-        code: "INVALID_TOKEN"
+        code: "INVALID_TOKEN",
       });
     }
 
@@ -239,7 +239,7 @@ router.get("/profile", async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "User not found",
-        code: "USER_NOT_FOUND"
+        code: "USER_NOT_FOUND",
       });
     }
 
@@ -247,7 +247,7 @@ router.get("/profile", async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Account is deactivated",
-        code: "USER_INACTIVE"
+        code: "USER_INACTIVE",
       });
     }
 
