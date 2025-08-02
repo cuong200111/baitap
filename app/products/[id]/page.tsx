@@ -35,6 +35,7 @@ import ProductReviews from "@/components/ProductReviews";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { cartApi, cartUtils } from "@/lib/cart-api";
+import { buyNowApi } from "@/lib/buy-now-api";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -46,6 +47,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [buyingNow, setBuyingNow] = useState(false);
   const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
 
   useEffect(() => {
@@ -104,21 +106,21 @@ export default function ProductDetailPage() {
   const buyNow = async () => {
     if (!product) return;
 
-    setAddingToCart(true);
+    setBuyingNow(true);
     try {
-      const result = await cartApi.addToCart(product.id, quantity);
+      const result = await buyNowApi.createBuyNowSession(product.id, quantity);
 
       if (result.success) {
-        // Success - redirect to checkout page
-        router.push("/checkout");
+        // Success - redirect to buy now checkout page
+        router.push("/buy-now-checkout");
       } else {
-        toast.error(result.message || "Có lỗi xảy ra khi thêm vào giỏ hàng");
+        toast.error(result.message || "Có lỗi xảy ra khi tạo phiên mua ngay");
       }
     } catch (error) {
       console.error("Buy now error:", error);
       toast.error("Không thể kết nối đến server");
     } finally {
-      setAddingToCart(false);
+      setBuyingNow(false);
     }
   };
 
@@ -441,10 +443,10 @@ export default function ProductDetailPage() {
 
                   <Button
                     onClick={buyNow}
-                    disabled={addingToCart}
+                    disabled={buyingNow || addingToCart}
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white h-14 text-lg font-medium rounded-xl"
                   >
-                    {addingToCart ? "Đang xử lý..." : "Mua ngay"}
+                    {buyingNow ? "Đang xử lý..." : "Mua ngay"}
                   </Button>
                 </div>
               </div>
