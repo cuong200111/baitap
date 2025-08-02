@@ -328,7 +328,7 @@ export default function AdvancedSeoDashboard() {
                 <div>
                   <p className="text-sm text-gray-600">Keywords Tracked</p>
                   <p className="text-2xl font-bold">
-                    {performance.keywordRankings.length}
+                    {performance.keywordRankings?.length || 0}
                   </p>
                 </div>
                 <div className="p-2 rounded-lg bg-blue-50">
