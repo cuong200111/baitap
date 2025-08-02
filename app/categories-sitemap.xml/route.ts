@@ -17,19 +17,38 @@ export async function GET(request: NextRequest) {
     // Get base URL from request
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
 
-    // Fetch categories from backend API
+    // Get API URL with fallback
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000";
+    console.log("🔗 Fetching categories from:", `${apiUrl}/api/categories`);
+
+    // Fetch categories from backend API with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const categoriesRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/categories`,
+      `${apiUrl}/api/categories`,
+      { signal: controller.signal }
     );
+
+    clearTimeout(timeoutId);
 
     let categories: any[] = [];
 
     // Parse categories
     if (categoriesRes?.ok) {
       const categoriesData = await categoriesRes.json();
+      console.log("📦 Categories API response:", { success: categoriesData.success, count: categoriesData.data?.length });
+
       if (categoriesData.success && Array.isArray(categoriesData.data)) {
         categories = categoriesData.data;
+        console.log(`✅ Found ${categories.length} categories for sitemap`);
+      } else {
+        console.log("❌ Invalid categories data structure:", categoriesData);
       }
+    } else {
+      console.log(`❌ Categories API failed: ${categoriesRes.status} ${categoriesRes.statusText}`);
+      const errorText = await categoriesRes.text();
+      console.log("❌ Error response:", errorText);
     }
 
     // Generate XML sitemap for categories
