@@ -74,35 +74,46 @@ export default function OrdersPage() {
 
     try {
       setLoading(true);
+      setError(null);
       const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Chưa đăng nhập");
+        return;
+      }
+
       const response = await fetch(`${Domain}/api/orders?user_id=${user.id}&limit=50`, {
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-
-      console.log("Orders API response:", data);
 
       if (!response.ok) {
         if (response.status === 401) {
+          setError("Phiên đăng nhập đã hết hạn");
           toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
-          // AuthGuard will handle redirect
           return;
         }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
+      const data = await response.json();
+      console.log("Orders API response:", data);
+
       if (data.success) {
         setOrders(data.data?.orders || []);
+        setError(null);
       } else {
         console.error("Orders API error:", data.message);
+        setError(data.message || "Không thể tải danh sách đơn hàng");
         toast.error(data.message || "Không thể tải danh sách đơn hàng");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to load orders:", error);
-      toast.error("Có lỗi xảy ra khi tải đơn hàng");
+      const errorMessage = "Có lỗi xảy ra khi tải đơn hàng";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
