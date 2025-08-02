@@ -341,7 +341,7 @@ try {
       id: 61,
       name: "Màn Hình 4K",
       slug: "man-hinh-4k",
-      description: "M��n hình 4K UHD cho đồ họa và giải trí",
+      description: "Màn hình 4K UHD cho đồ họa và giải trí",
       image:
         "https://images.unsplash.com/photo-1561736778-92e52a7769ef?w=400&h=300&fit=crop",
       parent_id: 4,
