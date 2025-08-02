@@ -532,7 +532,7 @@ export function ProductManagement() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Xác nhận x��a</AlertDialogTitle>
+                            <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
                             <AlertDialogDescription>
                               Bạn có chắc chắn muốn xóa sản phẩm &quot;
                               {product.name}&quot;? Hành động này không thể hoàn
@@ -596,7 +596,7 @@ export function ProductManagement() {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, sku: e.target.value }))
                     }
-                    placeholder="Mã s��n phẩm"
+                    placeholder="Mã sản phẩm"
                   />
                 </div>
               </div>
