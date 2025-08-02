@@ -123,6 +123,42 @@ export default function CheckoutPage() {
     }
   };
 
+  const loadUserAddress = async () => {
+    if (!isAuthenticated || !user?.id) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const response = await fetch(`${API_CONFIG.BASE_URL}/api/addresses`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data?.length > 0) {
+          // Get the default or first address
+          const address = data.data[0];
+          setCustomerInfo((prev) => ({
+            ...prev,
+            name: address.full_name || prev.name,
+            phone: address.phone || prev.phone,
+            address: address.address_line_1 || "",
+            city: address.city || "",
+            district: address.district || "",
+            ward: address.ward || "",
+          }));
+          console.log("✅ Loaded user address:", address);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load user address:", error);
+    }
+  };
+
   const saveCustomerInfoToStorage = () => {
     if (saveInfo) {
       localStorage.setItem("customer_info", JSON.stringify(customerInfo));
