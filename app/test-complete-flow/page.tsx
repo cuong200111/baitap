@@ -40,8 +40,11 @@ export default function TestCompleteFlowPage() {
   // Test 1: Add to cart
   const testAddToCart = async () => {
     try {
-      const result = await cartApi.addToCart(parseInt(productId), parseInt(quantity));
-      
+      const result = await cartApi.addToCart(
+        parseInt(productId),
+        parseInt(quantity),
+      );
+
       if (result.success) {
         addResult("1. Add to Cart", true, "Successfully added to cart", result);
         return true;
@@ -59,9 +62,14 @@ export default function TestCompleteFlowPage() {
   const testGetCart = async () => {
     try {
       const result = await cartApi.getCart();
-      
+
       if (result.success && result.data?.items?.length > 0) {
-        addResult("2. Get Cart", true, `Cart has ${result.data.items.length} items`, result.data);
+        addResult(
+          "2. Get Cart",
+          true,
+          `Cart has ${result.data.items.length} items`,
+          result.data,
+        );
         return result.data;
       } else {
         addResult("2. Get Cart", false, "Cart is empty or failed", result);
@@ -83,14 +91,24 @@ export default function TestCompleteFlowPage() {
     try {
       const firstItem = cartData.items[0];
       const newQuantity = firstItem.quantity + 1;
-      
+
       const result = await cartApi.updateQuantity(firstItem.id, newQuantity);
-      
+
       if (result.success) {
-        addResult("3. Update Quantity", true, `Updated to quantity ${newQuantity}`, result);
+        addResult(
+          "3. Update Quantity",
+          true,
+          `Updated to quantity ${newQuantity}`,
+          result,
+        );
         return true;
       } else {
-        addResult("3. Update Quantity", false, result.message || "Failed", result);
+        addResult(
+          "3. Update Quantity",
+          false,
+          result.message || "Failed",
+          result,
+        );
         return false;
       }
     } catch (error: any) {
@@ -103,9 +121,14 @@ export default function TestCompleteFlowPage() {
   const testCartCount = async () => {
     try {
       const result = await cartApi.getCartCount();
-      
+
       if (result.success) {
-        addResult("4. Cart Count", true, `Cart count: ${result.data?.count || 0}`, result);
+        addResult(
+          "4. Cart Count",
+          true,
+          `Cart count: ${result.data?.count || 0}`,
+          result,
+        );
         return true;
       } else {
         addResult("4. Cart Count", false, result.message || "Failed", result);
@@ -127,7 +150,7 @@ export default function TestCompleteFlowPage() {
     try {
       const firstItem = cartData.items[0];
       const result = await cartApi.removeItem(firstItem.id);
-      
+
       if (result.success) {
         addResult("5. Remove Item", true, "Successfully removed item", result);
         return true;
@@ -145,7 +168,7 @@ export default function TestCompleteFlowPage() {
   const testClearCart = async () => {
     try {
       const result = await cartApi.clearCart();
-      
+
       if (result.success) {
         addResult("6. Clear Cart", true, "Successfully cleared cart", result);
         return true;
@@ -164,15 +187,15 @@ export default function TestCompleteFlowPage() {
     try {
       // First add an item to cart for checkout
       await cartApi.addToCart(parseInt(productId), parseInt(quantity));
-      
+
       // Test navigation
       addResult("7. Checkout Navigation", true, "Navigating to checkout page");
-      
+
       // Small delay then navigate
       setTimeout(() => {
         router.push("/checkout");
       }, 1000);
-      
+
       return true;
     } catch (error: any) {
       addResult("7. Checkout Navigation", false, `Error: ${error.message}`);
@@ -308,7 +331,11 @@ export default function TestCompleteFlowPage() {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => testNavigation("/thank-you?order_id=test&order_number=TEST-123")}
+                onClick={() =>
+                  testNavigation(
+                    "/thank-you?order_id=test&order_number=TEST-123",
+                  )
+                }
                 className="w-full"
               >
                 Test Thank You Page
@@ -325,7 +352,8 @@ export default function TestCompleteFlowPage() {
             <Card>
               <CardContent className="pt-6">
                 <p className="text-muted-foreground">
-                  No tests run yet. Configure test parameters and click "Run All Cart Tests".
+                  No tests run yet. Configure test parameters and click "Run All
+                  Cart Tests".
                 </p>
               </CardContent>
             </Card>
@@ -389,12 +417,13 @@ export default function TestCompleteFlowPage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
             <p className="text-sm text-yellow-800">
-              <strong>Test Notes:</strong> These tests use the actual API endpoints. 
-              Make sure the backend server is running on the configured port (default: 4000).
-              The tests will create real cart entries that may need to be cleaned up.
+              <strong>Test Notes:</strong> These tests use the actual API
+              endpoints. Make sure the backend server is running on the
+              configured port (default: 4000). The tests will create real cart
+              entries that may need to be cleaned up.
             </p>
           </div>
         </div>

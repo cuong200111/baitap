@@ -71,7 +71,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      setCustomerInfo(prev => ({
+      setCustomerInfo((prev) => ({
         ...prev,
         name: user.full_name || "",
         email: user.email || "",
@@ -107,7 +107,7 @@ export default function CheckoutPage() {
       const saved = localStorage.getItem("customer_info");
       if (saved) {
         const parsedInfo = JSON.parse(saved);
-        setCustomerInfo(prev => ({
+        setCustomerInfo((prev) => ({
           ...prev,
           ...parsedInfo,
         }));
@@ -127,7 +127,7 @@ export default function CheckoutPage() {
   };
 
   const handleInputChange = (field: keyof CustomerInfo, value: string) => {
-    setCustomerInfo(prev => ({ ...prev, [field]: value }));
+    setCustomerInfo((prev) => ({ ...prev, [field]: value }));
   };
 
   const validateForm = (): boolean => {
@@ -177,7 +177,7 @@ export default function CheckoutPage() {
       const shippingAddress = `${customerInfo.address}, ${customerInfo.ward ? customerInfo.ward + ", " : ""}${customerInfo.district ? customerInfo.district + ", " : ""}${customerInfo.city}`;
 
       const orderData = {
-        items: cartItems.map(item => ({
+        items: cartItems.map((item) => ({
           product_id: item.product_id,
           quantity: item.quantity,
           price: item.final_price,
@@ -259,9 +259,7 @@ export default function CheckoutPage() {
           </Link>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Thanh toán</h1>
-            <p className="text-gray-600">
-              Hoàn tất đơn hàng của bạn
-            </p>
+            <p className="text-gray-600">Hoàn tất đơn hàng của bạn</p>
           </div>
         </div>
 
@@ -282,7 +280,9 @@ export default function CheckoutPage() {
                     <Input
                       id="name"
                       value={customerInfo.name}
-                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("name", e.target.value)
+                      }
                       placeholder="Nhập họ và tên"
                     />
                   </div>
@@ -291,7 +291,9 @@ export default function CheckoutPage() {
                     <Input
                       id="phone"
                       value={customerInfo.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
                       placeholder="Nhập số điện thoại"
                     />
                   </div>
@@ -313,7 +315,9 @@ export default function CheckoutPage() {
                   <Input
                     id="address"
                     value={customerInfo.address}
-                    onChange={(e) => handleInputChange("address", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("address", e.target.value)
+                    }
                     placeholder="Số nhà, tên đường"
                   />
                 </div>
@@ -324,7 +328,9 @@ export default function CheckoutPage() {
                     <Input
                       id="ward"
                       value={customerInfo.ward}
-                      onChange={(e) => handleInputChange("ward", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("ward", e.target.value)
+                      }
                       placeholder="Nhập phường/xã"
                     />
                   </div>
@@ -333,7 +339,9 @@ export default function CheckoutPage() {
                     <Input
                       id="district"
                       value={customerInfo.district}
-                      onChange={(e) => handleInputChange("district", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("district", e.target.value)
+                      }
                       placeholder="Nhập quận/huyện"
                     />
                   </div>
@@ -342,7 +350,9 @@ export default function CheckoutPage() {
                     <Input
                       id="city"
                       value={customerInfo.city}
-                      onChange={(e) => handleInputChange("city", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("city", e.target.value)
+                      }
                       placeholder="Nhập tỉnh/thành phố"
                     />
                   </div>
@@ -364,7 +374,9 @@ export default function CheckoutPage() {
                     <Checkbox
                       id="save-info"
                       checked={saveInfo}
-                      onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        setSaveInfo(checked as boolean)
+                      }
                     />
                     <Label htmlFor="save-info" className="text-sm">
                       Lưu thông tin cho lần mua hàng tiếp theo
@@ -413,7 +425,9 @@ export default function CheckoutPage() {
                     <div key={item.id} className="flex space-x-3">
                       <div className="relative w-16 h-16 flex-shrink-0">
                         <Image
-                          src={getMediaUrl(item.images[0]) || "/placeholder.svg"}
+                          src={
+                            getMediaUrl(item.images[0]) || "/placeholder.svg"
+                          }
                           alt={item.product_name}
                           fill
                           className="object-cover rounded-lg"
@@ -451,7 +465,9 @@ export default function CheckoutPage() {
                   <div className="border-t pt-3">
                     <div className="flex justify-between text-lg font-semibold">
                       <span>Tổng cộng</span>
-                      <span className="text-red-600">{formatPrice(summary.total)}</span>
+                      <span className="text-red-600">
+                        {formatPrice(summary.total)}
+                      </span>
                     </div>
                   </div>
                 </div>

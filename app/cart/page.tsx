@@ -121,7 +121,7 @@ export default function CartPage() {
   };
 
   const handleQuantityChange = (cartItemId: number, delta: number) => {
-    const item = cartItems.find(item => item.id === cartItemId);
+    const item = cartItems.find((item) => item.id === cartItemId);
     if (!item) return;
 
     const newQuantity = item.quantity + delta;
@@ -220,7 +220,9 @@ export default function CartPage() {
                       {/* Product Image */}
                       <div className="relative w-20 h-20 flex-shrink-0">
                         <Image
-                          src={getMediaUrl(item.images[0]) || "/placeholder.svg"}
+                          src={
+                            getMediaUrl(item.images[0]) || "/placeholder.svg"
+                          }
                           alt={item.product_name}
                           fill
                           className="object-cover rounded-lg"
@@ -239,7 +241,9 @@ export default function CartPage() {
                                 {item.product_name}
                               </Link>
                             </h3>
-                            <p className="text-sm text-gray-500">SKU: {item.sku}</p>
+                            <p className="text-sm text-gray-500">
+                              SKU: {item.sku}
+                            </p>
                             <div className="flex items-center space-x-2 mt-2">
                               {item.sale_price && (
                                 <span className="text-sm text-gray-500 line-through">
@@ -265,13 +269,19 @@ export default function CartPage() {
                         {/* Quantity Controls */}
                         <div className="flex items-center justify-between mt-4">
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-600">Số lượng:</span>
+                            <span className="text-sm text-gray-600">
+                              Số lượng:
+                            </span>
                             <div className="flex items-center border border-gray-300 rounded-lg">
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleQuantityChange(item.id, -1)}
-                                disabled={item.quantity <= 1 || updating === item.id}
+                                onClick={() =>
+                                  handleQuantityChange(item.id, -1)
+                                }
+                                disabled={
+                                  item.quantity <= 1 || updating === item.id
+                                }
                                 className="h-8 w-8 p-0"
                               >
                                 <Minus className="h-3 w-3" />
@@ -284,7 +294,8 @@ export default function CartPage() {
                                 size="sm"
                                 onClick={() => handleQuantityChange(item.id, 1)}
                                 disabled={
-                                  item.quantity >= item.stock_quantity || updating === item.id
+                                  item.quantity >= item.stock_quantity ||
+                                  updating === item.id
                                 }
                                 className="h-8 w-8 p-0"
                               >
@@ -337,7 +348,9 @@ export default function CartPage() {
                   <div className="border-t pt-4">
                     <div className="flex justify-between text-lg font-semibold">
                       <span>Tổng cộng</span>
-                      <span className="text-red-600">{formatPrice(summary.total)}</span>
+                      <span className="text-red-600">
+                        {formatPrice(summary.total)}
+                      </span>
                     </div>
                   </div>
 

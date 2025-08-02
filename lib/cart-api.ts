@@ -49,10 +49,11 @@ export interface CartActionResponse {
 // Get session ID for guest users
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
-  
+
   let sessionId = localStorage.getItem("session_id");
   if (!sessionId) {
-    sessionId = "session_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    sessionId =
+      "session_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
     localStorage.setItem("session_id", sessionId);
   }
   return sessionId;
@@ -61,13 +62,13 @@ function getSessionId(): string {
 // Get user ID if authenticated
 function getUserId(): number | null {
   if (typeof window === "undefined") return null;
-  
+
   try {
     const token = localStorage.getItem("token");
     if (!token) return null;
-    
+
     // Decode JWT to get user ID (simple decode, not verification)
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = JSON.parse(atob(token.split(".")[1]));
     return payload.userId || payload.id || null;
   } catch {
     return null;
@@ -77,11 +78,11 @@ function getUserId(): number | null {
 // Generic API call helper
 async function apiCall<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T> {
   try {
     const url = `${API_CONFIG.BASE_URL}${endpoint}`;
-    
+
     let headers: HeadersInit = {
       "Content-Type": "application/json",
       ...(options.headers || {}),
@@ -138,7 +139,10 @@ export const cartApi = {
   },
 
   // Add item to cart
-  async addToCart(productId: number, quantity: number = 1): Promise<CartActionResponse> {
+  async addToCart(
+    productId: number,
+    quantity: number = 1,
+  ): Promise<CartActionResponse> {
     try {
       const userId = getUserId();
       const sessionId = getSessionId();
@@ -167,7 +171,10 @@ export const cartApi = {
   },
 
   // Update cart item quantity
-  async updateQuantity(cartItemId: number, quantity: number): Promise<CartActionResponse> {
+  async updateQuantity(
+    cartItemId: number,
+    quantity: number,
+  ): Promise<CartActionResponse> {
     try {
       return await apiCall<CartActionResponse>(`/api/cart/${cartItemId}`, {
         method: "PUT",
@@ -182,11 +189,16 @@ export const cartApi = {
   },
 
   // Remove item from cart
-  async removeItem(cartItemId: number): Promise<{ success: boolean; message?: string }> {
+  async removeItem(
+    cartItemId: number,
+  ): Promise<{ success: boolean; message?: string }> {
     try {
-      return await apiCall<{ success: boolean; message?: string }>(`/api/cart/${cartItemId}`, {
-        method: "DELETE",
-      });
+      return await apiCall<{ success: boolean; message?: string }>(
+        `/api/cart/${cartItemId}`,
+        {
+          method: "DELETE",
+        },
+      );
     } catch (error) {
       return {
         success: false,
@@ -208,10 +220,13 @@ export const cartApi = {
         body.session_id = sessionId;
       }
 
-      return await apiCall<{ success: boolean; message?: string }>("/api/cart", {
-        method: "DELETE",
-        body: JSON.stringify(body),
-      });
+      return await apiCall<{ success: boolean; message?: string }>(
+        "/api/cart",
+        {
+          method: "DELETE",
+          body: JSON.stringify(body),
+        },
+      );
     } catch (error) {
       return {
         success: false,
@@ -221,7 +236,11 @@ export const cartApi = {
   },
 
   // Get cart count
-  async getCartCount(): Promise<{ success: boolean; data?: { count: number }; message?: string }> {
+  async getCartCount(): Promise<{
+    success: boolean;
+    data?: { count: number };
+    message?: string;
+  }> {
     try {
       const userId = getUserId();
       const sessionId = getSessionId();
@@ -233,7 +252,11 @@ export const cartApi = {
         params.append("session_id", sessionId);
       }
 
-      return await apiCall<{ success: boolean; data?: { count: number }; message?: string }>(`/api/cart/count?${params}`);
+      return await apiCall<{
+        success: boolean;
+        data?: { count: number };
+        message?: string;
+      }>(`/api/cart/count?${params}`);
     } catch (error) {
       return {
         success: false,
@@ -243,14 +266,24 @@ export const cartApi = {
   },
 
   // Migrate cart from session to user (called when user logs in)
-  async migrateCart(userId: number): Promise<{ success: boolean; message?: string; data?: { migrated: number } }> {
+  async migrateCart(
+    userId: number,
+  ): Promise<{
+    success: boolean;
+    message?: string;
+    data?: { migrated: number };
+  }> {
     try {
       const sessionId = localStorage.getItem("session_id");
       if (!sessionId) {
         return { success: true, message: "No session cart to migrate" };
       }
 
-      const result = await apiCall<{ success: boolean; message?: string; data?: { migrated: number } }>("/api/cart/migrate", {
+      const result = await apiCall<{
+        success: boolean;
+        message?: string;
+        data?: { migrated: number };
+      }>("/api/cart/migrate", {
         method: "POST",
         body: JSON.stringify({
           session_id: sessionId,
