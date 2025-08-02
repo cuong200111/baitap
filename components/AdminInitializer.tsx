@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Settings, 
-  CheckCircle, 
-  AlertCircle, 
+import {
+  Settings,
+  CheckCircle,
+  AlertCircle,
   Loader2,
   Database,
-  Zap 
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { API_DOMAIN } from "@/lib/api-helpers";
@@ -26,7 +26,7 @@ export default function AdminInitializer() {
   const [status, setStatus] = useState<InitStatus>({
     seoSettings: false,
     siteSettings: false,
-    initialized: false
+    initialized: false,
   });
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(false);
@@ -39,7 +39,7 @@ export default function AdminInitializer() {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         setLoading(false);
         return;
@@ -61,17 +61,24 @@ export default function AdminInitializer() {
       });
 
       const seoData = seoResponse.ok ? await seoResponse.json() : null;
-      const settingsData = settingsResponse.ok ? await settingsResponse.json() : null;
+      const settingsData = settingsResponse.ok
+        ? await settingsResponse.json()
+        : null;
 
       const newStatus = {
-        seoSettings: seoData?.success && seoData?.data && Object.keys(seoData.data).length > 0,
-        siteSettings: settingsData?.success && settingsData?.data && Object.keys(settingsData.data).length > 0,
-        initialized: false
+        seoSettings:
+          seoData?.success &&
+          seoData?.data &&
+          Object.keys(seoData.data).length > 0,
+        siteSettings:
+          settingsData?.success &&
+          settingsData?.data &&
+          Object.keys(settingsData.data).length > 0,
+        initialized: false,
       };
 
       newStatus.initialized = newStatus.seoSettings && newStatus.siteSettings;
       setStatus(newStatus);
-      
     } catch (error) {
       console.error("Failed to check init status:", error);
     } finally {
@@ -83,7 +90,7 @@ export default function AdminInitializer() {
     try {
       setInitializing(true);
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         toast.error("Vui lòng đăng nhập để khởi tạo cài đặt");
         return;
@@ -95,20 +102,22 @@ export default function AdminInitializer() {
       };
 
       // Initialize default settings
-      const initResponse = await fetch(`${API_DOMAIN}/api/init/default-settings`, {
-        method: "POST",
-        headers,
-      });
+      const initResponse = await fetch(
+        `${API_DOMAIN}/api/init/default-settings`,
+        {
+          method: "POST",
+          headers,
+        },
+      );
 
       const initData = await initResponse.json();
-      
+
       if (initData.success) {
         toast.success("Đã khởi tạo cài đặt mặc định thành công!");
         await checkInitStatus(); // Recheck status
       } else {
         toast.error("Có lỗi xảy ra khi khởi tạo cài đặt");
       }
-      
     } catch (error) {
       console.error("Failed to initialize settings:", error);
       toast.error("Có lỗi xảy ra khi khởi tạo cài đặt");
@@ -135,7 +144,8 @@ export default function AdminInitializer() {
       <Alert className="border-green-200 bg-green-50">
         <CheckCircle className="h-4 w-4 text-green-600" />
         <AlertDescription className="text-green-800">
-          <strong>Hệ thống đã được khởi tạo!</strong> Tất cả cài đặt cơ bản đã sẵn sàng.
+          <strong>Hệ thống đã được khởi tạo!</strong> Tất cả cài đặt cơ bản đã
+          sẵn sàng.
         </AlertDescription>
       </Alert>
     );
@@ -153,7 +163,8 @@ export default function AdminInitializer() {
         <Alert className="border-orange-200 bg-orange-50">
           <AlertCircle className="h-4 w-4 text-orange-600" />
           <AlertDescription className="text-orange-800">
-            Hệ thống cần được khởi tạo với cài đặt mặc định để hoạt động đúng cách.
+            Hệ thống cần được khởi tạo với cài đặt mặc định để hoạt động đúng
+            cách.
           </AlertDescription>
         </Alert>
 
@@ -180,7 +191,7 @@ export default function AdminInitializer() {
         </div>
 
         <div className="flex items-center gap-2 pt-4">
-          <Button 
+          <Button
             onClick={initializeSettings}
             disabled={initializing}
             className="flex-1"
@@ -197,9 +208,9 @@ export default function AdminInitializer() {
               </>
             )}
           </Button>
-          
-          <Button 
-            variant="outline" 
+
+          <Button
+            variant="outline"
             onClick={checkInitStatus}
             disabled={loading}
           >
@@ -208,7 +219,8 @@ export default function AdminInitializer() {
         </div>
 
         <div className="text-xs text-gray-500 pt-2">
-          Thao tác này sẽ tạo các cài đặt SEO và hệ thống mặc định cần thiết cho HACOM.
+          Thao tác này sẽ tạo các cài đặt SEO và hệ thống mặc định cần thiết cho
+          HACOM.
         </div>
       </CardContent>
     </Card>

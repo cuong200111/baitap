@@ -226,21 +226,21 @@ export const seoController = {
         performance: {},
         local: {},
         robots: {},
-        sitemap: {}
+        sitemap: {},
       };
 
       if (Array.isArray(settings)) {
         settings.forEach((setting) => {
-          const category = setting.category || 'general';
+          const category = setting.category || "general";
           const key = setting.setting_key;
           let value = setting.setting_value;
 
           // Convert string values back to appropriate types
-          if (value === '1' || value === 'true') {
+          if (value === "1" || value === "true") {
             value = true;
-          } else if (value === '0' || value === 'false') {
+          } else if (value === "0" || value === "false") {
             value = false;
-          } else if (!isNaN(value) && value !== '') {
+          } else if (!isNaN(value) && value !== "") {
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
               value = numValue;
@@ -259,16 +259,19 @@ export const seoController = {
       const defaultSettings = {
         general: {
           site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
-          site_description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-          site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
+          site_description:
+            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+          site_keywords:
+            "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
           site_url: "https://hacom.vn",
           site_logo: "/logo.png",
           site_favicon: "/favicon.ico",
           default_meta_title_pattern: "{title} | HACOM",
           product_meta_title_pattern: "{product_name} - {category} | HACOM",
-          category_meta_title_pattern: "{category_name} - {description} | HACOM",
+          category_meta_title_pattern:
+            "{category_name} - {description} | HACOM",
           auto_generate_meta_description: true,
-          meta_description_length: 160
+          meta_description_length: 160,
         },
         social: {
           facebook_app_id: "",
@@ -277,7 +280,7 @@ export const seoController = {
           youtube_url: "",
           instagram_url: "",
           tiktok_url: "",
-          default_og_image: "/og-image.jpg"
+          default_og_image: "/og-image.jpg",
         },
         analytics: {
           google_analytics_id: "",
@@ -287,7 +290,7 @@ export const seoController = {
           facebook_pixel_id: "",
           hotjar_id: "",
           google_ads_id: "",
-          enable_analytics: true
+          enable_analytics: true,
         },
         schema: {
           organization_name: "HACOM",
@@ -302,7 +305,7 @@ export const seoController = {
           enable_organization_schema: true,
           enable_breadcrumb_schema: true,
           enable_product_schema: true,
-          enable_review_schema: true
+          enable_review_schema: true,
         },
         technical: {
           enable_compression: true,
@@ -315,15 +318,15 @@ export const seoController = {
           sitemap_include_images: true,
           sitemap_include_videos: true,
           sitemap_max_urls: 50000,
-          robots_txt_custom: ""
-        }
+          robots_txt_custom: "",
+        },
       };
 
       // Merge default settings with database settings
-      Object.keys(defaultSettings).forEach(category => {
+      Object.keys(defaultSettings).forEach((category) => {
         organizedSettings[category] = {
           ...defaultSettings[category],
-          ...organizedSettings[category]
+          ...organizedSettings[category],
         };
       });
 
@@ -360,12 +363,12 @@ export const seoController = {
       if (existing.length > 0) {
         // Update existing settings
         const updates = [
-          ['site_title', site_title, 'general'],
-          ['site_description', site_description, 'general'],
-          ['keywords', keywords, 'general'],
-          ['robots_txt', robots_txt, 'technical'],
-          ['meta_author', meta_author, 'general'],
-          ['og_image', og_image, 'social']
+          ["site_title", site_title, "general"],
+          ["site_description", site_description, "general"],
+          ["keywords", keywords, "general"],
+          ["robots_txt", robots_txt, "technical"],
+          ["meta_author", meta_author, "general"],
+          ["og_image", og_image, "social"],
         ];
 
         for (const [key, value, category] of updates) {
@@ -376,25 +379,25 @@ export const seoController = {
                setting_value = VALUES(setting_value),
                category = VALUES(category),
                updated_at = NOW()`,
-            [key, value, category]
+            [key, value, category],
           );
         }
       } else {
         // Insert new settings
         const inserts = [
-          ['site_title', site_title, 'general'],
-          ['site_description', site_description, 'general'], 
-          ['keywords', keywords, 'general'],
-          ['robots_txt', robots_txt, 'technical'],
-          ['meta_author', meta_author, 'general'],
-          ['og_image', og_image, 'social']
+          ["site_title", site_title, "general"],
+          ["site_description", site_description, "general"],
+          ["keywords", keywords, "general"],
+          ["robots_txt", robots_txt, "technical"],
+          ["meta_author", meta_author, "general"],
+          ["og_image", og_image, "social"],
         ];
 
         for (const [key, value, category] of inserts) {
           await executeQuery(
             `INSERT INTO seo_settings (setting_key, setting_value, category, created_at, updated_at, is_active)
              VALUES (?, ?, ?, NOW(), NOW(), 1)`,
-            [key, value, category]
+            [key, value, category],
           );
         }
       }
@@ -426,18 +429,22 @@ export const seoController = {
         if (existingCount[0].count === 0) {
           // Insert default settings
           const defaultSettings = [
-            ['site_name', 'HACOM - Máy tính, Laptop, Gaming Gear', 'general'],
-            ['site_url', 'https://hacom.vn', 'general'],
-            ['site_description', 'HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.', 'general'],
-            ['enable_sitemap', '1', 'technical'],
-            ['enable_analytics', '1', 'analytics']
+            ["site_name", "HACOM - Máy tính, Laptop, Gaming Gear", "general"],
+            ["site_url", "https://hacom.vn", "general"],
+            [
+              "site_description",
+              "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+              "general",
+            ],
+            ["enable_sitemap", "1", "technical"],
+            ["enable_analytics", "1", "analytics"],
           ];
 
           for (const [key, value, category] of defaultSettings) {
             await executeQuery(
               `INSERT INTO seo_settings (setting_key, setting_value, category, created_at, updated_at, is_active)
                VALUES (?, ?, ?, NOW(), NOW(), 1)`,
-              [key, value, category]
+              [key, value, category],
             );
           }
         }
@@ -449,7 +456,7 @@ export const seoController = {
       const flatSettings = [];
 
       Object.keys(body).forEach((category) => {
-        if (body[category] && typeof body[category] === 'object') {
+        if (body[category] && typeof body[category] === "object") {
           Object.keys(body[category]).forEach((key) => {
             let value = body[category][key];
 
@@ -483,21 +490,21 @@ export const seoController = {
              category = VALUES(category),
              updated_at = NOW(),
              is_active = 1`,
-          [setting.key, setting.value, setting.category]
+          [setting.key, setting.value, setting.category],
         );
       }
 
       res.json({
         success: true,
         message: "SEO settings saved successfully",
-        saved_count: flatSettings.length
+        saved_count: flatSettings.length,
       });
     } catch (error) {
       console.error("Failed to save SEO settings:", error);
       res.status(500).json({
         success: false,
         message: "Failed to save SEO settings",
-        error: error.message
+        error: error.message,
       });
     }
   },
