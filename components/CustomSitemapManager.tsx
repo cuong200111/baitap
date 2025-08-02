@@ -94,6 +94,7 @@ export default function CustomSitemapManager({
   // Fetch sitemaps
   const fetchSitemaps = async () => {
     try {
+      console.log('Fetching sitemaps with token:', authToken ? 'exists' : 'missing');
       const response = await fetch(`${Domain}/api/custom-sitemaps/admin`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -101,11 +102,21 @@ export default function CustomSitemapManager({
         },
       });
 
+      console.log('Response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
+        console.log('Response data:', data);
         if (data.success) {
           setSitemaps(data.data);
+        } else {
+          console.error('API returned success: false', data);
+          toast.error(data.message || 'Không thể tải sitemap');
         }
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Response not ok:', response.status, errorData);
+        toast.error(errorData.message || `Lỗi: ${response.status}`);
       }
     } catch (error) {
       console.error("Error fetching custom sitemaps:", error);
