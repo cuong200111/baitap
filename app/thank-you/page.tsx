@@ -76,9 +76,19 @@ export default function ThankYouPage() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(`/api/orders/${orderId}`);
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${Domain}/api/orders/${orderId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          setError("Phiên đăng nhập đã hết hạn");
+          return;
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
