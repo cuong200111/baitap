@@ -16,7 +16,7 @@ import devRoutes from "./routes/dev.js";
 
 // Import new routes
 import adminRoutes from "./routes/admin.js";
-// import robotsApi from "./routes/robots.js";
+import robotsRoutes from "./routes/robots.js";
 import debugRoutes from "./routes/debug.js";
 import searchRoutes from "./routes/search.js";
 import locationsRoutes from "./routes/locations.js";
@@ -28,7 +28,11 @@ import seoRoutes from "./routes/seo.js";
 import utilsRoutes from "./routes/utils.js";
 import configRoutes from "./routes/config.js";
 import sitemapRouter from "./routes/sitemap.js";
+import sitemapIndexRouter from "./routes/sitemap-index.js";
 import addressesRoutes from "./routes/addresses.js";
+import initRoutes from "./routes/init.js";
+import customSitemapsRoutes from "./routes/custom-sitemaps.js";
+import testSitemapRoutes from "./routes/test-sitemap.js";
 dotenv.config();
 
 const app = express();
@@ -98,8 +102,14 @@ app.use("/api/seo", seoRoutes);
 app.use("/api/utils", utilsRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/addresses", addressesRoutes);
+app.use("/api/init", initRoutes);
+app.use("/api/custom-sitemaps", customSitemapsRoutes);
+app.use("/api/test-sitemap", testSitemapRoutes);
 
-// Serve robots.txt and sitemap.xml
+// Note: robots.txt and sitemap.xml are now served by Next.js frontend
+// Backend only provides data APIs
+
+// Legacy sitemeta routes (kept for compatibility)
 app.use("/", sitemetaRoutes);
 
 // Test order update endpoint (should be moved to debug in production)

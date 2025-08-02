@@ -156,7 +156,7 @@ export default function TrackOrderPage() {
         };
         setOrderInfo(mockOrder);
       } else {
-        setError("Không tìm thấy đơn h��ng với thông tin đã nhập");
+        setError("Không tìm thấy đơn hàng với thông tin đã nhập");
       }
     } catch (error) {
       console.error("Failed to track order:", error);

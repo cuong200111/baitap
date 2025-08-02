@@ -495,7 +495,7 @@ export default function CheckoutPage() {
             {/* Order Items */}
             <Card>
               <CardHeader>
-                <CardTitle>Đơn hàng của bạn</CardTitle>
+                <CardTitle>��ơn hàng của bạn</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

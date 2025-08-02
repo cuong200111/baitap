@@ -127,8 +127,8 @@ export function Header() {
       {/* Top banner */}
       <div className="bg-red-600 text-white text-center py-2 text-sm">
         <div className="container mx-auto px-4">
-          🔥 KHUYẾN MÃI HOT: Gi��m đến 50% cho tất cả s���n phẩm Gaming - Miễn
-          phí giao hàng toàn quốc
+          🔥 KHUYẾN MÃI HOT: Giảm đến 50% cho tất cả sản phẩm Gaming - Miễn phí
+          giao hàng toàn quốc
         </div>
       </div>
 

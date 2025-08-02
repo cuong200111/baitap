@@ -152,7 +152,7 @@ export default function CategoriesPage() {
       loadCategories();
     } catch (error) {
       console.error("Failed to save category:", error);
-      toast.error("Kh��ng thể lưu danh mục");
+      toast.error("Không thể lưu danh mục");
     } finally {
       setSubmitting(false);
     }
@@ -494,7 +494,7 @@ export default function CategoriesPage() {
                       <FolderTree className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                       <p>Chưa có danh mục nào</p>
                       <p className="text-sm">
-                        Thêm danh mục đ��u tiên để bắt đầu
+                        Thêm danh mục đầu tiên để bắt đầu
                       </p>
                     </div>
                   </TableCell>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "de": "concurrently \"npm run frontend:dev\" \"npm run backend:dev\"",
+    "de": "concurrently \"npm run dev\" \"npm run backend:dev\"",
     "dev:dual": "concurrently \"npm run frontend:dev\" \"npm run frontend:dev2\" \"npm run backend:dev\"",
     "dev": "next dev -p 3000",
     "frontend:dev2": "next dev -p 3000",
