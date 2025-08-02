@@ -15,6 +15,7 @@ import {
   MapPin,
   Phone,
   Mail,
+  RefreshCw,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -210,7 +211,7 @@ export default function OrdersPage() {
             <Alert className="mb-6 border-green-200 bg-green-50">
               <CheckCircle className="h-4 w-4 text-green-600" />
               <AlertDescription className="text-green-800">
-                <strong>Đặt hàng thành công!</strong> Mã đơn hàng của bạn là{" "}
+                <strong>Đặt hàng thành c��ng!</strong> Mã đơn hàng của bạn là{" "}
                 <strong>{orderNumber}</strong>. Chúng tôi sẽ liên hệ với bạn sớm
                 nhất.
               </AlertDescription>
