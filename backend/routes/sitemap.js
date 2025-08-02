@@ -162,47 +162,90 @@ router.get("/sitemap.xml", async (req, res) => {
       });
     }
 
-    // 5. Products
+    // 5. Products với thông tin đ���y đủ
     const products = await executeQuery(
       `
-      SELECT id, slug, updated_at, images, name
-      FROM products 
-      WHERE status = 'active'
-      ORDER BY updated_at DESC
+      SELECT p.id, p.slug, p.name, p.short_description, p.price, p.sale_price,
+             p.images, p.videos, p.updated_at, p.featured, p.view_count,
+             c.name as category_name
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.status = 'active' AND p.stock_quantity > 0
+      ORDER BY p.featured DESC, p.view_count DESC, p.updated_at DESC
       LIMIT ?
     `,
-      [maxUrls - 100 - staticPages.length - 1]
+      [maxUrls - 150 - staticPages.length - 1]
     );
 
     if (Array.isArray(products)) {
       products.forEach((product) => {
         const lastmod = product.updated_at
-          ? new Date(product.updated_at).toISOString().split("T")[0]
-          : new Date().toISOString().split("T")[0];
+          ? new Date(product.updated_at).toISOString()
+          : new Date().toISOString();
+
+        // Priority cao hơn cho featured products
+        const priority = product.featured ? "0.8" : "0.7";
+
+        // Change frequency dựa trên view count
+        const changefreq = product.view_count > 100 ? "daily" : "weekly";
 
         xml += `  <url>
     <loc>${escapeXml(baseUrl)}/products/${product.id}</loc>
     <lastmod>${lastmod}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>`;
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+    <mobile:mobile/>`;
 
-        // Include images nếu có
+        // Include images với thông tin chi tiết
         if (includeImages && product.images) {
           try {
             const images = JSON.parse(product.images);
             if (Array.isArray(images)) {
-              images.slice(0, 5).forEach((imageUrl) => {
+              images.slice(0, 10).forEach((imageUrl, index) => {
                 const fullImageUrl = imageUrl.startsWith("http")
                   ? imageUrl
                   : `${baseUrl}${imageUrl}`;
+
+                const imageTitle = index === 0
+                  ? `${product.name} - ${product.category_name || 'HACOM'}`
+                  : `${product.name} - Hình ${index + 1}`;
+
                 xml += `
     <image:image>
       <image:loc>${escapeXml(fullImageUrl)}</image:loc>
-      <image:title>${escapeXml(product.name || "")}</image:title>
-      <image:caption>${escapeXml(
-        (product.name || "") + " - HACOM"
-      )}</image:caption>
+      <image:title>${escapeXml(imageTitle)}</image:title>
+      <image:caption>${escapeXml(product.short_description || product.name || "")}</image:caption>
+      <image:geo_location>Vietnam</image:geo_location>
+      <image:license>${escapeXml(baseUrl)}/terms</image:license>
     </image:image>`;
+              });
+            }
+          } catch (e) {
+            // ignore invalid JSON
+          }
+        }
+
+        // Include videos nếu có
+        if (includeVideos && product.videos) {
+          try {
+            const videos = JSON.parse(product.videos);
+            if (Array.isArray(videos)) {
+              videos.slice(0, 3).forEach((videoUrl) => {
+                const fullVideoUrl = videoUrl.startsWith("http")
+                  ? videoUrl
+                  : `${baseUrl}${videoUrl}`;
+
+                xml += `
+    <video:video>
+      <video:thumbnail_loc>${escapeXml(product.images ? JSON.parse(product.images)[0] : "")}</video:thumbnail_loc>
+      <video:title>${escapeXml(product.name + " - Video Review")}</video:title>
+      <video:description>${escapeXml(product.short_description || product.name || "")}</video:description>
+      <video:content_loc>${escapeXml(fullVideoUrl)}</video:content_loc>
+      <video:duration>120</video:duration>
+      <video:publication_date>${lastmod}</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>`;
               });
             }
           } catch (e) {
