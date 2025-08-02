@@ -256,7 +256,7 @@ export default function ProfilePage() {
         { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
         { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
         { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
-        { code: 36, name: "Thái Bình", full_name: "Tỉnh Th��i Bình" },
+        { code: 36, name: "Thái Bình", full_name: "Tỉnh Thái Bình" },
         { code: 37, name: "Hà Nam", full_name: "Tỉnh Hà Nam" },
         { code: 38, name: "Nam Định", full_name: "Tỉnh Nam Định" },
         { code: 40, name: "Ninh Bình", full_name: "Tỉnh Ninh Bình" },
@@ -1182,7 +1182,7 @@ export default function ProfilePage() {
           {
             code: 9307,
             name: "Vĩnh Hòa",
-            full_name: "Phường Vĩnh Hòa",
+            full_name: "Phư���ng Vĩnh Hòa",
             district_code: 260,
           },
           {
