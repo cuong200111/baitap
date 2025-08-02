@@ -1091,7 +1091,7 @@ export default function AdvancedSeoDashboard() {
               </Card>
 
               {/* Traffic Trends */}
-              {performance.trafficTrends.length > 0 && (
+              {(performance.trafficTrends?.length || 0) > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
