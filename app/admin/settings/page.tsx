@@ -381,7 +381,30 @@ export default function SettingsPage() {
   const loadSettings = async () => {
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để xem cài đặt");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(`${API_DOMAIN}/api/admin/settings`, {
+        headers,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setSettings(data.data);
+        }
+      } else {
+        console.error("Failed to load settings:", response.status);
+      }
     } catch (error) {
       console.error("Failed to load settings:", error);
       toast.error("Không thể tải cài đặt");
@@ -574,8 +597,30 @@ export default function SettingsPage() {
   const handleSaveSettings = async () => {
     try {
       setSaving(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Đã lưu cài đặt thành công");
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để lưu cài đặt");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(`${API_DOMAIN}/api/admin/settings`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(settings),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Đã lưu cài đặt thành công");
+      } else {
+        toast.error("Có lỗi xảy ra khi lưu cài đặt");
+      }
     } catch (error) {
       console.error("Failed to save settings:", error);
       toast.error("Có lỗi xảy ra khi lưu cài đặt");

@@ -180,7 +180,7 @@ export default function ReportsPage() {
       // Load sales data
       try {
         const salesResponse = await fetch(
-          `/api/admin/reports/sales?period=${selectedPeriod}`,
+          `${API_DOMAIN}/api/admin/reports/sales?period=${selectedPeriod}`,
           {
             headers,
           },

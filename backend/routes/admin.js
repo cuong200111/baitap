@@ -3,6 +3,7 @@ import { adminController } from "../controllers/adminController.js";
 import { reportsController } from "../controllers/reportsController.js";
 import { shippingController } from "../controllers/shippingController.js";
 import { seoController } from "../controllers/seoController.js";
+import { settingsController } from "../controllers/settingsController.js";
 import { authenticateToken, requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -57,5 +58,11 @@ router.post("/warehouses", shippingController.createWarehouse);
 router.get("/reports/customers", reportsController.getCustomerReports);
 router.get("/reports/products", reportsController.getProductReports);
 router.get("/reports/sales", reportsController.getSalesReports);
+
+// Settings Management
+router.get("/settings", settingsController.getSettings);
+router.post("/settings", settingsController.saveSettings);
+router.get("/settings/:key", settingsController.getSetting);
+router.put("/settings/:key", settingsController.updateSetting);
 
 export default router;
