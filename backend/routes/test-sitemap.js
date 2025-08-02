@@ -1,6 +1,7 @@
 import express from "express";
 import { pool } from "../database/connection.js";
 import { authenticateToken } from "../middleware/auth.js";
+import { createSeoAnalyticsTable } from "../database/migrate-seo-analytics.js";
 
 const router = express.Router();
 
