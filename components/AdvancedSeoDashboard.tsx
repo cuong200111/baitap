@@ -1162,7 +1162,9 @@ export default function AdvancedSeoDashboard() {
 
         {/* Sitemap Management Tab */}
         <TabsContent value="sitemap" className="space-y-6">
-          <CustomSitemapManager authToken={localStorage.getItem('token') || undefined} />
+          <CustomSitemapManager
+            authToken={localStorage.getItem("token") || undefined}
+          />
 
           <Card>
             <CardHeader>
@@ -1176,7 +1178,9 @@ export default function AdvancedSeoDashboard() {
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Main Sitemap Index</h4>
-                    <p className="text-sm text-muted-foreground">Sitemap chính chứa tất cả các sitemap con</p>
+                    <p className="text-sm text-muted-foreground">
+                      Sitemap chính chứa tất cả các sitemap con
+                    </p>
                   </div>
                   <a
                     href="/sitemap.xml"
@@ -1192,7 +1196,9 @@ export default function AdvancedSeoDashboard() {
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Static Pages Sitemap</h4>
-                    <p className="text-sm text-muted-foreground">Trang chính, sản phẩm, đăng nhập...</p>
+                    <p className="text-sm text-muted-foreground">
+                      Trang chính, sản phẩm, đăng nhập...
+                    </p>
                   </div>
                   <a
                     href="/main-sitemap.xml"
@@ -1208,7 +1214,9 @@ export default function AdvancedSeoDashboard() {
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Categories Sitemap</h4>
-                    <p className="text-sm text-muted-foreground">Tất cả danh mục sản phẩm (Priority: 1.0)</p>
+                    <p className="text-sm text-muted-foreground">
+                      Tất cả danh mục sản phẩm (Priority: 1.0)
+                    </p>
                   </div>
                   <a
                     href="/categories-sitemap.xml"
@@ -1224,7 +1232,9 @@ export default function AdvancedSeoDashboard() {
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Products Sitemap</h4>
-                    <p className="text-sm text-muted-foreground">Tất cả sản phẩm (Priority: 1.0)</p>
+                    <p className="text-sm text-muted-foreground">
+                      Tất cả sản phẩm (Priority: 1.0)
+                    </p>
                   </div>
                   <a
                     href="/products-sitemap.xml"
@@ -1240,7 +1250,9 @@ export default function AdvancedSeoDashboard() {
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <h4 className="font-medium">Custom URLs Sitemap</h4>
-                    <p className="text-sm text-muted-foreground">URLs tùy chỉnh do bạn thêm (Priority: 0.2)</p>
+                    <p className="text-sm text-muted-foreground">
+                      URLs tùy chỉnh do bạn thêm (Priority: 0.2)
+                    </p>
                   </div>
                   <a
                     href="/all-sitemap.xml"

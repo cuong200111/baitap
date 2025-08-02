@@ -59,7 +59,7 @@ interface CustomSitemap {
   image_title?: string;
   image_caption?: string;
   mobile_friendly: boolean;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   created_at: string;
   updated_at: string;
 }
@@ -68,23 +68,27 @@ interface CustomSitemapManagerProps {
   authToken?: string;
 }
 
-export default function CustomSitemapManager({ authToken }: CustomSitemapManagerProps) {
+export default function CustomSitemapManager({
+  authToken,
+}: CustomSitemapManagerProps) {
   const [sitemaps, setSitemaps] = useState<CustomSitemap[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingSitemap, setEditingSitemap] = useState<CustomSitemap | null>(null);
+  const [editingSitemap, setEditingSitemap] = useState<CustomSitemap | null>(
+    null,
+  );
   const [formData, setFormData] = useState({
-    url: '',
-    title: '',
-    description: '',
+    url: "",
+    title: "",
+    description: "",
     priority: 0.2,
-    changefreq: 'monthly',
-    last_modified: '',
-    image_url: '',
-    image_title: '',
-    image_caption: '',
+    changefreq: "monthly",
+    last_modified: "",
+    image_url: "",
+    image_title: "",
+    image_caption: "",
     mobile_friendly: true,
-    status: 'active' as 'active' | 'inactive'
+    status: "active" as "active" | "inactive",
   });
 
   // Fetch sitemaps
@@ -92,8 +96,8 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
     try {
       const response = await fetch(`${Domain}/api/custom-sitemaps/admin`, {
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
         },
       });
 
@@ -104,8 +108,8 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
         }
       }
     } catch (error) {
-      console.error('Error fetching custom sitemaps:', error);
-      toast.error('Không thể tải danh sách sitemap');
+      console.error("Error fetching custom sitemaps:", error);
+      toast.error("Không thể tải danh sách sitemap");
     } finally {
       setLoading(false);
     }
@@ -120,17 +124,17 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
   // Reset form
   const resetForm = () => {
     setFormData({
-      url: '',
-      title: '',
-      description: '',
+      url: "",
+      title: "",
+      description: "",
       priority: 0.2,
-      changefreq: 'monthly',
-      last_modified: '',
-      image_url: '',
-      image_title: '',
-      image_caption: '',
+      changefreq: "monthly",
+      last_modified: "",
+      image_url: "",
+      image_title: "",
+      image_caption: "",
       mobile_friendly: true,
-      status: 'active'
+      status: "active",
     });
     setEditingSitemap(null);
   };
@@ -139,15 +143,17 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
   const handleSubmit = async () => {
     try {
       const isEditing = editingSitemap !== null;
-      const url = isEditing 
+      const url = isEditing
         ? `${Domain}/api/custom-sitemaps/${editingSitemap.id}`
         : `${Domain}/api/custom-sitemaps`;
-      
-      const method = isEditing ? 'PUT' : 'POST';
+
+      const method = isEditing ? "PUT" : "POST";
 
       const submitData = { ...formData };
       if (submitData.last_modified && submitData.last_modified.trim()) {
-        submitData.last_modified = new Date(submitData.last_modified).toISOString();
+        submitData.last_modified = new Date(
+          submitData.last_modified,
+        ).toISOString();
       } else {
         delete submitData.last_modified;
       }
@@ -155,8 +161,8 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
       const response = await fetch(url, {
         method,
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(submitData),
       });
@@ -164,43 +170,45 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
       const data = await response.json();
 
       if (response.ok && data.success) {
-        toast.success(isEditing ? 'Cập nhật sitemap thành công' : 'Thêm sitemap thành công');
+        toast.success(
+          isEditing ? "Cập nhật sitemap thành công" : "Thêm sitemap thành công",
+        );
         setIsDialogOpen(false);
         resetForm();
         fetchSitemaps();
       } else {
-        toast.error(data.message || 'Có lỗi xảy ra');
+        toast.error(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
-      console.error('Error saving sitemap:', error);
-      toast.error('Không thể lưu sitemap');
+      console.error("Error saving sitemap:", error);
+      toast.error("Không thể lưu sitemap");
     }
   };
 
   // Handle delete
   const handleDelete = async (id: number) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa sitemap này?')) return;
+    if (!confirm("Bạn có chắc chắn muốn xóa sitemap này?")) return;
 
     try {
       const response = await fetch(`${Domain}/api/custom-sitemaps/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
         },
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        toast.success('Xóa sitemap thành công');
+        toast.success("Xóa sitemap thành công");
         fetchSitemaps();
       } else {
-        toast.error(data.message || 'Không thể xóa sitemap');
+        toast.error(data.message || "Không thể xóa sitemap");
       }
     } catch (error) {
-      console.error('Error deleting sitemap:', error);
-      toast.error('Không thể xóa sitemap');
+      console.error("Error deleting sitemap:", error);
+      toast.error("Không thể xóa sitemap");
     }
   };
 
@@ -209,16 +217,18 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
     setEditingSitemap(sitemap);
     setFormData({
       url: sitemap.url,
-      title: sitemap.title || '',
-      description: sitemap.description || '',
+      title: sitemap.title || "",
+      description: sitemap.description || "",
       priority: sitemap.priority,
       changefreq: sitemap.changefreq,
-      last_modified: sitemap.last_modified ? sitemap.last_modified.split('T')[0] : '',
-      image_url: sitemap.image_url || '',
-      image_title: sitemap.image_title || '',
-      image_caption: sitemap.image_caption || '',
+      last_modified: sitemap.last_modified
+        ? sitemap.last_modified.split("T")[0]
+        : "",
+      image_url: sitemap.image_url || "",
+      image_title: sitemap.image_title || "",
+      image_caption: sitemap.image_caption || "",
       mobile_friendly: sitemap.mobile_friendly,
-      status: sitemap.status
+      status: sitemap.status,
     });
     setIsDialogOpen(true);
   };
@@ -257,7 +267,7 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
-                  {editingSitemap ? 'Sửa sitemap' : 'Thêm sitemap mới'}
+                  {editingSitemap ? "Sửa sitemap" : "Thêm sitemap mới"}
                 </DialogTitle>
                 <DialogDescription>
                   Nhập thông tin cho URL muốn thêm vào sitemap
@@ -271,7 +281,9 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                     id="url"
                     placeholder="https://example.com/page"
                     value={formData.url}
-                    onChange={(e) => setFormData(prev => ({ ...prev, url: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, url: e.target.value }))
+                    }
                   />
                 </div>
 
@@ -282,7 +294,12 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                       id="title"
                       placeholder="Tiêu đề trang"
                       value={formData.title}
-                      onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          title: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                   <div className="grid gap-2">
@@ -294,7 +311,12 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                       max="1"
                       step="0.1"
                       value={formData.priority}
-                      onChange={(e) => setFormData(prev => ({ ...prev, priority: parseFloat(e.target.value) }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          priority: parseFloat(e.target.value),
+                        }))
+                      }
                     />
                   </div>
                 </div>
@@ -305,14 +327,24 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                     id="description"
                     placeholder="Mô tả nội dung trang"
                     value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="changefreq">Tần suất cập nhật</Label>
-                    <Select value={formData.changefreq} onValueChange={(value) => setFormData(prev => ({ ...prev, changefreq: value }))}>
+                    <Select
+                      value={formData.changefreq}
+                      onValueChange={(value) =>
+                        setFormData((prev) => ({ ...prev, changefreq: value }))
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -333,7 +365,12 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                       id="last_modified"
                       type="date"
                       value={formData.last_modified}
-                      onChange={(e) => setFormData(prev => ({ ...prev, last_modified: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          last_modified: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                 </div>
@@ -344,7 +381,12 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                     id="image_url"
                     placeholder="https://example.com/image.jpg"
                     value={formData.image_url}
-                    onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        image_url: e.target.value,
+                      }))
+                    }
                   />
                 </div>
 
@@ -355,7 +397,12 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                       id="image_title"
                       placeholder="Tiêu đề cho hình ảnh"
                       value={formData.image_title}
-                      onChange={(e) => setFormData(prev => ({ ...prev, image_title: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          image_title: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                   <div className="grid gap-2">
@@ -364,7 +411,12 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                       id="image_caption"
                       placeholder="Chú thích cho hình ảnh"
                       value={formData.image_caption}
-                      onChange={(e) => setFormData(prev => ({ ...prev, image_caption: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          image_caption: e.target.value,
+                        }))
+                      }
                     />
                   </div>
                 </div>
@@ -374,13 +426,23 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                     <Switch
                       id="mobile_friendly"
                       checked={formData.mobile_friendly}
-                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, mobile_friendly: checked }))}
+                      onCheckedChange={(checked) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          mobile_friendly: checked,
+                        }))
+                      }
                     />
                     <Label htmlFor="mobile_friendly">Tương thích mobile</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Label htmlFor="status">Trạng thái:</Label>
-                    <Select value={formData.status} onValueChange={(value: 'active' | 'inactive') => setFormData(prev => ({ ...prev, status: value }))}>
+                    <Select
+                      value={formData.status}
+                      onValueChange={(value: "active" | "inactive") =>
+                        setFormData((prev) => ({ ...prev, status: value }))
+                      }
+                    >
                       <SelectTrigger className="w-32">
                         <SelectValue />
                       </SelectTrigger>
@@ -394,11 +456,14 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                >
                   Hủy
                 </Button>
                 <Button onClick={handleSubmit}>
-                  {editingSitemap ? 'Cập nhật' : 'Thêm mới'}
+                  {editingSitemap ? "Cập nhật" : "Thêm mới"}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -421,7 +486,10 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
             <TableBody>
               {sitemaps.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell
+                    colSpan={6}
+                    className="text-center py-8 text-muted-foreground"
+                  >
                     Chưa có sitemap tùy chỉnh nào
                   </TableCell>
                 </TableRow>
@@ -436,7 +504,9 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline text-sm"
                         >
-                          {sitemap.url.length > 50 ? sitemap.url.substring(0, 50) + '...' : sitemap.url}
+                          {sitemap.url.length > 50
+                            ? sitemap.url.substring(0, 50) + "..."
+                            : sitemap.url}
                         </a>
                         <ExternalLink className="h-3 w-3" />
                       </div>
@@ -446,7 +516,9 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                         {sitemap.title ? (
                           <span className="text-sm">{sitemap.title}</span>
                         ) : (
-                          <span className="text-muted-foreground text-sm">Không có</span>
+                          <span className="text-muted-foreground text-sm">
+                            Không có
+                          </span>
                         )}
                       </div>
                     </TableCell>
@@ -456,13 +528,15 @@ export default function CustomSitemapManager({ authToken }: CustomSitemapManager
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">
-                        {sitemap.changefreq}
-                      </Badge>
+                      <Badge variant="outline">{sitemap.changefreq}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={sitemap.status === 'active' ? 'default' : 'secondary'}>
-                        {sitemap.status === 'active' ? (
+                      <Badge
+                        variant={
+                          sitemap.status === "active" ? "default" : "secondary"
+                        }
+                      >
+                        {sitemap.status === "active" ? (
                           <>
                             <CheckCircle className="h-3 w-3 mr-1" />
                             Kích hoạt

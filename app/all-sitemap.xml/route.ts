@@ -27,7 +27,10 @@ export async function GET(request: NextRequest) {
     // Parse custom sitemaps
     if (customSitemapsRes?.ok) {
       const customSitemapsData = await customSitemapsRes.json();
-      if (customSitemapsData.success && Array.isArray(customSitemapsData.data)) {
+      if (
+        customSitemapsData.success &&
+        Array.isArray(customSitemapsData.data)
+      ) {
         customSitemaps = customSitemapsData.data;
       }
     }
@@ -46,8 +49,8 @@ export async function GET(request: NextRequest) {
       const lastmod = sitemap.last_modified
         ? new Date(sitemap.last_modified).toISOString()
         : sitemap.updated_at
-        ? new Date(sitemap.updated_at).toISOString()
-        : new Date().toISOString();
+          ? new Date(sitemap.updated_at).toISOString()
+          : new Date().toISOString();
 
       // Priority is always 0.2 for custom sitemaps as requested
       const priority = "0.2";
@@ -55,7 +58,7 @@ export async function GET(request: NextRequest) {
       xml += `  <url>
     <loc>${escapeXml(sitemap.url)}</loc>
     <lastmod>${lastmod}</lastmod>
-    <changefreq>${sitemap.changefreq || 'monthly'}</changefreq>
+    <changefreq>${sitemap.changefreq || "monthly"}</changefreq>
     <priority>${priority}</priority>`;
 
       // Add mobile if enabled
