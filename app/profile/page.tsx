@@ -619,7 +619,7 @@ export default function ProfilePage() {
         // Provide fallback districts for major provinces
         const fallbackDistricts = {
           1: [
-            // H�� Nội
+            // Hà Nội
             {
               code: 1,
               name: "Ba Đình",
@@ -758,7 +758,7 @@ export default function ProfilePage() {
             {
               code: 776,
               name: "Quận Tân Phú",
-              full_name: "Quận Tân Phú",
+              full_name: "Qu��n Tân Phú",
               province_code: 79,
             },
           ],
@@ -896,7 +896,7 @@ export default function ProfilePage() {
             {
               code: 262,
               name: "Cam Lâm",
-              full_name: "Huyện Cam L��m",
+              full_name: "Huyện Cam Lâm",
               province_code: 26,
             },
             {
@@ -1234,7 +1234,7 @@ export default function ProfilePage() {
           },
           {
             code: 4,
-            name: "Ph��ờng 4",
+            name: "Phường 4",
             full_name: "Phường 4",
             district_code: districtCode,
           },
@@ -1619,7 +1619,7 @@ export default function ProfilePage() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle className="text-center">Ảnh đ��i diện</CardTitle>
+                <CardTitle className="text-center">Ảnh đại diện</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <div className="relative inline-block">
