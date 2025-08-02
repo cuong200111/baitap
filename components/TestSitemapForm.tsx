@@ -149,6 +149,9 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
         </div>
 
         <div className="flex gap-2">
+          <Button onClick={handleDatabaseSetup} variant="secondary" className="flex-1">
+            🔧 DB Setup
+          </Button>
           <Button onClick={handleTestCreate} className="flex-1">
             🧪 Test Create
           </Button>
