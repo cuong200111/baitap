@@ -91,17 +91,11 @@ export function CartPopup({ cartCount }: CartPopupProps) {
     try {
       setUpdating(cartId);
 
-      const response = await fetch(`${Domain}/api/cart`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart_id: cartId, quantity: newQuantity }),
-      });
+      const result = await cartApi.updateQuantity(cartId, newQuantity);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         await loadCartItems();
-        window.dispatchEvent(new Event("cartUpdated"));
+        cartUtils.triggerCartUpdate();
         toast.success("Cập nhật giỏ hàng thành công");
       } else {
         toast.error(data.message || "Có lỗi xảy ra");
