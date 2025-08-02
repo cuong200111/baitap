@@ -485,13 +485,14 @@ export default function AdvancedSeoDashboard() {
 
       {/* Main Dashboard Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="keywords">Keywords</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="content">Content</TabsTrigger>
           <TabsTrigger value="ai-recommendations">AI Insights</TabsTrigger>
           <TabsTrigger value="competitors">Competitors</TabsTrigger>
+          <TabsTrigger value="sitemap">Sitemap</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
