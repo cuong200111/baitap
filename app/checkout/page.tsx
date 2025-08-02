@@ -307,6 +307,16 @@ export default function CheckoutPage() {
           </div>
         </div>
 
+        {/* Address loaded notification */}
+        {addressLoadedFromProfile && (
+          <Alert className="mb-6">
+            <CheckCircle className="h-4 w-4" />
+            <AlertDescription>
+              Địa chỉ đã được tự động điền từ thông tin trong hồ sơ của bạn. Bạn có thể chỉnh sửa nếu cần.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Customer Information Form */}
           <div className="space-y-6">
