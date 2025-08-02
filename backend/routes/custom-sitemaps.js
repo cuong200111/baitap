@@ -84,8 +84,10 @@ router.post(
     body("url")
       .notEmpty()
       .withMessage("URL is required")
-      .isURL()
-      .withMessage("URL must be valid"),
+      .isURL({ protocols: ['http', 'https'], require_protocol: true })
+      .withMessage("URL must be valid (http:// or https://)")
+      .isLength({ max: 2000 })
+      .withMessage("URL too long"),
     body("title")
       .optional()
       .isLength({ max: 255 })
