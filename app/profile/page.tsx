@@ -269,7 +269,7 @@ export default function ProfilePage() {
         { code: 52, name: "Quảng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
         { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
         { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
-        { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thu��n" },
+        { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
         { code: 60, name: "Bình Thuận", full_name: "Tỉnh Bình Thuận" },
         { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
         { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
@@ -1776,7 +1776,7 @@ export default function ProfilePage() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                           <Label htmlFor="manual_province">
-                            Tỉnh/Th��nh phố
+                            Tỉnh/Thành phố
                           </Label>
                           <Input
                             id="manual_province"
