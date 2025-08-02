@@ -271,7 +271,7 @@ export default function ProfilePage() {
         { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
         { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
         { code: 60, name: "Bình Thuận", full_name: "Tỉnh Bình Thuận" },
-        { code: 62, name: "Kon Tum", full_name: "T���nh Kon Tum" },
+        { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
         { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
         { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
         { code: 67, name: "Đắk Nông", full_name: "Tỉnh Đắk Nông" },
@@ -290,8 +290,8 @@ export default function ProfilePage() {
         { code: 83, name: "Bến Tre", full_name: "Tỉnh Bến Tre" },
         { code: 84, name: "Trà Vinh", full_name: "Tỉnh Trà Vinh" },
         { code: 86, name: "Vĩnh Long", full_name: "Tỉnh Vĩnh Long" },
-        { code: 87, name: "Đồng Tháp", full_name: "Tỉnh Đồng Tháp" },
-        { code: 89, name: "An Giang", full_name: "T���nh An Giang" },
+        { code: 87, name: "Đồng Tháp", full_name: "T���nh Đồng Tháp" },
+        { code: 89, name: "An Giang", full_name: "Tỉnh An Giang" },
         { code: 91, name: "Kiên Giang", full_name: "Tỉnh Kiên Giang" },
         { code: 93, name: "Hậu Giang", full_name: "Tỉnh Hậu Giang" },
         { code: 94, name: "Sóc Trăng", full_name: "Tỉnh Sóc Trăng" },
@@ -943,7 +943,7 @@ export default function ProfilePage() {
             {
               code: provinceCode * 1000 + 3,
               name: "Huyện/Quận 3",
-              full_name: "Huyện/Qu��n 3",
+              full_name: "Huyện/Quận 3",
               province_code: provinceCode,
             },
           ],
@@ -1924,7 +1924,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Lock className="h-5 w-5" />
-                      Bảo m��t tài khoản
+                      Bảo mật tài khoản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
