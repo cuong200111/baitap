@@ -345,13 +345,17 @@ export const adminController = {
         // Count URLs in sitemap
         const urlCount = (sitemapContent.match(/<url>/g) || []).length;
 
-        // Log generation to analytics
-        await executeQuery(
-          `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
-           VALUES ('sitemap_generation', CURDATE(), 1, NOW())
-           ON DUPLICATE KEY UPDATE
-           page_views = page_views + 1, updated_at = NOW()`,
-        );
+        // Log generation to analytics (skip if table doesn't exist)
+        try {
+          await executeQuery(
+            `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
+             VALUES ('sitemap_generation', CURDATE(), 1, NOW())
+             ON DUPLICATE KEY UPDATE
+             page_views = page_views + 1`,
+          );
+        } catch (error) {
+          console.log('Analytics logging skipped (table may not exist):', error.message);
+        }
 
         res.json({
           success: true,
