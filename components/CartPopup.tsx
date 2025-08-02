@@ -19,9 +19,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice, getMediaUrl, Domain } from "@/config";
+import { formatPrice, getMediaUrl } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { cartApi, cartUtils } from "@/lib/cart-api";
 
 interface CartItem {
   id: number;
@@ -111,22 +112,16 @@ export function CartPopup({ cartCount }: CartPopupProps) {
     }
   };
 
-  const removeItem = async (cartId: number) => {
-    if (!user?.id) return;
-
+  const removeItem = async (cartItemId: number) => {
     try {
-      const response = await fetch(`${Domain}/api/cart?cart_id=${cartId}`, {
-        method: "DELETE",
-      });
+      const result = await cartApi.removeItem(cartItemId);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         await loadCartItems();
-        window.dispatchEvent(new Event("cartUpdated"));
+        cartUtils.triggerCartUpdate();
         toast.success("Đã xóa sản phẩm khỏi giỏ hàng");
       } else {
-        toast.error(data.message || "Có lỗi xảy ra");
+        toast.error(result.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Failed to remove item:", error);
