@@ -200,10 +200,21 @@ export default function OrdersPage() {
                 Theo dõi trạng thái và lịch sử đơn hàng
               </p>
             </div>
-            <Button variant="outline" onClick={() => router.push("/")}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Về trang chủ
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadOrders}
+                disabled={loading}
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Làm mới
+              </Button>
+              <Button variant="outline" onClick={() => router.push("/")}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Về trang chủ
+              </Button>
+            </div>
           </div>
 
           {/* Success Message */}
@@ -211,7 +222,7 @@ export default function OrdersPage() {
             <Alert className="mb-6 border-green-200 bg-green-50">
               <CheckCircle className="h-4 w-4 text-green-600" />
               <AlertDescription className="text-green-800">
-                <strong>Đặt hàng thành c��ng!</strong> Mã đơn hàng của bạn là{" "}
+                <strong>Đặt hàng thành công!</strong> Mã đơn hàng của bạn là{" "}
                 <strong>{orderNumber}</strong>. Chúng tôi sẽ liên hệ với bạn sớm
                 nhất.
               </AlertDescription>
