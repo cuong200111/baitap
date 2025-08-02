@@ -45,7 +45,33 @@ router.get("/", async (req, res) => {
 
     query += " ORDER BY c.sort_order ASC, c.name ASC";
 
-    const categories = await executeQuery(query, params);
+    console.log("📂 Fetching categories with query:", query);
+    console.log("📂 Query params:", params);
+
+    let categories;
+    let retryCount = 0;
+    const maxRetries = 3;
+
+    while (retryCount < maxRetries) {
+      try {
+        categories = await executeQuery(query, params);
+        break;
+      } catch (error) {
+        retryCount++;
+        console.error(`❌ Categories query attempt ${retryCount} failed:`, error.message);
+
+        if (retryCount >= maxRetries) {
+          throw error;
+        }
+
+        // Wait before retry
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+      }
+    }
+
+    if (!categories) {
+      throw new Error("Failed to fetch categories after retries");
+    }
 
     // If flat=true, return flat array
     if (flat === "true") {
