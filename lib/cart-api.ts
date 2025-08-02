@@ -47,9 +47,11 @@ export interface CartActionResponse {
     quantity: number;
     action: "added" | "updated";
   };
+  stock_status?: "out_of_stock" | "insufficient_stock" | "cart_limit_reached";
   current_in_cart?: number;
   available_stock?: number;
   max_can_add?: number;
+  requested_quantity?: number;
 }
 
 // Get session ID for guest users
