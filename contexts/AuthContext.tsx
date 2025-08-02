@@ -257,11 +257,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const value: AuthContextType = {
     user,
     loading,
+    initializing,
     login,
     register,
     logout,
     isAdmin: user?.role === "admin",
     isAuthenticated: !!user,
+    hasToken: !!getToken(),
     checkAuth,
     refreshUser,
   };
