@@ -240,7 +240,7 @@ export default function ProfilePage() {
         { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
         { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
         { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
-        { code: 6, name: "B��c Kạn", full_name: "Tỉnh Bắc Kạn" },
+        { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
         { code: 8, name: "Tuyên Quang", full_name: "Tỉnh Tuyên Quang" },
         { code: 10, name: "Lào Cai", full_name: "Tỉnh Lào Cai" },
         { code: 11, name: "Điện Biên", full_name: "Tỉnh Điện Biên" },
