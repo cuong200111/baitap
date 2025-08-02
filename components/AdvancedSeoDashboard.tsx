@@ -498,7 +498,7 @@ export default function AdvancedSeoDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {performance.keywordRankings
+                    {(performance.keywordRankings || [])
                       .slice(0, 5)
                       .map((keyword, index) => (
                         <div
