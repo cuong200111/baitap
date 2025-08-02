@@ -17,19 +17,38 @@ export async function GET(request: NextRequest) {
     // Get base URL from request
     const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
 
-    // Fetch products from backend API
+    // Get API URL with fallback
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000";
+    console.log("🔗 Fetching products from:", `${apiUrl}/api/products`);
+
+    // Fetch products from backend API with timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const productsRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN || "http://localhost:4000"}/api/products`,
+      `${apiUrl}/api/products`,
+      { signal: controller.signal }
     );
+
+    clearTimeout(timeoutId);
 
     let products: any[] = [];
 
     // Parse products
     if (productsRes?.ok) {
       const productsData = await productsRes.json();
+      console.log("📦 Products API response:", { success: productsData.success, count: productsData.data?.products?.length });
+
       if (productsData.success && Array.isArray(productsData.data?.products)) {
         products = productsData.data.products;
+        console.log(`✅ Found ${products.length} products for sitemap`);
+      } else {
+        console.log("❌ Invalid products data structure:", productsData);
       }
+    } else {
+      console.log(`❌ Products API failed: ${productsRes.status} ${productsRes.statusText}`);
+      const errorText = await productsRes.text();
+      console.log("❌ Error response:", errorText);
     }
 
     // Generate XML sitemap for products
