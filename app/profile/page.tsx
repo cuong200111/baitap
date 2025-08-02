@@ -424,7 +424,7 @@ export default function ProfilePage() {
           { code: 763, name: "Quận 4", full_name: "Quận 4", province_code: 79 },
         ],
         11: [
-          // Điện Biên
+          // ��iện Biên
           {
             code: 110,
             name: "Điện Biên Phủ",
@@ -943,7 +943,7 @@ export default function ProfilePage() {
             {
               code: provinceCode * 1000 + 3,
               name: "Huyện/Quận 3",
-              full_name: "Huyện/Quận 3",
+              full_name: "Huyện/Qu���n 3",
               province_code: provinceCode,
             },
           ],
@@ -1142,7 +1142,7 @@ export default function ProfilePage() {
           },
           {
             code: 6862,
-            name: "Phước Hòa",
+            name: "Phư��c Hòa",
             full_name: "Phường Phước Hòa",
             district_code: 200,
           },
@@ -1229,7 +1229,7 @@ export default function ProfilePage() {
           {
             code: 3,
             name: "Phường 3",
-            full_name: "Phư��ng 3",
+            full_name: "Phường 3",
             district_code: districtCode,
           },
           {
@@ -1589,7 +1589,7 @@ export default function ProfilePage() {
             </h2>
             <Button onClick={() => router.push("/")} variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Về trang chủ
+              V��� trang chủ
             </Button>
           </CardContent>
         </Card>
