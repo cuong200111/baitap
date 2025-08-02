@@ -78,6 +78,22 @@ interface KeywordRanking {
   url: string;
 }
 
+interface TrafficData {
+  date: string;
+  organicTraffic: number;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  avgPosition: number;
+}
+
+interface IndexingStatus {
+  totalPages: number;
+  indexedPages: number;
+  crawlErrors: number;
+  sitemapStatus: string;
+}
+
 interface CoreWebVitals {
   lcp: number;
   fid: number;
@@ -941,7 +957,7 @@ export default function AdvancedSeoDashboard() {
                             }
                           />
                           <p className="text-xs text-gray-500 mt-1">
-                            Target: ��� 100ms
+                            Target: ≤ 100ms
                           </p>
                         </div>
 
