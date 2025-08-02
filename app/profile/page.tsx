@@ -1127,7 +1127,7 @@ export default function ProfilePage() {
           },
           {
             code: 26749,
-            name: "Ph���m Ngũ Lão",
+            name: "Phạm Ngũ Lão",
             full_name: "Phường Phạm Ngũ Lão",
             district_code: 760,
           },
