@@ -73,7 +73,13 @@ export default function OrdersPage() {
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/orders?user_id=${user.id}&limit=50`);
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${Domain}/api/orders?user_id=${user.id}&limit=50`, {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
       const data = await response.json();
 
       console.log("Orders API response:", data);
