@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  initializing: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (
     email: string,
@@ -18,6 +19,7 @@ interface AuthContextType {
   logout: () => void;
   isAdmin: boolean;
   isAuthenticated: boolean;
+  hasToken: boolean;
   checkAuth: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
