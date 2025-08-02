@@ -428,7 +428,7 @@ export default function ProfilePage() {
           {
             code: 110,
             name: "Điện Biên Phủ",
-            full_name: "Th��nh phố Điện Biên Phủ",
+            full_name: "Thành phố Điện Biên Phủ",
             province_code: 11,
           },
           {
@@ -1434,7 +1434,7 @@ export default function ProfilePage() {
           "Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng",
         );
       } else {
-        toast.error("Có l��i xảy ra khi cập nhật thông tin. Vui lòng thử lại");
+        toast.error("Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại");
       }
     } finally {
       setUpdating(false);
