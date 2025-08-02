@@ -262,6 +262,17 @@ export default function CustomSitemapManager({
     );
   }
 
+  if (!authToken) {
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center p-6">
+          <AlertCircle className="h-6 w-6 text-yellow-500 mr-2" />
+          Vui lòng đăng nhập để quản lý sitemap
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
