@@ -26,6 +26,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { cartApi, cartUtils, CartItem, CartSummary } from "@/lib/cart-api";
 import { apiWrappers } from "@/lib/api-wrapper";
+import { API_CONFIG } from "@/lib/config-client";
 
 interface CustomerInfo {
   name: string;
