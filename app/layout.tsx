@@ -7,11 +7,11 @@ import StructuredData from "@/components/StructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seoSettings = await getSeoSettings();
-  
+
   return {
     title: {
       default: seoSettings.general.site_name,
-      template: `%s | ${seoSettings.general.site_name}`
+      template: `%s | ${seoSettings.general.site_name}`,
     },
     description: seoSettings.general.site_description,
     keywords: seoSettings.general.site_keywords,
@@ -20,11 +20,11 @@ export async function generateMetadata(): Promise<Metadata> {
     publisher: seoSettings.schema.organization_name,
     metadataBase: new URL(seoSettings.general.site_url),
     alternates: {
-      canonical: '/',
+      canonical: "/",
     },
     openGraph: {
-      type: 'website',
-      locale: 'vi_VN',
+      type: "website",
+      locale: "vi_VN",
       url: seoSettings.general.site_url,
       siteName: seoSettings.general.site_name,
       title: seoSettings.general.site_name,
@@ -39,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       site: seoSettings.social.twitter_site,
       creator: seoSettings.social.twitter_site,
     },
@@ -49,13 +49,13 @@ export async function generateMetadata(): Promise<Metadata> {
       googleBot: {
         index: true,
         follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
       },
     },
     verification: {
-      google: 'your-google-verification-code',
+      google: "your-google-verification-code",
     },
     icons: {
       icon: seoSettings.general.site_favicon,

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   try {
     // Fetch product data
     const response = await fetch(`${Domain}/api/products/${params.id}`, {
-      next: { revalidate: 300 } // Revalidate every 5 minutes
+      next: { revalidate: 300 }, // Revalidate every 5 minutes
     });
 
     if (!response.ok) {
@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         "Sản phẩm",
         undefined,
         undefined,
-        `/products/${params.id}`
+        `/products/${params.id}`,
       );
     }
 
     const data = await response.json();
-    
+
     if (!data.success || !data.data) {
       return await generateProductMetadata(
         "Sản phẩm không tồn tại",
@@ -34,33 +34,39 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         "Sản phẩm",
         undefined,
         undefined,
-        `/products/${params.id}`
+        `/products/${params.id}`,
       );
     }
 
     const product = data.data;
-    
+
     // Get the main image
     let productImage = undefined;
-    if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+    if (
+      product.images &&
+      Array.isArray(product.images) &&
+      product.images.length > 0
+    ) {
       productImage = product.images[0];
     }
 
     // Get category name (assuming it's in the product data)
-    const categoryName = product.category_name || product.category || "Sản phẩm";
+    const categoryName =
+      product.category_name || product.category || "Sản phẩm";
 
     return await generateProductMetadata(
       product.name,
-      product.description || product.short_description || `Mua ${product.name} chính hãng tại HACOM với giá tốt nhất.`,
+      product.description ||
+        product.short_description ||
+        `Mua ${product.name} chính hãng tại HACOM với giá tốt nhất.`,
       categoryName,
       product.price,
       productImage,
-      `/products/${params.id}`
+      `/products/${params.id}`,
     );
-
   } catch (error) {
     console.error("Error generating product metadata:", error);
-    
+
     // Fallback metadata
     return await generateProductMetadata(
       "Sản phẩm HACOM",
@@ -68,11 +74,15 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       "Sản phẩm",
       undefined,
       undefined,
-      `/products/${params.id}`
+      `/products/${params.id}`,
     );
   }
 }
 
-export default function ProductLayout({ children }: { children: React.ReactNode }) {
+export default function ProductLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <>{children}</>;
 }

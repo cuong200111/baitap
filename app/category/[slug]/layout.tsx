@@ -6,11 +6,15 @@ interface CategoryPageProps {
   children: React.ReactNode;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
   try {
     // Fetch category data
     const response = await fetch(`${Domain}/api/categories/${params.slug}`, {
-      next: { revalidate: 300 } // Revalidate every 5 minutes
+      next: { revalidate: 300 }, // Revalidate every 5 minutes
     });
 
     if (!response.ok) {
@@ -18,22 +22,22 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
         "Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
-        `/category/${params.slug}`
+        `/category/${params.slug}`,
       );
     }
 
     const data = await response.json();
-    
+
     if (!data.success || !data.data) {
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
         "Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
-        `/category/${params.slug}`
+        `/category/${params.slug}`,
       );
     }
 
     const category = data.data;
-    
+
     // Get category image if available
     const categoryImage = category.image || undefined;
 
@@ -47,21 +51,24 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       category.name,
       description,
       `/category/${params.slug}`,
-      categoryImage
+      categoryImage,
     );
-
   } catch (error) {
     console.error("Error generating category metadata:", error);
-    
+
     // Fallback metadata
     return await generateCategoryMetadata(
       "Danh mục sản phẩm HACOM",
       "Khám phá các danh mục sản phẩm chất lượng cao tại HACOM với giá tốt nhất.",
-      `/category/${params.slug}`
+      `/category/${params.slug}`,
     );
   }
 }
 
-export default function CategoryLayout({ children }: { children: React.ReactNode }) {
+export default function CategoryLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <>{children}</>;
 }

@@ -18,12 +18,7 @@ import {
   Award,
 } from "lucide-react";
 import Link from "next/link";
-import {
-  Category,
-  Product,
-  formatPrice,
-  getMediaUrl,
-} from "@/config";
+import { Category, Product, formatPrice, getMediaUrl } from "@/config";
 import { apiWrappers } from "@/lib/api-wrapper";
 import { AppLayout } from "@/components/AppLayout";
 
@@ -275,7 +270,9 @@ export default function HomePage() {
                               HOT
                             </span>
                           </div>
-                        ):""}
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <CardContent className="p-4">
                         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
