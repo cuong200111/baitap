@@ -237,7 +237,7 @@ export default function ProfilePage() {
         { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
-        { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
+        { code: 20, name: "Qu���ng Nam", full_name: "Tỉnh Quảng Nam" },
         { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
         { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
         { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
@@ -290,7 +290,7 @@ export default function ProfilePage() {
         { code: 83, name: "Bến Tre", full_name: "Tỉnh Bến Tre" },
         { code: 84, name: "Trà Vinh", full_name: "Tỉnh Trà Vinh" },
         { code: 86, name: "Vĩnh Long", full_name: "Tỉnh Vĩnh Long" },
-        { code: 87, name: "Đồng Tháp", full_name: "T���nh Đồng Tháp" },
+        { code: 87, name: "Đồng Tháp", full_name: "Tỉnh Đồng Tháp" },
         { code: 89, name: "An Giang", full_name: "Tỉnh An Giang" },
         { code: 91, name: "Kiên Giang", full_name: "Tỉnh Kiên Giang" },
         { code: 93, name: "Hậu Giang", full_name: "Tỉnh Hậu Giang" },
@@ -428,7 +428,7 @@ export default function ProfilePage() {
           {
             code: 110,
             name: "Điện Biên Phủ",
-            full_name: "Thành phố Điện Biên Phủ",
+            full_name: "Thành ph�� Điện Biên Phủ",
             province_code: 11,
           },
           {
@@ -1954,7 +1954,7 @@ export default function ProfilePage() {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Đổi mật kh����u</DialogTitle>
+                            <DialogTitle>Đổi mật khẩu</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
