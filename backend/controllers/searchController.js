@@ -271,7 +271,7 @@ export const locationsController = {
           { code: 40, name: "Ninh Bình", full_name: "Tỉnh Ninh Bình" },
           { code: 42, name: "Thanh Hóa", full_name: "Tỉnh Thanh Hóa" },
           { code: 44, name: "Nghệ An", full_name: "Tỉnh Nghệ An" },
-          { code: 45, name: "Hà Tĩnh", full_name: "Tỉnh Hà Tĩnh" },
+          { code: 45, name: "H�� Tĩnh", full_name: "Tỉnh Hà Tĩnh" },
           { code: 46, name: "Quảng Bình", full_name: "Tỉnh Quảng Bình" },
           { code: 49, name: "Quảng Trị", full_name: "Tỉnh Quảng Trị" },
           {
@@ -461,7 +461,7 @@ export const locationsController = {
             {
               code: 767,
               name: "Quận 8",
-              full_name: "Quận 8",
+              full_name: "Qu��n 8",
               province_code: 79,
             },
             {
@@ -1097,7 +1097,7 @@ export const locationsController = {
             {
               code: 26734,
               name: "Tân Định",
-              full_name: "Phư��ng Tân Định",
+              full_name: "Phường Tân Định",
               district_code: 760,
             },
             {
