@@ -93,6 +93,7 @@ app.use("/api/search", searchRoutes);
 app.use("/api/locations", locationsRoutes);
 app.use("/api/shipping", shippingRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/buy-now", buyNowRoutes);
 app.use("/api/seo", seoRoutes);
 app.use("/api/utils", utilsRoutes);
 app.use("/api/config", configRoutes);
