@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { formatPrice, getMediaUrl } from "@/config";
+import { formatPrice, getMediaUrl, Domain } from "@/config";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { WithAuth } from "@/components/AuthGuard";
