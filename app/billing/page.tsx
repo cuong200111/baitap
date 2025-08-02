@@ -34,6 +34,7 @@ import {
   User,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { WithAuth } from "@/components/AuthGuard";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 
