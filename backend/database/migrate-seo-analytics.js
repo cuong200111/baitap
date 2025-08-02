@@ -1,9 +1,9 @@
-import { pool } from './connection.js';
+import { pool } from "./connection.js";
 
 async function createSeoAnalyticsTable() {
   try {
-    console.log('🔄 Creating seo_analytics table...');
-    
+    console.log("🔄 Creating seo_analytics table...");
+
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS seo_analytics (
         id int(11) NOT NULL AUTO_INCREMENT,
@@ -18,12 +18,11 @@ async function createSeoAnalyticsTable() {
         INDEX idx_created_at (created_at)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `;
-    
+
     await pool.execute(createTableQuery);
-    console.log('✅ seo_analytics table created successfully');
-    
+    console.log("✅ seo_analytics table created successfully");
   } catch (error) {
-    console.error('❌ Error creating seo_analytics table:', error);
+    console.error("❌ Error creating seo_analytics table:", error);
     throw error;
   }
 }
@@ -32,11 +31,11 @@ async function createSeoAnalyticsTable() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   createSeoAnalyticsTable()
     .then(() => {
-      console.log('🎉 Migration completed successfully');
+      console.log("🎉 Migration completed successfully");
       process.exit(0);
     })
     .catch((error) => {
-      console.error('💥 Migration failed:', error);
+      console.error("💥 Migration failed:", error);
       process.exit(1);
     });
 }

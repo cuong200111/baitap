@@ -306,7 +306,10 @@ export const adminController = {
              page_views = page_views + 1`,
           );
         } catch (error) {
-          console.log('Analytics logging skipped (table may not exist):', error.message);
+          console.log(
+            "Analytics logging skipped (table may not exist):",
+            error.message,
+          );
         }
 
         res.json({
@@ -358,7 +361,10 @@ export const adminController = {
              page_views = page_views + 1`,
           );
         } catch (error) {
-          console.log('Analytics logging skipped (table may not exist):', error.message);
+          console.log(
+            "Analytics logging skipped (table may not exist):",
+            error.message,
+          );
         }
 
         res.json({

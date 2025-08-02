@@ -87,42 +87,47 @@ router.post("/create", authenticateToken, async (req, res) => {
 // Check and setup database tables
 router.get("/setup", async (req, res) => {
   try {
-    console.log('=== DATABASE SETUP CHECK ===');
+    console.log("=== DATABASE SETUP CHECK ===");
 
     // Check custom_sitemaps table
     try {
-      const [sitemapRows] = await pool.execute('DESCRIBE custom_sitemaps');
-      console.log('✅ custom_sitemaps table exists with columns:', sitemapRows.map(r => r.Field));
+      const [sitemapRows] = await pool.execute("DESCRIBE custom_sitemaps");
+      console.log(
+        "✅ custom_sitemaps table exists with columns:",
+        sitemapRows.map((r) => r.Field),
+      );
     } catch (error) {
-      console.log('❌ custom_sitemaps table missing:', error.message);
+      console.log("❌ custom_sitemaps table missing:", error.message);
     }
 
     // Check seo_analytics table
     try {
-      const [analyticsRows] = await pool.execute('DESCRIBE seo_analytics');
-      console.log('✅ seo_analytics table exists with columns:', analyticsRows.map(r => r.Field));
+      const [analyticsRows] = await pool.execute("DESCRIBE seo_analytics");
+      console.log(
+        "✅ seo_analytics table exists with columns:",
+        analyticsRows.map((r) => r.Field),
+      );
     } catch (error) {
-      console.log('❌ seo_analytics table missing, creating...', error.message);
+      console.log("❌ seo_analytics table missing, creating...", error.message);
       try {
         await createSeoAnalyticsTable();
-        console.log('✅ seo_analytics table created');
+        console.log("✅ seo_analytics table created");
       } catch (createError) {
-        console.log('❌ Failed to create seo_analytics:', createError.message);
+        console.log("❌ Failed to create seo_analytics:", createError.message);
       }
     }
 
     res.json({
       success: true,
       message: "Database setup check completed",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Database setup error:', error);
+    console.error("Database setup error:", error);
     res.status(500).json({
       success: false,
       message: "Database setup failed",
-      error: error.message
+      error: error.message,
     });
   }
 });
