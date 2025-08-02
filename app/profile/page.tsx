@@ -1188,7 +1188,7 @@ export default function ProfilePage() {
           {
             code: 9310,
             name: "Vĩnh Phước",
-            full_name: "Phường Vĩnh Phư��c",
+            full_name: "Phường Vĩnh Phước",
             district_code: 260,
           },
           {
