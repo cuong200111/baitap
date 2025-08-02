@@ -435,124 +435,125 @@ export function ProductManagement() {
             </TableHeader>
             <TableBody>
               {filteredProducts.map((product) => {
-                console.log(product)
+                console.log(product);
                 return (
-                <TableRow key={product.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={getMediaUrl(product.images?.[0] || "")}
-                        alt={product.name}
-                        className="w-12 h-12 object-cover rounded"
-                      />
-                      <div>
-                        <div className="font-medium">{product.name}</div>
-                        <div className="text-sm text-gray-500">
-                          {product.short_description}
+                  <TableRow key={product.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={getMediaUrl(product.images?.[0] || "")}
+                          alt={product.name}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                        <div>
+                          <div className="font-medium">{product.name}</div>
+                          <div className="text-sm text-gray-500">
+                            {product.short_description}
+                          </div>
+                          {product.featured && (
+                            <Badge variant="secondary" className="mt-1">
+                              <Star className="h-3 w-3 mr-1" />
+                              Nổi bật
+                            </Badge>
+                          )}
                         </div>
-                        {product.featured && (
-                          <Badge variant="secondary" className="mt-1">
-                            <Star className="h-3 w-3 mr-1" />
-                            Nổi bật
-                          </Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <code className="px-2 py-1 bg-gray-100 rounded text-sm">
+                        {product.sku}
+                      </code>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">
+                          {formatPrice(product.price)}
+                        </div>
+                        {product.sale_price && (
+                          <div className="text-sm text-gray-500 line-through">
+                            {formatPrice(product.sale_price)}
+                          </div>
                         )}
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <code className="px-2 py-1 bg-gray-100 rounded text-sm">
-                      {product.sku}
-                    </code>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">
-                        {formatPrice(product.price)}
-                      </div>
-                      {product.sale_price && (
-                        <div className="text-sm text-gray-500 line-through">
-                          {formatPrice(product.sale_price)}
-                        </div>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        (product.stock_quantity || 0) > 0
-                          ? "default"
-                          : "destructive"
-                      }
-                    >
-                      {product.stock_quantity || 0}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        product.status === "active"
-                          ? "default"
-                          : product.status === "inactive"
-                            ? "destructive"
-                            : "secondary"
-                      }
-                    >
-                      {product.status === "active"
-                        ? "Hoạt động"
-                        : product.status === "inactive"
-                          ? "Không hoạt động"
-                          : "Bản nháp"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                      <span className="text-sm">
-                        {product.average_rating?.toFixed(1) || "0.0"}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        ({product.total_reviews || 0})
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openEditDialog(product)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          (product.stock_quantity || 0) > 0
+                            ? "default"
+                            : "destructive"
+                        }
                       >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="outline" size="sm">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Bạn có chắc chắn muốn xóa sản phẩm &quot;
-                              {product.name}&quot;? Hành động này không thể hoàn
-                              tác.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Hủy</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(product.id)}
-                            >
-                              Xóa
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )})}
+                        {product.stock_quantity || 0}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          product.status === "active"
+                            ? "default"
+                            : product.status === "inactive"
+                              ? "destructive"
+                              : "secondary"
+                        }
+                      >
+                        {product.status === "active"
+                          ? "Hoạt động"
+                          : product.status === "inactive"
+                            ? "Không hoạt động"
+                            : "Bản nháp"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                        <span className="text-sm">
+                          {product.average_rating?.toFixed(1) || "0.0"}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          ({product.total_reviews || 0})
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openEditDialog(product)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Bạn có chắc chắn muốn xóa sản phẩm &quot;
+                                {product.name}&quot;? Hành động này không thể
+                                hoàn tác.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Hủy</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDelete(product.id)}
+                              >
+                                Xóa
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>

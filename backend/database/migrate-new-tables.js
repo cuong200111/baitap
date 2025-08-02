@@ -95,7 +95,9 @@ const createNewTables = async () => {
       `);
 
       if (userColumns.length === 0) {
-        await executeQuery(`ALTER TABLE users ADD COLUMN last_login TIMESTAMP NULL`);
+        await executeQuery(
+          `ALTER TABLE users ADD COLUMN last_login TIMESTAMP NULL`,
+        );
         console.log("✅ Added last_login column to users table");
       }
     } catch (e) {
@@ -110,7 +112,9 @@ const createNewTables = async () => {
       `);
 
       if (orderColumns.length === 0) {
-        await executeQuery(`ALTER TABLE orders ADD COLUMN payment_method VARCHAR(50) NULL`);
+        await executeQuery(
+          `ALTER TABLE orders ADD COLUMN payment_method VARCHAR(50) NULL`,
+        );
         console.log("✅ Added payment_method column to orders table");
       }
     } catch (e) {
@@ -125,7 +129,9 @@ const createNewTables = async () => {
       `);
 
       if (productColumns.length === 0) {
-        await executeQuery(`ALTER TABLE products ADD COLUMN category_id INT NULL`);
+        await executeQuery(
+          `ALTER TABLE products ADD COLUMN category_id INT NULL`,
+        );
         console.log("✅ Added category_id column to products table");
       }
     } catch (e) {
@@ -133,7 +139,9 @@ const createNewTables = async () => {
     }
 
     // Insert default warehouse if none exists
-    const existingWarehouses = await executeQuery("SELECT COUNT(*) as count FROM warehouses");
+    const existingWarehouses = await executeQuery(
+      "SELECT COUNT(*) as count FROM warehouses",
+    );
     if (existingWarehouses[0].count === 0) {
       await executeQuery(`
         INSERT INTO warehouses (name, address, latitude, longitude, is_default, is_active) 
@@ -145,48 +153,62 @@ const createNewTables = async () => {
     }
 
     // Insert default shipping zones if none exist
-    const existingZones = await executeQuery("SELECT COUNT(*) as count FROM shipping_zones");
+    const existingZones = await executeQuery(
+      "SELECT COUNT(*) as count FROM shipping_zones",
+    );
     if (existingZones[0].count === 0) {
-      const warehouses = await executeQuery("SELECT id FROM warehouses LIMIT 2");
+      const warehouses = await executeQuery(
+        "SELECT id FROM warehouses LIMIT 2",
+      );
       if (warehouses.length > 0) {
-        await executeQuery(`
+        await executeQuery(
+          `
           INSERT INTO shipping_zones (name, warehouse_id, province_ids, description) 
           VALUES 
           ('Miền Bắc', ?, '${JSON.stringify([1, 33, 77, 2, 4, 6, 8, 10, 11, 12, 14, 15, 17, 19, 22, 24, 25, 27, 30, 31, 35, 36, 37, 38, 40, 42, 44, 45, 46])}', 'Khu vực miền Bắc'),
           ('Miền Nam', ?, '${JSON.stringify([79, 92, 70, 72, 74, 75, 77, 80, 82, 83, 84, 86, 87, 89, 91, 93, 94, 95, 96])}', 'Khu vực miền Nam')
-        `, [warehouses[0].id, warehouses[1]?.id || warehouses[0].id]);
+        `,
+          [warehouses[0].id, warehouses[1]?.id || warehouses[0].id],
+        );
         console.log("✅ Created default shipping zones");
       }
     }
 
     // Insert default shipping rates if none exist
-    const existingRates = await executeQuery("SELECT COUNT(*) as count FROM shipping_rates");
+    const existingRates = await executeQuery(
+      "SELECT COUNT(*) as count FROM shipping_rates",
+    );
     if (existingRates[0].count === 0) {
       const zones = await executeQuery("SELECT id FROM shipping_zones LIMIT 2");
       if (zones.length > 0) {
-        await executeQuery(`
+        await executeQuery(
+          `
           INSERT INTO shipping_rates (zone_id, min_distance, max_distance, base_rate, per_km_rate, min_order_amount) 
           VALUES 
           (?, 0, 50, 30000, 1000, 500000),
           (?, 50, 200, 50000, 1500, 500000),
           (?, 200, NULL, 80000, 2000, 500000)
-        `, [zones[0].id, zones[0].id, zones[0].id]);
-        
+        `,
+          [zones[0].id, zones[0].id, zones[0].id],
+        );
+
         if (zones[1]) {
-          await executeQuery(`
+          await executeQuery(
+            `
             INSERT INTO shipping_rates (zone_id, min_distance, max_distance, base_rate, per_km_rate, min_order_amount) 
             VALUES 
             (?, 0, 50, 35000, 1200, 500000),
             (?, 50, 200, 55000, 1800, 500000),
             (?, 200, NULL, 85000, 2200, 500000)
-          `, [zones[1].id, zones[1].id, zones[1].id]);
+          `,
+            [zones[1].id, zones[1].id, zones[1].id],
+          );
         }
         console.log("✅ Created default shipping rates");
       }
     }
 
     console.log("✅ All new tables created successfully!");
-
   } catch (error) {
     console.error("❌ Error creating new tables:", error);
     throw error;

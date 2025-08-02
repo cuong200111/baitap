@@ -1974,9 +1974,7 @@ export default function ProfilePage() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="new_password">
-                                Mật khẩu mới
-                              </Label>
+                              <Label htmlFor="new_password">Mật khẩu mới</Label>
                               <Input
                                 id="new_password"
                                 type="password"
