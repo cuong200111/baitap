@@ -1,154 +1,218 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Test Sitemap Form</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 8px; margin-bottom: 5px; }
-        button { background: #007cba; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-        button:hover { background: #005a87; }
-        .result { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; }
-        .error { background: #ffebee; color: #c62828; }
-        .success { background: #e8f5e8; color: #2e7d32; }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 5px;
+      }
+      button {
+        background: #007cba;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #005a87;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f0f0f0;
+        border-radius: 5px;
+      }
+      .error {
+        background: #ffebee;
+        color: #c62828;
+      }
+      .success {
+        background: #e8f5e8;
+        color: #2e7d32;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Test Custom Sitemap Creation</h1>
-    
+
     <form id="sitemapForm">
-        <div class="form-group">
-            <label for="authToken">Auth Token:</label>
-            <input type="password" id="authToken" name="authToken" placeholder="Bearer token từ localStorage">
-        </div>
-        
-        <div class="form-group">
-            <label for="url">URL (Required):</label>
-            <input type="url" id="url" name="url" value="https://example.com/test-page" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="Test Page Title">
-        </div>
-        
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="3">Test page description for sitemap</textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="priority">Priority:</label>
-            <input type="number" id="priority" name="priority" value="0.2" min="0" max="1" step="0.1">
-        </div>
-        
-        <div class="form-group">
-            <label for="changefreq">Change Frequency:</label>
-            <select id="changefreq" name="changefreq">
-                <option value="monthly" selected>Monthly</option>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="yearly">Yearly</option>
-                <option value="never">Never</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="mobile_friendly">Mobile Friendly:</label>
-            <input type="checkbox" id="mobile_friendly" name="mobile_friendly" checked>
-        </div>
-        
-        <div class="form-group">
-            <label for="status">Status:</label>
-            <select id="status" name="status">
-                <option value="active" selected>Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-        </div>
-        
-        <button type="submit">Test Create Sitemap</button>
-        <button type="button" onclick="testGet()">Test Get Sitemaps</button>
+      <div class="form-group">
+        <label for="authToken">Auth Token:</label>
+        <input
+          type="password"
+          id="authToken"
+          name="authToken"
+          placeholder="Bearer token từ localStorage"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="url">URL (Required):</label>
+        <input
+          type="url"
+          id="url"
+          name="url"
+          value="https://example.com/test-page"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="Test Page Title" />
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="3">
+Test page description for sitemap</textarea
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="priority">Priority:</label>
+        <input
+          type="number"
+          id="priority"
+          name="priority"
+          value="0.2"
+          min="0"
+          max="1"
+          step="0.1"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="changefreq">Change Frequency:</label>
+        <select id="changefreq" name="changefreq">
+          <option value="monthly" selected>Monthly</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="yearly">Yearly</option>
+          <option value="never">Never</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="mobile_friendly">Mobile Friendly:</label>
+        <input
+          type="checkbox"
+          id="mobile_friendly"
+          name="mobile_friendly"
+          checked
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+          <option value="active" selected>Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+      <button type="submit">Test Create Sitemap</button>
+      <button type="button" onclick="testGet()">Test Get Sitemaps</button>
     </form>
-    
-    <div id="result" class="result" style="display: none;"></div>
-    
+
+    <div id="result" class="result" style="display: none"></div>
+
     <script>
-        const API_BASE = 'http://localhost:4000/api/custom-sitemaps';
-        
-        // Auto-fill token from localStorage if available
-        if (localStorage.getItem('token')) {
-            document.getElementById('authToken').value = localStorage.getItem('token');
-        }
-        
-        document.getElementById('sitemapForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(e.target);
-            const authToken = formData.get('authToken');
-            
-            const submitData = {
-                url: formData.get('url'),
-                title: formData.get('title'),
-                description: formData.get('description'),
-                priority: parseFloat(formData.get('priority')),
-                changefreq: formData.get('changefreq'),
-                mobile_friendly: document.getElementById('mobile_friendly').checked,
-                status: formData.get('status')
-            };
-            
-            console.log('Submitting data:', submitData);
-            console.log('Auth token:', authToken ? 'Present' : 'Missing');
-            
-            try {
-                const response = await fetch(API_BASE, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(submitData)
-                });
-                
-                console.log('Response status:', response.status);
-                const data = await response.json();
-                console.log('Response data:', data);
-                
-                showResult(data, response.ok);
-            } catch (error) {
-                console.error('Error:', error);
-                showResult({ error: error.message }, false);
-            }
+      const API_BASE = "http://localhost:4000/api/custom-sitemaps";
+
+      // Auto-fill token from localStorage if available
+      if (localStorage.getItem("token")) {
+        document.getElementById("authToken").value =
+          localStorage.getItem("token");
+      }
+
+      document
+        .getElementById("sitemapForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+          const authToken = formData.get("authToken");
+
+          const submitData = {
+            url: formData.get("url"),
+            title: formData.get("title"),
+            description: formData.get("description"),
+            priority: parseFloat(formData.get("priority")),
+            changefreq: formData.get("changefreq"),
+            mobile_friendly: document.getElementById("mobile_friendly").checked,
+            status: formData.get("status"),
+          };
+
+          console.log("Submitting data:", submitData);
+          console.log("Auth token:", authToken ? "Present" : "Missing");
+
+          try {
+            const response = await fetch(API_BASE, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(submitData),
+            });
+
+            console.log("Response status:", response.status);
+            const data = await response.json();
+            console.log("Response data:", data);
+
+            showResult(data, response.ok);
+          } catch (error) {
+            console.error("Error:", error);
+            showResult({ error: error.message }, false);
+          }
         });
-        
-        async function testGet() {
-            const authToken = document.getElementById('authToken').value;
-            
-            try {
-                const response = await fetch(API_BASE + '/admin', {
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                console.log('GET Response status:', response.status);
-                const data = await response.json();
-                console.log('GET Response data:', data);
-                
-                showResult(data, response.ok);
-            } catch (error) {
-                console.error('GET Error:', error);
-                showResult({ error: error.message }, false);
-            }
+
+      async function testGet() {
+        const authToken = document.getElementById("authToken").value;
+
+        try {
+          const response = await fetch(API_BASE + "/admin", {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("GET Response status:", response.status);
+          const data = await response.json();
+          console.log("GET Response data:", data);
+
+          showResult(data, response.ok);
+        } catch (error) {
+          console.error("GET Error:", error);
+          showResult({ error: error.message }, false);
         }
-        
-        function showResult(data, isSuccess) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            resultDiv.className = isSuccess ? 'result success' : 'result error';
-            resultDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-        }
+      }
+
+      function showResult(data, isSuccess) {
+        const resultDiv = document.getElementById("result");
+        resultDiv.style.display = "block";
+        resultDiv.className = isSuccess ? "result success" : "result error";
+        resultDiv.innerHTML =
+          "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+      }
     </script>
-</body>
+  </body>
 </html>

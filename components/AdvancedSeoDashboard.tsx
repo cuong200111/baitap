@@ -154,8 +154,8 @@ export default function AdvancedSeoDashboard() {
 
   // Get auth token on client side
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
       setAuthToken(token || undefined);
     }
   }, []);
@@ -1174,9 +1174,7 @@ export default function AdvancedSeoDashboard() {
         <TabsContent value="sitemap" className="space-y-6">
           <TestSitemapForm authToken={authToken} />
 
-          <CustomSitemapManager
-            authToken={authToken}
-          />
+          <CustomSitemapManager authToken={authToken} />
 
           <Card>
             <CardHeader>

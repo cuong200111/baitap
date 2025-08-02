@@ -7,19 +7,19 @@ const router = express.Router();
 // Simple test endpoint without validation
 router.post("/create", authenticateToken, async (req, res) => {
   try {
-    console.log('=== TEST SITEMAP CREATE ===');
-    console.log('Request body:', JSON.stringify(req.body, null, 2));
-    console.log('User:', req.user);
-    console.log('Headers:', req.headers);
-    
+    console.log("=== TEST SITEMAP CREATE ===");
+    console.log("Request body:", JSON.stringify(req.body, null, 2));
+    console.log("User:", req.user);
+    console.log("Headers:", req.headers);
+
     // Basic validation
     if (!req.body.url) {
       return res.status(400).json({
         success: false,
-        message: "URL is required"
+        message: "URL is required",
       });
     }
-    
+
     // Simple insert
     const {
       url,
@@ -28,20 +28,37 @@ router.post("/create", authenticateToken, async (req, res) => {
       priority = 0.2,
       changefreq = "monthly",
       mobile_friendly = true,
-      status = "active"
+      status = "active",
     } = req.body;
-    
-    console.log('Inserting:', { url, title, description, priority, changefreq, mobile_friendly, status });
-    
+
+    console.log("Inserting:", {
+      url,
+      title,
+      description,
+      priority,
+      changefreq,
+      mobile_friendly,
+      status,
+    });
+
     const [result] = await pool.execute(
       `INSERT INTO custom_sitemaps 
        (url, title, description, priority, changefreq, mobile_friendly, status, created_by)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [url, title, description, priority, changefreq, mobile_friendly, status, req.user.id]
+      [
+        url,
+        title,
+        description,
+        priority,
+        changefreq,
+        mobile_friendly,
+        status,
+        req.user.id,
+      ],
     );
-    
-    console.log('Insert result:', result);
-    
+
+    console.log("Insert result:", result);
+
     res.json({
       success: true,
       message: "Test sitemap created successfully",
@@ -53,16 +70,15 @@ router.post("/create", authenticateToken, async (req, res) => {
         priority,
         changefreq,
         mobile_friendly,
-        status
-      }
+        status,
+      },
     });
-    
   } catch (error) {
-    console.error('Test sitemap create error:', error);
+    console.error("Test sitemap create error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to create test sitemap",
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -70,26 +86,25 @@ router.post("/create", authenticateToken, async (req, res) => {
 // List all sitemaps
 router.get("/list", async (req, res) => {
   try {
-    console.log('=== TEST SITEMAP LIST ===');
-    
+    console.log("=== TEST SITEMAP LIST ===");
+
     const [rows] = await pool.execute(
-      'SELECT * FROM custom_sitemaps ORDER BY created_at DESC'
+      "SELECT * FROM custom_sitemaps ORDER BY created_at DESC",
     );
-    
-    console.log('Found sitemaps:', rows.length);
-    
+
+    console.log("Found sitemaps:", rows.length);
+
     res.json({
       success: true,
       data: rows,
-      count: rows.length
+      count: rows.length,
     });
-    
   } catch (error) {
-    console.error('Test sitemap list error:', error);
+    console.error("Test sitemap list error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to list test sitemaps",
-      error: error.message
+      error: error.message,
     });
   }
 });

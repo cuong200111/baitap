@@ -15,55 +15,55 @@ interface TestSitemapFormProps {
 
 export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
   const [formData, setFormData] = useState({
-    url: 'https://example.com/test-page',
-    title: 'Test Page',
-    description: 'Test description',
+    url: "https://example.com/test-page",
+    title: "Test Page",
+    description: "Test description",
     priority: 0.2,
-    changefreq: 'monthly',
+    changefreq: "monthly",
     mobile_friendly: true,
-    status: 'active'
+    status: "active",
   });
 
   const [results, setResults] = useState<any[]>([]);
 
   const handleTestCreate = async () => {
     try {
-      console.log('🧪 Testing sitemap creation with data:', formData);
-      console.log('🔑 Auth token:', authToken ? 'Present' : 'Missing');
+      console.log("🧪 Testing sitemap creation with data:", formData);
+      console.log("🔑 Auth token:", authToken ? "Present" : "Missing");
 
       const response = await fetch(`${Domain}/api/test-sitemap/create`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
-      console.log('📡 Response status:', response.status);
+      console.log("📡 Response status:", response.status);
       const data = await response.json();
-      console.log('📦 Response data:', data);
+      console.log("📦 Response data:", data);
 
       if (response.ok && data.success) {
-        toast.success('✅ Test sitemap created successfully!');
+        toast.success("✅ Test sitemap created successfully!");
         await handleTestList(); // Refresh list
       } else {
         toast.error(`❌ Test failed: ${data.message}`);
       }
     } catch (error) {
-      console.error('🚨 Test create error:', error);
-      toast.error('❌ Network error occurred');
+      console.error("🚨 Test create error:", error);
+      toast.error("❌ Network error occurred");
     }
   };
 
   const handleTestList = async () => {
     try {
-      console.log('📋 Testing sitemap list...');
+      console.log("📋 Testing sitemap list...");
 
       const response = await fetch(`${Domain}/api/test-sitemap/list`);
       const data = await response.json();
 
-      console.log('📋 List response:', data);
+      console.log("📋 List response:", data);
 
       if (response.ok && data.success) {
         setResults(data.data);
@@ -72,8 +72,8 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
         toast.error(`❌ List failed: ${data.message}`);
       }
     } catch (error) {
-      console.error('🚨 Test list error:', error);
-      toast.error('❌ Network error occurred');
+      console.error("🚨 Test list error:", error);
+      toast.error("❌ Network error occurred");
     }
   };
 
@@ -102,14 +102,18 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
             <Label>URL</Label>
             <Input
               value={formData.url}
-              onChange={(e) => setFormData(prev => ({ ...prev, url: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, url: e.target.value }))
+              }
             />
           </div>
           <div>
             <Label>Title</Label>
             <Input
               value={formData.title}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, title: e.target.value }))
+              }
             />
           </div>
         </div>
@@ -118,7 +122,9 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
           <Label>Description</Label>
           <Input
             value={formData.description}
-            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, description: e.target.value }))
+            }
           />
         </div>
 
@@ -137,11 +143,22 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
             <div className="space-y-2 max-h-60 overflow-y-auto">
               {results.map((item, index) => (
                 <div key={index} className="text-sm border-b pb-2">
-                  <div><strong>ID:</strong> {item.id}</div>
-                  <div><strong>URL:</strong> {item.url}</div>
-                  <div><strong>Title:</strong> {item.title || 'N/A'}</div>
-                  <div><strong>Status:</strong> {item.status}</div>
-                  <div><strong>Created:</strong> {new Date(item.created_at).toLocaleString()}</div>
+                  <div>
+                    <strong>ID:</strong> {item.id}
+                  </div>
+                  <div>
+                    <strong>URL:</strong> {item.url}
+                  </div>
+                  <div>
+                    <strong>Title:</strong> {item.title || "N/A"}
+                  </div>
+                  <div>
+                    <strong>Status:</strong> {item.status}
+                  </div>
+                  <div>
+                    <strong>Created:</strong>{" "}
+                    {new Date(item.created_at).toLocaleString()}
+                  </div>
                 </div>
               ))}
             </div>

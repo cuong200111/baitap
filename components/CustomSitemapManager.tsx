@@ -94,7 +94,10 @@ export default function CustomSitemapManager({
   // Fetch sitemaps
   const fetchSitemaps = async () => {
     try {
-      console.log('Fetching sitemaps with token:', authToken ? 'exists' : 'missing');
+      console.log(
+        "Fetching sitemaps with token:",
+        authToken ? "exists" : "missing",
+      );
       const response = await fetch(`${Domain}/api/custom-sitemaps/admin`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -102,20 +105,20 @@ export default function CustomSitemapManager({
         },
       });
 
-      console.log('Response status:', response.status);
+      console.log("Response status:", response.status);
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Response data:', data);
+        console.log("Response data:", data);
         if (data.success) {
           setSitemaps(data.data);
         } else {
-          console.error('API returned success: false', data);
-          toast.error(data.message || 'Không thể tải sitemap');
+          console.error("API returned success: false", data);
+          toast.error(data.message || "Không thể tải sitemap");
         }
       } else {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Response not ok:', response.status, errorData);
+        console.error("Response not ok:", response.status, errorData);
         toast.error(errorData.message || `Lỗi: ${response.status}`);
       }
     } catch (error) {
@@ -171,7 +174,12 @@ export default function CustomSitemapManager({
         delete submitData.last_modified;
       }
 
-      console.log('Submitting sitemap:', { method, url, submitData, authToken: authToken ? 'exists' : 'missing' });
+      console.log("Submitting sitemap:", {
+        method,
+        url,
+        submitData,
+        authToken: authToken ? "exists" : "missing",
+      });
 
       const response = await fetch(url, {
         method,
@@ -182,9 +190,9 @@ export default function CustomSitemapManager({
         body: JSON.stringify(submitData),
       });
 
-      console.log('Submit response status:', response.status);
+      console.log("Submit response status:", response.status);
       const data = await response.json();
-      console.log('Submit response data:', data);
+      console.log("Submit response data:", data);
 
       if (response.ok && data.success) {
         toast.success(
@@ -194,7 +202,7 @@ export default function CustomSitemapManager({
         resetForm();
         fetchSitemaps();
       } else {
-        console.error('Submit failed:', data);
+        console.error("Submit failed:", data);
         toast.error(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
