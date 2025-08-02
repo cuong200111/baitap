@@ -5,7 +5,7 @@ const API_BASE = "http://localhost:4000";
 
 async function testBuyNowFlow() {
   console.log("🛒 Testing Buy Now Flow - Should NOT affect cart");
-  console.log("=" .repeat(50));
+  console.log("=".repeat(50));
 
   try {
     // Test 1: Create buy now session
@@ -36,11 +36,13 @@ async function testBuyNowFlow() {
 
     // Test 2: Verify cart remains empty
     console.log("\n2. Testing Cart Independence...");
-    const cartResponse = await fetch(`${API_BASE}/api/cart?session_id=test_session_cart_${Date.now()}`);
+    const cartResponse = await fetch(
+      `${API_BASE}/api/cart?session_id=test_session_cart_${Date.now()}`,
+    );
     const cartResult = await cartResponse.json();
-    
+
     console.log("Cart Response:", cartResult);
-    
+
     if (cartResult.success && cartResult.data.items.length === 0) {
       console.log("✅ Cart remains empty - Buy Now didn't affect cart");
     } else {
@@ -67,16 +69,18 @@ async function testBuyNowFlow() {
     if (addToCartResult.success) {
       console.log("✅ Add to Cart functionality still works independently");
     } else {
-      console.log("❌ Add to Cart functionality broken:", addToCartResult.message);
+      console.log(
+        "❌ Add to Cart functionality broken:",
+        addToCartResult.message,
+      );
     }
 
     console.log("\n" + "=".repeat(50));
     console.log("🎉 Buy Now flow test completed!");
     console.log("📋 Summary:");
     console.log("   - Buy Now creates separate session ✅");
-    console.log("   - Cart remains independent ✅");  
+    console.log("   - Cart remains independent ✅");
     console.log("   - Add to Cart still works ✅");
-
   } catch (error) {
     console.error("❌ Test failed with error:", error.message);
   }

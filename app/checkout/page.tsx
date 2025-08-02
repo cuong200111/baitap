@@ -64,7 +64,8 @@ export default function CheckoutPage() {
   });
 
   const [saveInfo, setSaveInfo] = useState(false);
-  const [addressLoadedFromProfile, setAddressLoadedFromProfile] = useState(false);
+  const [addressLoadedFromProfile, setAddressLoadedFromProfile] =
+    useState(false);
 
   useEffect(() => {
     loadCart();
@@ -141,7 +142,7 @@ export default function CheckoutPage() {
       console.log("📍 Loading user address from API...");
       const response = await fetch(`${API_CONFIG.BASE_URL}/api/addresses`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -173,7 +174,11 @@ export default function CheckoutPage() {
           console.log("📍 No addresses found for user");
         }
       } else {
-        console.log("📍 Address API request failed:", response.status, response.statusText);
+        console.log(
+          "📍 Address API request failed:",
+          response.status,
+          response.statusText,
+        );
       }
     } catch (error) {
       console.error("❌ Failed to load user address:", error);
@@ -330,7 +335,8 @@ export default function CheckoutPage() {
           <Alert className="mb-6">
             <CheckCircle className="h-4 w-4" />
             <AlertDescription>
-              Địa chỉ đã được tự động điền từ thông tin trong hồ sơ của bạn. Bạn có thể chỉnh sửa nếu cần.
+              Địa chỉ đã được tự động điền từ thông tin trong hồ sơ của bạn. Bạn
+              có thể chỉnh sửa nếu cần.
             </AlertDescription>
           </Alert>
         )}

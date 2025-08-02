@@ -24,7 +24,12 @@ import Link from "next/link";
 import { formatPrice, getMediaUrl } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
-import { buyNowApi, buyNowUtils, BuyNowItem, BuyNowSummary } from "@/lib/buy-now-api";
+import {
+  buyNowApi,
+  buyNowUtils,
+  BuyNowItem,
+  BuyNowSummary,
+} from "@/lib/buy-now-api";
 import { apiWrappers } from "@/lib/api-wrapper";
 import { API_CONFIG } from "@/lib/config-client";
 
@@ -64,7 +69,8 @@ export default function BuyNowCheckoutPage() {
   });
 
   const [saveInfo, setSaveInfo] = useState(false);
-  const [addressLoadedFromProfile, setAddressLoadedFromProfile] = useState(false);
+  const [addressLoadedFromProfile, setAddressLoadedFromProfile] =
+    useState(false);
 
   useEffect(() => {
     loadBuyNowSession();
@@ -141,7 +147,7 @@ export default function BuyNowCheckoutPage() {
       console.log("📍 Loading user address from API...");
       const response = await fetch(`${API_CONFIG.BASE_URL}/api/addresses`, {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -173,7 +179,11 @@ export default function BuyNowCheckoutPage() {
           console.log("📍 No addresses found for user");
         }
       } else {
-        console.log("📍 Address API request failed:", response.status, response.statusText);
+        console.log(
+          "📍 Address API request failed:",
+          response.status,
+          response.statusText,
+        );
       }
     } catch (error) {
       console.error("❌ Failed to load user address:", error);
@@ -239,11 +249,13 @@ export default function BuyNowCheckoutPage() {
       const shippingAddress = `${customerInfo.address}, ${customerInfo.ward ? customerInfo.ward + ", " : ""}${customerInfo.district ? customerInfo.district + ", " : ""}${customerInfo.city}`;
 
       const orderData = {
-        items: [{
-          product_id: buyNowItem.product_id,
-          quantity: buyNowItem.quantity,
-          price: buyNowItem.final_price,
-        }],
+        items: [
+          {
+            product_id: buyNowItem.product_id,
+            quantity: buyNowItem.quantity,
+            price: buyNowItem.final_price,
+          },
+        ],
         customer_name: customerInfo.name,
         customer_email: customerInfo.email,
         customer_phone: customerInfo.phone,
@@ -334,11 +346,7 @@ export default function BuyNowCheckoutPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center space-x-4 mb-8">
-          <Button
-            onClick={() => router.back()}
-            variant="outline"
-            size="sm"
-          >
+          <Button onClick={() => router.back()} variant="outline" size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Quay lại
           </Button>
@@ -352,7 +360,8 @@ export default function BuyNowCheckoutPage() {
         <Alert className="mb-6 border-orange-200 bg-orange-50">
           <Package className="h-4 w-4 text-orange-600" />
           <AlertDescription className="text-orange-800">
-            Bạn đang mua ngay sản phẩm "{buyNowItem.product_name}". Sản phẩm này sẽ không được thêm vào giỏ hàng.
+            Bạn đang mua ngay sản phẩm "{buyNowItem.product_name}". Sản phẩm này
+            sẽ không được thêm vào giỏ hàng.
           </AlertDescription>
         </Alert>
 
@@ -361,7 +370,8 @@ export default function BuyNowCheckoutPage() {
           <Alert className="mb-6">
             <CheckCircle className="h-4 w-4" />
             <AlertDescription>
-              Địa chỉ đã được tự động điền từ thông tin trong hồ sơ của bạn. Bạn có thể chỉnh sửa nếu cần.
+              Địa chỉ đã được tự động điền từ thông tin trong hồ sơ của bạn. Bạn
+              có thể chỉnh sửa nếu cần.
             </AlertDescription>
           </Alert>
         )}

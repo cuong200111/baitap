@@ -149,10 +149,10 @@ export const buyNowApi = {
   } | null {
     try {
       if (typeof window === "undefined") return null;
-      
+
       const stored = localStorage.getItem("buy_now_session");
       if (!stored) return null;
-      
+
       return JSON.parse(stored);
     } catch {
       return null;
