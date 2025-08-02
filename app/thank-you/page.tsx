@@ -79,19 +79,38 @@ export default function ThankYouPage() {
       setError("");
 
       const token = localStorage.getItem("token");
-      const response = await fetch(`${Domain}/api/orders/${orderId}`, {
+
+      // Try order ID first, then order number
+      const identifier = orderId || orderNumber;
+      if (!identifier) {
+        throw new Error("Không có thông tin đơn hàng");
+      }
+
+      console.log("Loading order details for identifier:", identifier);
+      console.log("Has token:", !!token);
+
+      const response = await fetch(`${Domain}/api/orders/${identifier}`, {
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
 
+      console.log("Order API response status:", response.status);
+
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Order API error response:", errorText);
+
         if (response.status === 401) {
-          setError("Phiên đăng nhập đã hết hạn");
+          setError("Cần đăng nhập để xem thông tin đơn hàng. Bạn có thể tra cứu đơn hàng bằng mã đơn hàng tại trang Tra cứu đơn hàng.");
           return;
         }
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status === 404) {
+          setError("Không tìm thấy đơn hàng. Vui lòng kiểm tra lại mã đơn hàng.");
+          return;
+        }
+        throw new Error(`Lỗi API: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
@@ -99,6 +118,7 @@ export default function ThankYouPage() {
 
       if (data.success && data.data) {
         setOrder(data.data);
+        setError("");
       } else {
         setError(data.message || "Không thể tải thông tin đơn hàng");
       }
