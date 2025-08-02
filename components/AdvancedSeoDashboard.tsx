@@ -135,6 +135,7 @@ interface ContentAnalysis {
 
 export default function AdvancedSeoDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [authToken, setAuthToken] = useState<string | undefined>(undefined);
   const [performance, setPerformance] = useState<PerformanceMetrics | null>(
     null,
   );
