@@ -237,7 +237,7 @@ export default function ProfilePage() {
         { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
-        { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
+        { code: 20, name: "Quảng Nam", full_name: "T��nh Quảng Nam" },
         { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
         { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
         { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
@@ -252,7 +252,7 @@ export default function ProfilePage() {
         { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
         { code: 24, name: "Bắc Giang", full_name: "Tỉnh Bắc Giang" },
         { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
-        { code: 27, name: "Vĩnh Ph��c", full_name: "Tỉnh Vĩnh Phúc" },
+        { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
         { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
         { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
         { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
@@ -373,7 +373,7 @@ export default function ProfilePage() {
           {
             code: 201,
             name: "Hội An",
-            full_name: "Thành ph��� Hội An",
+            full_name: "Thành phố Hội An",
             province_code: 20,
           },
           {
@@ -709,7 +709,7 @@ export default function ProfilePage() {
             },
             {
               code: 763,
-              name: "Qu���n 4",
+              name: "Quận 4",
               full_name: "Quận 4",
               province_code: 79,
             },
@@ -1182,7 +1182,7 @@ export default function ProfilePage() {
           {
             code: 9307,
             name: "Vĩnh Hòa",
-            full_name: "Ph��ờng Vĩnh Hòa",
+            full_name: "Phường Vĩnh Hòa",
             district_code: 260,
           },
           {
@@ -1534,7 +1534,7 @@ export default function ProfilePage() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success("Đ��i mật khẩu thành công");
+        toast.success("Đổi mật khẩu thành công");
         setPasswordData({
           current_password: "",
           new_password: "",
@@ -1542,7 +1542,7 @@ export default function ProfilePage() {
         });
         setIsPasswordDialogOpen(false);
       } else {
-        toast.error(data.message || "Có l���i xảy ra");
+        toast.error(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Change password error:", error);
