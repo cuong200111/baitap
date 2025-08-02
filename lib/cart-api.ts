@@ -31,6 +31,12 @@ export interface CartResponse {
     items: CartItem[];
     summary: CartSummary;
   };
+  removed_items?: Array<{
+    cart_id: number;
+    product_name: string;
+    requested: number;
+    available: number;
+  }>;
 }
 
 export interface CartActionResponse {
