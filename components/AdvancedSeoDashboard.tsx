@@ -1172,7 +1172,7 @@ export default function AdvancedSeoDashboard() {
         {/* Sitemap Management Tab */}
         <TabsContent value="sitemap" className="space-y-6">
           <CustomSitemapManager
-            authToken={localStorage.getItem("token") || undefined}
+            authToken={authToken}
           />
 
           <Card>
@@ -1206,7 +1206,7 @@ export default function AdvancedSeoDashboard() {
                   <div>
                     <h4 className="font-medium">Static Pages Sitemap</h4>
                     <p className="text-sm text-muted-foreground">
-                      Trang chính, sản phẩm, đăng nhập...
+                      Trang chính, sản phẩm, ��ăng nhập...
                     </p>
                   </div>
                   <a
