@@ -7,7 +7,7 @@ import StructuredData from "@/components/StructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
   const seoSettings = await getSeoSettings();
-
+  
   return {
     title: {
       default: seoSettings.general.site_name,
