@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
       ui: {
         items_per_page: 12,
         max_cart_items: 50,
-        supported_formats: ['jpg', 'jpeg', 'png', 'webp', 'svg'],
+        supported_formats: ["jpg", "jpeg", "png", "webp", "svg"],
         max_upload_size: 10 * 1024 * 1024, // 10MB
       },
       seo: seoConfig.general,
@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
 
     res.json({
       success: true,
-      data: config
+      data: config,
     });
   } catch (error) {
     console.error("Config API error:", error);
@@ -63,13 +63,13 @@ router.get("/", async (req, res) => {
 router.get("/:section", async (req, res) => {
   try {
     const { section } = req.params;
-    
+
     let config;
     switch (section) {
-      case 'seo':
+      case "seo":
         config = seoConfig;
         break;
-      case 'app':
+      case "app":
         config = {
           name: "ZOXVN",
           version: "1.0.0",
@@ -77,14 +77,14 @@ router.get("/:section", async (req, res) => {
           environment: process.env.NODE_ENV || "development",
         };
         break;
-      case 'api':
+      case "api":
         config = {
           base_url: process.env.BASE_URL || "http://localhost:4000",
           version: "v1",
           timeout: 15000,
         };
         break;
-      case 'features':
+      case "features":
         config = {
           enable_search: true,
           enable_cart: true,
@@ -98,13 +98,13 @@ router.get("/:section", async (req, res) => {
       default:
         return res.status(404).json({
           success: false,
-          message: "Config section not found"
+          message: "Config section not found",
         });
     }
 
     res.json({
       success: true,
-      data: config
+      data: config,
     });
   } catch (error) {
     console.error("Config section API error:", error);
