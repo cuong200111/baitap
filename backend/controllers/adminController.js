@@ -331,57 +331,43 @@ export const adminController = {
   async generateSitemap(req, res) {
     try {
       const baseUrl = `${req.protocol}://${req.get("host")}`;
-      
-      // Get categories
-      const categories = await executeQuery(
-        "SELECT slug FROM categories WHERE is_active = 1"
-      );
-      
-      // Get products
-      const products = await executeQuery(
-        "SELECT id FROM products WHERE status = 'active'"
-      );
 
-      let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>`;
+      // Test sitemap.xml accessibility
+      const response = await fetch(`${baseUrl}/sitemap.xml`);
 
-      // Add category URLs
-      for (const category of categories) {
-        sitemap += `
-  <url>
-    <loc>${baseUrl}/category/${category.slug}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`;
+      if (response.ok) {
+        const sitemapContent = await response.text();
+
+        // Count URLs in sitemap
+        const urlCount = (sitemapContent.match(/<url>/g) || []).length;
+
+        // Log generation to analytics
+        await executeQuery(
+          `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
+           VALUES ('sitemap_generation', CURDATE(), 1, NOW())
+           ON DUPLICATE KEY UPDATE
+           page_views = page_views + 1, updated_at = NOW()`
+        );
+
+        res.json({
+          success: true,
+          message: `Sitemap generated successfully with ${urlCount} URLs`,
+          data: {
+            content: sitemapContent,
+            url: `${baseUrl}/sitemap.xml`,
+            urlCount: urlCount,
+            size: sitemapContent.length,
+            lastGenerated: new Date().toISOString()
+          },
+        });
+      } else {
+        throw new Error(`Failed to generate sitemap: ${response.status}`);
       }
-
-      // Add product URLs
-      for (const product of products) {
-        sitemap += `
-  <url>
-    <loc>${baseUrl}/products/${product.id}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>`;
-      }
-
-      sitemap += `
-</urlset>`;
-
-      res.json({
-        success: true,
-        data: { content: sitemap },
-      });
     } catch (error) {
       console.error("Generate sitemap error:", error);
       res.status(500).json({
         success: false,
-        message: "Failed to generate sitemap",
+        message: "Failed to generate sitemap: " + error.message,
       });
     }
   },
