@@ -47,6 +47,7 @@ import {
 import { toast } from "sonner";
 import { Domain } from "@/config";
 import CustomSitemapManager from "./CustomSitemapManager";
+import TestSitemapForm from "./TestSitemapForm";
 
 // Helper function for authenticated API calls
 const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
@@ -1206,7 +1207,7 @@ export default function AdvancedSeoDashboard() {
                   <div>
                     <h4 className="font-medium">Static Pages Sitemap</h4>
                     <p className="text-sm text-muted-foreground">
-                      Trang chính, sản phẩm, ��ăng nhập...
+                      Trang chính, sản phẩm, đăng nhập...
                     </p>
                   </div>
                   <a
