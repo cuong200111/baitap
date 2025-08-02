@@ -162,7 +162,7 @@ router.get("/sitemap.xml", async (req, res) => {
       });
     }
 
-    // 5. Products với thông tin đ���y đủ
+    // 5. Products với thông tin đầy đủ
     const products = await executeQuery(
       `
       SELECT p.id, p.slug, p.name, p.short_description, p.price, p.sale_price,
@@ -261,8 +261,30 @@ router.get("/sitemap.xml", async (req, res) => {
 
     xml += `</urlset>`;
 
-    res.setHeader("Content-Type", "application/xml");
-    res.setHeader("Cache-Control", "public, max-age=3600");
+    // Log sitemap generation to analytics
+    try {
+      await executeQuery(
+        `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
+         VALUES ('sitemap_generation', CURDATE(), 1, NOW())
+         ON DUPLICATE KEY UPDATE
+         page_views = page_views + 1, updated_at = NOW()`
+      );
+    } catch (logError) {
+      console.log("Analytics logging failed:", logError.message);
+    }
+
+    // Count total URLs for optimization
+    const urlCount = (xml.match(/<url>/g) || []).length;
+    console.log(`Sitemap generated with ${urlCount} URLs`);
+
+    // Set optimal headers for SEO
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=7200");
+    res.setHeader("Expires", new Date(Date.now() + 3600000).toUTCString());
+    res.setHeader("Last-Modified", new Date().toUTCString());
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    res.setHeader("Vary", "Accept-Encoding");
+
     res.send(xml);
   } catch (error) {
     console.error("Failed to generate sitemap:", error);
