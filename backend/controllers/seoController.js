@@ -648,34 +648,90 @@ export const seoController = {
     try {
       const recommendations = [
         {
-          type: "title",
+          id: "rec-001",
+          type: "technical",
           priority: "high",
-          message: "Optimize title tags to include target keywords",
-          pages: ["/products/laptop-gaming", "/category/pc-gaming"],
+          title: "Optimize Core Web Vitals",
+          description: "Improve LCP scores by optimizing images and reducing server response time",
+          impact: "High traffic increase",
+          difficulty: "medium",
+          estimatedTimeToComplete: "2-3 hours",
+          potentialTrafficIncrease: "+15-25%",
+          confidence: 85,
+          actionItems: [
+            "Compress and convert images to WebP format",
+            "Implement lazy loading for below-fold images",
+            "Optimize server response time",
+            "Minify CSS and JavaScript files"
+          ]
         },
         {
-          type: "meta",
-          priority: "medium",
-          message: "Add meta descriptions to improve click-through rates",
-          pages: ["/products/123", "/products/456"],
-        },
-        {
+          id: "rec-002",
           type: "content",
-          priority: "low",
-          message: "Increase content length for better SEO rankings",
-          pages: ["/category/accessories"],
+          priority: "high",
+          title: "Improve Title Tag Optimization",
+          description: "Add target keywords to title tags for better rankings",
+          impact: "Medium traffic increase",
+          difficulty: "easy",
+          estimatedTimeToComplete: "1-2 hours",
+          potentialTrafficIncrease: "+8-15%",
+          confidence: 92,
+          actionItems: [
+            "Research target keywords for each page",
+            "Update title tags to include primary keywords",
+            "Ensure titles are under 60 characters",
+            "Make titles compelling for click-through"
+          ]
         },
         {
-          type: "images",
+          id: "rec-003",
+          type: "keywords",
           priority: "medium",
-          message: "Add alt text to images for better accessibility",
-          pages: ["/", "/products/789"],
+          title: "Expand Long-tail Keyword Coverage",
+          description: "Target more specific, less competitive keywords",
+          impact: "Medium traffic increase",
+          difficulty: "medium",
+          estimatedTimeToComplete: "4-6 hours",
+          potentialTrafficIncrease: "+10-20%",
+          confidence: 78,
+          actionItems: [
+            "Conduct keyword research for product categories",
+            "Create content targeting long-tail keywords",
+            "Optimize existing pages for secondary keywords",
+            "Monitor keyword performance and adjust"
+          ]
         },
+        {
+          id: "rec-004",
+          type: "links",
+          priority: "medium",
+          title: "Improve Internal Linking Structure",
+          description: "Add more strategic internal links to boost page authority",
+          impact: "Low-medium traffic increase",
+          difficulty: "easy",
+          estimatedTimeToComplete: "2-3 hours",
+          potentialTrafficIncrease: "+5-12%",
+          confidence: 82,
+          actionItems: [
+            "Audit current internal linking structure",
+            "Add contextual links between related products",
+            "Create hub pages for main categories",
+            "Link from high-authority pages to important pages"
+          ]
+        }
       ];
 
       res.json({
         success: true,
-        data: recommendations,
+        data: {
+          recommendations,
+          totalRecommendations: recommendations.length,
+          priorityBreakdown: {
+            high: recommendations.filter(r => r.priority === "high").length,
+            medium: recommendations.filter(r => r.priority === "medium").length,
+            low: recommendations.filter(r => r.priority === "low").length
+          }
+        }
       });
     } catch (error) {
       console.error("AI recommendations error:", error);
