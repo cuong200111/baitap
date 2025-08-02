@@ -1172,6 +1172,8 @@ export default function AdvancedSeoDashboard() {
 
         {/* Sitemap Management Tab */}
         <TabsContent value="sitemap" className="space-y-6">
+          <TestSitemapForm authToken={authToken} />
+
           <CustomSitemapManager
             authToken={authToken}
           />
