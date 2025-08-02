@@ -102,7 +102,7 @@ export default function OrdersPage() {
         description: "Đơn hàng đang được xử lý",
       },
       confirmed: {
-        label: "Đã xác nh���n",
+        label: "Đã xác nhận",
         icon: CheckCircle,
         color: "text-blue-600",
         bgColor: "bg-blue-50",
