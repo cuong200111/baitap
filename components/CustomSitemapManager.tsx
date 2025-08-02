@@ -169,6 +169,8 @@ export default function CustomSitemapManager({
         delete submitData.last_modified;
       }
 
+      console.log('Submitting sitemap:', { method, url, submitData, authToken: authToken ? 'exists' : 'missing' });
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -178,7 +180,9 @@ export default function CustomSitemapManager({
         body: JSON.stringify(submitData),
       });
 
+      console.log('Submit response status:', response.status);
       const data = await response.json();
+      console.log('Submit response data:', data);
 
       if (response.ok && data.success) {
         toast.success(
