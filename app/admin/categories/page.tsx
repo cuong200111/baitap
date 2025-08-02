@@ -152,7 +152,7 @@ export default function CategoriesPage() {
       loadCategories();
     } catch (error) {
       console.error("Failed to save category:", error);
-      toast.error("Kh��ng thể lưu danh mục");
+      toast.error("Không thể lưu danh mục");
     } finally {
       setSubmitting(false);
     }
