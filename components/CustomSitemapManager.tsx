@@ -192,6 +192,7 @@ export default function CustomSitemapManager({
         resetForm();
         fetchSitemaps();
       } else {
+        console.error('Submit failed:', data);
         toast.error(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
