@@ -175,7 +175,7 @@ export function SimpleDbCategoryMenu() {
         },
         {
           id: 4,
-          name: "Màn h��nh",
+          name: "Màn hình",
           slug: "man-hinh",
           description: "Màn hình máy tính",
           icon: "monitor",
