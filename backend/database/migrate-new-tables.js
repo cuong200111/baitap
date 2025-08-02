@@ -138,7 +138,7 @@ const createNewTables = async () => {
       await executeQuery(`
         INSERT INTO warehouses (name, address, latitude, longitude, is_default, is_active) 
         VALUES 
-        ('Kho chính Hà Nội', '123 Đường ABC, Quận C���u Giấy, Hà Nội', 21.0285, 105.8542, 1, 1),
+        ('Kho chính Hà Nội', '123 Đường ABC, Quận Cầu Giấy, Hà Nội', 21.0285, 105.8542, 1, 1),
         ('Kho TP.HCM', '456 Đường XYZ, Quận 1, TP Hồ Chí Minh', 10.8231, 106.6297, 0, 1)
       `);
       console.log("✅ Created default warehouses");
