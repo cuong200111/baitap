@@ -21,6 +21,7 @@ import Image from "next/image";
 import { formatPrice, getMediaUrl } from "@/config";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { WithAuth } from "@/components/AuthGuard";
 
 interface Order {
   id: number;
@@ -96,7 +97,7 @@ export default function OrdersPage() {
       }
     } catch (error) {
       console.error("Failed to load orders:", error);
-      toast.error("Có lỗi xảy ra khi tải đơn hàng");
+      toast.error("Có lỗi xảy ra khi tải đơn h��ng");
     } finally {
       setLoading(false);
     }
