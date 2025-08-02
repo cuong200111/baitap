@@ -137,22 +137,12 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    // Wait for auth to complete before deciding whether to redirect
-    if (authLoading) {
-      return; // Still loading, don't do anything yet
+    // Only load data if user is authenticated (AuthGuard handles auth)
+    if (user && isAuthenticated) {
+      loadProfile();
+      loadProvinces();
     }
-
-    if (!isAuthenticated || !user) {
-      // Auth completed and user is not authenticated
-      router.push("/login");
-      return;
-    }
-
-    // User is authenticated, load profile data
-    loadProfile();
-    // Load provinces immediately for API mode functionality
-    loadProvinces();
-  }, [user, authLoading, isAuthenticated, router]);
+  }, [user, isAuthenticated]);
 
   const loadProfile = async () => {
     try {
@@ -235,7 +225,7 @@ export default function ProfilePage() {
         },
         { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
         { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
-        { code: 33, name: "Hải Phòng", full_name: "Thành phố H��i Phòng" },
+        { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
         { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
@@ -267,7 +257,7 @@ export default function ProfilePage() {
         { code: 46, name: "Quảng Bình", full_name: "Tỉnh Quảng Bình" },
         { code: 49, name: "Quảng Trị", full_name: "Tỉnh Quảng Trị" },
         { code: 51, name: "Thừa Thiên Huế", full_name: "Tỉnh Thừa Thiên Huế" },
-        { code: 52, name: "Quảng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
+        { code: 52, name: "Qu���ng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
         { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
         { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
         { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
@@ -504,7 +494,7 @@ export default function ProfilePage() {
           {
             code: 492,
             name: "Thanh Khê",
-            full_name: "Quận Thanh Khê",
+            full_name: "Quận Thanh Kh��",
             province_code: 48,
           },
           {
@@ -1123,7 +1113,7 @@ export default function ProfilePage() {
           {
             code: 26746,
             name: "Nguyễn Thái Bình",
-            full_name: "Phường Nguyễn Th��i Bình",
+            full_name: "Phường Nguyễn Thái Bình",
             district_code: 760,
           },
           {
@@ -1405,7 +1395,7 @@ export default function ProfilePage() {
           ward_name: data.data.ward_name || "",
         });
 
-        toast.success("Cập nhật thông tin và địa chỉ thành công");
+        toast.success("Cập nhật thông tin và địa chỉ th��nh công");
 
         // Refresh user context
         if (refreshUser) {
