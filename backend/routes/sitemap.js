@@ -78,20 +78,27 @@ router.get("/sitemap.xml", async (req, res) => {
 <!-- Total URLs: Will be calculated dynamically -->
 `;
 
-    // Trang chủ
+    // Trang chủ với mobile optimization
     xml += `  <url>
     <loc>${escapeXml(baseUrl)}</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
+    <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <mobile:mobile/>
   </url>
 `;
 
-    // Trang tĩnh
+    // Trang tĩnh quan trọng cho SEO
     const staticPages = [
-      { path: "/products", priority: "0.9", changefreq: "daily" },
-      { path: "/login", priority: "0.3", changefreq: "monthly" },
-      { path: "/register", priority: "0.3", changefreq: "monthly" },
+      { path: "/products", priority: "0.9", changefreq: "daily", mobile: true },
+      { path: "/category", priority: "0.8", changefreq: "daily", mobile: true },
+      { path: "/about", priority: "0.6", changefreq: "monthly", mobile: true },
+      { path: "/contact", priority: "0.6", changefreq: "monthly", mobile: true },
+      { path: "/privacy", priority: "0.4", changefreq: "yearly", mobile: false },
+      { path: "/terms", priority: "0.4", changefreq: "yearly", mobile: false },
+      { path: "/shipping", priority: "0.5", changefreq: "monthly", mobile: true },
+      { path: "/warranty", priority: "0.5", changefreq: "monthly", mobile: true },
+      { path: "/support", priority: "0.6", changefreq: "weekly", mobile: true },
     ];
 
     staticPages.forEach((page) => {
