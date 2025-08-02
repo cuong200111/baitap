@@ -93,20 +93,11 @@ export default function BillingPage() {
   });
 
   useEffect(() => {
-    // Wait for auth to complete before deciding whether to redirect
-    if (authLoading) {
-      return; // Still loading, don't do anything yet
+    // Only load data if user is authenticated (AuthGuard handles auth)
+    if (user && isAuthenticated) {
+      loadBillingData();
     }
-
-    if (!isAuthenticated || !user) {
-      // Auth completed and user is not authenticated
-      router.push("/login");
-      return;
-    }
-
-    // User is authenticated, load billing data
-    loadBillingData();
-  }, [user, authLoading, isAuthenticated, router]);
+  }, [user, isAuthenticated]);
 
   const loadBillingData = async () => {
     try {
