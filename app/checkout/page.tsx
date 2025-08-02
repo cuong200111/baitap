@@ -67,6 +67,9 @@ export default function CheckoutPage() {
   useEffect(() => {
     loadCart();
     loadSavedCustomerInfo();
+    if (isAuthenticated && user?.id) {
+      loadUserAddress();
+    }
   }, []);
 
   useEffect(() => {
@@ -77,6 +80,8 @@ export default function CheckoutPage() {
         email: user.email || "",
         phone: user.phone || "",
       }));
+      // Load user address when user becomes available
+      loadUserAddress();
     }
   }, [isAuthenticated, user]);
 
