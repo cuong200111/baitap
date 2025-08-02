@@ -234,7 +234,7 @@ export default function ProfilePage() {
         },
         { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
         { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
-        { code: 33, name: "Hải Ph��ng", full_name: "Thành phố Hải Phòng" },
+        { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
         { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
@@ -1234,7 +1234,7 @@ export default function ProfilePage() {
           },
           {
             code: 4,
-            name: "Phư���ng 4",
+            name: "Phường 4",
             full_name: "Phường 4",
             district_code: districtCode,
           },
@@ -1924,7 +1924,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Lock className="h-5 w-5" />
-                      Bảo m���t tài khoản
+                      Bảo m��t tài khoản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
