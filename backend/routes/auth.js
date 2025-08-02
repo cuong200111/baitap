@@ -195,17 +195,58 @@ router.post(
 );
 
 // Get current user profile
-router.get("/profile", authenticateToken, async (req, res) => {
+router.get("/profile", async (req, res) => {
   try {
+    // Check if authorization header exists
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Access token required",
+        code: "NO_TOKEN"
+      });
+    }
+
+    // Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(401).json({
+          success: false,
+          message: "Token expired",
+          code: "TOKEN_EXPIRED"
+        });
+      }
+      return res.status(403).json({
+        success: false,
+        message: "Invalid token",
+        code: "INVALID_TOKEN"
+      });
+    }
+
+    // Check if user exists and is active
     const user = await executeQuery(
-      "SELECT id, email, full_name, phone, role, avatar, created_at FROM users WHERE id = ?",
-      [req.user.id],
+      "SELECT id, email, full_name, phone, role, avatar, created_at, is_active FROM users WHERE id = ?",
+      [decoded.id],
     );
 
     if (!user.length) {
       return res.status(404).json({
         success: false,
         message: "User not found",
+        code: "USER_NOT_FOUND"
+      });
+    }
+
+    if (!user[0].is_active) {
+      return res.status(401).json({
+        success: false,
+        message: "Account is deactivated",
+        code: "USER_INACTIVE"
       });
     }
 
