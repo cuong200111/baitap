@@ -288,7 +288,7 @@ router.get("/sitemap.xml", async (req, res) => {
         `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
          VALUES ('sitemap_generation', CURDATE(), 1, NOW())
          ON DUPLICATE KEY UPDATE
-         page_views = page_views + 1, updated_at = NOW()`,
+         page_views = page_views + 1`,
       );
     } catch (logError) {
       console.log("Analytics logging failed:", logError.message);
