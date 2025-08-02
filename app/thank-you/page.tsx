@@ -64,7 +64,12 @@ export default function ThankYouPage() {
   const orderNumber = searchParams.get("order_number");
 
   useEffect(() => {
-    console.log("ThankYou page - orderId:", orderId, "orderNumber:", orderNumber);
+    console.log(
+      "ThankYou page - orderId:",
+      orderId,
+      "orderNumber:",
+      orderNumber,
+    );
 
     if (orderId || orderNumber) {
       loadOrderDetails();
@@ -104,11 +109,15 @@ export default function ThankYouPage() {
         console.error("Order API error response:", errorText);
 
         if (response.status === 401) {
-          setError("Cần đăng nhập để xem thông tin đơn hàng. Bạn có thể tra cứu đơn hàng bằng mã đơn hàng tại trang Tra cứu đơn hàng.");
+          setError(
+            "Cần đăng nhập để xem thông tin đơn hàng. Bạn có thể tra cứu đơn hàng bằng mã đơn hàng tại trang Tra cứu đơn hàng.",
+          );
           return;
         }
         if (response.status === 404) {
-          setError("Không tìm thấy đơn hàng. Vui lòng kiểm tra lại mã đơn hàng.");
+          setError(
+            "Không tìm thấy đơn hàng. Vui lòng kiểm tra lại mã đơn hàng.",
+          );
           return;
         }
         throw new Error(`Lỗi API: ${response.status} - ${errorText}`);
@@ -198,7 +207,8 @@ export default function ThankYouPage() {
               Đặt hàng thành công!
             </h1>
             <p className="text-gray-600">
-              Cảm ơn bạn đã mua sắm tại HACOM. Đơn hàng của bạn đã được ghi nhận.
+              Cảm ơn bạn đã mua sắm tại HACOM. Đơn hàng của bạn đã được ghi
+              nhận.
             </p>
           </div>
 
@@ -210,13 +220,15 @@ export default function ThankYouPage() {
               </div>
 
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                <p className="text-sm text-yellow-800">
-                  {error}
-                </p>
+                <p className="text-sm text-yellow-800">{error}</p>
               </div>
 
               <div className="space-y-3">
-                <Button onClick={loadOrderDetails} variant="outline" className="w-full">
+                <Button
+                  onClick={loadOrderDetails}
+                  variant="outline"
+                  className="w-full"
+                >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Thử tải lại thông tin
                 </Button>
@@ -243,7 +255,8 @@ export default function ThankYouPage() {
 
               <div className="mt-6 text-center text-sm text-gray-600">
                 <p>
-                  Đơn hàng sẽ được xử lý trong vòng 24 giờ. Hotline hỗ trợ: <strong>1900.1903</strong>
+                  Đơn hàng sẽ được xử lý trong vòng 24 giờ. Hotline hỗ trợ:{" "}
+                  <strong>1900.1903</strong>
                 </p>
               </div>
             </CardContent>
@@ -267,7 +280,8 @@ export default function ThankYouPage() {
               Đặt hàng thành công!
             </h1>
             <p className="text-gray-600">
-              Cảm ơn bạn đã mua sắm tại HACOM. Đơn hàng của bạn đã được ghi nhận.
+              Cảm ơn bạn đã mua sắm tại HACOM. Đơn hàng của bạn đã được ghi
+              nhận.
             </p>
           </div>
 
@@ -304,7 +318,11 @@ export default function ThankYouPage() {
                   </Link>
                 </Button>
 
-                <Button onClick={() => router.push("/")} variant="outline" className="w-full">
+                <Button
+                  onClick={() => router.push("/")}
+                  variant="outline"
+                  className="w-full"
+                >
                   <Home className="h-4 w-4 mr-2" />
                   Về trang chủ
                 </Button>
@@ -332,7 +350,9 @@ export default function ThankYouPage() {
               <div className="text-red-500 mb-4">
                 <Package className="h-16 w-16 mx-auto" />
               </div>
-              <h2 className="text-xl font-semibold mb-2">Có vấn đề khi tải thông tin đơn hàng</h2>
+              <h2 className="text-xl font-semibold mb-2">
+                Có vấn đề khi tải thông tin đơn hàng
+              </h2>
               <p className="text-gray-600 mb-6">{error}</p>
 
               <div className="space-y-3">
