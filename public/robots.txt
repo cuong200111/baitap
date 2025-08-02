@@ -1,0 +1,130 @@
+# HACOM E-commerce Platform - Robots.txt
+# Optimized for maximum SEO performance
+# Last updated: 2024-01-15
+
+# ===========================================
+# MAIN CRAWLERS - FULL ACCESS
+# ===========================================
+
+# Google Search Engine
+User-agent: Googlebot
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 1
+
+# Bing Search Engine  
+User-agent: Bingbot
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 2
+
+# Yahoo Search Engine
+User-agent: Slurp
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+Crawl-delay: 3
+
+# ===========================================
+# SOCIAL MEDIA CRAWLERS
+# ===========================================
+
+# Facebook Crawler
+User-agent: facebookexternalhit/
+Allow: /
+Allow: /products/
+Allow: /category/
+
+# Twitter Crawler
+User-agent: Twitterbot
+Allow: /
+Allow: /products/
+Allow: /category/
+
+# LinkedIn Crawler
+User-agent: LinkedInBot
+Allow: /
+Allow: /products/
+Allow: /category/
+
+# ===========================================
+# GENERAL CRAWLERS - RESTRICTED ACCESS  
+# ===========================================
+
+User-agent: *
+Allow: /
+Allow: /products/
+Allow: /category/
+Allow: /uploads/
+
+# Block admin and sensitive areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /debug*
+Disallow: /test*
+Disallow: /setup*
+Disallow: /status*
+
+# Block user-specific pages
+Disallow: /login*
+Disallow: /register*
+Disallow: /profile*
+Disallow: /checkout*
+Disallow: /cart*
+Disallow: /orders*
+Disallow: /billing*
+Disallow: /thank-you*
+Disallow: /track-order*
+
+# Block dynamic/filtered URLs that cause duplicate content
+Disallow: /*?*sort=*
+Disallow: /*?*filter=*
+Disallow: /*?*page=*
+Disallow: /*?*limit=*
+Disallow: /*?*search=*
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid*
+Disallow: /*?*gclid*
+
+# ===========================================
+# BAD BOTS AND SCRAPERS - BLOCKED
+# ===========================================
+
+# SEO Tools Bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot  
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# ===========================================
+# SITEMAPS
+# ===========================================
+Sitemap: https://hacom.vn/sitemap.xml
+Sitemap: https://hacom.vn/sitemapindex.xml
+
+# ===========================================
+# TECHNICAL DIRECTIVES
+# ===========================================
+Host: hacom.vn
+Request-rate: 1/10
+Visit-time: 0600-1800
+Cache-delay: 86400
