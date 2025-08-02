@@ -14,7 +14,7 @@ export const adminController = {
           COUNT(CASE WHEN stock_quantity <= 5 THEN 1 END) as low_stock
         FROM products
       `,
-        []
+        [],
       );
 
       // Get categories statistics
@@ -25,7 +25,7 @@ export const adminController = {
           COUNT(CASE WHEN is_active = 1 THEN 1 END) as active
         FROM categories
       `,
-        []
+        [],
       );
 
       // Get users statistics
@@ -37,7 +37,7 @@ export const adminController = {
           COUNT(CASE WHEN role = 'admin' THEN 1 END) as admins
         FROM users
       `,
-        []
+        [],
       );
 
       // Get orders statistics
@@ -54,7 +54,7 @@ export const adminController = {
           COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed
         FROM orders
       `,
-        []
+        [],
       );
 
       // Get revenue from delivered and completed orders
@@ -65,7 +65,7 @@ export const adminController = {
           COALESCE(SUM(CASE WHEN status IN ('cancelled', 'failed') THEN total_amount ELSE 0 END), 0) as lost_revenue
         FROM orders
       `,
-        []
+        [],
       );
 
       // Get successful and failed orders count
@@ -76,7 +76,7 @@ export const adminController = {
           COUNT(CASE WHEN status IN ('cancelled', 'failed') THEN 1 END) as failed_orders
         FROM orders
       `,
-        []
+        [],
       );
 
       const dashboardStats = {
@@ -205,7 +205,7 @@ export const adminController = {
         try {
           const existing = await executeQuery(
             "SELECT id FROM categories WHERE slug = ?",
-            [category.slug]
+            [category.slug],
           );
 
           if (existing.length === 0) {
@@ -218,7 +218,7 @@ export const adminController = {
                 category.description,
                 category.image,
                 category.sort_order,
-              ]
+              ],
             );
             created++;
           }
@@ -250,7 +250,7 @@ export const adminController = {
       // Check if admin already exists
       const existingAdmin = await executeQuery(
         "SELECT id FROM users WHERE email = ?",
-        [adminEmail]
+        [adminEmail],
       );
 
       if (existingAdmin.length > 0) {
@@ -268,7 +268,7 @@ export const adminController = {
       const result = await executeQuery(
         `INSERT INTO users (email, password, full_name, role, is_active, created_at) 
          VALUES (?, ?, ?, 'admin', 1, NOW())`,
-        [adminEmail, hashedPassword, "Admin ZOXVN"]
+        [adminEmail, hashedPassword, "Admin ZOXVN"],
       );
 
       res.json({
@@ -288,24 +288,44 @@ export const adminController = {
   // Generate Robots.txt
   async generateRobots(req, res) {
     try {
-      const robotsContent = `User-agent: *
-Allow: /
+      // Frontend URL (where robots.txt should be accessible)
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 
-# Sitemap
-Sitemap: ${req.protocol}://${req.get("host")}/sitemap.xml
+      // Test robots.txt accessibility from frontend
+      const response = await fetch(`${frontendUrl}/robots.txt`);
 
-# Crawl-delay
-Crawl-delay: 1`;
+      if (response.ok) {
+        const robotsContent = await response.text();
 
-      res.json({
-        success: true,
-        data: { content: robotsContent },
-      });
+        // Log generation to analytics
+        await executeQuery(
+          `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
+           VALUES ('robots_generation', CURDATE(), 1, NOW())
+           ON DUPLICATE KEY UPDATE
+           page_views = page_views + 1, updated_at = NOW()`,
+        );
+
+        res.json({
+          success: true,
+          message: "Robots.txt accessible successfully from frontend",
+          data: {
+            content: robotsContent,
+            url: `${frontendUrl}/robots.txt`,
+            size: robotsContent.length,
+            lastGenerated: new Date().toISOString(),
+            note: "Generated dynamically by Next.js frontend",
+          },
+        });
+      } else {
+        throw new Error(
+          `Frontend robots.txt not accessible: ${response.status}`,
+        );
+      }
     } catch (error) {
       console.error("Generate robots error:", error);
       res.status(500).json({
         success: false,
-        message: "Failed to generate robots.txt",
+        message: "Failed to access robots.txt from frontend: " + error.message,
       });
     }
   },
@@ -313,58 +333,46 @@ Crawl-delay: 1`;
   // Generate Sitemap
   async generateSitemap(req, res) {
     try {
-      const baseUrl = `${req.protocol}://${req.get("host")}`;
-      
-      // Get categories
-      const categories = await executeQuery(
-        "SELECT slug FROM categories WHERE is_active = 1"
-      );
-      
-      // Get products
-      const products = await executeQuery(
-        "SELECT id FROM products WHERE status = 'active'"
-      );
+      // Frontend URL (where sitemap.xml should be accessible)
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 
-      let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>`;
+      // Test sitemap.xml accessibility from frontend
+      const response = await fetch(`${frontendUrl}/sitemap.xml`);
 
-      // Add category URLs
-      for (const category of categories) {
-        sitemap += `
-  <url>
-    <loc>${baseUrl}/category/${category.slug}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`;
+      if (response.ok) {
+        const sitemapContent = await response.text();
+
+        // Count URLs in sitemap
+        const urlCount = (sitemapContent.match(/<url>/g) || []).length;
+
+        // Log generation to analytics
+        await executeQuery(
+          `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
+           VALUES ('sitemap_generation', CURDATE(), 1, NOW())
+           ON DUPLICATE KEY UPDATE
+           page_views = page_views + 1, updated_at = NOW()`,
+        );
+
+        res.json({
+          success: true,
+          message: `Sitemap accessible successfully with ${urlCount} URLs from frontend`,
+          data: {
+            content: sitemapContent,
+            url: `${frontendUrl}/sitemap.xml`,
+            urlCount: urlCount,
+            size: sitemapContent.length,
+            lastGenerated: new Date().toISOString(),
+            note: "Generated dynamically by Next.js frontend",
+          },
+        });
+      } else {
+        throw new Error(`Frontend sitemap not accessible: ${response.status}`);
       }
-
-      // Add product URLs
-      for (const product of products) {
-        sitemap += `
-  <url>
-    <loc>${baseUrl}/products/${product.id}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>`;
-      }
-
-      sitemap += `
-</urlset>`;
-
-      res.json({
-        success: true,
-        data: { content: sitemap },
-      });
     } catch (error) {
       console.error("Generate sitemap error:", error);
       res.status(500).json({
         success: false,
-        message: "Failed to generate sitemap",
+        message: "Failed to access sitemap from frontend: " + error.message,
       });
     }
   },
@@ -373,7 +381,7 @@ Crawl-delay: 1`;
   async validateXml(req, res) {
     try {
       const { xml } = req.body;
-      
+
       if (!xml) {
         return res.status(400).json({
           success: false,
@@ -382,13 +390,13 @@ Crawl-delay: 1`;
       }
 
       // Basic XML validation
-      const isValid = xml.includes('<?xml') && xml.includes('</');
-      
+      const isValid = xml.includes("<?xml") && xml.includes("</");
+
       res.json({
         success: true,
-        data: { 
+        data: {
           isValid,
-          message: isValid ? "XML is valid" : "XML is invalid"
+          message: isValid ? "XML is valid" : "XML is invalid",
         },
       });
     } catch (error) {

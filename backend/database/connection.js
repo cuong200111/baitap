@@ -24,12 +24,28 @@ const dbConfig = {
 };
 export const mysqlExecuteQuery = async (query, params = []) => {
   try {
+    console.log(
+      "🔍 Executing query:",
+      query.slice(0, 100) + (query.length > 100 ? "..." : ""),
+    );
     const [results] = await pool.execute(query, params);
+    console.log(
+      "✅ Query executed successfully, rows affected:",
+      Array.isArray(results) ? results.length : "N/A",
+    );
     return results;
   } catch (error) {
     console.error("❌ MySQL query error:", error.message);
     console.error("Query:", query);
     console.error("Params:", params);
+
+    // Handle specific connection errors
+    if (error.code === "ECONNRESET") {
+      console.error("🔄 Connection reset, may need to retry");
+    } else if (error.code === "PROTOCOL_CONNECTION_LOST") {
+      console.error("🔄 Connection lost, may need to retry");
+    }
+
     throw error;
   }
 };
@@ -50,8 +66,6 @@ try {
   console.error("❌ MySQL pool creation failed:", error.message);
   throw error;
 }
-
-
 
 // Execute query with error handling
 export const executeQuery = async (query, params = []) => {

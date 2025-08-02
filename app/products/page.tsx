@@ -26,12 +26,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Product,
-  Category,
-  formatPrice,
-  getMediaUrl,
-} from "@/config";
+import { Product, Category, formatPrice, getMediaUrl } from "@/config";
 import { apiWrappers } from "@/lib/api-wrapper";
 
 interface Filters {
@@ -273,12 +268,14 @@ export default function ProductsPage() {
                 <Badge variant="destructive">-{discount}%</Badge>
               </div>
             )}
-              {product.featured ? (
+            {product.featured ? (
               <div className="absolute top-2 right-2">
                 <Badge className="bg-yellow-500 text-black">HOT</Badge>
               </div>
-            ):""}
-            
+            ) : (
+              ""
+            )}
+
             {product.stock_quantity === 0 && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <Badge variant="secondary">Hết hàng</Badge>

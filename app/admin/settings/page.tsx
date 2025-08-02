@@ -66,6 +66,7 @@ import SeoSummaryStats from "@/components/SeoSummaryStats";
 import SeoSystemStatus from "@/components/SeoSystemStatus";
 import AdvancedSeoDashboard from "@/components/AdvancedSeoDashboard";
 import SeoGenerationPanel from "@/components/SeoGenerationPanel";
+import AdminInitializer from "@/components/AdminInitializer";
 import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SeoSettings {
@@ -381,7 +382,30 @@ export default function SettingsPage() {
   const loadSettings = async () => {
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để xem cài đặt");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(`${API_DOMAIN}/api/admin/settings`, {
+        headers,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setSettings(data.data);
+        }
+      } else {
+        console.error("Failed to load settings:", response.status);
+      }
     } catch (error) {
       console.error("Failed to load settings:", error);
       toast.error("Không thể tải cài đặt");
@@ -574,8 +598,30 @@ export default function SettingsPage() {
   const handleSaveSettings = async () => {
     try {
       setSaving(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Đã lưu cài đặt thành công");
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để lưu cài đặt");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(`${API_DOMAIN}/api/admin/settings`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(settings),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Đã lưu cài đặt thành công");
+      } else {
+        toast.error("Có lỗi xảy ra khi lưu cài đặt");
+      }
     } catch (error) {
       console.error("Failed to save settings:", error);
       toast.error("Có lỗi xảy ra khi lưu cài đặt");
@@ -787,6 +833,9 @@ export default function SettingsPage() {
           </Button>
         </div>
       </div>
+
+      {/* Admin Initializer */}
+      <AdminInitializer />
 
       <Tabs defaultValue="seo" className="w-full">
         <TabsList className="grid w-full grid-cols-10">
@@ -1859,7 +1908,7 @@ export default function SettingsPage() {
                     <div>
                       <Label htmlFor="enable_local_seo">Enable Local SEO</Label>
                       <p className="text-sm text-gray-500">
-                        Bật các tính n��ng tối ưu cho tìm kiếm địa phương
+                        Bật các tính năng tối ưu cho tìm kiếm địa phương
                       </p>
                     </div>
                     <Switch
@@ -1902,7 +1951,7 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Search className="h-4 w-4" />
-                  <span>Cài đặt SEO được tối ưu hóa cho công cụ tìm kiếm</span>
+                  <span>Cài đặt SEO được tối ưu hóa cho công cụ t��m kiếm</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button onClick={calculateSeoScore} variant="outline">

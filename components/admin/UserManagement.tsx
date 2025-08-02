@@ -368,7 +368,7 @@ export function UserManagement() {
             <div className="flex items-center">
               <Users className="h-8 w-8 text-gray-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Hoạt đ���ng</p>
+                <p className="text-sm font-medium text-gray-600">Hoạt động</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {users.filter((u) => u.is_active).length}
                 </p>

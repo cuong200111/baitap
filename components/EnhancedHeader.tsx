@@ -402,7 +402,7 @@ export function EnhancedHeader() {
                             onClick={handleSearch}
                             className="w-full text-left text-sm text-red-600 hover:text-red-700 font-medium flex items-center justify-between"
                           >
-                            <span>Xem tất c�� kết quả cho "{searchQuery}"</span>
+                            <span>Xem tất cả kết quả cho "{searchQuery}"</span>
                             <ArrowRight className="h-4 w-4" />
                           </button>
                         </div>
