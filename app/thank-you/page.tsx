@@ -63,13 +63,15 @@ export default function ThankYouPage() {
   const orderNumber = searchParams.get("order_number");
 
   useEffect(() => {
-    if (orderId) {
+    console.log("ThankYou page - orderId:", orderId, "orderNumber:", orderNumber);
+
+    if (orderId || orderNumber) {
       loadOrderDetails();
     } else {
-      setError("Không tìm thấy thông tin đơn hàng");
+      setError("Không tìm thấy thông tin đơn hàng. Vui lòng kiểm tra URL hoặc liên hệ hỗ trợ.");
       setLoading(false);
     }
-  }, [orderId]);
+  }, [orderId, orderNumber]);
 
   const loadOrderDetails = async () => {
     try {
