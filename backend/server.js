@@ -105,6 +105,7 @@ app.use("/api/init", initRoutes);
 // Serve robots.txt and sitemap.xml directly from root
 app.use("/", robotsRoutes);
 app.use("/", sitemapRouter);
+app.use("/", sitemapIndexRouter);
 app.use("/api", sitemapRouter); // Also serve from /api for admin access
 
 // Legacy sitemeta routes
