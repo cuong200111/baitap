@@ -1,5 +1,7 @@
 "use client";
 
+export { generateMetadata } from "./metadata";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -547,7 +549,7 @@ export default function BillingPage() {
                 <Shield className="h-4 w-4" />
                 <AlertDescription>
                   Thông tin thẻ của bạn được bảo mật bằng mã hóa SSL 256-bit và
-                  tuân thủ tiêu chuẩn PCI DSS.
+                  tuân th�� tiêu chuẩn PCI DSS.
                 </AlertDescription>
               </Alert>
             </TabsContent>
