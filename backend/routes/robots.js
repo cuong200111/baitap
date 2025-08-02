@@ -287,10 +287,10 @@ Cache-delay: 86400
     // 5. Log sitemap generation to analytics
     try {
       await executeQuery(
-        `INSERT INTO seo_analytics (url_path, date, page_views, created_at) 
+        `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
          VALUES ('robots_generation', CURDATE(), 1, NOW())
-         ON DUPLICATE KEY UPDATE 
-         page_views = page_views + 1, updated_at = NOW()`,
+         ON DUPLICATE KEY UPDATE
+         page_views = page_views + 1`,
       );
     } catch (logError) {
       console.log("Analytics logging failed:", logError.message);
