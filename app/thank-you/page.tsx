@@ -253,6 +253,75 @@ export default function ThankYouPage() {
     );
   }
 
+  // If no parameters at all, show basic success
+  if (!orderId && !orderNumber && !loading && !error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          {/* Success Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Đặt hàng thành công!
+            </h1>
+            <p className="text-gray-600">
+              Cảm ơn bạn đã mua sắm tại HACOM. Đơn hàng của bạn đã được ghi nhận.
+            </p>
+          </div>
+
+          <Card className="max-w-lg mx-auto text-center">
+            <CardContent className="pt-6">
+              <div className="mb-6">
+                <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 mb-4">
+                  Chúng tôi sẽ xử lý đơn hàng của bạn và liên hệ sớm nhất.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {user ? (
+                  <Button asChild className="w-full">
+                    <Link href="/orders">
+                      <Package className="h-4 w-4 mr-2" />
+                      Xem đơn hàng của tôi
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button asChild className="w-full">
+                    <Link href="/track-order">
+                      <Package className="h-4 w-4 mr-2" />
+                      Tra cứu đơn hàng
+                    </Link>
+                  </Button>
+                )}
+
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/products">
+                    <ShoppingBag className="h-4 w-4 mr-2" />
+                    Tiếp tục mua sắm
+                  </Link>
+                </Button>
+
+                <Button onClick={() => router.push("/")} variant="outline" className="w-full">
+                  <Home className="h-4 w-4 mr-2" />
+                  Về trang chủ
+                </Button>
+              </div>
+
+              <div className="mt-6 text-center text-sm text-gray-600">
+                <p>
+                  Hotline hỗ trợ: <strong>1900.1903</strong>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   // If no order number and error, show full error state
   if (error || !order) {
     return (
@@ -396,7 +465,7 @@ export default function ThankYouPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />
-                  Thông tin kh��ch hàng
+                  Thông tin khách hàng
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
