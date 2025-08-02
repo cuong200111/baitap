@@ -22,6 +22,7 @@ import searchRoutes from "./routes/search.js";
 import locationsRoutes from "./routes/locations.js";
 import shippingRoutes from "./routes/shipping.js";
 import cartRoutes from "./routes/cart.js";
+import buyNowRoutes from "./routes/buy-now.js";
 import sitemetaRoutes from "./routes/sitemeta.js";
 import seoRoutes from "./routes/seo.js";
 import utilsRoutes from "./routes/utils.js";
