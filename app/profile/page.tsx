@@ -427,7 +427,7 @@ export default function ProfilePage() {
           // Điện Biên
           {
             code: 110,
-            name: "Điện Biên Phủ",
+            name: "Đi��n Biên Phủ",
             full_name: "Thành phố Điện Biên Phủ",
             province_code: 11,
           },
@@ -641,7 +641,7 @@ export default function ProfilePage() {
             {
               code: 4,
               name: "Long Biên",
-              full_name: "Quận Long Bi��n",
+              full_name: "Quận Long Biên",
               province_code: 1,
             },
             {
@@ -1137,7 +1137,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phường Tân Th��nh",
+            full_name: "Phường Tân Thạnh",
             district_code: 200,
           },
           {
@@ -1924,7 +1924,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Lock className="h-5 w-5" />
-                      Bảo m��t tài khoản
+                      Bảo m���t tài khoản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
