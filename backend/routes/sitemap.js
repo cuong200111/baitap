@@ -104,9 +104,16 @@ router.get("/sitemap.xml", async (req, res) => {
     staticPages.forEach((page) => {
       xml += `  <url>
     <loc>${escapeXml(baseUrl)}${escapeXml(page.path)}</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
+    <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
+    <priority>${page.priority}</priority>`;
+
+      if (page.mobile) {
+        xml += `
+    <mobile:mobile/>`;
+      }
+
+      xml += `
   </url>
 `;
     });
