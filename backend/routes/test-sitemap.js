@@ -132,6 +132,45 @@ router.get("/setup", async (req, res) => {
   }
 });
 
+// Test public endpoint
+router.get("/public", async (req, res) => {
+  try {
+    console.log('=== TEST PUBLIC ENDPOINT ===');
+
+    const response = await fetch('http://localhost:4000/api/custom-sitemaps');
+    console.log('Public endpoint response status:', response.status);
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Public endpoint data:', data);
+
+      res.json({
+        success: true,
+        message: 'Public endpoint test completed',
+        data: data
+      });
+    } else {
+      const errorText = await response.text();
+      console.log('Public endpoint error:', errorText);
+
+      res.json({
+        success: false,
+        message: 'Public endpoint failed',
+        status: response.status,
+        error: errorText
+      });
+    }
+
+  } catch (error) {
+    console.error('Test public endpoint error:', error);
+    res.status(500).json({
+      success: false,
+      message: "Test failed",
+      error: error.message
+    });
+  }
+});
+
 // List all sitemaps
 router.get("/list", async (req, res) => {
   try {
