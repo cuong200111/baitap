@@ -428,7 +428,7 @@ export default function AdminShippingPage() {
                         disabled={!warehouseForm.province_id}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn huy���n" />
+                          <SelectValue placeholder="Chọn huyện" />
                         </SelectTrigger>
                         <SelectContent>
                           {districts.map((district) => (
