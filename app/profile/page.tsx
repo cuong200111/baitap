@@ -791,7 +791,7 @@ export default function ProfilePage() {
             {
               code: 494,
               name: "Ngũ Hành Sơn",
-              full_name: "Qu���n Ngũ Hành Sơn",
+              full_name: "Quận Ngũ Hành Sơn",
               province_code: 48,
             },
             {
