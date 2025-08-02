@@ -77,6 +77,26 @@ export default function TestSitemapForm({ authToken }: TestSitemapFormProps) {
     }
   };
 
+  const handleDatabaseSetup = async () => {
+    try {
+      console.log("🔧 Testing database setup...");
+
+      const response = await fetch(`${Domain}/api/test-sitemap/setup`);
+      const data = await response.json();
+
+      console.log("🔧 Setup response:", data);
+
+      if (response.ok && data.success) {
+        toast.success("🔧 Database setup completed");
+      } else {
+        toast.error(`❌ Setup failed: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("🚨 Database setup error:", error);
+      toast.error("❌ Setup error occurred");
+    }
+  };
+
   if (!authToken) {
     return (
       <Card>
