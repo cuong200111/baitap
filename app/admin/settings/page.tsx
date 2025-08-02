@@ -834,6 +834,9 @@ export default function SettingsPage() {
         </div>
       </div>
 
+      {/* Admin Initializer */}
+      <AdminInitializer />
+
       <Tabs defaultValue="seo" className="w-full">
         <TabsList className="grid w-full grid-cols-10">
           <TabsTrigger value="seo">SEO</TabsTrigger>
