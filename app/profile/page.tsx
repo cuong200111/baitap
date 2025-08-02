@@ -572,7 +572,7 @@ export default function ProfilePage() {
           {
             code: 922,
             name: "Cờ Đỏ",
-            full_name: "Huyện Cờ Đỏ",
+            full_name: "Huyện C�� Đỏ",
             province_code: 92,
           },
           {
@@ -758,7 +758,7 @@ export default function ProfilePage() {
             {
               code: 776,
               name: "Quận Tân Phú",
-              full_name: "Quận Tân Phú",
+              full_name: "Quận Tân Ph��",
               province_code: 79,
             },
           ],
@@ -1137,7 +1137,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phường Tân Thạnh",
+            full_name: "Phường T��n Thạnh",
             district_code: 200,
           },
           {
@@ -1898,7 +1898,7 @@ export default function ProfilePage() {
                         onChange={(e) =>
                           handleInputChange("address", e.target.value)
                         }
-                        placeholder="S��� nh��, tên đường..."
+                        placeholder="Số nhà, tên đường..."
                       />
                     </div>
 
