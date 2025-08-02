@@ -14,50 +14,102 @@ export async function apiCall<T = any>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<ApiResponse<T>> {
-  try {
-    const url = `${Domain}${endpoint}`;
-    let headers: HeadersInit = {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    };
+  let retryCount = 0;
+  const maxRetries = 3;
 
-    // Check for token in localStorage (browser only)
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers = {
-          ...headers,
-          Authorization: `Bearer ${token}`,
+  while (retryCount < maxRetries) {
+    try {
+      const url = `${Domain}${endpoint}`;
+      let headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      };
+
+      // Check for token in localStorage (browser only)
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) {
+          headers = {
+            ...headers,
+            Authorization: `Bearer ${token}`,
+          };
+        }
+      }
+
+      const defaultOptions: RequestInit = {
+        ...options,
+        headers,
+      };
+
+      console.log(`🌐 API Call: ${options.method || 'GET'} ${endpoint} (attempt ${retryCount + 1})`);
+
+      const response = await fetch(url, defaultOptions);
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse response JSON:", parseError);
+        data = { success: false, message: "Invalid response format" };
+      }
+
+      if (!response.ok) {
+        console.error(`❌ HTTP ${response.status} for ${endpoint}:`, data);
+
+        // For auth errors, don't retry
+        if (response.status === 401 || response.status === 403) {
+          return {
+            success: false,
+            message: data.message || `HTTP ${response.status}`,
+            status: response.status,
+            code: data.code
+          };
+        }
+
+        // For server errors, retry
+        if (response.status >= 500 && retryCount < maxRetries - 1) {
+          retryCount++;
+          console.log(`🔄 Retrying ${endpoint} (attempt ${retryCount + 1})`);
+          await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+          continue;
+        }
+
+        return {
+          success: false,
+          message: data.message || `HTTP error! status: ${response.status}`,
+          status: response.status,
         };
       }
+
+      console.log(`✅ API Success: ${endpoint}`);
+      return {
+        ...data,
+        status: response.status,
+      };
+    } catch (error: any) {
+      console.error(`❌ API Error for ${endpoint} (attempt ${retryCount + 1}):`, error.message);
+
+      // For network errors, retry
+      if (retryCount < maxRetries - 1) {
+        retryCount++;
+        console.log(`🔄 Retrying ${endpoint} due to network error (attempt ${retryCount + 1})`);
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount));
+        continue;
+      }
+
+      return {
+        success: false,
+        message: error.message || "Network error occurred",
+        status: error.status || 500,
+      };
     }
-
-    const defaultOptions: RequestInit = {
-      ...options,
-      headers,
-    };
-
-    const response = await fetch(url, defaultOptions);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    return {
-      ...data,
-      status: response.status,
-    };
-  } catch (error: any) {
-    console.error(`❌ API Error for ${endpoint}:`, error);
-
-    return {
-      success: false,
-      message: error.message || "Network error occurred",
-      status: error.status || 500,
-    };
   }
+
+  return {
+    success: false,
+    message: "Maximum retries exceeded",
+    status: 500,
+  };
 }
 
 // Specific API wrappers that work properly
