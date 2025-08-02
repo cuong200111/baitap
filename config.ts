@@ -90,8 +90,23 @@ async function callApi<T>(url: string, options: RequestInit = {}): Promise<T> {
     }
   }
 
+  console.log("🌐 API Call:", options.method || "GET", url);
+  console.log("🔑 Headers:", headers);
+
   const response = await fetch(url, { ...options, headers });
-  return response.json();
+
+  console.log("📡 Response status:", response.status, response.statusText);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("❌ API Error:", response.status, errorText);
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  console.log("📋 Response data:", data);
+
+  return data;
 }
 
 // API Functions
