@@ -151,6 +151,14 @@ export default function AdvancedSeoDashboard() {
   const [contentToAnalyze, setContentToAnalyze] = useState("");
   const [targetKeywords, setTargetKeywords] = useState("");
 
+  // Get auth token on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      setAuthToken(token || undefined);
+    }
+  }, []);
+
   useEffect(() => {
     loadDashboardData();
   }, [selectedTimeRange]);
