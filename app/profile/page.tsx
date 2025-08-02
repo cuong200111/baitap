@@ -130,14 +130,22 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (!user) {
+    // Wait for auth to complete before deciding whether to redirect
+    if (authLoading) {
+      return; // Still loading, don't do anything yet
+    }
+
+    if (!isAuthenticated || !user) {
+      // Auth completed and user is not authenticated
       router.push("/login");
       return;
     }
+
+    // User is authenticated, load profile data
     loadProfile();
     // Load provinces immediately for API mode functionality
     loadProvinces();
-  }, [user, router]);
+  }, [user, authLoading, isAuthenticated, router]);
 
   const loadProfile = async () => {
     try {
@@ -1911,7 +1919,7 @@ export default function ProfilePage() {
 
                     <div className="flex items-center justify-between p-4 border rounded">
                       <div>
-                        <h4 className="font-medium">M���t khẩu</h4>
+                        <h4 className="font-medium">Mật khẩu</h4>
                         <p className="text-sm text-gray-600">
                           Cập nhật lần cuối:{" "}
                           {new Date(profile.created_at).toLocaleDateString(
