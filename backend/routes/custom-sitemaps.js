@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
 });
 
 // Get all custom sitemaps for admin (requires auth)
-router.get("/admin", verifyToken, async (req, res) => {
+router.get("/admin", authenticateToken, async (req, res) => {
   try {
     const [rows] = await pool.execute(
       "SELECT * FROM custom_sitemaps ORDER BY created_at DESC",
@@ -47,7 +47,7 @@ router.get("/admin", verifyToken, async (req, res) => {
 });
 
 // Get single custom sitemap
-router.get("/:id", verifyToken, async (req, res) => {
+router.get("/:id", authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -79,7 +79,7 @@ router.get("/:id", verifyToken, async (req, res) => {
 // Create new custom sitemap
 router.post(
   "/",
-  verifyToken,
+  authenticateToken,
   [
     body("url")
       .notEmpty()
@@ -196,7 +196,7 @@ router.post(
 // Update custom sitemap
 router.put(
   "/:id",
-  verifyToken,
+  authenticateToken,
   [
     body("url").optional().isURL().withMessage("URL must be valid"),
     body("title")
@@ -315,7 +315,7 @@ router.put(
 );
 
 // Delete custom sitemap
-router.delete("/:id", verifyToken, async (req, res) => {
+router.delete("/:id", authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
