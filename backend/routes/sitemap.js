@@ -58,13 +58,24 @@ router.get("/sitemap.xml", async (req, res) => {
       return res.status(404).send("Sitemap is disabled");
     }
 
-    // 3. Tạo XML
+    // 3. Tạo XML với tất cả namespaces cần thiết
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${
-      includeImages
-        ? ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'
-        : ""
-    }>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`;
+
+    if (includeImages) {
+      xml += ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"';
+    }
+    if (includeVideos) {
+      xml += ' xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"';
+    }
+
+    xml += ' xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"';
+    xml += ' xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"';
+    xml += '>\n';
+
+    xml += `<!-- Generated automatically on ${new Date().toISOString()} -->
+<!-- Optimized for maximum SEO performance -->
+<!-- Total URLs: Will be calculated dynamically -->
 `;
 
     // Trang chủ
