@@ -98,7 +98,7 @@ export function CartPopup({ cartCount }: CartPopupProps) {
         cartUtils.triggerCartUpdate();
         toast.success("Cập nhật giỏ hàng thành công");
       } else {
-        toast.error(data.message || "Có lỗi xảy ra");
+        toast.error(result.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Failed to update cart:", error);
