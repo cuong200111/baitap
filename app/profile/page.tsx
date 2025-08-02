@@ -237,7 +237,7 @@ export default function ProfilePage() {
         { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
-        { code: 20, name: "Qu���ng Nam", full_name: "Tỉnh Quảng Nam" },
+        { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
         { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
         { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
         { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
@@ -330,7 +330,7 @@ export default function ProfilePage() {
       // Fallback data if API fails
       const districtsMapping: { [key: number]: any[] } = {
         1: [
-          // Hà Nội
+          // Hà N��i
           {
             code: 1,
             name: "Ba Đình",
@@ -428,7 +428,7 @@ export default function ProfilePage() {
           {
             code: 110,
             name: "Điện Biên Phủ",
-            full_name: "Thành ph�� Điện Biên Phủ",
+            full_name: "Thành phố Điện Biên Phủ",
             province_code: 11,
           },
           {
@@ -1959,7 +1959,7 @@ export default function ProfilePage() {
                           <div className="space-y-4">
                             <div>
                               <Label htmlFor="current_password">
-                                Mật kh��u hiện tại
+                                Mật khẩu hiện tại
                               </Label>
                               <Input
                                 id="current_password"
