@@ -47,6 +47,12 @@ export async function getSeoSettings(): Promise<SeoSettings> {
     return seoSettingsCache;
   }
 
+  // Skip API call during build time or if we're in a server environment without backend access
+  if (typeof window === 'undefined' && process.env.NODE_ENV !== 'production') {
+    // During development, return default settings to avoid connection issues during SSR
+    return getDefaultSeoSettings();
+  }
+
   try {
     const response = await fetch(`${Domain}/api/admin/seo-settings`, {
       next: { revalidate: 300 } // Revalidate every 5 minutes
@@ -61,7 +67,12 @@ export async function getSeoSettings(): Promise<SeoSettings> {
       }
     }
   } catch (error) {
-    console.error("Failed to fetch SEO settings:", error);
+    // Silently handle fetch errors during SSR
+    if (typeof window === 'undefined') {
+      // Server side - don't log fetch errors
+    } else {
+      console.error("Failed to fetch SEO settings:", error);
+    }
   }
 
   // Return default settings if API fails
