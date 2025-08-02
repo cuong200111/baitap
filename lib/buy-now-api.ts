@@ -30,6 +30,9 @@ export interface BuyNowResponse {
     item: BuyNowItem;
     summary: BuyNowSummary;
   };
+  stock_status?: "out_of_stock" | "insufficient_stock";
+  available_stock?: number;
+  requested_quantity?: number;
 }
 
 // Get session ID for guest users
