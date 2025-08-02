@@ -24,24 +24,8 @@ import Link from "next/link";
 import { formatPrice, getMediaUrl } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { cartApi, cartUtils, CartItem, CartSummary } from "@/lib/cart-api";
 import { apiWrappers } from "@/lib/api-wrapper";
-
-interface CartItem {
-  id: number;
-  product_id: number;
-  product_name: string;
-  sku: string;
-  final_price: number;
-  quantity: number;
-  images: string[];
-  total: number;
-}
-
-interface CartSummary {
-  itemCount: number;
-  subtotal: number;
-  total: number;
-}
 
 interface CustomerInfo {
   name: string;
@@ -56,16 +40,16 @@ interface CustomerInfo {
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [summary, setSummary] = useState<CartSummary>({
-    itemCount: 0,
+    item_count: 0,
     subtotal: 0,
+    shipping_fee: 0,
     total: 0,
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [saveInfo, setSaveInfo] = useState(false);
 
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: "",
@@ -78,155 +62,36 @@ export default function CheckoutPage() {
     notes: "",
   });
 
-  // Get user ID from auth context, null for guests
-  const userId = user?.id || null;
+  const [saveInfo, setSaveInfo] = useState(false);
 
   useEffect(() => {
     loadCart();
-    loadCustomerInfo();
-  }, [user]);
+    loadSavedCustomerInfo();
+  }, []);
 
-  const loadCustomerInfo = async () => {
-    if (user) {
-      // Load complete user profile from API to get address fields
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`${Domain}/api/auth/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            const profile = data.data;
-            setCustomerInfo({
-              name: profile.full_name || "",
-              email: profile.email || "",
-              phone: profile.phone || "",
-              address: profile.address || "",
-              city: profile.province_name || "",
-              district: profile.district_name || "",
-              ward: profile.ward_name || "",
-              notes: "",
-            });
-            return;
-          }
-        }
-      } catch (error) {
-        console.error("Failed to load user profile:", error);
-      }
-
-      // Fallback to user object from context if API fails
-      setCustomerInfo({
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setCustomerInfo(prev => ({
+        ...prev,
         name: user.full_name || "",
         email: user.email || "",
         phone: user.phone || "",
-        address: user.address || "",
-        city: user.province_name || "",
-        district: user.district_name || "",
-        ward: user.ward_name || "",
-        notes: "",
-      });
-    } else {
-      // Load from localStorage for guest users
-      const savedInfo = localStorage.getItem("guestCheckoutInfo");
-      if (savedInfo) {
-        try {
-          const parsed = JSON.parse(savedInfo);
-          setCustomerInfo(parsed);
-          setSaveInfo(true); // Auto-check save info if data exists
-        } catch (error) {
-          console.error("Failed to parse saved checkout info:", error);
-        }
-      }
+      }));
     }
-  };
-
-  const saveCustomerInfoToStorage = () => {
-    if (!user && saveInfo) {
-      localStorage.setItem("guestCheckoutInfo", JSON.stringify(customerInfo));
-      toast.success("Đã lưu thông tin để sử dụng cho lần sau");
-    }
-  };
+  }, [isAuthenticated, user]);
 
   const loadCart = async () => {
     try {
       setLoading(true);
+      const result = await cartApi.getCart();
 
-      if (!userId) {
-        // For guest users, try to get from session cart first
-        const sessionId = localStorage.getItem("session_id");
-        if (sessionId) {
-          try {
-            const cartResponse = await apiWrappers.cart.getAll({
-              session_id: sessionId,
-            });
-            if (cartResponse.success && cartResponse.data?.items?.length > 0) {
-              setCartItems(cartResponse.data.items);
-              setSummary(cartResponse.data.summary);
-            } else {
-              toast.error("Giỏ hàng trống");
-              router.push("/cart");
-              return;
-            }
-          } catch (error) {
-            console.error("Failed to load session cart:", error);
-            toast.error("Không thể tải giỏ hàng");
-            router.push("/cart");
-            return;
-          }
-        } else {
-          // Fallback to localStorage guest cart
-          const guestCart = localStorage.getItem("guest_cart");
-          if (!guestCart) {
-            toast.error("Giỏ hàng trống");
-            router.push("/cart");
-            return;
-          }
-
-          try {
-            const cartData = JSON.parse(guestCart);
-            if (!cartData.items || cartData.items.length === 0) {
-              toast.error("Giỏ hàng trống");
-              router.push("/cart");
-              return;
-            }
-            setCartItems(cartData.items);
-            setSummary(cartData.summary);
-          } catch (error) {
-            toast.error("Lỗi giỏ hàng, vui lòng thử lại");
-            router.push("/cart");
-            return;
-          }
-        }
+      if (result.success && result.data?.items?.length > 0) {
+        setCartItems(result.data.items);
+        setSummary(result.data.summary);
       } else {
-        // For authenticated users, use API
-        const token = localStorage.getItem("token");
-        const headers: HeadersInit = {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        };
-        const response = await fetch(`${Domain}/api/cart?user_id=${userId}`, {
-          headers,
-        });
-        const data = await response.json();
-
-        if (data.success) {
-          setCartItems(data.data.items);
-          setSummary(data.data.summary);
-
-          // Redirect if cart is empty
-          if (data.data.items.length === 0) {
-            toast.error("Gi��� hàng trống");
-            router.push("/cart");
-            return;
-          }
-        } else {
-          toast.error("Không thể tải giỏ hàng");
-          router.push("/cart");
-        }
+        toast.error("Giỏ hàng trống");
+        router.push("/cart");
+        return;
       }
     } catch (error) {
       console.error("Failed to load cart:", error);
@@ -237,8 +102,32 @@ export default function CheckoutPage() {
     }
   };
 
+  const loadSavedCustomerInfo = () => {
+    try {
+      const saved = localStorage.getItem("customer_info");
+      if (saved) {
+        const parsedInfo = JSON.parse(saved);
+        setCustomerInfo(prev => ({
+          ...prev,
+          ...parsedInfo,
+        }));
+        setSaveInfo(true);
+      }
+    } catch (error) {
+      console.error("Failed to load saved customer info:", error);
+    }
+  };
+
+  const saveCustomerInfoToStorage = () => {
+    if (saveInfo) {
+      localStorage.setItem("customer_info", JSON.stringify(customerInfo));
+    } else {
+      localStorage.removeItem("customer_info");
+    }
+  };
+
   const handleInputChange = (field: keyof CustomerInfo, value: string) => {
-    setCustomerInfo((prev) => ({ ...prev, [field]: value }));
+    setCustomerInfo(prev => ({ ...prev, [field]: value }));
   };
 
   const validateForm = (): boolean => {
@@ -246,19 +135,14 @@ export default function CheckoutPage() {
 
     for (const field of required) {
       if (!customerInfo[field as keyof CustomerInfo].trim()) {
-        toast.error(
-          `Vui lòng nhập ${
-            field === "name"
-              ? "họ tên"
-              : field === "email"
-                ? "email"
-                : field === "phone"
-                  ? "số điện thoại"
-                  : field === "address"
-                    ? "địa chỉ"
-                    : "thành phố"
-          }`,
-        );
+        const fieldNames: Record<string, string> = {
+          name: "họ tên",
+          email: "email",
+          phone: "số điện thoại",
+          address: "địa chỉ",
+          city: "tỉnh/thành phố",
+        };
+        toast.error(`Vui lòng nhập ${fieldNames[field]}`);
         return false;
       }
     }
@@ -286,63 +170,56 @@ export default function CheckoutPage() {
     try {
       setSubmitting(true);
 
-      // Save guest info to localStorage if requested
+      // Save customer info to localStorage if requested
       saveCustomerInfoToStorage();
 
       // Prepare order data
       const shippingAddress = `${customerInfo.address}, ${customerInfo.ward ? customerInfo.ward + ", " : ""}${customerInfo.district ? customerInfo.district + ", " : ""}${customerInfo.city}`;
 
       const orderData = {
-        items: cartItems.map((item) => ({
+        items: cartItems.map(item => ({
           product_id: item.product_id,
           quantity: item.quantity,
           price: item.final_price,
         })),
+        customer_name: customerInfo.name,
+        customer_email: customerInfo.email,
+        customer_phone: customerInfo.phone,
         shipping_address: shippingAddress,
         billing_address: shippingAddress,
-        payment_method: "cod", // Default payment method
+        payment_method: "cod", // Cash on delivery
         notes: customerInfo.notes,
       };
 
-      const data = await apiWrappers.orders.create(orderData);
+      let result;
+      if (isAuthenticated && user?.id) {
+        // Authenticated user order
+        result = await apiWrappers.orders.create(orderData);
+      } else {
+        // Guest order
+        result = await apiWrappers.orders.createGuest(orderData);
+      }
 
-      if (data.success) {
+      if (result.success && result.data) {
         toast.success("Đặt hàng thành công!");
 
         // Clear cart after successful order
-        if (userId) {
-          // Clear database cart for authenticated users
-          try {
-            await apiWrappers.cart.clear(userId);
-          } catch (e) {
-            console.log("Cart clear error:", e);
-          }
-        } else {
-          // Clear session cart for guest users
-          const sessionId = localStorage.getItem("session_id");
-          if (sessionId) {
-            try {
-              await apiWrappers.cart.clear({ session_id: sessionId });
-            } catch (e) {
-              console.log("Session cart clear error:", e);
-            }
-          }
-          // Also clear any legacy guest cart
-          localStorage.removeItem("guest_cart");
-        }
+        await cartApi.clearCart();
+        cartUtils.triggerCartUpdate();
 
-        // Trigger cart update in header
-        window.dispatchEvent(new Event("cartUpdated"));
+        // Get order info
+        const orderId = result.data.order?.id || result.data.id;
+        const orderNumber = result.data.order_number;
 
-        // Redirect to thank you page with order details
+        // Redirect to thank you page
         router.push(
-          `/thank-you?order_id=${data.data.id}&order_number=${data.data.order_number}`,
+          `/thank-you?order_id=${orderId}&order_number=${orderNumber}`,
         );
       } else {
-        toast.error(data.message || "Đặt hàng thất bại");
+        toast.error(result.message || "Đặt hàng thất bại");
       }
     } catch (error) {
-      console.error("Order submission error:", error);
+      console.error("Order submission failed:", error);
       toast.error("Có lỗi xảy ra khi đặt hàng");
     } finally {
       setSubmitting(false);
@@ -353,15 +230,15 @@ export default function CheckoutPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse space-y-6">
+          <div className="animate-pulse space-y-8">
             <div className="h-8 bg-gray-200 rounded w-1/4"></div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="h-32 bg-gray-200 rounded-lg"></div>
-                ))}
+              <div className="space-y-6">
+                <div className="h-64 bg-gray-200 rounded"></div>
               </div>
-              <div className="h-64 bg-gray-200 rounded-lg"></div>
+              <div className="space-y-4">
+                <div className="h-32 bg-gray-200 rounded"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -373,48 +250,29 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center space-x-4 mb-8">
+          <Link href="/cart">
+            <Button variant="outline" size="sm">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Quay lại giỏ hàng
+            </Button>
+          </Link>
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Thanh toán</h1>
-            <div className="flex items-center gap-2 mt-2">
-              {user ? (
-                <div className="flex items-center gap-2 text-sm text-green-600">
-                  <User className="h-4 w-4" />
-                  <span>Đăng nhập với tài khoản: {user.email}</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <span>Đặt hàng với tư cách khách</span>
-                  <Link href="/login" className="text-red-600 hover:underline">
-                    Đăng nhập
-                  </Link>
-                </div>
-              )}
-            </div>
+            <p className="text-gray-600">
+              Hoàn tất đơn hàng của bạn
+            </p>
           </div>
-          <Button variant="outline" onClick={() => router.push("/cart")}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Quay lại giỏ hàng
-          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Customer Information */}
+          {/* Customer Information Form */}
           <div className="space-y-6">
-            {/* Contact Information */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5" />
-                  Thông tin liên hệ
-                  {user && (
-                    <Link
-                      href="/profile"
-                      className="ml-auto text-sm text-red-600 hover:underline"
-                    >
-                      Cập nhật profile
-                    </Link>
-                  )}
+                <CardTitle className="flex items-center">
+                  <User className="h-5 w-5 mr-2" />
+                  Thông tin khách hàng
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -424,11 +282,8 @@ export default function CheckoutPage() {
                     <Input
                       id="name"
                       value={customerInfo.name}
-                      onChange={(e) =>
-                        handleInputChange("name", e.target.value)
-                      }
-                      placeholder="Nguyễn Văn A"
-                      disabled={!!user}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      placeholder="Nhập họ và tên"
                     />
                   </div>
                   <div>
@@ -436,13 +291,12 @@ export default function CheckoutPage() {
                     <Input
                       id="phone"
                       value={customerInfo.phone}
-                      onChange={(e) =>
-                        handleInputChange("phone", e.target.value)
-                      }
-                      placeholder="0912345678"
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      placeholder="Nhập số điện thoại"
                     />
                   </div>
                 </div>
+
                 <div>
                   <Label htmlFor="email">Email *</Label>
                   <Input
@@ -450,63 +304,28 @@ export default function CheckoutPage() {
                     type="email"
                     value={customerInfo.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    placeholder="example@email.com"
-                    disabled={!!user}
+                    placeholder="Nhập địa chỉ email"
                   />
                 </div>
 
-                {/* Save info checkbox for guests */}
-                {!user && (
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="saveInfo"
-                      checked={saveInfo}
-                      onCheckedChange={(checked) =>
-                        setSaveInfo(checked as boolean)
-                      }
-                    />
-                    <Label
-                      htmlFor="saveInfo"
-                      className="text-sm cursor-pointer"
-                    >
-                      <Save className="h-3 w-3 inline mr-1" />
-                      Lưu thông tin để sử dụng cho lần sau
-                    </Label>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Shipping Address */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Truck className="h-5 w-5" />
-                  ��ịa chỉ giao hàng
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
                 <div>
                   <Label htmlFor="address">Địa chỉ *</Label>
                   <Input
                     id="address"
                     value={customerInfo.address}
-                    onChange={(e) =>
-                      handleInputChange("address", e.target.value)
-                    }
-                    placeholder="123 Đường ABC"
+                    onChange={(e) => handleInputChange("address", e.target.value)}
+                    placeholder="Số nhà, tên đường"
                   />
                 </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <Label htmlFor="ward">Phường/Xã</Label>
                     <Input
                       id="ward"
                       value={customerInfo.ward}
-                      onChange={(e) =>
-                        handleInputChange("ward", e.target.value)
-                      }
-                      placeholder="Phường 1"
+                      onChange={(e) => handleInputChange("ward", e.target.value)}
+                      placeholder="Nhập phường/xã"
                     />
                   </div>
                   <div>
@@ -514,10 +333,8 @@ export default function CheckoutPage() {
                     <Input
                       id="district"
                       value={customerInfo.district}
-                      onChange={(e) =>
-                        handleInputChange("district", e.target.value)
-                      }
-                      placeholder="Quận 1"
+                      onChange={(e) => handleInputChange("district", e.target.value)}
+                      placeholder="Nhập quận/huyện"
                     />
                   </div>
                   <div>
@@ -525,41 +342,60 @@ export default function CheckoutPage() {
                     <Input
                       id="city"
                       value={customerInfo.city}
-                      onChange={(e) =>
-                        handleInputChange("city", e.target.value)
-                      }
-                      placeholder="TP. Hồ Chí Minh"
+                      onChange={(e) => handleInputChange("city", e.target.value)}
+                      placeholder="Nhập tỉnh/thành phố"
                     />
                   </div>
                 </div>
+
                 <div>
                   <Label htmlFor="notes">Ghi chú đơn hàng</Label>
                   <Textarea
                     id="notes"
                     value={customerInfo.notes}
                     onChange={(e) => handleInputChange("notes", e.target.value)}
-                    placeholder="Ghi chú thêm về đơn hàng (tùy chọn)"
+                    placeholder="Ghi chú về đơn hàng (tùy chọn)"
                     rows={3}
                   />
                 </div>
+
+                {!isAuthenticated && (
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="save-info"
+                      checked={saveInfo}
+                      onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
+                    />
+                    <Label htmlFor="save-info" className="text-sm">
+                      Lưu thông tin cho lần mua hàng tiếp theo
+                    </Label>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
             {/* Payment Method */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
+                <CardTitle className="flex items-center">
+                  <CreditCard className="h-5 w-5 mr-2" />
                   Phương thức thanh toán
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    Hiện tại chỉ hỗ trợ thanh toán khi nhận hàng (COD)
-                  </AlertDescription>
-                </Alert>
+                <div className="p-4 border border-green-200 bg-green-50 rounded-lg">
+                  <div className="flex items-center">
+                    <Truck className="h-5 w-5 text-green-600 mr-3" />
+                    <div>
+                      <h3 className="font-medium text-green-800">
+                        Thanh toán khi nhận hàng (COD)
+                      </h3>
+                      <p className="text-sm text-green-600">
+                        Bạn chỉ thanh toán khi nhận được hàng
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -569,92 +405,85 @@ export default function CheckoutPage() {
             {/* Order Items */}
             <Card>
               <CardHeader>
-                <CardTitle>����n hàng của bạn</CardTitle>
+                <CardTitle>Đơn hàng của bạn</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-3 py-3 border-b last:border-b-0"
-                  >
-                    <div className="relative w-16 h-16 flex-shrink-0">
-                      <Image
-                        src={getMediaUrl(item.images[0] || "")}
-                        alt={item.product_name}
-                        fill
-                        className="object-cover rounded"
-                      />
+              <CardContent>
+                <div className="space-y-4">
+                  {cartItems.map((item) => (
+                    <div key={item.id} className="flex space-x-3">
+                      <div className="relative w-16 h-16 flex-shrink-0">
+                        <Image
+                          src={getMediaUrl(item.images[0]) || "/placeholder.svg"}
+                          alt={item.product_name}
+                          fill
+                          className="object-cover rounded-lg"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-medium text-gray-900 truncate">
+                          {item.product_name}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          Số lượng: {item.quantity}
+                        </p>
+                        <p className="text-sm font-medium text-red-600">
+                          {formatPrice(item.total_price)}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm line-clamp-2">
-                        {item.product_name}
-                      </h4>
-                      <p className="text-xs text-gray-500">
-                        {formatPrice(item.final_price)} x {item.quantity}
-                      </p>
-                    </div>
-                    <div className="text-sm font-medium">
-                      {formatPrice(item.total)}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
             {/* Order Total */}
             <Card>
-              <CardContent className="pt-6 space-y-3">
-                <div className="flex justify-between">
-                  <span>Tạm tính:</span>
-                  <span>{formatPrice(summary.subtotal)}</span>
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span>Tạm tính</span>
+                    <span>{formatPrice(summary.subtotal)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Phí vận chuyển</span>
+                    <span className="text-green-600">Miễn phí</span>
+                  </div>
+                  <div className="border-t pt-3">
+                    <div className="flex justify-between text-lg font-semibold">
+                      <span>Tổng cộng</span>
+                      <span className="text-red-600">{formatPrice(summary.total)}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Phí vận chuyển:</span>
-                  <span className="text-green-600">Miễn phí</span>
-                </div>
-                <div className="border-t pt-3">
-                  <div className="flex justify-between text-lg font-bold">
-                    <span>Tổng cộng:</span>
-                    <span className="text-red-600">
-                      {formatPrice(summary.total)}
-                    </span>
+
+                <Button
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                  className="w-full mt-6 bg-red-600 hover:bg-red-700"
+                >
+                  {submitting ? (
+                    "Đang xử lý..."
+                  ) : (
+                    <>
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Đặt hàng
+                    </>
+                  )}
+                </Button>
+
+                {/* Security Icons */}
+                <div className="flex items-center justify-center space-x-4 mt-4 text-sm text-gray-500">
+                  <div className="flex items-center">
+                    <Shield className="h-4 w-4 mr-1" />
+                    Bảo mật
+                  </div>
+                  <div className="flex items-center">
+                    <Truck className="h-4 w-4 mr-1" />
+                    Giao hàng nhanh
                   </div>
                 </div>
               </CardContent>
             </Card>
-
-            {/* Place Order Button */}
-            <Button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="w-full bg-red-600 hover:bg-red-700"
-              size="lg"
-            >
-              {submitting ? (
-                "Đang xử lý..."
-              ) : (
-                <>
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Đặt hàng ({formatPrice(summary.total)})
-                </>
-              )}
-            </Button>
-
-            {/* Security Info */}
-            <div className="text-xs text-gray-500 space-y-2">
-              <div className="flex items-center gap-2">
-                <Shield className="h-3 w-3" />
-                <span>Thông tin của bạn được bảo mật</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-3 w-3" />
-                <span>Miễn phí đổi trả trong 7 ngày</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Truck className="h-3 w-3" />
-                <span>Giao hàng nhanh toàn quốc</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
