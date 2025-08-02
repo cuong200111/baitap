@@ -288,11 +288,11 @@ export const adminController = {
   // Generate Robots.txt
   async generateRobots(req, res) {
     try {
-      // Trigger robots.txt generation by making internal request
-      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      // Frontend URL (where robots.txt should be accessible)
+      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 
-      // Test robots.txt accessibility
-      const response = await fetch(`${baseUrl}/robots.txt`);
+      // Test robots.txt accessibility from frontend
+      const response = await fetch(`${frontendUrl}/robots.txt`);
 
       if (response.ok) {
         const robotsContent = await response.text();
@@ -307,22 +307,23 @@ export const adminController = {
 
         res.json({
           success: true,
-          message: "Robots.txt generated successfully",
+          message: "Robots.txt accessible successfully from frontend",
           data: {
             content: robotsContent,
-            url: `${baseUrl}/robots.txt`,
+            url: `${frontendUrl}/robots.txt`,
             size: robotsContent.length,
             lastGenerated: new Date().toISOString(),
+            note: "Generated dynamically by Next.js frontend"
           },
         });
       } else {
-        throw new Error(`Failed to generate robots.txt: ${response.status}`);
+        throw new Error(`Frontend robots.txt not accessible: ${response.status}`);
       }
     } catch (error) {
       console.error("Generate robots error:", error);
       res.status(500).json({
         success: false,
-        message: "Failed to generate robots.txt: " + error.message,
+        message: "Failed to access robots.txt from frontend: " + error.message,
       });
     }
   },
