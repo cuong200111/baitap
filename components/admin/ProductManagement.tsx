@@ -540,7 +540,7 @@ export function ProductManagement() {
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>H��y</AlertDialogCancel>
+                            <AlertDialogCancel>Hủy</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => handleDelete(product.id)}
                             >
@@ -628,7 +628,7 @@ export function ProductManagement() {
                       description: e.target.value,
                     }))
                   }
-                  placeholder="Mô tả chi tiết về s���n phẩm"
+                  placeholder="Mô tả chi tiết về sản phẩm"
                   rows={4}
                 />
               </div>
