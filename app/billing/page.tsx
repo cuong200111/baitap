@@ -92,12 +92,20 @@ export default function BillingPage() {
   });
 
   useEffect(() => {
-    if (!user) {
+    // Wait for auth to complete before deciding whether to redirect
+    if (authLoading) {
+      return; // Still loading, don't do anything yet
+    }
+
+    if (!isAuthenticated || !user) {
+      // Auth completed and user is not authenticated
       router.push("/login");
       return;
     }
+
+    // User is authenticated, load billing data
     loadBillingData();
-  }, [user, router]);
+  }, [user, authLoading, isAuthenticated, router]);
 
   const loadBillingData = async () => {
     try {
