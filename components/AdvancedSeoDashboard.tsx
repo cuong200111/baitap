@@ -605,7 +605,7 @@ export default function AdvancedSeoDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {performance.keywordRankings.map((keyword, index) => (
+                      {(performance.keywordRankings || []).map((keyword, index) => (
                         <tr key={index} className="border-b hover:bg-gray-50">
                           <td className="p-2 font-medium">{keyword.keyword}</td>
                           <td className="p-2">
@@ -941,7 +941,7 @@ export default function AdvancedSeoDashboard() {
                             }
                           />
                           <p className="text-xs text-gray-500 mt-1">
-                            Target: ≤ 100ms
+                            Target: ��� 100ms
                           </p>
                         </div>
 
