@@ -290,7 +290,7 @@ Cache-delay: 86400
         `INSERT INTO seo_analytics (url_path, date, page_views, created_at) 
          VALUES ('robots_generation', CURDATE(), 1, NOW())
          ON DUPLICATE KEY UPDATE 
-         page_views = page_views + 1, updated_at = NOW()`
+         page_views = page_views + 1, updated_at = NOW()`,
       );
     } catch (logError) {
       console.log("Analytics logging failed:", logError.message);
@@ -300,13 +300,12 @@ Cache-delay: 86400
     res.set({
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "public, max-age=86400, s-maxage=86400",
-      "Expires": new Date(Date.now() + 86400000).toUTCString(),
+      Expires: new Date(Date.now() + 86400000).toUTCString(),
       "Last-Modified": new Date().toUTCString(),
-      "X-Robots-Tag": "noindex, nofollow"
+      "X-Robots-Tag": "noindex, nofollow",
     });
-    
-    return res.send(robotsContent);
 
+    return res.send(robotsContent);
   } catch (error) {
     console.error("Failed to generate robots.txt:", error);
 
@@ -352,9 +351,9 @@ Host: hacom.vn
     res.set({
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "public, max-age=86400",
-      "X-Robots-Tag": "noindex, nofollow"
+      "X-Robots-Tag": "noindex, nofollow",
     });
-    
+
     return res.send(fallbackContent);
   }
 });

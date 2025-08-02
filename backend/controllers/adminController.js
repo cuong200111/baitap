@@ -14,7 +14,7 @@ export const adminController = {
           COUNT(CASE WHEN stock_quantity <= 5 THEN 1 END) as low_stock
         FROM products
       `,
-        []
+        [],
       );
 
       // Get categories statistics
@@ -25,7 +25,7 @@ export const adminController = {
           COUNT(CASE WHEN is_active = 1 THEN 1 END) as active
         FROM categories
       `,
-        []
+        [],
       );
 
       // Get users statistics
@@ -37,7 +37,7 @@ export const adminController = {
           COUNT(CASE WHEN role = 'admin' THEN 1 END) as admins
         FROM users
       `,
-        []
+        [],
       );
 
       // Get orders statistics
@@ -54,7 +54,7 @@ export const adminController = {
           COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed
         FROM orders
       `,
-        []
+        [],
       );
 
       // Get revenue from delivered and completed orders
@@ -65,7 +65,7 @@ export const adminController = {
           COALESCE(SUM(CASE WHEN status IN ('cancelled', 'failed') THEN total_amount ELSE 0 END), 0) as lost_revenue
         FROM orders
       `,
-        []
+        [],
       );
 
       // Get successful and failed orders count
@@ -76,7 +76,7 @@ export const adminController = {
           COUNT(CASE WHEN status IN ('cancelled', 'failed') THEN 1 END) as failed_orders
         FROM orders
       `,
-        []
+        [],
       );
 
       const dashboardStats = {
@@ -205,7 +205,7 @@ export const adminController = {
         try {
           const existing = await executeQuery(
             "SELECT id FROM categories WHERE slug = ?",
-            [category.slug]
+            [category.slug],
           );
 
           if (existing.length === 0) {
@@ -218,7 +218,7 @@ export const adminController = {
                 category.description,
                 category.image,
                 category.sort_order,
-              ]
+              ],
             );
             created++;
           }
@@ -250,7 +250,7 @@ export const adminController = {
       // Check if admin already exists
       const existingAdmin = await executeQuery(
         "SELECT id FROM users WHERE email = ?",
-        [adminEmail]
+        [adminEmail],
       );
 
       if (existingAdmin.length > 0) {
@@ -268,7 +268,7 @@ export const adminController = {
       const result = await executeQuery(
         `INSERT INTO users (email, password, full_name, role, is_active, created_at) 
          VALUES (?, ?, ?, 'admin', 1, NOW())`,
-        [adminEmail, hashedPassword, "Admin ZOXVN"]
+        [adminEmail, hashedPassword, "Admin ZOXVN"],
       );
 
       res.json({
@@ -302,7 +302,7 @@ export const adminController = {
           `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
            VALUES ('robots_generation', CURDATE(), 1, NOW())
            ON DUPLICATE KEY UPDATE
-           page_views = page_views + 1, updated_at = NOW()`
+           page_views = page_views + 1, updated_at = NOW()`,
         );
 
         res.json({
@@ -312,7 +312,7 @@ export const adminController = {
             content: robotsContent,
             url: `${baseUrl}/robots.txt`,
             size: robotsContent.length,
-            lastGenerated: new Date().toISOString()
+            lastGenerated: new Date().toISOString(),
           },
         });
       } else {
@@ -346,7 +346,7 @@ export const adminController = {
           `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
            VALUES ('sitemap_generation', CURDATE(), 1, NOW())
            ON DUPLICATE KEY UPDATE
-           page_views = page_views + 1, updated_at = NOW()`
+           page_views = page_views + 1, updated_at = NOW()`,
         );
 
         res.json({
@@ -357,7 +357,7 @@ export const adminController = {
             url: `${baseUrl}/sitemap.xml`,
             urlCount: urlCount,
             size: sitemapContent.length,
-            lastGenerated: new Date().toISOString()
+            lastGenerated: new Date().toISOString(),
           },
         });
       } else {
@@ -376,7 +376,7 @@ export const adminController = {
   async validateXml(req, res) {
     try {
       const { xml } = req.body;
-      
+
       if (!xml) {
         return res.status(400).json({
           success: false,
@@ -385,13 +385,13 @@ export const adminController = {
       }
 
       // Basic XML validation
-      const isValid = xml.includes('<?xml') && xml.includes('</');
-      
+      const isValid = xml.includes("<?xml") && xml.includes("</");
+
       res.json({
         success: true,
-        data: { 
+        data: {
           isValid,
-          message: isValid ? "XML is valid" : "XML is invalid"
+          message: isValid ? "XML is valid" : "XML is invalid",
         },
       });
     } catch (error) {

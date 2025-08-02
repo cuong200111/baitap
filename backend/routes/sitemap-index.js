@@ -54,10 +54,9 @@ router.get("/sitemapindex.xml", async (req, res) => {
     res.setHeader("Cache-Control", "public, max-age=86400");
     res.setHeader("Last-Modified", new Date().toUTCString());
     res.send(xml);
-
   } catch (error) {
     console.error("Failed to generate sitemap index:", error);
-    
+
     const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
@@ -125,7 +124,7 @@ router.get("/sitemap-products.xml", async (req, res) => {
                 xml += `
     <image:image>
       <image:loc>${fullImageUrl}</image:loc>
-      <image:title>${product.name} - ${product.category_name || 'HACOM'}</image:title>
+      <image:title>${product.name} - ${product.category_name || "HACOM"}</image:title>
       <image:caption>${product.short_description || product.name}</image:caption>
     </image:image>`;
               });
@@ -146,7 +145,6 @@ router.get("/sitemap-products.xml", async (req, res) => {
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=7200");
     res.send(xml);
-
   } catch (error) {
     console.error("Failed to generate products sitemap:", error);
     res.status(500).send("Failed to generate products sitemap");
@@ -191,8 +189,8 @@ router.get("/sitemap-categories.xml", async (req, res) => {
     <priority>0.9</priority>`;
 
         if (category.image) {
-          const imageUrl = category.image.startsWith("http") 
-            ? category.image 
+          const imageUrl = category.image.startsWith("http")
+            ? category.image
             : `${baseUrl}${category.image}`;
           xml += `
     <image:image>
@@ -213,7 +211,6 @@ router.get("/sitemap-categories.xml", async (req, res) => {
     res.setHeader("Content-Type", "application/xml; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=86400");
     res.send(xml);
-
   } catch (error) {
     console.error("Failed to generate categories sitemap:", error);
     res.status(500).send("Failed to generate categories sitemap");

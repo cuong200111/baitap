@@ -71,7 +71,7 @@ router.get("/sitemap.xml", async (req, res) => {
 
     xml += ' xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"';
     xml += ' xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"';
-    xml += '>\n';
+    xml += ">\n";
 
     xml += `<!-- Generated automatically on ${new Date().toISOString()} -->
 <!-- Optimized for maximum SEO performance -->
@@ -93,11 +93,31 @@ router.get("/sitemap.xml", async (req, res) => {
       { path: "/products", priority: "0.9", changefreq: "daily", mobile: true },
       { path: "/category", priority: "0.8", changefreq: "daily", mobile: true },
       { path: "/about", priority: "0.6", changefreq: "monthly", mobile: true },
-      { path: "/contact", priority: "0.6", changefreq: "monthly", mobile: true },
-      { path: "/privacy", priority: "0.4", changefreq: "yearly", mobile: false },
+      {
+        path: "/contact",
+        priority: "0.6",
+        changefreq: "monthly",
+        mobile: true,
+      },
+      {
+        path: "/privacy",
+        priority: "0.4",
+        changefreq: "yearly",
+        mobile: false,
+      },
       { path: "/terms", priority: "0.4", changefreq: "yearly", mobile: false },
-      { path: "/shipping", priority: "0.5", changefreq: "monthly", mobile: true },
-      { path: "/warranty", priority: "0.5", changefreq: "monthly", mobile: true },
+      {
+        path: "/shipping",
+        priority: "0.5",
+        changefreq: "monthly",
+        mobile: true,
+      },
+      {
+        path: "/warranty",
+        priority: "0.5",
+        changefreq: "monthly",
+        mobile: true,
+      },
       { path: "/support", priority: "0.6", changefreq: "weekly", mobile: true },
     ];
 
@@ -174,7 +194,7 @@ router.get("/sitemap.xml", async (req, res) => {
       ORDER BY p.featured DESC, p.view_count DESC, p.updated_at DESC
       LIMIT ?
     `,
-      [maxUrls - 150 - staticPages.length - 1]
+      [maxUrls - 150 - staticPages.length - 1],
     );
 
     if (Array.isArray(products)) {
@@ -206,9 +226,10 @@ router.get("/sitemap.xml", async (req, res) => {
                   ? imageUrl
                   : `${baseUrl}${imageUrl}`;
 
-                const imageTitle = index === 0
-                  ? `${product.name} - ${product.category_name || 'HACOM'}`
-                  : `${product.name} - Hình ${index + 1}`;
+                const imageTitle =
+                  index === 0
+                    ? `${product.name} - ${product.category_name || "HACOM"}`
+                    : `${product.name} - Hình ${index + 1}`;
 
                 xml += `
     <image:image>
@@ -267,7 +288,7 @@ router.get("/sitemap.xml", async (req, res) => {
         `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
          VALUES ('sitemap_generation', CURDATE(), 1, NOW())
          ON DUPLICATE KEY UPDATE
-         page_views = page_views + 1, updated_at = NOW()`
+         page_views = page_views + 1, updated_at = NOW()`,
       );
     } catch (logError) {
       console.log("Analytics logging failed:", logError.message);
