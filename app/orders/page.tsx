@@ -84,11 +84,20 @@ export default function OrdersPage() {
 
       console.log("Orders API response:", data);
 
+      if (!response.ok) {
+        if (response.status === 401) {
+          toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại");
+          // AuthGuard will handle redirect
+          return;
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       if (data.success) {
         setOrders(data.data?.orders || []);
       } else {
         console.error("Orders API error:", data.message);
-        toast.error("Không thể tải danh sách đơn hàng");
+        toast.error(data.message || "Không thể tải danh sách đơn hàng");
       }
     } catch (error) {
       console.error("Failed to load orders:", error);
