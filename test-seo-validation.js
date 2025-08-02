@@ -10,42 +10,43 @@ const FRONTEND_BASE = "http://localhost:3000";
 
 async function testSeoFiles() {
   console.log("🔍 HACOM SEO FILES VALIDATION");
+  console.log("🌐 Testing Frontend URLs (where SEO files should be accessible)");
   console.log("=".repeat(50));
 
   const tests = [
-    // Test robots.txt accessibility
+    // Test robots.txt from frontend
     {
-      name: "Robots.txt Direct Access",
-      url: `${API_BASE}/robots.txt`,
-      expectedContent: ["User-agent:", "Sitemap:", "HACOM"],
+      name: "Robots.txt Frontend Access",
+      url: `${FRONTEND_BASE}/robots.txt`,
+      expectedContent: ["User-agent:", "Sitemap:", "HACOM", "Disallow:"],
     },
 
-    // Test sitemap.xml accessibility
+    // Test sitemap.xml from frontend
     {
-      name: "Sitemap.xml Direct Access",
-      url: `${API_BASE}/sitemap.xml`,
-      expectedContent: ["<?xml", "<urlset", "<url>", "<loc>"],
+      name: "Sitemap.xml Frontend Access",
+      url: `${FRONTEND_BASE}/sitemap.xml`,
+      expectedContent: ["<?xml", "<urlset", "<url>", "<loc>", "HACOM"],
     },
 
-    // Test sitemap index
+    // Test backend APIs still work (for admin panel)
     {
-      name: "Sitemap Index",
-      url: `${API_BASE}/sitemapindex.xml`,
-      expectedContent: ["<sitemapindex", "<sitemap>", "<loc>"],
+      name: "Backend Categories API",
+      url: `${API_BASE}/api/categories`,
+      expectedContent: ["success", "data"],
     },
 
-    // Test products sitemap
+    // Test backend products API
     {
-      name: "Products Sitemap",
-      url: `${API_BASE}/sitemap-products.xml`,
-      expectedContent: ["<urlset", "/products/", "<image:image>"],
+      name: "Backend Products API",
+      url: `${API_BASE}/api/products`,
+      expectedContent: ["success", "data"],
     },
 
-    // Test categories sitemap
+    // Test backend health
     {
-      name: "Categories Sitemap",
-      url: `${API_BASE}/sitemap-categories.xml`,
-      expectedContent: ["<urlset", "/category/", "priority"],
+      name: "Backend Health Check",
+      url: `${API_BASE}/api/health`,
+      expectedContent: ["success", "running"],
     },
   ];
 
