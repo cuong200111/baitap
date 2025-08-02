@@ -184,6 +184,76 @@ export default function ThankYouPage() {
     );
   }
 
+  // If we have order number but failed to load details, show success with basic info
+  if (orderNumber && !order && error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          {/* Success Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Đặt hàng thành công!
+            </h1>
+            <p className="text-gray-600">
+              Cảm ơn bạn đã mua sắm tại HACOM. Đơn hàng của bạn đã được ghi nhận.
+            </p>
+          </div>
+
+          <Card className="max-w-lg mx-auto text-center">
+            <CardContent className="pt-6">
+              <div className="mb-6">
+                <h2 className="text-xl font-semibold mb-2">Mã đơn hàng</h2>
+                <p className="text-2xl font-bold text-red-600">{orderNumber}</p>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-yellow-800">
+                  {error}
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <Button onClick={loadOrderDetails} variant="outline" className="w-full">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Thử tải lại thông tin
+                </Button>
+
+                <Button asChild variant="outline" className="w-full">
+                  <Link href={`/track-order?order_number=${orderNumber}`}>
+                    <Package className="h-4 w-4 mr-2" />
+                    Tra cứu đ��n hàng
+                  </Link>
+                </Button>
+
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="/orders">
+                    <Package className="h-4 w-4 mr-2" />
+                    Xem đơn hàng của tôi
+                  </Link>
+                </Button>
+
+                <Button onClick={() => router.push("/")} className="w-full">
+                  <Home className="h-4 w-4 mr-2" />
+                  Về trang chủ
+                </Button>
+              </div>
+
+              <div className="mt-6 text-center text-sm text-gray-600">
+                <p>
+                  Đơn hàng sẽ được xử lý trong vòng 24 giờ. Hotline hỗ trợ: <strong>1900.1903</strong>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // If no order number and error, show full error state
   if (error || !order) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -197,33 +267,6 @@ export default function ThankYouPage() {
               <p className="text-gray-600 mb-6">{error}</p>
 
               <div className="space-y-3">
-                {orderNumber && (
-                  <p className="text-sm text-gray-500 mb-4">
-                    Mã đơn hàng của bạn: <strong>{orderNumber}</strong>
-                  </p>
-                )}
-
-                <Button onClick={loadOrderDetails} variant="outline" className="w-full">
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Thử lại
-                </Button>
-
-                {orderNumber && (
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href={`/track-order?order_number=${orderNumber}`}>
-                      <Package className="h-4 w-4 mr-2" />
-                      Tra cứu đơn hàng
-                    </Link>
-                  </Button>
-                )}
-
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/orders">
-                    <Package className="h-4 w-4 mr-2" />
-                    Xem đơn hàng của tôi
-                  </Link>
-                </Button>
-
                 <Button onClick={() => router.push("/")} className="w-full">
                   <Home className="h-4 w-4 mr-2" />
                   Về trang chủ
