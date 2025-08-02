@@ -1947,7 +1947,7 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Search className="h-4 w-4" />
-                  <span>Cài đặt SEO đ��ợc tối ưu hóa cho công cụ tìm kiếm</span>
+                  <span>Cài đặt SEO được tối ưu hóa cho công cụ t��m kiếm</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button onClick={calculateSeoScore} variant="outline">
@@ -1980,7 +1980,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Th��ng tin chung
+                Thông tin chung
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
