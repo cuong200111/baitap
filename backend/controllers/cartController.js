@@ -108,7 +108,7 @@ export const cartController = {
         0,
       );
 
-      res.json({
+      const response = {
         success: true,
         data: {
           items: processedItems,
@@ -119,7 +119,15 @@ export const cartController = {
             total: subtotal,
           },
         },
-      });
+      };
+
+      // Include information about removed items if any
+      if (itemsToRemove.length > 0) {
+        response.removed_items = itemsToRemove;
+        response.message = `${itemsToRemove.length} sản phẩm đã được tự động xóa khỏi giỏ hàng do không đủ số lượng trong kho.`;
+      }
+
+      res.json(response);
     } catch (error) {
       console.error("Get cart error:", error);
       res.status(500).json({
