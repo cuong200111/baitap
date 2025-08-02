@@ -257,7 +257,7 @@ export function ProductManagement() {
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.sku || formData.price <= 0) {
-      toast.error("Vui lòng điền đầy đ�� thông tin bắt buộc");
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc");
       return;
     }
 
@@ -532,7 +532,7 @@ export function ProductManagement() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                            <AlertDialogTitle>Xác nhận x��a</AlertDialogTitle>
                             <AlertDialogDescription>
                               Bạn có chắc chắn muốn xóa sản phẩm &quot;
                               {product.name}&quot;? Hành động này không thể hoàn
