@@ -230,13 +230,26 @@ export const cartController = {
         // Check stock limits
         if (newQuantity > availableStock) {
           const maxCanAdd = Math.max(0, availableStock - currentQuantity);
-          return res.status(400).json({
-            success: false,
-            message: `Không thể thêm ${requestedQuantity} sản phẩm. Bạn đã có ${currentQuantity} trong giỏ hàng, chỉ còn lại ${maxCanAdd} sản phẩm có thể thêm.`,
-            current_in_cart: currentQuantity,
-            available_stock: availableStock,
-            max_can_add: maxCanAdd,
-          });
+
+          if (maxCanAdd === 0) {
+            return res.status(400).json({
+              success: false,
+              message: `Không thể thêm thêm sản phẩm "${product.name}". Bạn đã có ${currentQuantity} trong giỏ hàng và kho chỉ còn ${availableStock} sản phẩm.`,
+              stock_status: "cart_limit_reached",
+              current_in_cart: currentQuantity,
+              available_stock: availableStock,
+              max_can_add: maxCanAdd,
+            });
+          } else {
+            return res.status(400).json({
+              success: false,
+              message: `Không thể thêm ${requestedQuantity} sản phẩm. Bạn đã có ${currentQuantity} trong giỏ hàng, chỉ còn lại ${maxCanAdd} sản phẩm có thể thêm.`,
+              stock_status: "insufficient_stock",
+              current_in_cart: currentQuantity,
+              available_stock: availableStock,
+              max_can_add: maxCanAdd,
+            });
+          }
         }
 
         // Update quantity
