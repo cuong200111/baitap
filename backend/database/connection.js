@@ -8,12 +8,12 @@ const USE_MYSQL = true;
 console.log("🔄 Using MySQL database...");
 
 // MySQL configuration với thông tin cụ thể
-const dbConfig = {
-  host: "103.57.221.79",
-  user: "qftuzbjqhosting_b5",
-  password: "Iw~hwC@*9eyN.HQh",
-  database: "qftuzbjqhosting_b5",
-  port: 3306,
+export const dbConfig = {
+  host: process.env.DB_HOST || "103.57.221.79",
+  user: process.env.DB_USER || "qftuzbjqhosting_b5",
+  password: process.env.DB_PASSWORD || "Iw~hwC@*9eyN.HQh",
+  database: process.env.DB_NAME || "qftuzbjqhosting_b5",
+  port: parseInt(process.env.DB_PORT) || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -21,6 +21,67 @@ const dbConfig = {
   timeout: 60000,
   charset: "utf8mb4",
   ssl: false,
+};
+
+// SEO Configuration
+export const seoConfig = {
+  general: {
+    site_name: "ZOXVN - Máy tính, Laptop, Gaming Gear",
+    site_description:
+      "ZOXVN - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+    site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, ZOXVN",
+    site_url: "https://zoxvn.com",
+    enable_compression: true,
+    cache_duration: 3600,
+    enable_minification: true,
+  },
+  social_media: {
+    facebook_url: "",
+    facebook_app_id: "",
+    twitter_site: "@zoxvn_official",
+    linkedin_url: "",
+    youtube_url: "",
+    instagram_url: "",
+  },
+  content: {
+    default_meta_title_pattern: "{title} | ZOXVN",
+    product_meta_title_pattern: "{product_name} - {category} | ZOXVN",
+    category_meta_title_pattern: "{category_name} - {description} | ZOXVN",
+    auto_generate_meta_description: true,
+    enable_structured_data: true,
+    enable_breadcrumbs: true,
+  },
+  schema: {
+    organization_name: "ZOXVN",
+    organization_logo: "/logo.png",
+    organization_address: "123 Tech Street, Ho Chi Minh City, Vietnam",
+    organization_phone: "1900 1903",
+    organization_email: "contact@zoxvn.com",
+    business_type: "ElectronicsStore",
+  },
+  sitemap: {
+    sitemap_priority_homepage: 1.0,
+    sitemap_priority_products: 0.8,
+    sitemap_priority_categories: 0.7,
+    sitemap_changefreq: "weekly",
+    sitemap_include_images: true,
+    sitemap_max_urls: 50000,
+  },
+  local: {
+    business_type: "ElectronicsStore",
+    enable_geo_meta: true,
+    default_location: "Ho Chi Minh City, Vietnam",
+    enable_local_schema: true,
+  },
+  technical: {
+    enable_compression: true,
+    cache_duration: 3600,
+    enable_lazy_loading: true,
+    enable_preload: true,
+    cdn_url: "https://cdn.zoxvn.com",
+    enable_webp: true,
+    enable_critical_css: true,
+  },
 };
 export const mysqlExecuteQuery = async (query, params = []) => {
   try {
