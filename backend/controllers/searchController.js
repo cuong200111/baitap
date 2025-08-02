@@ -425,7 +425,7 @@ export const locationsController = {
             {
               code: 761,
               name: "Quận 2",
-              full_name: "Qu���n 2",
+              full_name: "Quận 2",
               province_code: 79,
             },
             {
