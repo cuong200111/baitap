@@ -24,7 +24,7 @@ export function AuthGuard({
     loading: authLoading,
     initializing,
     isAuthenticated,
-    hasToken
+    hasToken,
   } = useAuth();
   const router = useRouter();
 
@@ -38,8 +38,11 @@ export function AuthGuard({
       // If no token at all, redirect immediately
       if (!hasToken) {
         // Store current path for redirect after login
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('redirect_after_login', window.location.pathname);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(
+            "redirect_after_login",
+            window.location.pathname,
+          );
         }
         router.push(redirectTo);
         return;
@@ -47,8 +50,11 @@ export function AuthGuard({
 
       // If we have token but no user (token invalid), redirect
       if (!isAuthenticated || !user) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('redirect_after_login', window.location.pathname);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(
+            "redirect_after_login",
+            window.location.pathname,
+          );
         }
         router.push(redirectTo);
         return;

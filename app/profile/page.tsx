@@ -1541,8 +1541,6 @@ export default function ProfilePage() {
     }
   };
 
-
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -1581,448 +1579,454 @@ export default function ProfilePage() {
   return (
     <WithAuth>
       <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Thông tin cá nhân
-            </h1>
-            <p className="text-gray-600">Quản lý thông tin tài khoản của bạn</p>
-          </div>
-          <Button variant="outline" onClick={() => router.back()}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Quay lại
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Avatar */}
-          <div className="lg:col-span-1">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-center">Ảnh đại diện</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center space-y-4">
-                <div className="relative inline-block">
-                  <div className="relative w-32 h-32 mx-auto">
-                    <Image
-                      src={
-                        profile.avatar
-                          ? getMediaUrl(profile.avatar)
-                          : "/placeholder.svg"
-                      }
-                      alt="Avatar"
-                      fill
-                      className="object-cover rounded-full border-4 border-gray-200"
-                    />
-                    <button
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploadingAvatar}
-                      className="absolute bottom-0 right-0 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors disabled:opacity-50"
-                    >
-                      {uploadingAvatar ? (
-                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
-                      ) : (
-                        <Camera className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                  />
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-lg">{profile.full_name}</h3>
-                  <p className="text-gray-600">{profile.email}</p>
-                  <div className="mt-2">
-                    <span
-                      className={`inline-block px-2 py-1 rounded text-xs ${
-                        profile.role === "admin"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {profile.role === "admin"
-                        ? "Quản trị viên"
-                        : "Khách hàng"}
-                    </span>
-                  </div>
-                </div>
-
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploadingAvatar}
-                  variant="outline"
-                  className="w-full"
-                >
-                  <Upload className="h-4 w-4 mr-2" />
-                  {uploadingAvatar ? "Đang tải lên..." : "Thay đổi ảnh"}
-                </Button>
-              </CardContent>
-            </Card>
+        <div className="container mx-auto px-4 py-8">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Thông tin cá nhân
+              </h1>
+              <p className="text-gray-600">
+                Quản lý thông tin tài khoản của bạn
+              </p>
+            </div>
+            <Button variant="outline" onClick={() => router.back()}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Quay lại
+            </Button>
           </div>
 
-          {/* Profile Form */}
-          <div className="lg:col-span-2">
-            <Tabs defaultValue="info" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="info">Thông tin cá nhân</TabsTrigger>
-                <TabsTrigger value="security">Bảo mật</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="info" className="space-y-6">
-                {/* Personal Information */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5" />
-                      Thông tin cơ bản
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="full_name">Họ và tên</Label>
-                        <Input
-                          id="full_name"
-                          value={formData.full_name}
-                          onChange={(e) =>
-                            handleInputChange("full_name", e.target.value)
-                          }
-                          placeholder="Nguyễn Văn A"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">Số điện thoại</Label>
-                        <Input
-                          id="phone"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            handleInputChange("phone", e.target.value)
-                          }
-                          placeholder="0912345678"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        value={profile.email}
-                        disabled
-                        className="bg-gray-50"
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Profile Avatar */}
+            <div className="lg:col-span-1">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-center">Ảnh đại diện</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center space-y-4">
+                  <div className="relative inline-block">
+                    <div className="relative w-32 h-32 mx-auto">
+                      <Image
+                        src={
+                          profile.avatar
+                            ? getMediaUrl(profile.avatar)
+                            : "/placeholder.svg"
+                        }
+                        alt="Avatar"
+                        fill
+                        className="object-cover rounded-full border-4 border-gray-200"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
-                        Email không thể thay đổi
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Address Information */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <MapPin className="h-5 w-5" />
-                      Địa chỉ
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {/* Address Mode Toggle */}
-                    <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-                      <Checkbox
-                        id="manual-address"
-                        checked={isManualAddressMode}
-                        onCheckedChange={handleAddressModeToggle}
-                      />
-                      <Label
-                        htmlFor="manual-address"
-                        className="text-sm font-medium"
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingAvatar}
+                        className="absolute bottom-0 right-0 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 transition-colors disabled:opacity-50"
                       >
-                        Nhập địa chỉ thủ công
-                      </Label>
-                      <span className="text-xs text-gray-500">
-                        (Bỏ tích để chọn từ danh sách vùng miền Việt Nam)
+                        {uploadingAvatar ? (
+                          <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                        ) : (
+                          <Camera className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold text-lg">
+                      {profile.full_name}
+                    </h3>
+                    <p className="text-gray-600">{profile.email}</p>
+                    <div className="mt-2">
+                      <span
+                        className={`inline-block px-2 py-1 rounded text-xs ${
+                          profile.role === "admin"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
+                        {profile.role === "admin"
+                          ? "Quản trị viên"
+                          : "Khách hàng"}
                       </span>
                     </div>
+                  </div>
 
-                    {/* Address Input Fields */}
-                    {isManualAddressMode ? (
-                      // Manual Input Mode
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingAvatar}
+                    variant="outline"
+                    className="w-full"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    {uploadingAvatar ? "Đang tải lên..." : "Thay đổi ảnh"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Profile Form */}
+            <div className="lg:col-span-2">
+              <Tabs defaultValue="info" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="info">Thông tin cá nhân</TabsTrigger>
+                  <TabsTrigger value="security">Bảo mật</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="info" className="space-y-6">
+                  {/* Personal Information */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <User className="h-5 w-5" />
+                        Thông tin cơ bản
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="manual_province">
-                            Tỉnh/Thành phố
-                          </Label>
+                          <Label htmlFor="full_name">Họ và tên</Label>
                           <Input
-                            id="manual_province"
-                            value={addressData.province_name}
+                            id="full_name"
+                            value={formData.full_name}
                             onChange={(e) =>
-                              handleAddressChange(
-                                "province_name",
-                                e.target.value,
-                              )
+                              handleInputChange("full_name", e.target.value)
                             }
-                            placeholder="Nhập tên tỉnh/thành phố"
+                            placeholder="Nguyễn Văn A"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="manual_district">Quận/Huyện</Label>
+                          <Label htmlFor="phone">Số điện thoại</Label>
                           <Input
-                            id="manual_district"
-                            value={addressData.district_name}
+                            id="phone"
+                            value={formData.phone}
                             onChange={(e) =>
-                              handleAddressChange(
-                                "district_name",
-                                e.target.value,
-                              )
+                              handleInputChange("phone", e.target.value)
                             }
-                            placeholder="Nhập tên quận/huyện"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="manual_ward">Phường/Xã</Label>
-                          <Input
-                            id="manual_ward"
-                            value={addressData.ward_name}
-                            onChange={(e) =>
-                              handleAddressChange("ward_name", e.target.value)
-                            }
-                            placeholder="Nhập tên phường/xã"
+                            placeholder="0912345678"
                           />
                         </div>
                       </div>
-                    ) : (
-                      // API Dropdown Mode
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                          <Label htmlFor="province">Tỉnh/Thành phố</Label>
-                          <Select
-                            value={selectedProvince?.code.toString() || ""}
-                            onValueChange={handleProvinceChange}
-                            disabled={loadingLocations}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Chọn tỉnh" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {provinces.map((province) => (
-                                <SelectItem
-                                  key={province.code}
-                                  value={province.code.toString()}
-                                >
-                                  {province.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label htmlFor="district">Quận/Huyện</Label>
-                          <Select
-                            value={selectedDistrict?.code.toString() || ""}
-                            onValueChange={handleDistrictChange}
-                            disabled={
-                              !selectedProvince || districts.length === 0
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Chọn huyện" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {districts.map((district) => (
-                                <SelectItem
-                                  key={district.code}
-                                  value={district.code.toString()}
-                                >
-                                  {district.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label htmlFor="ward">Phường/Xã</Label>
-                          <Select
-                            value={selectedWard?.code.toString() || ""}
-                            onValueChange={handleWardChange}
-                            disabled={!selectedDistrict || wards.length === 0}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Chọn xã" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {wards.map((ward) => (
-                                <SelectItem
-                                  key={ward.code}
-                                  value={ward.code.toString()}
-                                >
-                                  {ward.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    )}
-
-                    <div>
-                      <Label htmlFor="address">Địa chỉ chi tiết</Label>
-                      <Input
-                        id="address"
-                        value={formData.address}
-                        onChange={(e) =>
-                          handleInputChange("address", e.target.value)
-                        }
-                        placeholder="Số nhà, tên đường..."
-                      />
-                    </div>
-
-                    <Button
-                      onClick={handleUpdateProfile}
-                      disabled={updating || updateInProgress.current}
-                      className="w-full md:w-auto"
-                      type="button"
-                    >
-                      {updating ? (
-                        <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                      ) : (
-                        <Save className="h-4 w-4 mr-2" />
-                      )}
-                      {updating ? "Đang cập nhật..." : "Lưu thay đổi"}
-                    </Button>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="security" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Lock className="h-5 w-5" />
-                      Bảo mật tài khoản
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Alert>
-                      <CheckCircle className="h-4 w-4" />
-                      <AlertDescription>
-                        Tài khoản của bạn được bảo mật bằng mật khẩu mạnh.
-                      </AlertDescription>
-                    </Alert>
-
-                    <div className="flex items-center justify-between p-4 border rounded">
                       <div>
-                        <h4 className="font-medium">Mật khẩu</h4>
-                        <p className="text-sm text-gray-600">
-                          Cập nhật lần cuối:{" "}
-                          {new Date(profile.created_at).toLocaleDateString(
-                            "vi-VN",
-                          )}
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          value={profile.email}
+                          disabled
+                          className="bg-gray-50"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Email không thể thay đổi
                         </p>
                       </div>
-                      <Dialog
-                        open={isPasswordDialogOpen}
-                        onOpenChange={setIsPasswordDialogOpen}
-                      >
-                        <DialogTrigger asChild>
-                          <Button variant="outline">Đổi mật khẩu</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Đổi mật khẩu</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <Label htmlFor="current_password">
-                                Mật khẩu hiện tại
-                              </Label>
-                              <Input
-                                id="current_password"
-                                type="password"
-                                value={passwordData.current_password}
-                                onChange={(e) =>
-                                  setPasswordData((prev) => ({
-                                    ...prev,
-                                    current_password: e.target.value,
-                                  }))
-                                }
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="new_password">Mật khẩu mới</Label>
-                              <Input
-                                id="new_password"
-                                type="password"
-                                value={passwordData.new_password}
-                                onChange={(e) =>
-                                  setPasswordData((prev) => ({
-                                    ...prev,
-                                    new_password: e.target.value,
-                                  }))
-                                }
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="confirm_password">
-                                Xác nhận mật khẩu mới
-                              </Label>
-                              <Input
-                                id="confirm_password"
-                                type="password"
-                                value={passwordData.confirm_password}
-                                onChange={(e) =>
-                                  setPasswordData((prev) => ({
-                                    ...prev,
-                                    confirm_password: e.target.value,
-                                  }))
-                                }
-                              />
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                onClick={handleChangePassword}
-                                className="flex-1"
-                              >
-                                Đổi mật khẩu
-                              </Button>
-                              <Button
-                                variant="outline"
-                                onClick={() => setIsPasswordDialogOpen(false)}
-                              >
-                                Hủy
-                              </Button>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
+                    </CardContent>
+                  </Card>
 
-                    <div className="pt-4 border-t">
-                      <h4 className="font-medium text-red-600 mb-2">
-                        Vùng nguy hiểm
-                      </h4>
+                  {/* Address Information */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <MapPin className="h-5 w-5" />
+                        Địa chỉ
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Address Mode Toggle */}
+                      <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
+                        <Checkbox
+                          id="manual-address"
+                          checked={isManualAddressMode}
+                          onCheckedChange={handleAddressModeToggle}
+                        />
+                        <Label
+                          htmlFor="manual-address"
+                          className="text-sm font-medium"
+                        >
+                          Nhập địa chỉ thủ công
+                        </Label>
+                        <span className="text-xs text-gray-500">
+                          (Bỏ tích để chọn từ danh sách vùng miền Việt Nam)
+                        </span>
+                      </div>
+
+                      {/* Address Input Fields */}
+                      {isManualAddressMode ? (
+                        // Manual Input Mode
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <Label htmlFor="manual_province">
+                              Tỉnh/Thành phố
+                            </Label>
+                            <Input
+                              id="manual_province"
+                              value={addressData.province_name}
+                              onChange={(e) =>
+                                handleAddressChange(
+                                  "province_name",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Nhập tên tỉnh/thành phố"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="manual_district">Quận/Huyện</Label>
+                            <Input
+                              id="manual_district"
+                              value={addressData.district_name}
+                              onChange={(e) =>
+                                handleAddressChange(
+                                  "district_name",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Nhập tên quận/huyện"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="manual_ward">Phường/Xã</Label>
+                            <Input
+                              id="manual_ward"
+                              value={addressData.ward_name}
+                              onChange={(e) =>
+                                handleAddressChange("ward_name", e.target.value)
+                              }
+                              placeholder="Nhập tên phường/xã"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        // API Dropdown Mode
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div>
+                            <Label htmlFor="province">Tỉnh/Thành phố</Label>
+                            <Select
+                              value={selectedProvince?.code.toString() || ""}
+                              onValueChange={handleProvinceChange}
+                              disabled={loadingLocations}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Chọn tỉnh" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {provinces.map((province) => (
+                                  <SelectItem
+                                    key={province.code}
+                                    value={province.code.toString()}
+                                  >
+                                    {province.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="district">Quận/Huyện</Label>
+                            <Select
+                              value={selectedDistrict?.code.toString() || ""}
+                              onValueChange={handleDistrictChange}
+                              disabled={
+                                !selectedProvince || districts.length === 0
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Chọn huyện" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {districts.map((district) => (
+                                  <SelectItem
+                                    key={district.code}
+                                    value={district.code.toString()}
+                                  >
+                                    {district.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="ward">Phường/Xã</Label>
+                            <Select
+                              value={selectedWard?.code.toString() || ""}
+                              onValueChange={handleWardChange}
+                              disabled={!selectedDistrict || wards.length === 0}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Chọn xã" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {wards.map((ward) => (
+                                  <SelectItem
+                                    key={ward.code}
+                                    value={ward.code.toString()}
+                                  >
+                                    {ward.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      )}
+
+                      <div>
+                        <Label htmlFor="address">Địa chỉ chi tiết</Label>
+                        <Input
+                          id="address"
+                          value={formData.address}
+                          onChange={(e) =>
+                            handleInputChange("address", e.target.value)
+                          }
+                          placeholder="Số nhà, tên đường..."
+                        />
+                      </div>
+
                       <Button
-                        variant="destructive"
-                        onClick={logout}
+                        onClick={handleUpdateProfile}
+                        disabled={updating || updateInProgress.current}
                         className="w-full md:w-auto"
+                        type="button"
                       >
-                        Đăng xuất khỏi t��t cả thiết bị
+                        {updating ? (
+                          <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
+                        ) : (
+                          <Save className="h-4 w-4 mr-2" />
+                        )}
+                        {updating ? "Đang cập nhật..." : "Lưu thay đổi"}
                       </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="security" className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Lock className="h-5 w-5" />
+                        Bảo mật tài khoản
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <Alert>
+                        <CheckCircle className="h-4 w-4" />
+                        <AlertDescription>
+                          Tài khoản của bạn được bảo mật bằng mật khẩu mạnh.
+                        </AlertDescription>
+                      </Alert>
+
+                      <div className="flex items-center justify-between p-4 border rounded">
+                        <div>
+                          <h4 className="font-medium">Mật khẩu</h4>
+                          <p className="text-sm text-gray-600">
+                            Cập nhật lần cuối:{" "}
+                            {new Date(profile.created_at).toLocaleDateString(
+                              "vi-VN",
+                            )}
+                          </p>
+                        </div>
+                        <Dialog
+                          open={isPasswordDialogOpen}
+                          onOpenChange={setIsPasswordDialogOpen}
+                        >
+                          <DialogTrigger asChild>
+                            <Button variant="outline">Đổi mật khẩu</Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Đổi mật khẩu</DialogTitle>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                              <div>
+                                <Label htmlFor="current_password">
+                                  Mật khẩu hiện tại
+                                </Label>
+                                <Input
+                                  id="current_password"
+                                  type="password"
+                                  value={passwordData.current_password}
+                                  onChange={(e) =>
+                                    setPasswordData((prev) => ({
+                                      ...prev,
+                                      current_password: e.target.value,
+                                    }))
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="new_password">
+                                  Mật khẩu mới
+                                </Label>
+                                <Input
+                                  id="new_password"
+                                  type="password"
+                                  value={passwordData.new_password}
+                                  onChange={(e) =>
+                                    setPasswordData((prev) => ({
+                                      ...prev,
+                                      new_password: e.target.value,
+                                    }))
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="confirm_password">
+                                  Xác nhận mật khẩu mới
+                                </Label>
+                                <Input
+                                  id="confirm_password"
+                                  type="password"
+                                  value={passwordData.confirm_password}
+                                  onChange={(e) =>
+                                    setPasswordData((prev) => ({
+                                      ...prev,
+                                      confirm_password: e.target.value,
+                                    }))
+                                  }
+                                />
+                              </div>
+                              <div className="flex gap-2">
+                                <Button
+                                  onClick={handleChangePassword}
+                                  className="flex-1"
+                                >
+                                  Đổi mật khẩu
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setIsPasswordDialogOpen(false)}
+                                >
+                                  Hủy
+                                </Button>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+
+                      <div className="pt-4 border-t">
+                        <h4 className="font-medium text-red-600 mb-2">
+                          Vùng nguy hiểm
+                        </h4>
+                        <Button
+                          variant="destructive"
+                          onClick={logout}
+                          className="w-full md:w-auto"
+                        >
+                          Đăng xuất khỏi t��t cả thiết bị
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </WithAuth>
   );

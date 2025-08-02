@@ -289,8 +289,6 @@ export default function BillingPage() {
     }
   };
 
-
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -310,212 +308,414 @@ export default function BillingPage() {
   return (
     <WithAuth>
       <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Thông tin thanh toán
-            </h1>
-            <p className="text-gray-600">
-              Quản lý phương thức thanh toán và hóa đơn
-            </p>
+        <div className="container mx-auto px-4 py-8">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Thông tin thanh toán
+              </h1>
+              <p className="text-gray-600">
+                Quản lý phương thức thanh toán và hóa đơn
+              </p>
+            </div>
+            <Button variant="outline" onClick={() => router.back()}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Quay lại
+            </Button>
           </div>
-          <Button variant="outline" onClick={() => router.back()}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Quay lại
-          </Button>
-        </div>
 
-        <Tabs defaultValue="payment-methods" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="payment-methods">
-              Phương thức thanh toán
-            </TabsTrigger>
-            <TabsTrigger value="billing-addresses">
-              Địa chỉ xuất hóa đơn
-            </TabsTrigger>
-          </TabsList>
+          <Tabs defaultValue="payment-methods" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="payment-methods">
+                Phương thức thanh toán
+              </TabsTrigger>
+              <TabsTrigger value="billing-addresses">
+                Địa chỉ xuất hóa đơn
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="payment-methods" className="space-y-6">
-            {/* Payment Methods */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <CreditCard className="h-5 w-5" />
-                    Phương thức thanh toán
-                  </CardTitle>
-                  <Dialog open={isAddCardOpen} onOpenChange={setIsAddCardOpen}>
-                    <DialogTrigger asChild>
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Thêm thẻ
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Thêm thẻ thanh toán</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="card_number">Số thẻ</Label>
-                          <Input
-                            id="card_number"
-                            value={cardForm.card_number}
-                            onChange={(e) =>
-                              setCardForm((prev) => ({
-                                ...prev,
-                                card_number: e.target.value,
-                              }))
-                            }
-                            placeholder="1234 5678 9012 3456"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="card_holder">Chủ thẻ</Label>
-                          <Input
-                            id="card_holder"
-                            value={cardForm.card_holder}
-                            onChange={(e) =>
-                              setCardForm((prev) => ({
-                                ...prev,
-                                card_holder: e.target.value,
-                              }))
-                            }
-                            placeholder="NGUYEN VAN A"
-                          />
-                        </div>
-                        <div className="grid grid-cols-3 gap-4">
+            <TabsContent value="payment-methods" className="space-y-6">
+              {/* Payment Methods */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="h-5 w-5" />
+                      Phương thức thanh toán
+                    </CardTitle>
+                    <Dialog
+                      open={isAddCardOpen}
+                      onOpenChange={setIsAddCardOpen}
+                    >
+                      <DialogTrigger asChild>
+                        <Button>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Thêm thẻ
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Thêm thẻ thanh toán</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
                           <div>
-                            <Label htmlFor="expiry_month">Tháng</Label>
-                            <Select
-                              value={cardForm.expiry_month}
-                              onValueChange={(value) =>
-                                setCardForm((prev) => ({
-                                  ...prev,
-                                  expiry_month: value,
-                                }))
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="MM" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {Array.from({ length: 12 }, (_, i) => (
-                                  <SelectItem
-                                    key={i + 1}
-                                    value={(i + 1).toString().padStart(2, "0")}
-                                  >
-                                    {(i + 1).toString().padStart(2, "0")}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <div>
-                            <Label htmlFor="expiry_year">Năm</Label>
-                            <Select
-                              value={cardForm.expiry_year}
-                              onValueChange={(value) =>
-                                setCardForm((prev) => ({
-                                  ...prev,
-                                  expiry_year: value,
-                                }))
-                              }
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="YYYY" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {Array.from({ length: 10 }, (_, i) => {
-                                  const year = new Date().getFullYear() + i;
-                                  return (
-                                    <SelectItem
-                                      key={year}
-                                      value={year.toString()}
-                                    >
-                                      {year}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <div>
-                            <Label htmlFor="cvv">CVV</Label>
+                            <Label htmlFor="card_number">Số thẻ</Label>
                             <Input
-                              id="cvv"
-                              value={cardForm.cvv}
+                              id="card_number"
+                              value={cardForm.card_number}
                               onChange={(e) =>
                                 setCardForm((prev) => ({
                                   ...prev,
-                                  cvv: e.target.value,
+                                  card_number: e.target.value,
                                 }))
                               }
-                              placeholder="123"
-                              maxLength={3}
+                              placeholder="1234 5678 9012 3456"
                             />
                           </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button onClick={handleAddCard} className="flex-1">
-                            Thêm thẻ
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={() => setIsAddCardOpen(false)}
-                          >
-                            Hủy
-                          </Button>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {paymentMethods.length === 0 ? (
-                  <div className="text-center py-8">
-                    <CreditCard className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-600">
-                      Chưa có phương thức thanh toán nào
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {paymentMethods.map((method) => {
-                      const display = getPaymentMethodDisplay(method);
-                      const IconComponent = display.icon;
-
-                      return (
-                        <div
-                          key={method.id}
-                          className="flex items-center justify-between p-4 border rounded-lg"
-                        >
-                          <div className="flex items-center gap-3">
-                            <IconComponent className="h-6 w-6 text-gray-400" />
+                          <div>
+                            <Label htmlFor="card_holder">Chủ thẻ</Label>
+                            <Input
+                              id="card_holder"
+                              value={cardForm.card_holder}
+                              onChange={(e) =>
+                                setCardForm((prev) => ({
+                                  ...prev,
+                                  card_holder: e.target.value,
+                                }))
+                              }
+                              placeholder="NGUYEN VAN A"
+                            />
+                          </div>
+                          <div className="grid grid-cols-3 gap-4">
                             <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-medium">
-                                  {display.title}
-                                </span>
-                                {method.is_default && (
-                                  <Badge variant="secondary">Mặc định</Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-gray-600">
-                                {display.subtitle}
-                              </p>
+                              <Label htmlFor="expiry_month">Tháng</Label>
+                              <Select
+                                value={cardForm.expiry_month}
+                                onValueChange={(value) =>
+                                  setCardForm((prev) => ({
+                                    ...prev,
+                                    expiry_month: value,
+                                  }))
+                                }
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="MM" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Array.from({ length: 12 }, (_, i) => (
+                                    <SelectItem
+                                      key={i + 1}
+                                      value={(i + 1)
+                                        .toString()
+                                        .padStart(2, "0")}
+                                    >
+                                      {(i + 1).toString().padStart(2, "0")}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label htmlFor="expiry_year">Năm</Label>
+                              <Select
+                                value={cardForm.expiry_year}
+                                onValueChange={(value) =>
+                                  setCardForm((prev) => ({
+                                    ...prev,
+                                    expiry_year: value,
+                                  }))
+                                }
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="YYYY" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Array.from({ length: 10 }, (_, i) => {
+                                    const year = new Date().getFullYear() + i;
+                                    return (
+                                      <SelectItem
+                                        key={year}
+                                        value={year.toString()}
+                                      >
+                                        {year}
+                                      </SelectItem>
+                                    );
+                                  })}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label htmlFor="cvv">CVV</Label>
+                              <Input
+                                id="cvv"
+                                value={cardForm.cvv}
+                                onChange={(e) =>
+                                  setCardForm((prev) => ({
+                                    ...prev,
+                                    cvv: e.target.value,
+                                  }))
+                                }
+                                placeholder="123"
+                                maxLength={3}
+                              />
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            {!method.is_default && (
+                          <div className="flex gap-2">
+                            <Button onClick={handleAddCard} className="flex-1">
+                              Thêm thẻ
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => setIsAddCardOpen(false)}
+                            >
+                              Hủy
+                            </Button>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {paymentMethods.length === 0 ? (
+                    <div className="text-center py-8">
+                      <CreditCard className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-600">
+                        Chưa có phương thức thanh toán nào
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {paymentMethods.map((method) => {
+                        const display = getPaymentMethodDisplay(method);
+                        const IconComponent = display.icon;
+
+                        return (
+                          <div
+                            key={method.id}
+                            className="flex items-center justify-between p-4 border rounded-lg"
+                          >
+                            <div className="flex items-center gap-3">
+                              <IconComponent className="h-6 w-6 text-gray-400" />
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">
+                                    {display.title}
+                                  </span>
+                                  {method.is_default && (
+                                    <Badge variant="secondary">Mặc định</Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                  {display.subtitle}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {!method.is_default && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() =>
+                                    handleSetDefault(method.id, "payment")
+                                  }
+                                >
+                                  Đặt mặc định
+                                </Button>
+                              )}
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() =>
-                                  handleSetDefault(method.id, "payment")
+                                  handleDelete(method.id, "payment")
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Security Note */}
+              <Alert>
+                <Shield className="h-4 w-4" />
+                <AlertDescription>
+                  Thông tin thẻ của bạn được bảo mật bằng mã hóa SSL 256-bit và
+                  tuân thủ tiêu chuẩn PCI DSS.
+                </AlertDescription>
+              </Alert>
+            </TabsContent>
+
+            <TabsContent value="billing-addresses" className="space-y-6">
+              {/* Billing Addresses */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="flex items-center gap-2">
+                      <Building className="h-5 w-5" />
+                      Địa chỉ xuất hóa đơn
+                    </CardTitle>
+                    <Dialog
+                      open={isAddAddressOpen}
+                      onOpenChange={setIsAddAddressOpen}
+                    >
+                      <DialogTrigger asChild>
+                        <Button>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Thêm địa chỉ
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Thêm địa chỉ xuất hóa đơn</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="company_name">Tên công ty</Label>
+                            <Input
+                              id="company_name"
+                              value={addressForm.company_name}
+                              onChange={(e) =>
+                                setAddressForm((prev) => ({
+                                  ...prev,
+                                  company_name: e.target.value,
+                                }))
+                              }
+                              placeholder="Công ty TNHH ABC"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="tax_code">Mã số thuế</Label>
+                            <Input
+                              id="tax_code"
+                              value={addressForm.tax_code}
+                              onChange={(e) =>
+                                setAddressForm((prev) => ({
+                                  ...prev,
+                                  tax_code: e.target.value,
+                                }))
+                              }
+                              placeholder="0123456789"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="address">Địa chỉ *</Label>
+                            <Input
+                              id="address"
+                              value={addressForm.address}
+                              onChange={(e) =>
+                                setAddressForm((prev) => ({
+                                  ...prev,
+                                  address: e.target.value,
+                                }))
+                              }
+                              placeholder="123 Đường ABC, Quận 1, TP.HCM"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="phone">Số điện thoại *</Label>
+                              <Input
+                                id="phone"
+                                value={addressForm.phone}
+                                onChange={(e) =>
+                                  setAddressForm((prev) => ({
+                                    ...prev,
+                                    phone: e.target.value,
+                                  }))
+                                }
+                                placeholder="0912345678"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="email">Email *</Label>
+                              <Input
+                                id="email"
+                                type="email"
+                                value={addressForm.email}
+                                onChange={(e) =>
+                                  setAddressForm((prev) => ({
+                                    ...prev,
+                                    email: e.target.value,
+                                  }))
+                                }
+                                placeholder="invoice@company.com"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={handleAddAddress}
+                              className="flex-1"
+                            >
+                              Thêm địa chỉ
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => setIsAddAddressOpen(false)}
+                            >
+                              Hủy
+                            </Button>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {billingAddresses.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Building className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-600">
+                        Chưa có địa chỉ xuất hóa đơn nào
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {billingAddresses.map((address) => (
+                        <div
+                          key={address.id}
+                          className="flex items-start justify-between p-4 border rounded-lg"
+                        >
+                          <div className="flex items-start gap-3">
+                            <Building className="h-6 w-6 text-gray-400 mt-1" />
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                {address.company_name && (
+                                  <span className="font-medium">
+                                    {address.company_name}
+                                  </span>
+                                )}
+                                {address.is_default && (
+                                  <Badge variant="secondary">Mặc định</Badge>
+                                )}
+                              </div>
+                              {address.tax_code && (
+                                <p className="text-sm text-gray-600">
+                                  MST: {address.tax_code}
+                                </p>
+                              )}
+                              <p className="text-sm text-gray-600">
+                                {address.address}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {address.phone} • {address.email}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {!address.is_default && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleSetDefault(address.id, "address")
                                 }
                               >
                                 Đặt mặc định
@@ -524,212 +724,22 @@ export default function BillingPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleDelete(method.id, "payment")}
+                              onClick={() =>
+                                handleDelete(address.id, "address")
+                              }
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Security Note */}
-            <Alert>
-              <Shield className="h-4 w-4" />
-              <AlertDescription>
-                Thông tin thẻ của bạn được bảo mật bằng mã hóa SSL 256-bit và
-                tuân thủ tiêu chuẩn PCI DSS.
-              </AlertDescription>
-            </Alert>
-          </TabsContent>
-
-          <TabsContent value="billing-addresses" className="space-y-6">
-            {/* Billing Addresses */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <Building className="h-5 w-5" />
-                    Địa chỉ xuất hóa đơn
-                  </CardTitle>
-                  <Dialog
-                    open={isAddAddressOpen}
-                    onOpenChange={setIsAddAddressOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Thêm địa chỉ
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Thêm địa chỉ xuất hóa đơn</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="company_name">Tên công ty</Label>
-                          <Input
-                            id="company_name"
-                            value={addressForm.company_name}
-                            onChange={(e) =>
-                              setAddressForm((prev) => ({
-                                ...prev,
-                                company_name: e.target.value,
-                              }))
-                            }
-                            placeholder="Công ty TNHH ABC"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="tax_code">Mã số thuế</Label>
-                          <Input
-                            id="tax_code"
-                            value={addressForm.tax_code}
-                            onChange={(e) =>
-                              setAddressForm((prev) => ({
-                                ...prev,
-                                tax_code: e.target.value,
-                              }))
-                            }
-                            placeholder="0123456789"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="address">Địa chỉ *</Label>
-                          <Input
-                            id="address"
-                            value={addressForm.address}
-                            onChange={(e) =>
-                              setAddressForm((prev) => ({
-                                ...prev,
-                                address: e.target.value,
-                              }))
-                            }
-                            placeholder="123 Đường ABC, Quận 1, TP.HCM"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="phone">Số điện thoại *</Label>
-                            <Input
-                              id="phone"
-                              value={addressForm.phone}
-                              onChange={(e) =>
-                                setAddressForm((prev) => ({
-                                  ...prev,
-                                  phone: e.target.value,
-                                }))
-                              }
-                              placeholder="0912345678"
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="email">Email *</Label>
-                            <Input
-                              id="email"
-                              type="email"
-                              value={addressForm.email}
-                              onChange={(e) =>
-                                setAddressForm((prev) => ({
-                                  ...prev,
-                                  email: e.target.value,
-                                }))
-                              }
-                              placeholder="invoice@company.com"
-                            />
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button onClick={handleAddAddress} className="flex-1">
-                            Thêm địa chỉ
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={() => setIsAddAddressOpen(false)}
-                          >
-                            Hủy
-                          </Button>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {billingAddresses.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Building className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-600">
-                      Chưa có địa chỉ xuất hóa đơn nào
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {billingAddresses.map((address) => (
-                      <div
-                        key={address.id}
-                        className="flex items-start justify-between p-4 border rounded-lg"
-                      >
-                        <div className="flex items-start gap-3">
-                          <Building className="h-6 w-6 text-gray-400 mt-1" />
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              {address.company_name && (
-                                <span className="font-medium">
-                                  {address.company_name}
-                                </span>
-                              )}
-                              {address.is_default && (
-                                <Badge variant="secondary">Mặc định</Badge>
-                              )}
-                            </div>
-                            {address.tax_code && (
-                              <p className="text-sm text-gray-600">
-                                MST: {address.tax_code}
-                              </p>
-                            )}
-                            <p className="text-sm text-gray-600">
-                              {address.address}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {address.phone} • {address.email}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {!address.is_default && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                handleSetDefault(address.id, "address")
-                              }
-                            >
-                              Đặt mặc định
-                            </Button>
-                          )}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDelete(address.id, "address")}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </WithAuth>
   );
