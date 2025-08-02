@@ -1,5 +1,5 @@
 import express from "express";
-import { seoConfig } from "../config/database.js";
+import { seoConfig } from "../database/connection.js";
 
 const router = express.Router();
 
