@@ -1160,6 +1160,103 @@ export default function AdvancedSeoDashboard() {
           )}
         </TabsContent>
 
+        {/* Sitemap Management Tab */}
+        <TabsContent value="sitemap" className="space-y-6">
+          <CustomSitemapManager authToken={localStorage.getItem('token') || undefined} />
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                Sitemap URLs
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Main Sitemap Index</h4>
+                    <p className="text-sm text-muted-foreground">Sitemap chính chứa tất cả các sitemap con</p>
+                  </div>
+                  <a
+                    href="/sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    /sitemap.xml
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Static Pages Sitemap</h4>
+                    <p className="text-sm text-muted-foreground">Trang chính, sản phẩm, đăng nhập...</p>
+                  </div>
+                  <a
+                    href="/main-sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    /main-sitemap.xml
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Categories Sitemap</h4>
+                    <p className="text-sm text-muted-foreground">Tất cả danh mục sản phẩm (Priority: 1.0)</p>
+                  </div>
+                  <a
+                    href="/categories-sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    /categories-sitemap.xml
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Products Sitemap</h4>
+                    <p className="text-sm text-muted-foreground">Tất cả sản phẩm (Priority: 1.0)</p>
+                  </div>
+                  <a
+                    href="/products-sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    /products-sitemap.xml
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+
+                <div className="flex items-center justify-between p-3 border rounded-lg">
+                  <div>
+                    <h4 className="font-medium">Custom URLs Sitemap</h4>
+                    <p className="text-sm text-muted-foreground">URLs tùy chỉnh do bạn thêm (Priority: 0.2)</p>
+                  </div>
+                  <a
+                    href="/all-sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline flex items-center gap-1"
+                  >
+                    /all-sitemap.xml
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* Competitors Tab */}
         <TabsContent value="competitors" className="space-y-6">
           <Card>
