@@ -1476,7 +1476,7 @@ export default function ProfilePage() {
           await refreshUser();
         }
       } else {
-        toast.error(data.message || "Có l���i xảy ra");
+        toast.error(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Avatar upload error:", error);
