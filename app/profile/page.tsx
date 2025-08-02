@@ -257,7 +257,7 @@ export default function ProfilePage() {
         { code: 46, name: "Quảng Bình", full_name: "Tỉnh Quảng Bình" },
         { code: 49, name: "Quảng Trị", full_name: "Tỉnh Quảng Trị" },
         { code: 51, name: "Thừa Thiên Huế", full_name: "Tỉnh Thừa Thiên Huế" },
-        { code: 52, name: "Qu���ng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
+        { code: 52, name: "Quảng Ngãi", full_name: "Tỉnh Quảng Ngãi" },
         { code: 54, name: "Bình Định", full_name: "Tỉnh Bình Định" },
         { code: 56, name: "Phú Yên", full_name: "Tỉnh Phú Yên" },
         { code: 58, name: "Ninh Thuận", full_name: "Tỉnh Ninh Thuận" },
@@ -494,7 +494,7 @@ export default function ProfilePage() {
           {
             code: 492,
             name: "Thanh Khê",
-            full_name: "Quận Thanh Kh��",
+            full_name: "Quận Thanh Khê",
             province_code: 48,
           },
           {
@@ -1128,7 +1128,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phường Tân Thạnh",
+            full_name: "Phư���ng Tân Thạnh",
             district_code: 200,
           },
           {
@@ -1395,7 +1395,7 @@ export default function ProfilePage() {
           ward_name: data.data.ward_name || "",
         });
 
-        toast.success("Cập nhật thông tin và địa chỉ th��nh công");
+        toast.success("Cập nhật thông tin và địa chỉ thành công");
 
         // Refresh user context
         if (refreshUser) {
@@ -1541,17 +1541,7 @@ export default function ProfilePage() {
     }
   };
 
-  // Show loading screen while authentication is in progress
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Đang xác thực...</p>
-        </div>
-      </div>
-    );
-  }
+
 
   if (loading) {
     return (
