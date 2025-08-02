@@ -560,18 +560,74 @@ export const seoController = {
   async getPerformanceMetrics(req, res) {
     try {
       const metrics = {
-        page_speed: {
-          desktop: 85,
-          mobile: 78,
-        },
-        core_web_vitals: {
+        overallHealth: 85,
+        keywordRankings: [
+          {
+            keyword: "laptop gaming",
+            currentPosition: 3,
+            previousPosition: 5,
+            change: 2,
+            searchVolume: 12000,
+            difficulty: 65,
+            url: "/category/laptop-gaming"
+          },
+          {
+            keyword: "máy tính gaming",
+            currentPosition: 7,
+            previousPosition: 8,
+            change: 1,
+            searchVolume: 8500,
+            difficulty: 70,
+            url: "/category/pc-gaming"
+          },
+          {
+            keyword: "linh kiện máy tính",
+            currentPosition: 12,
+            previousPosition: 15,
+            change: 3,
+            searchVolume: 6200,
+            difficulty: 45,
+            url: "/category/linh-kien"
+          }
+        ],
+        trafficTrends: [
+          {
+            date: "2024-01-15",
+            organicTraffic: 1250,
+            impressions: 25000,
+            clicks: 850,
+            ctr: 3.4,
+            avgPosition: 8.2
+          },
+          {
+            date: "2024-01-14",
+            organicTraffic: 1180,
+            impressions: 24200,
+            clicks: 820,
+            ctr: 3.39,
+            avgPosition: 8.5
+          }
+        ],
+        coreWebVitals: {
           lcp: 2.1,
           fid: 45,
-          cls: 0.05,
+          cls: 0.08,
+          fcp: 1.8,
+          ttfb: 0.5,
+          score: 85,
+          status: "good"
         },
-        lighthouse_score: 87,
-        gtmetrix_grade: "A",
-        loading_time: 1.8,
+        indexingStatus: {
+          totalPages: 150,
+          indexedPages: 142,
+          crawlErrors: 3,
+          sitemapStatus: "processed"
+        },
+        recommendations: [
+          "Optimize images on homepage for better LCP",
+          "Add more internal links to improve crawlability",
+          "Update meta descriptions for product pages"
+        ]
       };
 
       res.json({
