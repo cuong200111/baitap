@@ -400,7 +400,7 @@ router.post(
 
         await executeQuery(
           `INSERT INTO product_categories (product_id, category_id) VALUES ${placeholders}`,
-          flatValues
+          flatValues,
         );
       }
       // Get created product
@@ -451,7 +451,7 @@ router.put(
       .withMessage("Valid stock quantity required"),
   ],
   async (req, res) => {
-    console.log(body)
+    console.log(body);
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -537,7 +537,7 @@ router.put(
 
           await executeQuery(
             `INSERT INTO product_categories (product_id, category_id) VALUES ${placeholders}`,
-            flatValues
+            flatValues,
           );
         }
       }
