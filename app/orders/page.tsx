@@ -217,7 +217,23 @@ export default function OrdersPage() {
             </Alert>
           )}
 
-          {orders.length === 0 ? (
+          {error ? (
+            // Error state
+            <Card className="text-center py-16">
+              <CardContent>
+                <div className="text-red-500 mb-4">
+                  <Package className="h-16 w-16 mx-auto mb-4" />
+                </div>
+                <h2 className="text-xl font-semibold mb-2 text-red-600">
+                  Có lỗi xảy ra
+                </h2>
+                <p className="text-gray-600 mb-6">{error}</p>
+                <Button onClick={loadOrders} variant="outline">
+                  Thử lại
+                </Button>
+              </CardContent>
+            </Card>
+          ) : orders.length === 0 ? (
             // No orders
             <Card className="text-center py-16">
               <CardContent>
