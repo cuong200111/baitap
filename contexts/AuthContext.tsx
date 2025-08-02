@@ -55,9 +55,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initializing, setInitializing] = useState(true);
   const router = useRouter();
 
-  const checkAuth = async () => {
+  // Optimistic authentication - check token immediately without API call
+  const initializeAuth = () => {
+    const token = getToken();
+    if (token) {
+      // We have a token, assume user is authenticated initially
+      // This prevents immediate redirects while we verify the token
+      setLoading(true);
+      setInitializing(false);
+      // Verify token in background
+      verifyToken();
+    } else {
+      // No token, user is definitely not authenticated
+      setLoading(false);
+      setInitializing(false);
+    }
+  };
+
+  const verifyToken = async () => {
     const token = getToken();
     if (!token) {
       setLoading(false);
@@ -112,8 +130,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const checkAuth = async () => {
+    setLoading(true);
+    await verifyToken();
+  };
+
   useEffect(() => {
-    checkAuth();
+    initializeAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
