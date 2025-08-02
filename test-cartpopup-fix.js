@@ -4,7 +4,7 @@ const API_BASE = "http://localhost:4000";
 async function testCartPopupFix() {
   console.log("🧪 Testing CartPopup Fix...\n");
 
-  const sessionId = 'test_cartpopup_' + Date.now();
+  const sessionId = "test_cartpopup_" + Date.now();
 
   try {
     // Step 1: Add item to cart
@@ -24,7 +24,7 @@ async function testCartPopupFix() {
       console.log("❌ Add failed:", addData.message);
       return;
     }
-    
+
     const cartItemId = addData.data.cart_item_id;
     console.log("✅ Item added, cart_item_id:", cartItemId);
 
@@ -36,16 +36,16 @@ async function testCartPopupFix() {
 
     const deleteData = await deleteResponse.json();
     console.log("DELETE Response:", deleteData);
-    
+
     if (deleteData.success) {
       console.log("✅ DELETE works correctly with URL path format");
     } else {
       console.log("❌ DELETE failed:", deleteData.message);
     }
 
-    // Step 3: Test UPDATE with correct format  
+    // Step 3: Test UPDATE with correct format
     console.log("\n3. Testing UPDATE format...");
-    
+
     // Add another item first
     const addResponse2 = await fetch(`${API_BASE}/api/cart`, {
       method: "POST",
@@ -56,20 +56,23 @@ async function testCartPopupFix() {
         quantity: 1,
       }),
     });
-    
+
     const addData2 = await addResponse2.json();
     if (addData2.success) {
       const cartItemId2 = addData2.data.cart_item_id;
-      
-      const updateResponse = await fetch(`${API_BASE}/api/cart/${cartItemId2}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: 2 }),
-      });
+
+      const updateResponse = await fetch(
+        `${API_BASE}/api/cart/${cartItemId2}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ quantity: 2 }),
+        },
+      );
 
       const updateData = await updateResponse.json();
       console.log("UPDATE Response:", updateData);
-      
+
       if (updateData.success) {
         console.log("✅ UPDATE works correctly with URL path format");
       } else {
@@ -79,7 +82,6 @@ async function testCartPopupFix() {
       // Clean up
       await fetch(`${API_BASE}/api/cart/${cartItemId2}`, { method: "DELETE" });
     }
-
   } catch (error) {
     console.log("❌ Test error:", error.message);
   }

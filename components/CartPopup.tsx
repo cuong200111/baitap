@@ -86,7 +86,6 @@ export function CartPopup({ cartCount }: CartPopupProps) {
   };
 
   const updateQuantity = async (cartId: number, newQuantity: number) => {
-
     try {
       setUpdating(cartId);
 
