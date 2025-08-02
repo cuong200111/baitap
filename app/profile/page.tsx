@@ -237,7 +237,7 @@ export default function ProfilePage() {
         { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
-        { code: 20, name: "Quảng Nam", full_name: "T��nh Quảng Nam" },
+        { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
         { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
         { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
         { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
@@ -428,7 +428,7 @@ export default function ProfilePage() {
           {
             code: 110,
             name: "Điện Biên Phủ",
-            full_name: "Thành phố Điện Biên Phủ",
+            full_name: "Th��nh phố Điện Biên Phủ",
             province_code: 11,
           },
           {
@@ -1425,7 +1425,7 @@ export default function ProfilePage() {
 
       // Handle specific error types
       if (error.message?.includes("body stream already read")) {
-        toast.error("L��i hệ thống. Vui lòng tải lại trang và thử lại");
+        toast.error("Lỗi hệ thống. Vui lòng tải lại trang và thử lại");
       } else if (
         error.message?.includes("Failed to fetch") ||
         error.message?.includes("NetworkError")
