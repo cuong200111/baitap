@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { formatPrice } from "@/config";
 import { toast } from "sonner";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SalesData {
   overview: {
@@ -201,9 +202,12 @@ export default function ReportsPage() {
 
       // Load products data
       try {
-        const productsResponse = await fetch("/api/admin/reports/products", {
-          headers,
-        });
+        const productsResponse = await fetch(
+          `${API_DOMAIN}/api/admin/reports/products`,
+          {
+            headers,
+          },
+        );
 
         if (productsResponse.ok) {
           const productsResult = await productsResponse.json();
@@ -221,9 +225,12 @@ export default function ReportsPage() {
 
       // Load customers data
       try {
-        const customersResponse = await fetch("/api/admin/reports/customers", {
-          headers,
-        });
+        const customersResponse = await fetch(
+          `${API_DOMAIN}/api/admin/reports/customers`,
+          {
+            headers,
+          },
+        );
 
         if (customersResponse.ok) {
           const customersResult = await customersResponse.json();

@@ -12,7 +12,8 @@ import {
   DollarSign,
   Eye,
 } from "lucide-react";
-import { Domain, formatPrice } from "../../config";
+import { formatPrice } from "../../config";
+import { API_DOMAIN } from "@/lib/api-helpers";
 import { usersApi, productsApi, categoriesApi } from "../../config";
 
 interface DashboardStats {
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
   const loadDashboardData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${Domain}/api/admin/dashboard-stats`, {
+      const response = await fetch(`${API_DOMAIN}/api/admin/dashboard-stats`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

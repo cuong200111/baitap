@@ -31,6 +31,7 @@ import { Search, Eye, Package, Plus } from "lucide-react";
 import Image from "next/image";
 import { formatPrice, getMediaUrl } from "@/config";
 import { toast } from "sonner";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface Order {
   id: number;
@@ -81,12 +82,15 @@ export default function AdminOrdersPage() {
 
       console.log("Loading orders with params:", params.toString());
       const token = localStorage.getItem("token");
-      const response = await fetch(`/api/orders?${params.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${API_DOMAIN}/api/orders?${params.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -114,7 +118,7 @@ export default function AdminOrdersPage() {
     try {
       setUpdating(orderId);
       const token = localStorage.getItem("token");
-      const response = await fetch(`/api/orders/${orderId}`, {
+      const response = await fetch(`${API_DOMAIN}/api/orders/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -141,12 +145,15 @@ export default function AdminOrdersPage() {
 
   const createTestOrder = async () => {
     try {
-      const response = await fetch("/api/debug/create-test-order-complete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${API_DOMAIN}/api/debug/create-test-order-complete`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       const data = await response.json();
 
@@ -272,7 +279,7 @@ export default function AdminOrdersPage() {
                   <TableCell>
                     <div className="font-medium">{order.order_number}</div>
                     <div className="text-sm text-gray-500">
-                      {order.items.length} sản phẩm
+                      {order.items?.length || 0} sản phẩm
                     </div>
                   </TableCell>
                   <TableCell>

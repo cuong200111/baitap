@@ -69,14 +69,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (response.success && response.data) {
         setUser(response.data);
       } else {
-        // Only remove token if it's actually invalid (401/403), not for network errors
-        if (response.status === 401 || response.status === 403) {
-          console.log("Token is invalid, removing...");
+        console.log("Profile fetch failed:", response);
+
+        // Handle specific error codes
+        if (response.code === "TOKEN_EXPIRED") {
+          console.log("🔑 Token expired, removing...");
           removeToken();
+          setUser(null);
+        } else if (response.code === "INVALID_TOKEN") {
+          console.log("🔑 Invalid token, removing...");
+          removeToken();
+          setUser(null);
+        } else if (response.code === "NO_TOKEN") {
+          console.log("🔑 No token provided");
+          removeToken();
+          setUser(null);
+        } else if (response.status === 401 || response.status === 403) {
+          console.log("🔑 Auth error, removing token");
+          removeToken();
+          setUser(null);
         } else {
           console.log(
-            "Profile fetch failed but token might be valid, keeping it",
+            "🔄 Profile fetch failed but token might be valid, keeping it",
           );
+          // Keep token for server errors - might be temporary
         }
       }
     } catch (error: any) {
@@ -86,8 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (error?.response?.status === 401 || error?.response?.status === 403) {
         console.log("Authentication error, removing token");
         removeToken();
-      } else if (error?.cancelled) {
-        console.log("Request was cancelled, keeping token");
+        setUser(null);
       } else {
         console.log("Network error during auth check, keeping token for retry");
         // Keep the token for network errors - user might be offline temporarily
@@ -132,7 +147,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         throw new Error(response.message || "Login failed");
       }
     } catch (error: any) {
-
       // Handle different error formats
       let errorMessage = "Đăng nhập thất bại";
 

@@ -12,18 +12,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { X, Upload, Search, Image as ImageIcon } from "lucide-react";
-import { mediaApi, getMediaUrl } from "@/config";
+import { getMediaUrl, MediaFile } from "@/config";
+import { apiWrappers } from "@/lib/api-wrapper";
 import { toast } from "sonner";
 
-interface MediaFile {
-  id: number;
-  filename: string;
-  original_name: string;
-  url: string;
-  alt_text?: string;
-  title?: string;
-  created_at: string;
-}
+// MediaFile interface imported from config.ts
 
 interface MediaSelectorProps {
   selectedImage?: string;
@@ -53,9 +46,11 @@ export function MediaSelector({
   const loadMediaFiles = async () => {
     setLoading(true);
     try {
-      const response = await mediaApi.getAll();
+      const response = await apiWrappers.media.getAll();
       if (response.success && response.data) {
         setMediaFiles(response.data);
+      } else {
+        toast.error(response.message || "Không thể tải danh sách media");
       }
     } catch (error) {
       console.error("Failed to load media files:", error);
@@ -81,7 +76,7 @@ export function MediaSelector({
 
     setUploading(true);
     try {
-      const response = await mediaApi.upload(file, "category");
+      const response = await apiWrappers.media.upload(file, "category");
       if (response.success && response.data) {
         toast.success("Upload hình ảnh thành công");
         await loadMediaFiles(); // Reload media list

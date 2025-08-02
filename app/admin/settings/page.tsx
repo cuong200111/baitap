@@ -66,7 +66,7 @@ import SeoSummaryStats from "@/components/SeoSummaryStats";
 import SeoSystemStatus from "@/components/SeoSystemStatus";
 import AdvancedSeoDashboard from "@/components/AdvancedSeoDashboard";
 import SeoGenerationPanel from "@/components/SeoGenerationPanel";
-import { Domain } from "@/config";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SeoSettings {
   general: {
@@ -391,13 +391,16 @@ export default function SettingsPage() {
   };
 
   const loadSeoSettings = async () => {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+    const token =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
     try {
-      const response = await fetch(`${Domain}/api/admin/seo-settings`,{headers});
+      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
+        headers,
+      });
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.data) {
@@ -584,12 +587,13 @@ export default function SettingsPage() {
   const handleSaveSeoSettings = async () => {
     try {
       setSaving(true);
-       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
-      const response = await fetch(`${Domain}/api/admin/seo-settings`, {
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
         method: "POST",
         headers,
         body: JSON.stringify(seoSettings),
@@ -612,15 +616,16 @@ export default function SettingsPage() {
 
   const generateSitemap = async () => {
     try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
       setSitemapGenerating(true);
-      const response = await fetch(`${Domain}/api/admin/generate-sitemap`, {
+      const response = await fetch(`${API_DOMAIN}/api/admin/generate-sitemap`, {
         method: "POST",
-        headers
+        headers,
       });
 
       const data = await response.json();
@@ -639,15 +644,16 @@ export default function SettingsPage() {
 
   const generateRobotsTxt = async () => {
     try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-          const headers: HeadersInit = {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          };
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
       setRobotsGenerating(true);
-      const response = await fetch(`${Domain}/api/admin/generate-robots`, {
+      const response = await fetch(`${API_DOMAIN}/api/admin/generate-robots`, {
         method: "POST",
-        headers
+        headers,
       });
 
       const data = await response.json();
@@ -1853,7 +1859,7 @@ export default function SettingsPage() {
                     <div>
                       <Label htmlFor="enable_local_seo">Enable Local SEO</Label>
                       <p className="text-sm text-gray-500">
-                        Bật các tính n��ng tối ưu cho tìm kiếm địa phương
+                        Bật các tính năng tối ưu cho tìm kiếm địa phương
                       </p>
                     </div>
                     <Switch
@@ -1896,7 +1902,7 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Search className="h-4 w-4" />
-                  <span>Cài đặt SEO được tối ưu hóa cho công cụ tìm kiếm</span>
+                  <span>Cài đặt SEO đ��ợc tối ưu hóa cho công cụ tìm kiếm</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button onClick={calculateSeoScore} variant="outline">
@@ -1929,7 +1935,7 @@ export default function SettingsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Globe className="h-5 w-5" />
-                Thông tin chung
+                Th��ng tin chung
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">

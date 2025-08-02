@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface Category {
   id: number;
@@ -190,7 +191,9 @@ export function SimpleCategoryNav() {
         setTimeout(() => reject(new Error("Timeout")), 3000),
       );
 
-      const fetchPromise = fetch("/api/categories").then((res) => res.json());
+      const fetchPromise = fetch(`${API_DOMAIN}/api/categories`).then((res) =>
+        res.json(),
+      );
 
       const data = await Promise.race([fetchPromise, timeoutPromise]);
 

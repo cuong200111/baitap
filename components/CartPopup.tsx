@@ -19,9 +19,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice, getMediaUrl, Domain } from "@/config";
+import { formatPrice, getMediaUrl } from "@/config";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { cartApi, cartUtils } from "@/lib/cart-api";
 
 interface CartItem {
   id: number;
@@ -60,48 +61,52 @@ export function CartPopup({ cartCount }: CartPopupProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const loadCartItems = async () => {
-    if (!isAuthenticated || !user?.id) {
-      setCartItems([]);
-      setSummary({ itemCount: 0, subtotal: 0, total: 0 });
-      return;
-    }
-
     try {
       setLoading(true);
-      const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`);
-      const data = await response.json();
+      const result = await cartApi.getCart();
 
-      if (data.success) {
-        setCartItems(data.data.items);
-        setSummary(data.data.summary);
+      if (result.success && result.data) {
+        setCartItems(result.data.items);
+        setSummary({
+          itemCount: result.data.summary.item_count,
+          subtotal: result.data.summary.subtotal,
+          total: result.data.summary.total,
+        });
+
+        // Show notification if items were removed due to insufficient stock
+        if (result.removed_items && result.removed_items.length > 0) {
+          const removedNames = result.removed_items
+            .map((item) => item.product_name)
+            .join(", ");
+          toast.warning(
+            `Đã tự động xóa khỏi giỏ hàng: ${removedNames} (không đủ số lượng trong kho)`,
+          );
+        }
+      } else {
+        setCartItems([]);
+        setSummary({ itemCount: 0, subtotal: 0, total: 0 });
       }
     } catch (error) {
       console.error("Failed to load cart items:", error);
+      setCartItems([]);
+      setSummary({ itemCount: 0, subtotal: 0, total: 0 });
     } finally {
       setLoading(false);
     }
   };
 
   const updateQuantity = async (cartId: number, newQuantity: number) => {
-    if (!user?.id) return;
-
     try {
       setUpdating(cartId);
 
-      const response = await fetch(`${Domain}/api/cart`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart_id: cartId, quantity: newQuantity }),
-      });
+      const result = await cartApi.updateQuantity(cartId, newQuantity);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         await loadCartItems();
-        window.dispatchEvent(new Event("cartUpdated"));
+        cartUtils.triggerCartUpdate();
         toast.success("Cập nhật giỏ hàng thành công");
       } else {
-        toast.error(data.message || "Có lỗi xảy ra");
+        toast.error(result.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Failed to update cart:", error);
@@ -111,22 +116,16 @@ export function CartPopup({ cartCount }: CartPopupProps) {
     }
   };
 
-  const removeItem = async (cartId: number) => {
-    if (!user?.id) return;
-
+  const removeItem = async (cartItemId: number) => {
     try {
-      const response = await fetch(`${Domain}/api/cart?cart_id=${cartId}`, {
-        method: "DELETE",
-      });
+      const result = await cartApi.removeItem(cartItemId);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         await loadCartItems();
-        window.dispatchEvent(new Event("cartUpdated"));
+        cartUtils.triggerCartUpdate();
         toast.success("Đã xóa sản phẩm khỏi giỏ hàng");
       } else {
-        toast.error(data.message || "Có lỗi xảy ra");
+        toast.error(result.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Failed to remove item:", error);

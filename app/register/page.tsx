@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -119,11 +120,14 @@ export default function RegisterPage() {
                         size="sm"
                         onClick={async () => {
                           try {
-                            const response = await fetch("/api/debug/auth", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ action: "reset" }),
-                            });
+                            const response = await fetch(
+                              `${API_DOMAIN}/api/debug/auth`,
+                              {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ action: "reset" }),
+                              },
+                            );
                             const result = await response.json();
                             if (result.success) {
                               setError(

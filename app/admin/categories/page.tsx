@@ -86,7 +86,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     loadCategories();
   }, []);
- 
+
   const loadCategories = async () => {
     try {
       setLoading(true);
@@ -120,12 +120,18 @@ export default function CategoriesPage() {
     }
     try {
       if (editingCategory) {
-        const response = await apiWrappers.categories.update(editingCategory.id, {
-          ...formData,
-          parent_id: formData.parent_id || undefined,
-        });
+        const response = await apiWrappers.categories.update(
+          editingCategory.id,
+          {
+            ...formData,
+            parent_id: formData.parent_id || undefined,
+          },
+        );
         if (response.success) {
           toast.success("Cập nhật danh mục thành công");
+        } else {
+          toast.error(response.message || "Không thể cập nhật danh mục");
+          return;
         }
       } else {
         const response = await apiWrappers.categories.create({
@@ -134,6 +140,9 @@ export default function CategoriesPage() {
         });
         if (response.success) {
           toast.success("Tạo danh mục thành công");
+        } else {
+          toast.error(response.message || "Không thể tạo danh mục");
+          return;
         }
       }
 
@@ -143,7 +152,7 @@ export default function CategoriesPage() {
       loadCategories();
     } catch (error) {
       console.error("Failed to save category:", error);
-      toast.error("Kh��ng thể lưu danh mục");
+      toast.error("Không thể lưu danh mục");
     } finally {
       setSubmitting(false);
     }
@@ -167,6 +176,8 @@ export default function CategoriesPage() {
       if (response.success) {
         toast.success("Xóa danh mục thành công");
         loadCategories();
+      } else {
+        toast.error(response.message || "Không thể xóa danh mục");
       }
     } catch (error: any) {
       console.error("Failed to delete category:", error);
@@ -413,8 +424,7 @@ export default function CategoriesPage() {
                 <Label>Hình ảnh danh mục</Label>
                 <MediaSelector
                   selectedImage={formData.image}
-                  onSelect={(imageUrl) =>
-                   {
+                  onSelect={(imageUrl) => {
                     setFormData({ ...formData, image: imageUrl });
                     console.log("Selected image:", imageUrl);
                   }}

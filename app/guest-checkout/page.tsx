@@ -23,6 +23,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, getMediaUrl } from "@/config";
 import { toast } from "sonner";
+import { apiWrappers } from "@/lib/api-wrapper";
 
 interface GuestPurchase {
   product_id: number;
@@ -72,8 +73,46 @@ export default function GuestCheckoutPage() {
     loadSavedCustomerInfo();
   }, []);
 
-  const loadGuestPurchase = () => {
+  const loadGuestPurchase = async () => {
     try {
+      // Try to load from session cart first
+      const sessionId = localStorage.getItem("session_id");
+      if (sessionId) {
+        const cartResponse = await apiWrappers.cart.getAll({
+          session_id: sessionId,
+        });
+        if (cartResponse.success && cartResponse.data?.items?.length > 0) {
+          // Convert cart items to guest purchase format
+          const cartItems = cartResponse.data.items;
+          if (cartItems.length === 1) {
+            // Single product purchase
+            const item = cartItems[0];
+            const guestPurchaseData: GuestPurchase = {
+              product_id: item.product_id,
+              product_name: item.product_name,
+              sku: item.sku || "",
+              price: item.price,
+              sale_price: item.sale_price,
+              final_price: item.final_price,
+              quantity: item.quantity,
+              images: item.images || [],
+              total: item.total_price,
+            };
+            setGuestPurchase(guestPurchaseData);
+            setLoading(false);
+            return;
+          } else {
+            // Multiple items - redirect to regular checkout
+            toast.info(
+              "Có nhiều sản phẩm trong giỏ hàng, chuyển đến trang thanh toán thông thường",
+            );
+            router.push("/checkout");
+            return;
+          }
+        }
+      }
+
+      // Fallback to localStorage guest_purchase (legacy)
       const guestPurchaseData = localStorage.getItem("guest_purchase");
       if (guestPurchaseData) {
         setGuestPurchase(JSON.parse(guestPurchaseData));
@@ -165,7 +204,6 @@ export default function GuestCheckoutPage() {
       const shippingAddress = `${customerInfo.address}, ${customerInfo.ward ? customerInfo.ward + ", " : ""}${customerInfo.district ? customerInfo.district + ", " : ""}${customerInfo.city}`;
 
       const orderData = {
-        user_id: null, // Guest order
         items: [
           {
             product_id: guestPurchase.product_id,
@@ -173,32 +211,17 @@ export default function GuestCheckoutPage() {
             price: guestPurchase.final_price,
           },
         ],
-        shipping_address: shippingAddress,
-        billing_address: shippingAddress,
         customer_name: customerInfo.name,
         customer_email: customerInfo.email,
         customer_phone: customerInfo.phone,
+        shipping_address: shippingAddress,
+        billing_address: shippingAddress,
         notes: customerInfo.notes,
       };
 
       console.log("Sending order data:", orderData);
 
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("HTTP error response:", errorData);
-        toast.error(
-          errorData.message || `Lỗi ${response.status}: Không thể đặt hàng`,
-        );
-        return;
-      }
-
-      const data = await response.json();
+      const data = await apiWrappers.orders.createGuest(orderData);
       console.log("Order response:", data);
 
       if (data.success && data.data && data.data.order) {
@@ -206,6 +229,19 @@ export default function GuestCheckoutPage() {
 
         // Clear guest purchase data
         localStorage.removeItem("guest_purchase");
+
+        // Clear session cart if exists
+        const sessionId = localStorage.getItem("session_id");
+        if (sessionId) {
+          try {
+            await apiWrappers.cart.clear({ session_id: sessionId });
+          } catch (e) {
+            console.log("Session cart clear error:", e);
+          }
+        }
+
+        // Trigger cart update event
+        window.dispatchEvent(new Event("cartUpdated"));
 
         // Redirect to thank you page using correct response structure
         const orderId = data.data.order.id;
@@ -224,7 +260,7 @@ export default function GuestCheckoutPage() {
       }
     } catch (error) {
       console.error("Order submission error:", error);
-      toast.error("Có lỗi xảy ra khi đặt hàng");
+      toast.error("Có lỗi xảy ra khi ��ặt hàng");
     } finally {
       setSubmitting(false);
     }

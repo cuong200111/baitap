@@ -12,6 +12,7 @@ import {
   Menu,
 } from "lucide-react";
 import { fetchWithRetry, getErrorMessage } from "@/lib/network";
+import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface ApiCategory {
   id: number;
@@ -44,7 +45,7 @@ export function HacomStyleMenu() {
   const loadCategories = async () => {
     try {
       const response = await fetchWithRetry(
-        "/api/categories?mega_menu=true",
+        `${API_DOMAIN}/api/categories?mega_menu=true`,
         {},
         {
           retries: 3,

@@ -49,7 +49,7 @@ interface OrderItem {
 export default function OrdersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user } = useAuth();
+  const { user, loading: authLoading, isAuthenticated } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,13 +58,22 @@ export default function OrdersPage() {
   const orderNumber = searchParams.get("order_number");
 
   useEffect(() => {
+    // Wait for auth to complete before deciding whether to redirect
+    if (authLoading) {
+      return; // Still loading, don't do anything yet
+    }
+
+    if (!isAuthenticated || !user) {
+      // Auth completed and user is not authenticated
+      router.push("/login");
+      return;
+    }
+
+    // User is authenticated, load orders
     if (user?.id) {
       loadOrders();
-    } else if (user === null) {
-      // User is not authenticated, redirect to login
-      router.push("/login");
     }
-  }, [user, router]);
+  }, [user, authLoading, isAuthenticated, router]);
 
   const loadOrders = async () => {
     if (!user?.id) {
@@ -143,6 +152,18 @@ export default function OrdersPage() {
       statusConfig[status as keyof typeof statusConfig] || statusConfig.pending
     );
   };
+
+  // Show loading screen while authentication is in progress
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Đang xác thực...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

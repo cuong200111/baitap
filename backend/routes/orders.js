@@ -18,6 +18,15 @@ const generateOrderNumber = () => {
   return `HD${timestamp.slice(-6)}${random}`;
 };
 
+// Helper function to safely parse product images
+const safeParseImages = (images) => {
+  try {
+    return images ? JSON.parse(images)[0] : null;
+  } catch (e) {
+    return images || null;
+  }
+};
+
 // Get orders (Admin: all orders, User: own orders)
 router.get("/", authenticateToken, async (req, res) => {
   try {
@@ -58,10 +67,10 @@ router.get("/", authenticateToken, async (req, res) => {
       queryParams.push(payment_status);
     }
 
-    // Search by order number or customer name
+    // Search by order number or customer name (including guest orders)
     if (search) {
       whereConditions.push(
-        "(o.order_number LIKE ? OR u.full_name LIKE ? OR u.email LIKE ?)",
+        "(o.order_number LIKE ? OR COALESCE(u.full_name, o.customer_name) LIKE ? OR COALESCE(u.email, o.customer_email) LIKE ?)",
       );
       const searchTerm = `%${search}%`;
       queryParams.push(searchTerm, searchTerm, searchTerm);
@@ -87,21 +96,22 @@ router.get("/", authenticateToken, async (req, res) => {
     const countQuery = `
       SELECT COUNT(*) as total
       FROM orders o
-      JOIN users u ON o.user_id = u.id
+      LEFT JOIN users u ON o.user_id = u.id
       ${whereClause}
     `;
     const countResult = await executeQuery(countQuery, queryParams);
     const totalOrders = countResult[0].total;
 
-    // Get orders
+    // Get orders (including guest orders)
     const ordersQuery = `
-      SELECT 
+      SELECT
         o.*,
-        u.full_name as customer_name,
-        u.email as customer_email,
+        COALESCE(u.full_name, o.customer_name) as customer_name,
+        COALESCE(u.email, o.customer_email) as customer_email,
+        o.customer_phone,
         COUNT(oi.id) as items_count
       FROM orders o
-      JOIN users u ON o.user_id = u.id
+      LEFT JOIN users u ON o.user_id = u.id
       LEFT JOIN order_items oi ON o.id = oi.order_id
       ${whereClause}
       GROUP BY o.id
@@ -115,18 +125,59 @@ router.get("/", authenticateToken, async (req, res) => {
       offset,
     ]);
 
-    // Parse JSON fields
-    const formattedOrders = orders.map((order) => ({
-      ...order,
-      billing_address: order.billing_address
-        ? JSON.parse(order.billing_address)
-        : null,
-      shipping_address: order.shipping_address
-        ? JSON.parse(order.shipping_address)
-        : null,
-    }));
+    // Get order items for each order
+    const formattedOrders = [];
+    for (const order of orders) {
+      const orderItems = await executeQuery(
+        `
+        SELECT
+          oi.*,
+          p.images as product_images
+        FROM order_items oi
+        LEFT JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = ?
+        ORDER BY oi.created_at ASC
+      `,
+        [order.id],
+      );
+
+      // Format items with images
+      const formattedItems = orderItems.map((item) => ({
+        ...item,
+        images: (() => {
+          try {
+            // Check if product_images exists and parse it
+            if (item.product_images) {
+              return JSON.parse(item.product_images);
+            }
+            // Fallback to product_image if it exists
+            return item.product_image ? [item.product_image] : [];
+          } catch (e) {
+            console.warn("Error parsing product images:", e);
+            return item.product_image ? [item.product_image] : [];
+          }
+        })(),
+        // Keep original fields for compatibility
+        product_name: item.product_name,
+        product_sku: item.product_sku,
+        quantity: item.quantity,
+        price: item.unit_price,
+        total: item.total_price,
+      }));
+
+      formattedOrders.push({
+        ...order,
+        billing_address: order.billing_address,
+        shipping_address: order.shipping_address,
+        items: formattedItems,
+      });
+    }
 
     const totalPages = Math.ceil(totalOrders / parseInt(limit));
+
+    console.log(
+      `📋 Orders API: Returning ${formattedOrders.length} orders, total: ${totalOrders}`,
+    );
 
     res.json({
       success: true,
@@ -216,20 +267,20 @@ router.get("/:identifier", authenticateToken, async (req, res) => {
       [order.id],
     );
 
-    // Parse JSON fields and format response
+    // Format response
     const formattedOrder = {
       ...order,
-      billing_address: order.billing_address
-        ? JSON.parse(order.billing_address)
-        : null,
-      shipping_address: order.shipping_address
-        ? JSON.parse(order.shipping_address)
-        : null,
+      billing_address: order.billing_address,
+      shipping_address: order.shipping_address,
       items: orderItems.map((item) => ({
         ...item,
-        product_images: item.product_images
-          ? JSON.parse(item.product_images)
-          : [],
+        product_images: (() => {
+          try {
+            return item.product_images ? JSON.parse(item.product_images) : [];
+          } catch (e) {
+            return [];
+          }
+        })(),
       })),
       status_history: statusHistory,
     };
@@ -260,11 +311,12 @@ router.post(
       .isInt({ min: 1 })
       .withMessage("Valid quantity required"),
     body("shipping_address")
-      .isObject()
+      .trim()
+      .notEmpty()
       .withMessage("Shipping address required"),
     body("billing_address")
       .optional()
-      .isObject()
+      .isString()
       .withMessage("Invalid billing address"),
     body("payment_method")
       .isIn(["cod", "bank_transfer", "credit_card", "e_wallet"])
@@ -288,10 +340,7 @@ router.post(
         shipping_address,
         billing_address,
         payment_method,
-        shipping_method = "standard",
         notes,
-        shipping_fee = 0,
-        discount_amount = 0,
       } = req.body;
 
       // Start transaction
@@ -332,9 +381,7 @@ router.post(
             quantity: item.quantity,
             unit_price: finalPrice,
             total_price: totalPrice,
-            product_image: product.images
-              ? JSON.parse(product.images)[0]
-              : null,
+            product_image: safeParseImages(product.images),
           });
 
           // Update stock if managed
@@ -346,7 +393,7 @@ router.post(
           }
         }
 
-        const totalAmount = subtotal + shipping_fee - discount_amount;
+        const totalAmount = subtotal;
 
         // Generate order number
         const orderNumber = generateOrderNumber();
@@ -355,24 +402,21 @@ router.post(
         const orderResult = await executeQuery(
           `
           INSERT INTO orders (
-            order_number, user_id, status, payment_method, payment_status,
-            shipping_method, subtotal, shipping_fee, discount_amount, total_amount,
-            billing_address, shipping_address, notes
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            order_number, user_id, status, payment_method, total_amount,
+            billing_address, shipping_address, customer_name, customer_email, customer_phone, notes
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `,
           [
             orderNumber,
             req.user.id,
             "pending",
             payment_method,
-            "pending",
-            shipping_method,
-            subtotal,
-            shipping_fee,
-            discount_amount,
             totalAmount,
-            JSON.stringify(billing_address || shipping_address),
-            JSON.stringify(shipping_address),
+            billing_address || shipping_address,
+            shipping_address,
+            req.user.full_name,
+            req.user.email,
+            req.user.phone || "",
             notes || null,
           ],
         );
@@ -419,15 +463,7 @@ router.post(
         res.status(201).json({
           success: true,
           message: "Order created successfully",
-          data: {
-            ...newOrder[0],
-            billing_address: newOrder[0].billing_address
-              ? JSON.parse(newOrder[0].billing_address)
-              : null,
-            shipping_address: newOrder[0].shipping_address
-              ? JSON.parse(newOrder[0].shipping_address)
-              : null,
-          },
+          data: newOrder[0],
         });
       } catch (error) {
         // Rollback transaction
@@ -444,7 +480,125 @@ router.post(
   },
 );
 
-// Update order status (Admin only)
+// Update order (Admin only) - General route
+router.put(
+  "/:id",
+  authenticateToken,
+  requireAdmin,
+  [
+    param("id").isInt().withMessage("Invalid order ID"),
+    body("status")
+      .optional()
+      .isIn([
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ])
+      .withMessage("Invalid status"),
+    body("payment_status")
+      .optional()
+      .isIn(["pending", "paid", "failed", "refunded"])
+      .withMessage("Invalid payment status"),
+    body("comment").optional().isString(),
+    body("tracking_number").optional().isString(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation errors",
+          errors: errors.array(),
+        });
+      }
+
+      const { id } = req.params;
+      const { status, payment_status, comment, tracking_number } = req.body;
+
+      // Check if order exists
+      const existingOrder = await executeQuery(
+        "SELECT * FROM orders WHERE id = ?",
+        [id],
+      );
+
+      if (existingOrder.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Order not found",
+        });
+      }
+
+      const order = existingOrder[0];
+      const updateFields = [];
+      const updateValues = [];
+
+      // Update status if provided
+      if (status) {
+        updateFields.push("status = ?");
+        updateValues.push(status);
+
+        if (status === "shipped" && tracking_number) {
+          updateFields.push("tracking_number = ?", "shipped_at = NOW()");
+          updateValues.push(tracking_number);
+        }
+
+        if (status === "delivered") {
+          updateFields.push("delivered_at = NOW()");
+        }
+
+        // Add status history
+        await executeQuery(
+          "INSERT INTO order_status_history (order_id, status, comment, created_by) VALUES (?, ?, ?, ?)",
+          [id, status, comment || null, req.user.id],
+        );
+      }
+
+      // Update payment status if provided
+      if (payment_status) {
+        updateFields.push("payment_status = ?");
+        updateValues.push(payment_status);
+
+        // Add payment status history
+        await executeQuery(
+          "INSERT INTO order_status_history (order_id, status, comment, created_by) VALUES (?, ?, ?, ?)",
+          [id, `payment_${payment_status}`, comment || null, req.user.id],
+        );
+      }
+
+      if (updateFields.length > 0) {
+        updateValues.push(id);
+        await executeQuery(
+          `UPDATE orders SET ${updateFields.join(", ")} WHERE id = ?`,
+          updateValues,
+        );
+      }
+
+      // Get updated order
+      const updatedOrder = await executeQuery(
+        "SELECT * FROM orders WHERE id = ?",
+        [id],
+      );
+
+      res.json({
+        success: true,
+        message: "Order updated successfully",
+        data: updatedOrder[0],
+      });
+    } catch (error) {
+      console.error("Update order error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+  },
+);
+
+// Update order status (Admin only) - Specific route
 router.put(
   "/:id/status",
   authenticateToken,
@@ -734,6 +888,194 @@ router.put(
       res.status(500).json({
         success: false,
         message: "Internal server error",
+      });
+    }
+  },
+);
+
+// Create guest order (no authentication required)
+router.post(
+  "/guest",
+  [
+    body("items").isArray({ min: 1 }).withMessage("Order items required"),
+    body("items.*.product_id")
+      .isInt({ min: 1 })
+      .withMessage("Valid product ID required"),
+    body("items.*.quantity")
+      .isInt({ min: 1 })
+      .withMessage("Valid quantity required"),
+    body("customer_name")
+      .trim()
+      .notEmpty()
+      .withMessage("Customer name required"),
+    body("customer_email").isEmail().withMessage("Valid email required"),
+    body("customer_phone")
+      .trim()
+      .notEmpty()
+      .withMessage("Phone number required"),
+    body("shipping_address")
+      .trim()
+      .notEmpty()
+      .withMessage("Shipping address required"),
+    body("billing_address").optional().isString(),
+    body("notes").optional().isString(),
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({
+          success: false,
+          message: "Validation errors",
+          errors: errors.array(),
+        });
+      }
+
+      const {
+        items,
+        customer_name,
+        customer_email,
+        customer_phone,
+        shipping_address,
+        billing_address,
+        notes,
+      } = req.body;
+
+      // Start transaction
+      await executeQuery("START TRANSACTION");
+
+      try {
+        // Validate products and calculate totals
+        let subtotal = 0;
+        const validatedItems = [];
+
+        for (const item of items) {
+          const products = await executeQuery(
+            "SELECT id, name, sku, price, sale_price, stock_quantity, manage_stock, images FROM products WHERE id = ? AND status = 'active'",
+            [item.product_id],
+          );
+
+          if (products.length === 0) {
+            throw new Error(`Product with ID ${item.product_id} not found`);
+          }
+
+          const product = products[0];
+          const finalPrice = item.price || product.sale_price || product.price;
+
+          // Check stock
+          if (product.manage_stock && product.stock_quantity < item.quantity) {
+            throw new Error(
+              `Insufficient stock for product ${product.name}. Available: ${product.stock_quantity}, Requested: ${item.quantity}`,
+            );
+          }
+
+          const totalPrice = finalPrice * item.quantity;
+          subtotal += totalPrice;
+
+          validatedItems.push({
+            product_id: product.id,
+            product_name: product.name,
+            product_sku: product.sku,
+            quantity: item.quantity,
+            unit_price: finalPrice,
+            total_price: totalPrice,
+            product_image: safeParseImages(product.images),
+          });
+
+          // Update stock if managed
+          if (product.manage_stock) {
+            await executeQuery(
+              "UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?",
+              [item.quantity, product.id],
+            );
+          }
+        }
+
+        const totalAmount = subtotal;
+
+        // Generate order number
+        const orderNumber = generateOrderNumber();
+
+        // Create guest order (user_id = NULL)
+        const orderResult = await executeQuery(
+          `
+          INSERT INTO orders (
+            order_number, user_id, status, payment_method, total_amount,
+            billing_address, shipping_address, customer_name, customer_email, customer_phone, notes
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+          [
+            orderNumber,
+            null, // Guest order
+            "pending",
+            "cod", // Default to cash on delivery for guest orders
+            totalAmount,
+            billing_address || shipping_address,
+            shipping_address,
+            customer_name,
+            customer_email,
+            customer_phone,
+            notes || null,
+          ],
+        );
+
+        const orderId = orderResult.insertId;
+
+        // Create order items
+        for (const item of validatedItems) {
+          await executeQuery(
+            `
+            INSERT INTO order_items (
+              order_id, product_id, product_name, product_sku,
+              quantity, unit_price, total_price, product_image
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `,
+            [
+              orderId,
+              item.product_id,
+              item.product_name,
+              item.product_sku,
+              item.quantity,
+              item.unit_price,
+              item.total_price,
+              item.product_image,
+            ],
+          );
+        }
+
+        // Create initial status history (no user ID for guest orders)
+        await executeQuery(
+          "INSERT INTO order_status_history (order_id, status, comment) VALUES (?, ?, ?)",
+          [orderId, "pending", "Guest order created"],
+        );
+
+        // Commit transaction
+        await executeQuery("COMMIT");
+
+        // Get created order
+        const newOrder = await executeQuery(
+          "SELECT * FROM orders WHERE id = ?",
+          [orderId],
+        );
+
+        res.status(201).json({
+          success: true,
+          message: "Guest order created successfully",
+          data: {
+            order: newOrder[0],
+            order_number: newOrder[0].order_number,
+          },
+        });
+      } catch (error) {
+        // Rollback transaction
+        await executeQuery("ROLLBACK");
+        throw error;
+      }
+    } catch (error) {
+      console.error("Create guest order error:", error);
+      res.status(400).json({
+        success: false,
+        message: error.message || "Failed to create guest order",
       });
     }
   },

@@ -209,18 +209,29 @@ export function UserManagement() {
 
     setSubmitting(true);
     try {
+      console.log(
+        "🔑 Attempting to change password for user ID:",
+        passwordData.userId,
+      );
+
       const response = await usersApi.changePassword(passwordData.userId, {
         new_password: passwordData.newPassword,
       });
+
+      console.log("🔑 Password change response:", response);
 
       if (response.success) {
         toast.success("Đổi mật khẩu thành công");
         setIsPasswordDialogOpen(false);
         setPasswordData({ userId: 0, newPassword: "", confirmPassword: "" });
+      } else {
+        toast.error(response.message || "Đổi mật khẩu thất bại");
       }
     } catch (error) {
       console.error("Failed to change password:", error);
-      toast.error("Đổi mật khẩu thất bại");
+      toast.error(
+        "Đổi mật khẩu thất bại - " + (error.message || "Lỗi kết nối"),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -711,7 +722,7 @@ export function UserManagement() {
               onClick={handleChangePassword}
               disabled={submitting}
             >
-              {submitting ? "Đang đổi..." : "Đổi mật khẩu"}
+              {submitting ? "Đang đổi..." : "��ổi mật khẩu"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -34,6 +34,8 @@ import { productsApi, Product, formatPrice, getMediaUrl } from "@/config";
 import ProductReviews from "@/components/ProductReviews";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { cartApi, cartUtils } from "@/lib/cart-api";
+import { buyNowApi } from "@/lib/buy-now-api";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -45,6 +47,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [buyingNow, setBuyingNow] = useState(false);
   const [isZoomModalOpen, setIsZoomModalOpen] = useState(false);
 
   useEffect(() => {
@@ -82,35 +85,19 @@ export default function ProductDetailPage() {
   const addToCart = async () => {
     if (!product) return;
 
-    if (!isAuthenticated || !user?.id) {
-      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-      router.push("/login?message=Vui lòng đăng nhập để sử dụng giỏ hàng");
-      return;
-    }
-
     setAddingToCart(true);
     try {
-      const response = await fetch("/api/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: user.id,
-          product_id: product.id,
-          quantity: quantity,
-        }),
-      });
+      const result = await cartApi.addToCart(product.id, quantity);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (result.success) {
         toast.success(`Đã thêm ${quantity} ${product.name} vào giỏ hàng`);
-        window.dispatchEvent(new Event("cartUpdated"));
+        cartUtils.triggerCartUpdate();
       } else {
-        toast.error(data.message || "Có lỗi xảy ra khi thêm vào giỏ hàng");
+        toast.error(result.message || "Có lỗi xảy ra khi thêm vào giỏ hàng");
       }
     } catch (error) {
       console.error("Add to cart error:", error);
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
+      toast.error("Không thể kết nối đến server");
     } finally {
       setAddingToCart(false);
     }
@@ -119,47 +106,21 @@ export default function ProductDetailPage() {
   const buyNow = async () => {
     if (!product) return;
 
-    setAddingToCart(true);
+    setBuyingNow(true);
     try {
-      if (isAuthenticated && user?.id) {
-        const response = await fetch("/api/cart", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            user_id: user.id,
-            product_id: product.id,
-            quantity: quantity,
-          }),
-        });
+      const result = await buyNowApi.createBuyNowSession(product.id, quantity);
 
-        const data = await response.json();
-
-        if (data.success) {
-          router.push("/checkout");
-        } else {
-          toast.error(data.message || "Có lỗi xảy ra");
-        }
+      if (result.success) {
+        // Success - redirect to buy now checkout page
+        router.push("/buy-now-checkout");
       } else {
-        const guestPurchase = {
-          product_id: product.id,
-          product_name: product.name,
-          sku: product.sku,
-          price: product.price,
-          sale_price: product.sale_price,
-          final_price: product.sale_price || product.price,
-          quantity: quantity,
-          images: product.images,
-          total: (product.sale_price || product.price) * quantity,
-        };
-
-        localStorage.setItem("guest_purchase", JSON.stringify(guestPurchase));
-        router.push("/guest-checkout");
+        toast.error(result.message || "Có lỗi xảy ra khi tạo phiên mua ngay");
       }
     } catch (error) {
       console.error("Buy now error:", error);
-      toast.error("Có lỗi xảy ra");
+      toast.error("Không thể kết nối đến server");
     } finally {
-      setAddingToCart(false);
+      setBuyingNow(false);
     }
   };
 
@@ -482,10 +443,10 @@ export default function ProductDetailPage() {
 
                   <Button
                     onClick={buyNow}
-                    disabled={addingToCart}
+                    disabled={buyingNow || addingToCart}
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white h-14 text-lg font-medium rounded-xl"
                   >
-                    {addingToCart ? "Đang xử lý..." : "Mua ngay"}
+                    {buyingNow ? "Đang xử lý..." : "Mua ngay"}
                   </Button>
                 </div>
               </div>

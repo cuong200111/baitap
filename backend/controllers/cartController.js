@@ -1,7 +1,7 @@
 import { executeQuery } from "../database/connection.js";
 
 export const cartController = {
-  // Get cart items
+  // Get cart items for user or session
   async getCart(req, res) {
     try {
       const { session_id, user_id } = req.query;
@@ -21,6 +21,7 @@ export const cartController = {
           c.created_at,
           p.name as product_name,
           p.slug as product_slug,
+          p.sku,
           p.price,
           p.sale_price,
           p.images,
@@ -28,7 +29,7 @@ export const cartController = {
           p.status as product_status
         FROM cart_items c
         JOIN products p ON c.product_id = p.id
-        WHERE 1=1
+        WHERE p.status = 'active'
       `;
       let params = [];
 
@@ -44,30 +45,94 @@ export const cartController = {
 
       const cartItems = await executeQuery(query, params);
 
-      // Process cart items
-      const processedItems = cartItems.map(item => ({
-        ...item,
-        images: item.images ? JSON.parse(item.images) : [],
-        final_price: item.sale_price || item.price,
-        total_price: (item.sale_price || item.price) * item.quantity,
-      }));
+      // Check stock and remove items that exceed available stock
+      const itemsToRemove = [];
+      const validItems = [];
 
-      // Calculate totals
-      const subtotal = processedItems.reduce((sum, item) => sum + item.total_price, 0);
-      const itemCount = processedItems.reduce((sum, item) => sum + item.quantity, 0);
+      for (const item of cartItems) {
+        const availableStock = Math.max(0, parseInt(item.stock_quantity) || 0);
+        const requestedQuantity = parseInt(item.quantity) || 0;
 
-      res.json({
+        if (requestedQuantity > availableStock) {
+          // Mark for removal if no stock available or exceeds stock
+          itemsToRemove.push({
+            cart_id: item.id,
+            product_name: item.product_name,
+            requested: requestedQuantity,
+            available: availableStock,
+          });
+        } else {
+          // Keep items with sufficient stock
+          validItems.push(item);
+        }
+      }
+
+      // Remove items with insufficient stock
+      if (itemsToRemove.length > 0) {
+        console.log(
+          `🗑️ Removing ${itemsToRemove.length} cart items with insufficient stock:`,
+          itemsToRemove,
+        );
+
+        for (const item of itemsToRemove) {
+          await executeQuery("DELETE FROM cart_items WHERE id = ?", [
+            item.cart_id,
+          ]);
+        }
+      }
+
+      // Process remaining valid cart items
+      const processedItems = validItems.map((item) => {
+        const finalPrice = item.sale_price || item.price;
+        const totalPrice = finalPrice * item.quantity;
+
+        return {
+          id: item.id,
+          product_id: item.product_id,
+          product_name: item.product_name,
+          product_slug: item.product_slug,
+          sku: item.sku,
+          price: item.price,
+          sale_price: item.sale_price,
+          final_price: finalPrice,
+          quantity: item.quantity,
+          stock_quantity: item.stock_quantity,
+          images: item.images ? JSON.parse(item.images) : [],
+          total_price: totalPrice,
+          created_at: item.created_at,
+        };
+      });
+
+      // Calculate summary
+      const itemCount = processedItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0,
+      );
+      const subtotal = processedItems.reduce(
+        (sum, item) => sum + item.total_price,
+        0,
+      );
+
+      const response = {
         success: true,
         data: {
           items: processedItems,
           summary: {
             item_count: itemCount,
             subtotal: subtotal,
-            shipping_fee: 0, // Will be calculated based on location
+            shipping_fee: 0,
             total: subtotal,
           },
         },
-      });
+      };
+
+      // Include information about removed items if any
+      if (itemsToRemove.length > 0) {
+        response.removed_items = itemsToRemove;
+        response.message = `${itemsToRemove.length} sản phẩm đã được tự động xóa khỏi giỏ hàng do không đủ số lượng trong kho.`;
+      }
+
+      res.json(response);
     } catch (error) {
       console.error("Get cart error:", error);
       res.status(500).json({
@@ -82,6 +147,7 @@ export const cartController = {
     try {
       const { product_id, quantity = 1, session_id, user_id } = req.body;
 
+      // Validation
       if (!product_id) {
         return res.status(400).json({
           success: false,
@@ -96,37 +162,55 @@ export const cartController = {
         });
       }
 
-      // Check if product exists and is available
-      const product = await executeQuery(
-        "SELECT id, name, price, sale_price, stock_quantity, status FROM products WHERE id = ?",
-        [product_id]
-      );
+      const requestedQuantity = Math.max(1, parseInt(quantity) || 1);
 
-      if (!product.length) {
+      // Check product exists and get stock info
+      const productQuery =
+        "SELECT id, name, price, sale_price, stock_quantity, status FROM products WHERE id = ?";
+      const products = await executeQuery(productQuery, [product_id]);
+
+      if (!products.length) {
         return res.status(404).json({
           success: false,
           message: "Product not found",
         });
       }
 
-      const productData = product[0];
+      const product = products[0];
 
-      if (productData.status !== "active") {
+      if (product.status !== "active") {
         return res.status(400).json({
           success: false,
           message: "Product is not available",
         });
       }
 
-      if (productData.stock_quantity < quantity) {
+      const availableStock = Math.max(0, parseInt(product.stock_quantity) || 0);
+
+      // Check if product is out of stock
+      if (availableStock === 0) {
         return res.status(400).json({
           success: false,
-          message: "Insufficient stock",
+          message: `Sản phẩm "${product.name}" hiện đã hết hàng.`,
+          stock_status: "out_of_stock",
+          available_stock: 0,
+        });
+      }
+
+      // Check if requested quantity exceeds available stock
+      if (requestedQuantity > availableStock) {
+        return res.status(400).json({
+          success: false,
+          message: `Không đủ số lượng trong kho. Còn lại: ${availableStock}, Yêu cầu: ${requestedQuantity}`,
+          stock_status: "insufficient_stock",
+          available_stock: availableStock,
+          requested_quantity: requestedQuantity,
         });
       }
 
       // Check if item already exists in cart
-      let existingQuery = "SELECT id, quantity FROM cart_items WHERE product_id = ?";
+      let existingQuery =
+        "SELECT id, quantity FROM cart_items WHERE product_id = ?";
       let existingParams = [product_id];
 
       if (user_id) {
@@ -142,44 +226,79 @@ export const cartController = {
       if (existingItems.length > 0) {
         // Update existing item
         const existingItem = existingItems[0];
-        const newQuantity = existingItem.quantity + quantity;
+        const currentQuantity = Math.max(
+          0,
+          parseInt(existingItem.quantity) || 0,
+        );
+        const newQuantity = currentQuantity + requestedQuantity;
 
-        if (newQuantity > productData.stock_quantity) {
-          return res.status(400).json({
-            success: false,
-            message: "Total quantity exceeds available stock",
-          });
+        // Check stock limits
+        if (newQuantity > availableStock) {
+          const maxCanAdd = Math.max(0, availableStock - currentQuantity);
+
+          if (maxCanAdd === 0) {
+            return res.status(400).json({
+              success: false,
+              message: `Không thể thêm thêm sản phẩm "${product.name}". Bạn đã có ${currentQuantity} trong giỏ hàng và kho chỉ còn ${availableStock} sản phẩm.`,
+              stock_status: "cart_limit_reached",
+              current_in_cart: currentQuantity,
+              available_stock: availableStock,
+              max_can_add: maxCanAdd,
+            });
+          } else {
+            return res.status(400).json({
+              success: false,
+              message: `Không thể thêm ${requestedQuantity} sản phẩm. Bạn đã có ${currentQuantity} trong giỏ hàng, chỉ còn lại ${maxCanAdd} sản phẩm có thể thêm.`,
+              stock_status: "insufficient_stock",
+              current_in_cart: currentQuantity,
+              available_stock: availableStock,
+              max_can_add: maxCanAdd,
+            });
+          }
         }
 
+        // Update quantity
         await executeQuery(
           "UPDATE cart_items SET quantity = ?, updated_at = NOW() WHERE id = ?",
-          [newQuantity, existingItem.id]
+          [newQuantity, existingItem.id],
         );
 
         res.json({
           success: true,
           message: "Cart updated successfully",
-          data: { 
+          data: {
             cart_item_id: existingItem.id,
             quantity: newQuantity,
-            action: "updated"
+            action: "updated",
           },
         });
       } else {
         // Add new item
-        const result = await executeQuery(
-          `INSERT INTO cart_items (product_id, quantity, session_id, user_id, created_at) 
-           VALUES (?, ?, ?, ?, NOW())`,
-          [product_id, quantity, session_id || null, user_id || null]
-        );
+        if (requestedQuantity > availableStock) {
+          return res.status(400).json({
+            success: false,
+            message: `Insufficient stock. Available: ${availableStock}, Requested: ${requestedQuantity}`,
+          });
+        }
+
+        const insertQuery = `
+          INSERT INTO cart_items (product_id, quantity, session_id, user_id, created_at) 
+          VALUES (?, ?, ?, ?, NOW())
+        `;
+        const result = await executeQuery(insertQuery, [
+          product_id,
+          requestedQuantity,
+          session_id || null,
+          user_id || null,
+        ]);
 
         res.json({
           success: true,
           message: "Product added to cart successfully",
-          data: { 
+          data: {
             cart_item_id: result.insertId,
-            quantity: quantity,
-            action: "added"
+            quantity: requestedQuantity,
+            action: "added",
           },
         });
       }
@@ -206,22 +325,22 @@ export const cartController = {
       }
 
       // Get cart item with product info
-      const cartItem = await executeQuery(
-        `SELECT c.id, c.product_id, c.quantity, p.stock_quantity, p.status
-         FROM cart_items c
-         JOIN products p ON c.product_id = p.id
-         WHERE c.id = ?`,
-        [id]
-      );
+      const cartItemQuery = `
+        SELECT c.id, c.product_id, c.quantity, p.stock_quantity, p.status, p.name
+        FROM cart_items c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.id = ?
+      `;
+      const cartItems = await executeQuery(cartItemQuery, [id]);
 
-      if (!cartItem.length) {
+      if (!cartItems.length) {
         return res.status(404).json({
           success: false,
           message: "Cart item not found",
         });
       }
 
-      const item = cartItem[0];
+      const item = cartItems[0];
 
       if (item.status !== "active") {
         return res.status(400).json({
@@ -230,23 +349,26 @@ export const cartController = {
         });
       }
 
-      if (quantity > item.stock_quantity) {
+      const availableStock = Math.max(0, parseInt(item.stock_quantity) || 0);
+      const requestedQuantity = Math.max(1, parseInt(quantity) || 1);
+
+      if (requestedQuantity > availableStock) {
         return res.status(400).json({
           success: false,
-          message: "Quantity exceeds available stock",
+          message: `Quantity exceeds available stock. Available: ${availableStock}`,
         });
       }
 
       // Update quantity
       await executeQuery(
         "UPDATE cart_items SET quantity = ?, updated_at = NOW() WHERE id = ?",
-        [quantity, id]
+        [requestedQuantity, id],
       );
 
       res.json({
         success: true,
         message: "Cart item updated successfully",
-        data: { cart_item_id: id, quantity },
+        data: { cart_item_id: id, quantity: requestedQuantity },
       });
     } catch (error) {
       console.error("Update cart item error:", error);
@@ -262,7 +384,9 @@ export const cartController = {
     try {
       const { id } = req.params;
 
-      const result = await executeQuery("DELETE FROM cart_items WHERE id = ?", [id]);
+      const result = await executeQuery("DELETE FROM cart_items WHERE id = ?", [
+        id,
+      ]);
 
       if (result.affectedRows === 0) {
         return res.status(404).json({
@@ -296,14 +420,14 @@ export const cartController = {
         });
       }
 
-      let query = "DELETE FROM cart_items WHERE 1=1";
+      let query = "DELETE FROM cart_items WHERE ";
       let params = [];
 
       if (user_id) {
-        query += " AND user_id = ?";
+        query += "user_id = ?";
         params.push(user_id);
       } else {
-        query += " AND session_id = ?";
+        query += "session_id = ?";
         params.push(session_id);
       }
 
@@ -337,7 +461,7 @@ export const cartController = {
       // Get session cart items
       const sessionItems = await executeQuery(
         "SELECT product_id, quantity FROM cart_items WHERE session_id = ?",
-        [session_id]
+        [session_id],
       );
 
       if (sessionItems.length === 0) {
@@ -352,30 +476,32 @@ export const cartController = {
 
       for (const item of sessionItems) {
         // Check if user already has this product in cart
-        const existingUserItem = await executeQuery(
+        const existingUserItems = await executeQuery(
           "SELECT id, quantity FROM cart_items WHERE user_id = ? AND product_id = ?",
-          [user_id, item.product_id]
+          [user_id, item.product_id],
         );
 
-        if (existingUserItem.length > 0) {
+        if (existingUserItems.length > 0) {
           // Update existing user cart item
-          const newQuantity = existingUserItem[0].quantity + item.quantity;
+          const newQuantity = existingUserItems[0].quantity + item.quantity;
           await executeQuery(
             "UPDATE cart_items SET quantity = ?, updated_at = NOW() WHERE id = ?",
-            [newQuantity, existingUserItem[0].id]
+            [newQuantity, existingUserItems[0].id],
           );
         } else {
           // Create new user cart item
           await executeQuery(
             "INSERT INTO cart_items (user_id, product_id, quantity, created_at) VALUES (?, ?, ?, NOW())",
-            [user_id, item.product_id, item.quantity]
+            [user_id, item.product_id, item.quantity],
           );
         }
         migrated++;
       }
 
       // Clear session cart
-      await executeQuery("DELETE FROM cart_items WHERE session_id = ?", [session_id]);
+      await executeQuery("DELETE FROM cart_items WHERE session_id = ?", [
+        session_id,
+      ]);
 
       res.json({
         success: true,
@@ -403,14 +529,14 @@ export const cartController = {
         });
       }
 
-      let query = "SELECT SUM(quantity) as total_items FROM cart_items WHERE 1=1";
+      let query = "SELECT SUM(quantity) as total_items FROM cart_items WHERE ";
       let params = [];
 
       if (user_id) {
-        query += " AND user_id = ?";
+        query += "user_id = ?";
         params.push(user_id);
       } else {
-        query += " AND session_id = ?";
+        query += "session_id = ?";
         params.push(session_id);
       }
 

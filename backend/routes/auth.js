@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 import { executeQuery } from "../database/connection.js";
 import { generateToken, authenticateToken } from "../middleware/auth.js";
@@ -120,9 +121,7 @@ router.post(
 router.post(
   "/login",
   [
-    body("email")
-      .isEmail()
-      .withMessage("Valid email required"),
+    body("email").isEmail().withMessage("Valid email required"),
     body("password").notEmpty().withMessage("Password required"),
   ],
   async (req, res) => {
@@ -197,16 +196,95 @@ router.post(
 );
 
 // Get current user profile
-router.get("/profile", authenticateToken, async (req, res) => {
+router.get("/profile", async (req, res) => {
   try {
+    // Check if authorization header exists
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Access token required",
+        code: "NO_TOKEN",
+      });
+    }
+
+    // Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return res.status(401).json({
+          success: false,
+          message: "Token expired",
+          code: "TOKEN_EXPIRED",
+        });
+      }
+      return res.status(403).json({
+        success: false,
+        message: "Invalid token",
+        code: "INVALID_TOKEN",
+      });
+    }
+
+    // Check if user exists and is active
     const user = await executeQuery(
-      "SELECT id, email, full_name, phone, role, avatar, created_at FROM users WHERE id = ?",
-      [req.user.id],
+      "SELECT id, email, full_name, phone, role, avatar, created_at, is_active FROM users WHERE id = ?",
+      [decoded.id],
     );
+
+    if (!user.length) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        code: "USER_NOT_FOUND",
+      });
+    }
+
+    if (!user[0].is_active) {
+      return res.status(401).json({
+        success: false,
+        message: "Account is deactivated",
+        code: "USER_INACTIVE",
+      });
+    }
+
+    const userData = user[0];
+
+    // Get user address from customer_addresses table
+    let userAddress = null;
+    try {
+      const addresses = await executeQuery(
+        "SELECT * FROM customer_addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC LIMIT 1",
+        [req.user.id],
+      );
+      if (addresses.length > 0) {
+        userAddress = addresses[0];
+      }
+    } catch (addressError) {
+      console.error("Error fetching user address:", addressError);
+      // Continue without address data if table doesn't exist
+    }
+
+    // Merge user data with address data
+    const profileData = { ...userData };
+
+    // Add address data if available
+    if (userAddress) {
+      profileData.address = userAddress.address_line_1 || "";
+      profileData.province_name = userAddress.city || "";
+      profileData.district_name = userAddress.district || "";
+      profileData.ward_name = userAddress.ward || "";
+      profileData.address_line_2 = userAddress.address_line_2 || "";
+      profileData.address_full_name = userAddress.full_name || "";
+      profileData.address_phone = userAddress.phone || "";
+    }
 
     res.json({
       success: true,
-      data: user[0],
+      data: profileData,
     });
   } catch (error) {
     console.error("Profile error:", error);
@@ -231,6 +309,10 @@ router.put(
       .optional()
       .isMobilePhone("vi-VN")
       .withMessage("Invalid phone number"),
+    body("province_name").optional().trim(),
+    body("district_name").optional().trim(),
+    body("ward_name").optional().trim(),
+    body("address").optional().trim(),
   ],
   async (req, res) => {
     try {
@@ -243,8 +325,16 @@ router.put(
         });
       }
 
-      const { full_name, phone } = req.body;
+      const {
+        full_name,
+        phone,
+        province_name,
+        district_name,
+        ward_name,
+        address,
+      } = req.body;
 
+      // Update basic user profile
       const updateFields = [];
       const updateValues = [];
 
@@ -258,19 +348,79 @@ router.put(
         updateValues.push(phone);
       }
 
-      if (updateFields.length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "No fields to update",
-        });
+      // Update user table if there are basic fields to update
+      if (updateFields.length > 0) {
+        updateValues.push(req.user.id);
+        await executeQuery(
+          `UPDATE users SET ${updateFields.join(", ")} WHERE id = ?`,
+          updateValues,
+        );
       }
 
-      updateValues.push(req.user.id);
+      // Update address in customer_addresses table if address data is provided
+      if (province_name || district_name || ward_name || address) {
+        try {
+          // Check if user already has an address
+          const existingAddresses = await executeQuery(
+            "SELECT * FROM customer_addresses WHERE user_id = ?",
+            [req.user.id],
+          );
 
-      await executeQuery(
-        `UPDATE users SET ${updateFields.join(", ")} WHERE id = ?`,
-        updateValues,
-      );
+          const addressData = {
+            full_name: full_name || req.user.full_name,
+            phone: phone || req.user.phone,
+            address_line_1: address || "Địa chỉ chi tiết",
+            address_line_2: null,
+            ward: ward_name || "",
+            district: district_name || "",
+            city: province_name || "",
+            is_default: true,
+          };
+
+          if (existingAddresses.length > 0) {
+            // UPDATE existing address
+            await executeQuery(
+              `UPDATE customer_addresses SET
+               full_name = ?, phone = ?, address_line_1 = ?, address_line_2 = ?,
+               ward = ?, district = ?, city = ?, is_default = ?, updated_at = NOW()
+               WHERE user_id = ?`,
+              [
+                addressData.full_name,
+                addressData.phone,
+                addressData.address_line_1,
+                addressData.address_line_2,
+                addressData.ward,
+                addressData.district,
+                addressData.city,
+                addressData.is_default ? 1 : 0,
+                req.user.id,
+              ],
+            );
+          } else {
+            // INSERT new address
+            await executeQuery(
+              `INSERT INTO customer_addresses
+               (user_id, type, full_name, phone, address_line_1, address_line_2, ward, district, city, is_default, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+              [
+                req.user.id,
+                "default",
+                addressData.full_name,
+                addressData.phone,
+                addressData.address_line_1,
+                addressData.address_line_2,
+                addressData.ward,
+                addressData.district,
+                addressData.city,
+                addressData.is_default ? 1 : 0,
+              ],
+            );
+          }
+        } catch (addressError) {
+          console.error("Error updating address:", addressError);
+          // Continue without failing the entire update
+        }
+      }
 
       // Get updated user
       const updatedUser = await executeQuery(
@@ -278,10 +428,38 @@ router.put(
         [req.user.id],
       );
 
+      // Get updated address data
+      let userAddress = null;
+      try {
+        const addresses = await executeQuery(
+          "SELECT * FROM customer_addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC LIMIT 1",
+          [req.user.id],
+        );
+        if (addresses.length > 0) {
+          userAddress = addresses[0];
+        }
+      } catch (addressError) {
+        console.error("Error fetching updated address:", addressError);
+      }
+
+      // Merge user data with address data
+      const profileData = { ...updatedUser[0] };
+
+      // Add address data if available
+      if (userAddress) {
+        profileData.address = userAddress.address_line_1 || "";
+        profileData.province_name = userAddress.city || "";
+        profileData.district_name = userAddress.district || "";
+        profileData.ward_name = userAddress.ward || "";
+        profileData.address_line_2 = userAddress.address_line_2 || "";
+        profileData.address_full_name = userAddress.full_name || "";
+        profileData.address_phone = userAddress.phone || "";
+      }
+
       res.json({
         success: true,
         message: "Profile updated successfully",
-        data: updatedUser[0],
+        data: profileData,
       });
     } catch (error) {
       console.error("Update profile error:", error);
@@ -434,14 +612,14 @@ router.post("/create-admin", async (req, res) => {
     // Check if admin user exists
     const existing = await executeQuery(
       "SELECT id, email, role FROM users WHERE email = ?",
-      ["admin@zoxvn.com"]
+      ["admin@zoxvn.com"],
     );
 
     if (existing.length > 0) {
       return res.json({
         success: true,
         message: "Admin user already exists",
-        user: existing[0]
+        user: existing[0],
       });
     }
 
@@ -467,14 +645,13 @@ router.post("/create-admin", async (req, res) => {
       user: {
         id: result.insertId,
         email: "admin@zoxvn.com",
-        role: "admin"
+        role: "admin",
       },
       credentials: {
         email: "admin@zoxvn.com",
-        password: "admin123"
-      }
+        password: "admin123",
+      },
     });
-
   } catch (error) {
     console.error("Create admin error:", error);
     res.status(500).json({

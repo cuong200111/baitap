@@ -83,7 +83,13 @@ interface Ward {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, logout, refreshUser } = useAuth();
+  const {
+    user,
+    loading: authLoading,
+    logout,
+    refreshUser,
+    isAuthenticated,
+  } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Robust request handling to prevent "body stream already read" errors
   const updateInProgress = useRef<boolean>(false);
@@ -130,14 +136,22 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (!user) {
+    // Wait for auth to complete before deciding whether to redirect
+    if (authLoading) {
+      return; // Still loading, don't do anything yet
+    }
+
+    if (!isAuthenticated || !user) {
+      // Auth completed and user is not authenticated
       router.push("/login");
       return;
     }
+
+    // User is authenticated, load profile data
     loadProfile();
     // Load provinces immediately for API mode functionality
     loadProvinces();
-  }, [user, router]);
+  }, [user, authLoading, isAuthenticated, router]);
 
   const loadProfile = async () => {
     try {
@@ -220,13 +234,13 @@ export default function ProfilePage() {
         },
         { code: 48, name: "Đà Nẵng", full_name: "Thành phố Đà Nẵng" },
         { code: 92, name: "Cần Thơ", full_name: "Thành phố Cần Thơ" },
-        { code: 33, name: "Hải Ph��ng", full_name: "Thành phố Hải Phòng" },
+        { code: 33, name: "Hải Phòng", full_name: "Thành phố Hải Phòng" },
         { code: 77, name: "Quảng Ninh", full_name: "Tỉnh Quảng Ninh" },
         { code: 26, name: "Khánh Hòa", full_name: "Tỉnh Khánh Hòa" },
         { code: 20, name: "Quảng Nam", full_name: "Tỉnh Quảng Nam" },
         { code: 2, name: "Hà Giang", full_name: "Tỉnh Hà Giang" },
         { code: 4, name: "Cao Bằng", full_name: "Tỉnh Cao Bằng" },
-        { code: 6, name: "B��c Kạn", full_name: "Tỉnh Bắc Kạn" },
+        { code: 6, name: "Bắc Kạn", full_name: "Tỉnh Bắc Kạn" },
         { code: 8, name: "Tuyên Quang", full_name: "Tỉnh Tuyên Quang" },
         { code: 10, name: "Lào Cai", full_name: "Tỉnh Lào Cai" },
         { code: 11, name: "Điện Biên", full_name: "Tỉnh Điện Biên" },
@@ -236,13 +250,13 @@ export default function ProfilePage() {
         { code: 17, name: "Hoà Bình", full_name: "Tỉnh Hoà Bình" },
         { code: 19, name: "Thái Nguyên", full_name: "Tỉnh Thái Nguyên" },
         { code: 22, name: "Lạng Sơn", full_name: "Tỉnh Lạng Sơn" },
-        { code: 24, name: "Bắc Giang", full_name: "Tỉnh B��c Giang" },
+        { code: 24, name: "Bắc Giang", full_name: "Tỉnh Bắc Giang" },
         { code: 25, name: "Phú Thọ", full_name: "Tỉnh Phú Thọ" },
         { code: 27, name: "Vĩnh Phúc", full_name: "Tỉnh Vĩnh Phúc" },
         { code: 30, name: "Bắc Ninh", full_name: "Tỉnh Bắc Ninh" },
         { code: 31, name: "Hải Dương", full_name: "Tỉnh Hải Dương" },
         { code: 35, name: "Hưng Yên", full_name: "Tỉnh Hưng Yên" },
-        { code: 36, name: "Thái Bình", full_name: "Tỉnh Th��i Bình" },
+        { code: 36, name: "Thái Bình", full_name: "Tỉnh Thái Bình" },
         { code: 37, name: "Hà Nam", full_name: "Tỉnh Hà Nam" },
         { code: 38, name: "Nam Định", full_name: "Tỉnh Nam Định" },
         { code: 40, name: "Ninh Bình", full_name: "Tỉnh Ninh Bình" },
@@ -260,7 +274,7 @@ export default function ProfilePage() {
         { code: 62, name: "Kon Tum", full_name: "Tỉnh Kon Tum" },
         { code: 64, name: "Gia Lai", full_name: "Tỉnh Gia Lai" },
         { code: 66, name: "Đắk Lắk", full_name: "Tỉnh Đắk Lắk" },
-        { code: 67, name: "��ắk Nông", full_name: "Tỉnh Đắk Nông" },
+        { code: 67, name: "Đắk Nông", full_name: "Tỉnh Đắk Nông" },
         { code: 68, name: "Lâm Đồng", full_name: "Tỉnh Lâm Đồng" },
         { code: 70, name: "Bình Phước", full_name: "Tỉnh Bình Phước" },
         { code: 72, name: "Tây Ninh", full_name: "Tỉnh Tây Ninh" },
@@ -438,7 +452,7 @@ export default function ProfilePage() {
           {
             code: 114,
             name: "Tủa Chùa",
-            full_name: "Huyện T���a Chùa",
+            full_name: "Huyện Tủa Chùa",
             province_code: 11,
           },
           {
@@ -627,7 +641,7 @@ export default function ProfilePage() {
             {
               code: 4,
               name: "Long Biên",
-              full_name: "Quận Long Bi��n",
+              full_name: "Quận Long Biên",
               province_code: 1,
             },
             {
@@ -726,7 +740,7 @@ export default function ProfilePage() {
             {
               code: 773,
               name: "Quận Gò Vấp",
-              full_name: "Quận Gò V��p",
+              full_name: "Quận Gò Vấp",
               province_code: 79,
             },
             {
@@ -753,7 +767,7 @@ export default function ProfilePage() {
             {
               code: 490,
               name: "Hải Châu",
-              full_name: "Quận H��i Châu",
+              full_name: "Quận Hải Châu",
               province_code: 48,
             },
             {
@@ -777,7 +791,7 @@ export default function ProfilePage() {
             {
               code: 494,
               name: "Ngũ Hành Sơn",
-              full_name: "Qu���n Ngũ Hành Sơn",
+              full_name: "Quận Ngũ Hành Sơn",
               province_code: 48,
             },
             {
@@ -1030,7 +1044,7 @@ export default function ProfilePage() {
           {
             code: 3568,
             name: "Nam Thanh",
-            full_name: "Ph��ờng Nam Thanh",
+            full_name: "Phường Nam Thanh",
             district_code: 110,
           },
           {
@@ -1113,7 +1127,7 @@ export default function ProfilePage() {
           },
           {
             code: 26749,
-            name: "Ph���m Ngũ Lão",
+            name: "Phạm Ngũ Lão",
             full_name: "Phường Phạm Ngũ Lão",
             district_code: 760,
           },
@@ -1174,7 +1188,7 @@ export default function ProfilePage() {
           {
             code: 9310,
             name: "Vĩnh Phước",
-            full_name: "Phường Vĩnh Phư��c",
+            full_name: "Phường Vĩnh Phước",
             district_code: 260,
           },
           {
@@ -1215,7 +1229,7 @@ export default function ProfilePage() {
           {
             code: 3,
             name: "Phường 3",
-            full_name: "Phư��ng 3",
+            full_name: "Phường 3",
             district_code: districtCode,
           },
           {
@@ -1318,50 +1332,6 @@ export default function ProfilePage() {
     }
   };
 
-  const saveAddress = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("No token found");
-    }
-
-    // Validate address fields
-    if (
-      !addressData.province_name ||
-      !addressData.district_name ||
-      !addressData.ward_name
-    ) {
-      throw new Error("Vui lòng chọn đầy đủ tỉnh/thành, quận/huyện, phường/xã");
-    }
-
-    const addressPayload = {
-      type: "default",
-      full_name: formData.full_name.trim(),
-      phone: formData.phone.trim() || null,
-      address_line_1: formData.address.trim() || "Địa chỉ chi tiết",
-      address_line_2: null,
-      ward: addressData.ward_name.trim(),
-      district: addressData.district_name.trim(),
-      city: addressData.province_name.trim(),
-      is_default: true,
-    };
-
-    const response = await fetch(`${Domain}/api/addresses`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(addressPayload),
-    });
-
-    const data = await response.json();
-    if (!data.success) {
-      throw new Error(data.message || "Failed to save address");
-    }
-
-    return data;
-  };
-
   const handleUpdateProfile = async () => {
     // Use ref-based check to prevent race conditions
     if (updateInProgress.current) {
@@ -1377,7 +1347,7 @@ export default function ProfilePage() {
 
       const token = localStorage.getItem("token");
       if (!token) {
-        toast.error("Phiên đăng nhập đã h���t hạn");
+        toast.error("Phiên đăng nhập đã hết hạn");
         return;
       }
 
@@ -1387,15 +1357,20 @@ export default function ProfilePage() {
         return;
       }
 
-      // Update basic profile info only
+      // Update profile info and address data in single request
       const updateData = {
         full_name: formData.full_name.trim(),
         phone: formData.phone.trim() || null,
+        // Add address data
+        province_name: addressData.province_name || "",
+        district_name: addressData.district_name || "",
+        ward_name: addressData.ward_name || "",
+        address: formData.address.trim() || "",
       };
 
       console.log("Updating profile with data:", updateData);
 
-      // Update profile
+      // Update profile (now includes address data)
       const response = await fetch(`${Domain}/api/auth/profile`, {
         method: "PUT",
         headers: {
@@ -1415,16 +1390,21 @@ export default function ProfilePage() {
       if (data.success) {
         setProfile(data.data);
 
-        // Save address to customer_addresses table
-        try {
-          await saveAddress();
-          toast.success("Cập nhật thông tin và địa chỉ thành công");
-        } catch (addressError) {
-          console.error("Address save error:", addressError);
-          toast.success(
-            "Cập nhật thông tin thành công, nhưng có lỗi khi lưu địa chỉ",
-          );
-        }
+        // Update local form data with returned data
+        setFormData({
+          full_name: data.data.full_name || "",
+          phone: data.data.phone || "",
+          address: data.data.address || "",
+        });
+
+        // Update address data with returned data
+        setAddressData({
+          province_name: data.data.province_name || "",
+          district_name: data.data.district_name || "",
+          ward_name: data.data.ward_name || "",
+        });
+
+        toast.success("Cập nhật thông tin và địa chỉ thành công");
 
         // Refresh user context
         if (refreshUser) {
@@ -1451,10 +1431,10 @@ export default function ProfilePage() {
         error.message?.includes("NetworkError")
       ) {
         toast.error(
-          "Không thể kết nối đến server. Vui l��ng kiểm tra kết nối mạng",
+          "Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng",
         );
       } else {
-        toast.error("Có l��i xảy ra khi cập nhật thông tin. Vui lòng thử lại");
+        toast.error("Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại");
       }
     } finally {
       setUpdating(false);
@@ -1496,7 +1476,7 @@ export default function ProfilePage() {
           await refreshUser();
         }
       } else {
-        toast.error(data.message || "Có l���i xảy ra");
+        toast.error(data.message || "Có lỗi xảy ra");
       }
     } catch (error) {
       console.error("Avatar upload error:", error);
@@ -1554,7 +1534,7 @@ export default function ProfilePage() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success("Đ��i mật khẩu thành công");
+        toast.success("Đổi mật khẩu thành công");
         setPasswordData({
           current_password: "",
           new_password: "",
@@ -1569,6 +1549,18 @@ export default function ProfilePage() {
       toast.error("Có lỗi xảy ra khi đổi mật khẩu");
     }
   };
+
+  // Show loading screen while authentication is in progress
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Đang xác thực...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -1612,7 +1604,7 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Thông tin c�� nhân
+              Thông tin cá nhân
             </h1>
             <p className="text-gray-600">Quản lý thông tin tài khoản của bạn</p>
           </div>
@@ -1627,7 +1619,7 @@ export default function ProfilePage() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader>
-                <CardTitle className="text-center">Ảnh đ��i diện</CardTitle>
+                <CardTitle className="text-center">Ảnh đại diện</CardTitle>
               </CardHeader>
               <CardContent className="text-center space-y-4">
                 <div className="relative inline-block">
@@ -1699,7 +1691,7 @@ export default function ProfilePage() {
             <Tabs defaultValue="info" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="info">Thông tin cá nhân</TabsTrigger>
-                <TabsTrigger value="security">B��o mật</TabsTrigger>
+                <TabsTrigger value="security">Bảo mật</TabsTrigger>
               </TabsList>
 
               <TabsContent value="info" className="space-y-6">
@@ -1725,7 +1717,7 @@ export default function ProfilePage() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="phone">Số đi��n thoại</Label>
+                        <Label htmlFor="phone">Số điện thoại</Label>
                         <Input
                           id="phone"
                           value={formData.phone}
@@ -1906,7 +1898,7 @@ export default function ProfilePage() {
                         onChange={(e) =>
                           handleInputChange("address", e.target.value)
                         }
-                        placeholder="S��� nh��, tên đường..."
+                        placeholder="Số nhà, tên đường..."
                       />
                     </div>
 
@@ -1932,7 +1924,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Lock className="h-5 w-5" />
-                      Bảo m��t tài khoản
+                      Bảo mật tài khoản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -1962,12 +1954,12 @@ export default function ProfilePage() {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>Đổi mật kh����u</DialogTitle>
+                            <DialogTitle>Đổi mật khẩu</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
                               <Label htmlFor="current_password">
-                                Mật kh��u hiện tại
+                                Mật khẩu hiện tại
                               </Label>
                               <Input
                                 id="current_password"
@@ -1982,9 +1974,7 @@ export default function ProfilePage() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="new_password">
-                                Mật kh���u mới
-                              </Label>
+                              <Label htmlFor="new_password">Mật khẩu mới</Label>
                               <Input
                                 id="new_password"
                                 type="password"
