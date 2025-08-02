@@ -572,7 +572,7 @@ export default function ProfilePage() {
           {
             code: 922,
             name: "Cờ Đỏ",
-            full_name: "Huyện C�� Đỏ",
+            full_name: "Huyện Cờ Đỏ",
             province_code: 92,
           },
           {
@@ -758,7 +758,7 @@ export default function ProfilePage() {
             {
               code: 776,
               name: "Quận Tân Phú",
-              full_name: "Quận Tân Ph��",
+              full_name: "Quận Tân Phú",
               province_code: 79,
             },
           ],
@@ -1137,7 +1137,7 @@ export default function ProfilePage() {
           {
             code: 6859,
             name: "Tân Thạnh",
-            full_name: "Phường T��n Thạnh",
+            full_name: "Phường Tân Thạnh",
             district_code: 200,
           },
           {
@@ -1234,7 +1234,7 @@ export default function ProfilePage() {
           },
           {
             code: 4,
-            name: "Phường 4",
+            name: "Phư���ng 4",
             full_name: "Phường 4",
             district_code: districtCode,
           },
@@ -1913,7 +1913,7 @@ export default function ProfilePage() {
                       ) : (
                         <Save className="h-4 w-4 mr-2" />
                       )}
-                      {updating ? "Đang cập nhật..." : "Lưu thay đ���i"}
+                      {updating ? "Đang cập nhật..." : "Lưu thay đổi"}
                     </Button>
                   </CardContent>
                 </Card>
@@ -1924,7 +1924,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Lock className="h-5 w-5" />
-                      Bảo m��t tài khoản
+                      Bảo m���t tài khoản
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
