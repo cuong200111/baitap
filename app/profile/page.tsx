@@ -83,7 +83,7 @@ interface Ward {
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, logout, refreshUser } = useAuth();
+  const { user, loading: authLoading, logout, refreshUser, isAuthenticated } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Robust request handling to prevent "body stream already read" errors
   const updateInProgress = useRef<boolean>(false);
@@ -1911,7 +1911,7 @@ export default function ProfilePage() {
 
                     <div className="flex items-center justify-between p-4 border rounded">
                       <div>
-                        <h4 className="font-medium">Mật khẩu</h4>
+                        <h4 className="font-medium">M���t khẩu</h4>
                         <p className="text-sm text-gray-600">
                           Cập nhật lần cuối:{" "}
                           {new Date(profile.created_at).toLocaleDateString(
