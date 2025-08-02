@@ -61,23 +61,25 @@ export function CartPopup({ cartCount }: CartPopupProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const loadCartItems = async () => {
-    if (!isAuthenticated || !user?.id) {
-      setCartItems([]);
-      setSummary({ itemCount: 0, subtotal: 0, total: 0 });
-      return;
-    }
-
     try {
       setLoading(true);
-      const response = await fetch(`${Domain}/api/cart?user_id=${user.id}`);
-      const data = await response.json();
+      const result = await cartApi.getCart();
 
-      if (data.success) {
-        setCartItems(data.data.items);
-        setSummary(data.data.summary);
+      if (result.success && result.data) {
+        setCartItems(result.data.items);
+        setSummary({
+          itemCount: result.data.summary.item_count,
+          subtotal: result.data.summary.subtotal,
+          total: result.data.summary.total,
+        });
+      } else {
+        setCartItems([]);
+        setSummary({ itemCount: 0, subtotal: 0, total: 0 });
       }
     } catch (error) {
       console.error("Failed to load cart items:", error);
+      setCartItems([]);
+      setSummary({ itemCount: 0, subtotal: 0, total: 0 });
     } finally {
       setLoading(false);
     }
