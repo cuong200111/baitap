@@ -157,8 +157,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    initializeAuth();
+    // Mark as client-side after hydration
+    setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    // Only initialize auth after we're on the client side
+    if (isClient) {
+      initializeAuth();
+    }
+  }, [isClient]);
 
   const login = async (email: string, password: string) => {
     try {
