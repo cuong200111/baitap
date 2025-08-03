@@ -74,10 +74,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
   // Optimistic authentication - check token immediately without API call
   const initializeAuth = () => {
+    if (typeof window === "undefined") return; // Skip during SSR
+
     const token = getToken();
     if (token) {
       // We have a token, assume user is authenticated initially
