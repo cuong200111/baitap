@@ -37,6 +37,16 @@ router.get("/", async (req, res) => {
         supported_formats: ["jpg", "jpeg", "png", "webp", "svg"],
         max_upload_size: 10 * 1024 * 1024, // 10MB
       },
+      contact: {
+        phone: "1900.1903",
+        email: "info@zoxvn.com",
+        address: "123 Đường ABC, Quận 1, TP.HCM",
+        hours: "8:00 - 22:00 (T2-CN)",
+      },
+      social: {
+        facebook: "https://facebook.com/zoxvn",
+        youtube: "https://youtube.com/zoxvn",
+      },
       seo: seoConfig.general,
       business: {
         name: seoConfig.schema.organization_name,
