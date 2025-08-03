@@ -360,8 +360,8 @@ export default function BuyNowCheckoutPage() {
         <Alert className="mb-6 border-orange-200 bg-orange-50">
           <Package className="h-4 w-4 text-orange-600" />
           <AlertDescription className="text-orange-800">
-            Bạn đang mua ngay sản phẩm &quot;{buyNowItem.product_name}&quot;. Sản phẩm này
-            sẽ không được thêm vào giỏ hàng.
+            Bạn đang mua ngay sản phẩm &quot;{buyNowItem.product_name}&quot;.
+            Sản phẩm này sẽ không được thêm vào giỏ hàng.
           </AlertDescription>
         </Alert>
 

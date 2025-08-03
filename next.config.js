@@ -10,7 +10,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Try static export for faster build
-  output: 'export',
+  output: "export",
   trailingSlash: true,
   experimental: {
     optimizePackageImports: ["lucide-react"],
@@ -30,7 +30,7 @@ const nextConfig = {
         hostname: "localhost",
         port: "4000",
         pathname: "/uploads/**",
-      }
+      },
     ],
   },
   // Dev optimizations to reduce overlay errors

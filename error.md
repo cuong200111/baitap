@@ -7,28 +7,33 @@
 **SUMMARY:** Build process has severe performance issues. Critical errors were fixed but build takes too long to complete.
 
 **Fixed Issues:**
+
 - ✅ Unescaped entities errors in `app/buy-now-checkout/page.tsx` and `app/category/[slug]/page.tsx`
 - ✅ Added ESLint ignore during builds to `next.config.js`
 - ✅ Added TypeScript ignore during builds to `next.config.js`
 
 **Current Issues:**
+
 - ⏳ Build process extremely slow (taking 60+ seconds)
 - ⏳ Stuck at "Creating an optimized production build" phase
 - ⚠️ Environment warnings about non-standard NODE_ENV value
 - ⚠️ SWC Minifier deprecation warning
 
 **Build Performance Analysis:**
+
 - The build compiles successfully but takes extremely long
 - Type checking and optimization phases are bottlenecks
 - Large number of React Hook dependency warnings may slow compilation
 - Image optimization warnings throughout the app
 
 **Temporary Solutions Applied:**
+
 - ✅ `eslint.ignoreDuringBuilds: true` - Skip ESLint during build
 - ✅ `typescript.ignoreBuildErrors: true` - Skip TypeScript checking during build
 - ✅ Fixed critical unescaped entities errors
 
 **Recommended Long-term Fixes:**
+
 1. Fix all React Hook dependencies properly
 2. Replace `<img>` tags with Next.js `<Image />` components
 3. Set proper NODE_ENV environment variable
@@ -40,10 +45,12 @@
 #### 1. React Unescaped Entities Errors
 
 **File: `app/buy-now-checkout/page.tsx`**
+
 - Line 363:40: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`
 - Line 363:66: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`
 
 **File: `app/category/[slug]/page.tsx`**
+
 - Line 374:49: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`
 - Line 375:47: `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`
 
