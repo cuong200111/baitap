@@ -11,7 +11,6 @@ const nextConfig = {
   },
   // Disable prerendering completely to avoid context issues
   experimental: {
-    runtime: 'nodejs',
     optimizePackageImports: ["lucide-react"],
   },
   async generateBuildId() {
