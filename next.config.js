@@ -9,6 +9,9 @@ const nextConfig = {
     // Ignore TypeScript errors during build
     ignoreBuildErrors: true,
   },
+  // Try static export for faster build
+  output: 'export',
+  trailingSlash: true,
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
