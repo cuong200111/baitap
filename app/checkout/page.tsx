@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -217,7 +219,7 @@ export default function CheckoutPage() {
     // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerInfo.email)) {
-      toast.error("Email không hợp lệ");
+      toast.error("Email không hợp l��");
       return false;
     }
 
@@ -336,7 +338,7 @@ export default function CheckoutPage() {
             <CheckCircle className="h-4 w-4" />
             <AlertDescription>
               Địa chỉ đã được tự động điền từ thông tin trong hồ sơ của bạn. Bạn
-              có thể chỉnh sửa nếu cần.
+              có thể chỉnh s��a nếu cần.
             </AlertDescription>
           </Alert>
         )}
