@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,7 +52,7 @@ interface Order {
   items: OrderItem[];
 }
 
-export default function ThankYouPage() {
+function ThankYouPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { user } = useAuth();
@@ -590,5 +590,17 @@ export default function ThankYouPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+      </div>
+    }>
+      <ThankYouPageContent />
+    </Suspense>
   );
 }
