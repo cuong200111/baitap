@@ -9,7 +9,10 @@ const nextConfig = {
     // Ignore TypeScript errors during build
     ignoreBuildErrors: true,
   },
-  // Disable prerendering for pages with context issues
+  // Disable prerendering completely to avoid context issues
+  experimental: {
+    runtime: 'nodejs',
+  },
   async generateBuildId() {
     return 'build-' + Date.now();
   },
