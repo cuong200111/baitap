@@ -12,9 +12,7 @@ const nextConfig = {
   // Disable prerendering completely to avoid context issues
   experimental: {
     optimizePackageImports: ["lucide-react"],
-    isrMemoryCacheSize: 0, // Disable ISR cache
   },
-  output: 'standalone',
   async generateBuildId() {
     return 'build-' + Date.now();
   },
