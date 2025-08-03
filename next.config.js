@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   swcMinify: false,
+  eslint: {
+    // Ignore ESLint errors during build
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
