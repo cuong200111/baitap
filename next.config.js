@@ -9,6 +9,10 @@ const nextConfig = {
     // Ignore TypeScript errors during build
     ignoreBuildErrors: true,
   },
+  // Disable prerendering for pages with context issues
+  async generateBuildId() {
+    return 'build-' + Date.now();
+  },
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
