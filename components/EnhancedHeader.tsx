@@ -66,6 +66,9 @@ export function EnhancedHeader() {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Wait for auth to finish initializing before setting up cart functionality
+    if (initializing || loading) return;
+
     if (isAuthenticated && user?.id) {
       loadCartCount();
     } else {
