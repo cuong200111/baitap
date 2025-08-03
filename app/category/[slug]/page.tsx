@@ -371,8 +371,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               Danh mục không tồn tại
             </h1>
             <p className="text-gray-600 mb-4">
-              Chúng tôi không tìm thấy danh mục "
-              {params.slug.replace(/-/g, " ")}" trong database.
+              Chúng tôi không tìm thấy danh mục &quot;
+              {params.slug.replace(/-/g, " ")}&quot; trong database.
             </p>
             <div className="flex justify-center space-x-4">
               <Button onClick={() => window.history.back()} variant="outline">
