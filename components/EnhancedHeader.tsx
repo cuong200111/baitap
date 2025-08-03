@@ -53,7 +53,8 @@ interface SearchSuggestion {
 }
 
 export function EnhancedHeader() {
-  const { user, logout, isAdmin, isAuthenticated, loading, initializing } = useAuth();
+  const { user, logout, isAdmin, isAuthenticated, loading, initializing } =
+    useAuth();
   const [cartCount, setCartCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);

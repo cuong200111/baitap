@@ -14,7 +14,7 @@ const nextConfig = {
     optimizePackageImports: ["lucide-react"],
   },
   async generateBuildId() {
-    return 'build-' + Date.now();
+    return "build-" + Date.now();
   },
   // allowedDevOrigins: [
   //   "b622dc178809418abc65fe2ebec69108-b88d5d526d3548389438554db.fly.dev",
