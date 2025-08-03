@@ -29,6 +29,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
+    // During SSR, return a default context to prevent errors
+    if (typeof window === "undefined") {
+      return {
+        user: null,
+        loading: true,
+        initializing: true,
+        login: async () => {},
+        register: async () => {},
+        logout: () => {},
+        isAdmin: false,
+        isAuthenticated: false,
+        hasToken: false,
+        checkAuth: async () => {},
+        refreshUser: async () => {},
+      } as AuthContextType;
+    }
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
