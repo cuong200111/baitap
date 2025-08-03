@@ -102,7 +102,7 @@ export function EnhancedHeader() {
       window.removeEventListener("cartUpdated", handleCartUpdate);
       if (interval) clearInterval(interval);
     };
-  }, [user, isAuthenticated]);
+  }, [user, isAuthenticated, loading, initializing]);
 
   // Handle click outside search to close results
   useEffect(() => {
