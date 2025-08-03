@@ -85,7 +85,8 @@ export function Header() {
           setConfig({
             app: {
               name: configData.app?.name || "ZOXVN",
-              description: configData.app?.description || "Máy tính, Laptop, Gaming Gear",
+              description:
+                configData.app?.description || "Máy tính, Laptop, Gaming Gear",
             },
             contact: {
               phone: configData.contact?.phone || "1900.1903",
@@ -241,11 +242,17 @@ export function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">{config.app.name.charAt(0).toUpperCase()}</span>
+                <span className="text-white font-bold text-lg">
+                  {config.app.name.charAt(0).toUpperCase()}
+                </span>
               </div>
               <div>
-                <div className="font-bold text-xl text-gray-900">{config.app.name}</div>
-                <div className="text-xs text-gray-500">{config.app.description}</div>
+                <div className="font-bold text-xl text-gray-900">
+                  {config.app.name}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {config.app.description}
+                </div>
               </div>
             </Link>
 

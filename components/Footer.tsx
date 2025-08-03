@@ -52,16 +52,20 @@ export function Footer() {
           const data = await response.json();
           if (data.success) {
             const configData = data.data;
-            
+
             setConfig({
               app: {
                 name: configData.app?.name || "ZOXVN",
-                description: configData.app?.description || "Máy tính, Laptop, Gaming Gear",
+                description:
+                  configData.app?.description ||
+                  "Máy tính, Laptop, Gaming Gear",
               },
               contact: {
-                phone: configData.contact?.phone || "1900.1903", 
+                phone: configData.contact?.phone || "1900.1903",
                 email: configData.contact?.email || "info@zoxvn.com",
-                address: configData.contact?.address || "123 Đường ABC, Quận 1, TP.HCM",
+                address:
+                  configData.contact?.address ||
+                  "123 Đường ABC, Quận 1, TP.HCM",
                 hours: configData.contact?.hours || "8:00 - 22:00 (T2-CN)",
               },
               social: {
@@ -94,7 +98,9 @@ export function Footer() {
               </div>
               <div>
                 <div className="font-bold text-lg">{config.app.name}</div>
-                <div className="text-sm text-gray-400">{config.app.description}</div>
+                <div className="text-sm text-gray-400">
+                  {config.app.description}
+                </div>
               </div>
             </div>
             <p className="text-gray-400 text-sm mb-4">
@@ -103,12 +109,18 @@ export function Footer() {
             </p>
             <div className="flex space-x-4">
               {config.social.facebook && (
-                <Link href={config.social.facebook} className="text-gray-400 hover:text-white">
+                <Link
+                  href={config.social.facebook}
+                  className="text-gray-400 hover:text-white"
+                >
                   <Facebook className="h-5 w-5" />
                 </Link>
               )}
               {config.social.youtube && (
-                <Link href={config.social.youtube} className="text-gray-400 hover:text-white">
+                <Link
+                  href={config.social.youtube}
+                  className="text-gray-400 hover:text-white"
+                >
                   <Youtube className="h-5 w-5" />
                 </Link>
               )}
@@ -124,7 +136,9 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-red-500" />
-                <span className="text-sm">{config.contact.phone} (7:30 - 22:00)</span>
+                <span className="text-sm">
+                  {config.contact.phone} (7:30 - 22:00)
+                </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-red-500" />
@@ -132,9 +146,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4 text-red-500" />
-                <span className="text-sm">
-                  {config.contact.address}
-                </span>
+                <span className="text-sm">{config.contact.address}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="h-4 w-4 text-red-500" />
