@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   Phone,
   Mail,
@@ -9,7 +12,76 @@ import {
   Zap,
 } from "lucide-react";
 
+interface SiteConfig {
+  app: {
+    name: string;
+    description: string;
+  };
+  contact: {
+    phone: string;
+    email: string;
+    address: string;
+    hours: string;
+  };
+  social: {
+    facebook?: string;
+    youtube?: string;
+  };
+}
+
 export function Footer() {
+  const [config, setConfig] = useState<SiteConfig>({
+    app: {
+      name: "ZOXVN",
+      description: "Máy tính, Laptop, Gaming Gear",
+    },
+    contact: {
+      phone: "1900.1903",
+      email: "info@zoxvn.com",
+      address: "123 Đường ABC, Quận 1, TP.HCM",
+      hours: "8:00 - 22:00 (T2-CN)",
+    },
+    social: {},
+  });
+
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const response = await fetch("http://localhost:4000/api/config");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            const configData = data.data;
+            
+            setConfig({
+              app: {
+                name: configData.app?.name || "ZOXVN",
+                description: configData.app?.description || "Máy tính, Laptop, Gaming Gear",
+              },
+              contact: {
+                phone: configData.contact?.phone || "1900.1903", 
+                email: configData.contact?.email || "info@zoxvn.com",
+                address: configData.contact?.address || "123 Đường ABC, Quận 1, TP.HCM",
+                hours: configData.contact?.hours || "8:00 - 22:00 (T2-CN)",
+              },
+              social: {
+                facebook: configData.social?.facebook,
+                youtube: configData.social?.youtube,
+              },
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch footer config:", error);
+        // Keep default values on error
+      }
+    }
+
+    fetchConfig();
+  }, []);
+
+  const firstLetter = config.app.name.charAt(0).toUpperCase();
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -18,11 +90,11 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">H</span>
+                <span className="text-white font-bold">{firstLetter}</span>
               </div>
               <div>
-                <div className="font-bold text-lg">HACOM</div>
-                <div className="text-sm text-gray-400">Siêu thị máy tính</div>
+                <div className="font-bold text-lg">{config.app.name}</div>
+                <div className="text-sm text-gray-400">{config.app.description}</div>
               </div>
             </div>
             <p className="text-gray-400 text-sm mb-4">
@@ -30,12 +102,16 @@ export function Footer() {
               cấp các sản phẩm công nghệ chất lượng cao.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white">
-                <Facebook className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white">
-                <Youtube className="h-5 w-5" />
-              </Link>
+              {config.social.facebook && (
+                <Link href={config.social.facebook} className="text-gray-400 hover:text-white">
+                  <Facebook className="h-5 w-5" />
+                </Link>
+              )}
+              {config.social.youtube && (
+                <Link href={config.social.youtube} className="text-gray-400 hover:text-white">
+                  <Youtube className="h-5 w-5" />
+                </Link>
+              )}
               <Link href="#" className="text-gray-400 hover:text-white">
                 <Zap className="h-5 w-5" />
               </Link>
@@ -48,21 +124,21 @@ export function Footer() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-red-500" />
-                <span className="text-sm">1900.1903 (7:30 - 22:00)</span>
+                <span className="text-sm">{config.contact.phone} (7:30 - 22:00)</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-red-500" />
-                <span className="text-sm">info@hacom.vn</span>
+                <span className="text-sm">{config.contact.email}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4 text-red-500" />
                 <span className="text-sm">
-                  131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội
+                  {config.contact.address}
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <Clock className="h-4 w-4 text-red-500" />
-                <span className="text-sm">8:00 - 22:00 (T2-CN)</span>
+                <span className="text-sm">{config.contact.hours}</span>
               </div>
             </div>
           </div>
@@ -106,7 +182,7 @@ export function Footer() {
 
           {/* About */}
           <div>
-            <h3 className="font-bold text-lg mb-4">Về HACOM</h3>
+            <h3 className="font-bold text-lg mb-4">Về {config.app.name}</h3>
             <div className="space-y-2">
               <Link
                 href="/gioi-thieu"
@@ -145,7 +221,7 @@ export function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-gray-400">
-              © 2024 HACOM. Tất cả quyền được bảo lưu.
+              © 2024 {config.app.name}. Tất cả quyền được bảo lưu.
             </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <Link
