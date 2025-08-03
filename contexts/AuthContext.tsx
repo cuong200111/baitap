@@ -283,14 +283,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const value: AuthContextType = {
     user,
-    loading,
-    initializing,
+    loading: isClient ? loading : true, // Always loading during SSR
+    initializing: isClient ? initializing : true, // Always initializing during SSR
     login,
     register,
     logout,
     isAdmin: user?.role === "admin",
     isAuthenticated: !!user,
-    hasToken: !!getToken(),
+    hasToken: isClient ? !!getToken() : false, // No token during SSR
     checkAuth,
     refreshUser,
   };
