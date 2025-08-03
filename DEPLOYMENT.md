@@ -10,6 +10,7 @@ Backend (Express.js) → Port 4000
 ```
 
 ## Development
+
 ```bash
 npm run de  # Runs both frontend and backend
 ```
@@ -19,12 +20,14 @@ npm run de  # Runs both frontend and backend
 ### Option 1: Separate Deployment (Recommended)
 
 **Frontend:**
+
 ```bash
 npm run build    # Build Next.js app
 npm run start    # Start production Next.js server (port 3000)
 ```
 
 **Backend:**
+
 ```bash
 cd backend
 npm start        # Start Express API server (port 4000)
@@ -33,8 +36,9 @@ npm start        # Start Express API server (port 4000)
 ### Option 2: Docker Deployment
 
 Create `docker-compose.yml`:
+
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   frontend:
     build: .
@@ -61,12 +65,14 @@ services:
 ## Environment Variables
 
 **Frontend (.env.local):**
+
 ```
 NEXT_PUBLIC_API_URL=https://your-backend-api.com
 NEXT_PUBLIC_API_DOMAIN=https://your-backend-api.com
 ```
 
 **Backend (.env):**
+
 ```
 NODE_ENV=production
 PORT=4000
