@@ -166,7 +166,7 @@ export default function SeoHead({
       {metaData.ogImage && (
         <meta property="og:image" content={metaData.ogImage} />
       )}
-      <meta property="og:site_name" content="HACOM" />
+      <meta property="og:site_name" content="ZOXVN" />
 
       {/* Twitter Card */}
       <meta
