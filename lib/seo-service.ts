@@ -84,7 +84,7 @@ function getDefaultSeoSettings(): SeoSettings {
     general: {
       site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
       site_description:
-        "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+        "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá t��t nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
       site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
       site_url: "https://hacom.vn",
       site_logo: "/logo.png",
@@ -287,7 +287,7 @@ export async function generateProductMetadata(
       description: productDescription,
       url,
       image,
-      type: "product",
+      type: "website",
     },
     seoSettings,
   );
