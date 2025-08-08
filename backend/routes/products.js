@@ -571,8 +571,13 @@ router.delete(
   [param("id").isInt().withMessage("Invalid product ID")],
   async (req, res) => {
     try {
+      console.log("🗑️ DELETE /api/products/:id request received");
+      console.log("   - Product ID:", req.params.id);
+      console.log("   - User:", req.user ? `${req.user.email} (${req.user.role})` : "No user");
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        console.log("❌ Validation errors:", errors.array());
         return res.status(400).json({
           success: false,
           message: "Validation failed",
