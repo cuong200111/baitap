@@ -1,47 +1,39 @@
 /** @type {import('next-sitemap').IConfig} */
 
-// Cấu hình URL API và domain
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-// Hàm lấy các URL động từ API
 async function getDynamicUrls() {
   try {
     console.log("🔄 Fetching dynamic URLs for sitemap...");
 
-    // Lấy danh sách sản phẩm
-    const productsResponse = await fetch(`${API_URL}/api/products`);
-    const productsData = await productsResponse.json();
+    const [productsResponse, categoriesResponse] = await Promise.all([
+      fetch(`${API_URL}/api/products`),
+      fetch(`${API_URL}/api/categories`)
+    ]);
 
-    // Lấy danh sách danh mục
-    const categoriesResponse = await fetch(`${API_URL}/api/categories`);
-    const categoriesData = await categoriesResponse.json();
+    const [productsData, categoriesData] = await Promise.all([
+      productsResponse.json(),
+      categoriesResponse.json()
+    ]);
 
     const urls = [];
 
-    // Thêm URLs cho sản phẩm
+    // Add product URLs
     if (productsData.success && productsData.data) {
       const products = Array.isArray(productsData.data)
         ? productsData.data
         : productsData.data.products || [];
-
-      products.forEach((product) => {
-        if (product.id) {
-          urls.push(`/products/${product.id}`);
-        }
+      products.forEach(product => {
+        if (product.id) urls.push(`/products/${product.id}`);
       });
     }
 
-    // Thêm URLs cho danh mục
+    // Add category URLs
     if (categoriesData.success && categoriesData.data) {
-      const categories = Array.isArray(categoriesData.data)
-        ? categoriesData.data
-        : [];
-
-      categories.forEach((category) => {
-        if (category.slug) {
-          urls.push(`/category/${category.slug}`);
-        }
+      const categories = Array.isArray(categoriesData.data) ? categoriesData.data : [];
+      categories.forEach(category => {
+        if (category.slug) urls.push(`/category/${category.slug}`);
       });
     }
 
