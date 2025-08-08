@@ -286,59 +286,6 @@ export const adminController = {
   },
 
 
-  // Generate Sitemap
-  async generateSitemap(req, res) {
-    try {
-      // Frontend URL (where sitemap.xml should be accessible)
-      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-
-      // Test sitemap.xml accessibility from frontend
-      const response = await fetch(`${frontendUrl}/sitemap.xml`);
-
-      if (response.ok) {
-        const sitemapContent = await response.text();
-
-        // Count URLs in sitemap
-        const urlCount = (sitemapContent.match(/<url>/g) || []).length;
-
-        // Log generation to analytics (skip if table doesn't exist)
-        try {
-          await executeQuery(
-            `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
-             VALUES ('sitemap_generation', CURDATE(), 1, NOW())
-             ON DUPLICATE KEY UPDATE
-             page_views = page_views + 1`,
-          );
-        } catch (error) {
-          console.log(
-            "Analytics logging skipped (table may not exist):",
-            error.message,
-          );
-        }
-
-        res.json({
-          success: true,
-          message: `Sitemap accessible successfully with ${urlCount} URLs from frontend`,
-          data: {
-            content: sitemapContent,
-            url: `${frontendUrl}/sitemap.xml`,
-            urlCount: urlCount,
-            size: sitemapContent.length,
-            lastGenerated: new Date().toISOString(),
-            note: "Generated dynamically by Next.js frontend",
-          },
-        });
-      } else {
-        throw new Error(`Frontend sitemap not accessible: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Generate sitemap error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to access sitemap from frontend: " + error.message,
-      });
-    }
-  },
 
   // Validate XML
   async validateXml(req, res) {
