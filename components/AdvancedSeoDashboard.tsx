@@ -1177,7 +1177,13 @@ export default function AdvancedSeoDashboard() {
             </p>
           </div>
 
-          <CustomSitemapManager authToken={authToken} />
+          <div className="p-4 bg-green-50 rounded-lg">
+            <p className="text-green-800">
+              ✅ Sitemap và Robots.txt được tạo tự động bởi next-sitemap.
+              <br />
+              📁 Files sẽ được tạo trong public/ khi build hoặc chạy: npm run generate-sitemap
+            </p>
+          </div>
 
           <Card>
             <CardHeader>
