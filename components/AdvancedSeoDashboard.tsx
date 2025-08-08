@@ -46,7 +46,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Domain } from "@/config";
-import CustomSitemapManager from "./CustomSitemapManager";
 
 // Helper function for authenticated API calls
 const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
