@@ -37,16 +37,16 @@ const PORT = process.env.PORT || 4000;
 // Security middleware
 // app.use(helmet());
 
-// Rate limiting (more permissive for development)
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: process.env.NODE_ENV === "production" ? 100 : 1000, // Higher limit for development
-  message: {
-    success: false,
-    message: "Too many requests from this IP, please try again later",
-  },
-});
-app.use("/api/", limiter);
+// Rate limiting (temporarily disabled for debugging)
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: process.env.NODE_ENV === "production" ? 100 : 1000, // Higher limit for development
+//   message: {
+//     success: false,
+//     message: "Too many requests from this IP, please try again later",
+//   },
+// });
+// app.use("/api/", limiter);
 
 // CORS configuration
 app.use(
