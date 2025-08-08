@@ -99,7 +99,6 @@ app.use("/api/utils", utilsRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/addresses", addressesRoutes);
 app.use("/api/init", initRoutes);
-app.use("/api/custom-sitemaps", customSitemapsRoutes);
 
 // Note: robots.txt and sitemap.xml are now served by Next.js frontend
 // Backend only provides data APIs
