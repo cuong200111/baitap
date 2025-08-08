@@ -163,7 +163,6 @@ if (process.env.NODE_ENV !== "production") {
   app.use("/api/debug", debugRoutes);
 }
 
-app.use("/api", sitemapRouter);
 // 404 handler
 app.use("/api/*", (req, res) => {
   res.status(404).json({
