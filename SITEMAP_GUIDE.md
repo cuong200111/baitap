@@ -6,7 +6,7 @@
 - 🗑️ Đã xóa các routes backend: `sitemap.js`, `robots.js`, `custom-sitemaps.js`
 - 🗑️ Đã xóa components: `CustomSitemapManager`, `TestSitemapForm`
 - 🗑️ Đã xóa admin functions: `generateSitemap()`, `generateRobots()`
-- 🔧 Đã tối ưu `next-sitemap.config.js` 
+- 🔧 Đã tối ưu `next-sitemap.config.js`
 - 🎯 Chỉ giữ API: `/api/products` + `/api/categories`
 
 ## 🚀 Cách build sitemap
@@ -22,6 +22,7 @@ npm run generate-sitemap
 ## 📁 Kết quả
 
 Files tự động tạo trong `public/`:
+
 - `sitemap.xml` - Sitemap chính
 - `sitemap-0.xml` - Products + Categories
 - `robots.txt` - File robots.txt
@@ -36,6 +37,7 @@ http://localhost:3000/robots.txt
 ## ⚙️ Cấu hình tối ưu
 
 File `next-sitemap.config.js` đã được tối ưu:
+
 - ✅ Lấy dữ liệu từ 2 API: products + categories
 - ✅ Priority: Homepage (1.0) > Products (0.8) > Categories (0.7)
 - ✅ Loại trừ: admin, api, test pages
@@ -49,4 +51,5 @@ NEXT_PUBLIC_API_URL=https://api.yourdomain.com
 ```
 
 ---
+
 **✨ Code đã được rút gọn tối đa, chỉ giữ lại những gì cần thiết cho sitemap tự động!**

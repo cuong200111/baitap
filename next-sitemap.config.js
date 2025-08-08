@@ -9,12 +9,12 @@ async function getDynamicUrls() {
 
     const [productsResponse, categoriesResponse] = await Promise.all([
       fetch(`${API_URL}/api/products`),
-      fetch(`${API_URL}/api/categories`)
+      fetch(`${API_URL}/api/categories`),
     ]);
 
     const [productsData, categoriesData] = await Promise.all([
       productsResponse.json(),
-      categoriesResponse.json()
+      categoriesResponse.json(),
     ]);
 
     const urls = [];
@@ -24,15 +24,17 @@ async function getDynamicUrls() {
       const products = Array.isArray(productsData.data)
         ? productsData.data
         : productsData.data.products || [];
-      products.forEach(product => {
+      products.forEach((product) => {
         if (product.id) urls.push(`/products/${product.id}`);
       });
     }
 
     // Add category URLs
     if (categoriesData.success && categoriesData.data) {
-      const categories = Array.isArray(categoriesData.data) ? categoriesData.data : [];
-      categories.forEach(category => {
+      const categories = Array.isArray(categoriesData.data)
+        ? categoriesData.data
+        : [];
+      categories.forEach((category) => {
         if (category.slug) urls.push(`/category/${category.slug}`);
       });
     }
@@ -53,20 +55,22 @@ module.exports = {
   exclude: ["/admin/*", "/api/*", "/test-*", "/setup-admin", "/_next/*"],
 
   robotsTxtOptions: {
-    policies: [{
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/admin/", "/api/", "/test-*", "/setup-admin", "/_next/"]
-    }]
+    policies: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin/", "/api/", "/test-*", "/setup-admin", "/_next/"],
+      },
+    ],
   },
 
   additionalPaths: async () => {
     const dynamicUrls = await getDynamicUrls();
-    return dynamicUrls.map(url => ({
+    return dynamicUrls.map((url) => ({
       loc: url,
       changefreq: url.includes("/products/") ? "weekly" : "daily",
       priority: url.includes("/products/") ? 0.8 : 0.7,
-      lastmod: new Date().toISOString()
+      lastmod: new Date().toISOString(),
     }));
   },
 
@@ -91,7 +95,7 @@ module.exports = {
       loc: path,
       changefreq,
       priority,
-      lastmod: new Date().toISOString()
+      lastmod: new Date().toISOString(),
     };
-  }
+  },
 };
