@@ -255,10 +255,6 @@ export default function SeoTestPanel() {
     { name: "SEO Status Check", test: testSeoStatus, icon: Activity },
     { name: "SEO Audit", test: testSeoAudit, icon: CheckCircle },
     { name: "SEO Settings API", test: testSeoSettings, icon: Activity },
-    { name: "Sitemap Generation", test: testSitemap, icon: FileText },
-    { name: "Robots.txt Generation", test: testRobots, icon: Search },
-    { name: "Sitemap XML", test: testSitemapXml, icon: Link },
-    { name: "Robots.txt", test: testRobotsTxt, icon: FileText },
     { name: "Content Analysis", test: testContentAnalysis, icon: FileText },
     { name: "Performance API", test: testPerformance, icon: Activity },
     {
