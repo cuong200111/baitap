@@ -406,7 +406,7 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error("Failed to load settings:", error);
-      toast.error("Không thể tải cài đặt");
+      toast.error("Không thể tải cài ��ặt");
     } finally {
       setLoading(false);
     }
@@ -659,33 +659,6 @@ export default function SettingsPage() {
   };
 
 
-  const generateRobotsTxt = async () => {
-    try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      setRobotsGenerating(true);
-      const response = await fetch(`${API_DOMAIN}/api/admin/generate-robots`, {
-        method: "POST",
-        headers,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        toast.success("Đã tạo robots.txt thành công!");
-      } else {
-        toast.error("Có lỗi xảy ra khi tạo robots.txt");
-      }
-    } catch (error) {
-      console.error("Failed to generate robots.txt:", error);
-      toast.error("Có lỗi xảy ra khi tạo robots.txt");
-    } finally {
-      setRobotsGenerating(false);
-    }
-  };
 
   const calculateSeoScore = () => {
     let score = 0;
@@ -857,7 +830,7 @@ export default function SettingsPage() {
                   >
                     {seoScore}/100
                   </div>
-                  <p className="text-sm text-gray-600">Điểm SEO t���ng thể</p>
+                  <p className="text-sm text-gray-600">Điểm SEO tổng thể</p>
                   <Badge
                     variant={
                       seoScore >= 80
