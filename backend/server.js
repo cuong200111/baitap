@@ -16,7 +16,6 @@ import devRoutes from "./routes/dev.js";
 
 // Import new routes
 import adminRoutes from "./routes/admin.js";
-import robotsRoutes from "./routes/robots.js";
 import debugRoutes from "./routes/debug.js";
 import searchRoutes from "./routes/search.js";
 import locationsRoutes from "./routes/locations.js";
