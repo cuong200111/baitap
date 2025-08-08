@@ -406,7 +406,7 @@ export default function SettingsPage() {
       }
     } catch (error) {
       console.error("Failed to load settings:", error);
-      toast.error("Không thể tải cài ��ặt");
+      toast.error("Không thể tải cài đặt");
     } finally {
       setLoading(false);
     }
@@ -1314,32 +1314,8 @@ export default function SettingsPage() {
                           }
                         />
                       </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={generateSitemap}
-                          disabled={sitemapGenerating}
-                          className="flex-1"
-                        >
-                          {sitemapGenerating ? (
-                            <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                          ) : (
-                            <FileText className="h-4 w-4 mr-2" />
-                          )}
-                          {sitemapGenerating ? "Đang tạo..." : "Tạo Sitemap"}
-                        </Button>
-                        <Button
-                          onClick={generateRobotsTxt}
-                          disabled={robotsGenerating}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          {robotsGenerating ? (
-                            <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
-                          ) : (
-                            <FileText className="h-4 w-4 mr-2" />
-                          )}
-                          {robotsGenerating ? "Đang tạo..." : "Tạo Robots.txt"}
-                        </Button>
+                      <div className="text-sm text-gray-600">
+                        Sitemap và Robots.txt sẽ được tạo tự động bởi next-sitemap.
                       </div>
                     </div>
 
