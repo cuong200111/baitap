@@ -41,9 +41,7 @@ router.post("/seo-link-optimization", seoController.optimizeLinks);
 router.get("/seo-test-all", seoController.testAllSeo);
 router.post("/seo-test-all", seoController.testAllSeo);
 
-// Robots & Sitemap
-router.post("/generate-robots", adminController.generateRobots);
-router.post("/generate-sitemap", adminController.generateSitemap);
+// XML Validation (keeping for general use)
 router.post("/validate-xml", adminController.validateXml);
 
 // Shipping Management
