@@ -658,33 +658,6 @@ export default function SettingsPage() {
     }
   };
 
-  const generateSitemap = async () => {
-    try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      setSitemapGenerating(true);
-      const response = await fetch(`${API_DOMAIN}/api/admin/generate-sitemap`, {
-        method: "POST",
-        headers,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        toast.success(`Đã tạo sitemap thành công! Tổng ${data.urlCount} URL`);
-      } else {
-        toast.error("Có lỗi xảy ra khi tạo sitemap");
-      }
-    } catch (error) {
-      console.error("Failed to generate sitemap:", error);
-      toast.error("Có lỗi xảy ra khi tạo sitemap");
-    } finally {
-      setSitemapGenerating(false);
-    }
-  };
 
   const generateRobotsTxt = async () => {
     try {
@@ -884,7 +857,7 @@ export default function SettingsPage() {
                   >
                     {seoScore}/100
                   </div>
-                  <p className="text-sm text-gray-600">Điểm SEO tổng thể</p>
+                  <p className="text-sm text-gray-600">Điểm SEO t���ng thể</p>
                   <Badge
                     variant={
                       seoScore >= 80
