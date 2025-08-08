@@ -5,7 +5,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 async function getDynamicUrls() {
   try {
-    console.log("🔄 Fetching dynamic URLs for sitemap...");
+    console.log("�� Fetching dynamic URLs for sitemap...");
 
     const [productsResponse, categoriesResponse] = await Promise.all([
       fetch(`${API_URL}/api/products`),
@@ -49,60 +49,49 @@ module.exports = {
   siteUrl: SITE_URL,
   generateRobotsTxt: true,
   sitemapSize: 7000,
-  changefreq: "daily",
-  priority: 0.7,
 
-  // Các trang tĩnh được tạo tự động
   exclude: ["/admin/*", "/api/*", "/test-*", "/setup-admin", "/_next/*"],
 
-  // Cấu hình robots.txt
   robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin/", "/api/", "/test-*", "/setup-admin", "/_next/"],
-      },
-    ],
-    additionalSitemaps: [`${SITE_URL}/sitemap.xml`],
+    policies: [{
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/admin/", "/api/", "/test-*", "/setup-admin", "/_next/"]
+    }]
   },
 
-  // Thêm các URL động
-  additionalPaths: async (config) => {
+  additionalPaths: async () => {
     const dynamicUrls = await getDynamicUrls();
-
-    return dynamicUrls.map((url) => ({
+    return dynamicUrls.map(url => ({
       loc: url,
-      changefreq: "daily",
+      changefreq: url.includes("/products/") ? "weekly" : "daily",
       priority: url.includes("/products/") ? 0.8 : 0.7,
-      lastmod: new Date().toISOString(),
+      lastmod: new Date().toISOString()
     }));
   },
 
-  // Transform function để tùy chỉnh từng URL
   transform: async (config, path) => {
-    // Tăng priority cho các trang quan trọng
-    let priority = config.priority;
-    let changefreq = config.changefreq;
+    if (path.includes("/orders") || path.includes("/profile")) {
+      return null; // Exclude auth pages
+    }
+
+    let priority = 0.7;
+    let changefreq = "weekly";
 
     if (path === "/") {
       priority = 1.0;
       changefreq = "daily";
     } else if (path.includes("/products/")) {
       priority = 0.8;
-      changefreq = "weekly";
     } else if (path.includes("/category/")) {
       priority = 0.7;
-      changefreq = "weekly";
-    } else if (path.includes("/orders") || path.includes("/profile")) {
-      return null; // Loại trừ các trang cần đăng nhập
     }
 
     return {
       loc: path,
       changefreq,
       priority,
-      lastmod: new Date().toISOString(),
+      lastmod: new Date().toISOString()
     };
-  },
+  }
 };
