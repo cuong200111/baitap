@@ -2,10 +2,12 @@
 
 ## ✅ Đã hoàn thành
 
-- 🗑️ Đã xóa các chức năng test sitemap/robots.txt trong admin
-- 🔧 Đã cấu hình next-sitemap.config.js
+- 🗑️ Đã xóa toàn bộ các folder và file sitemap/robots.txt cũ
+- 🗑️ Đã xóa các routes backend sitemap không cần thiết
+- 🗑️ Đã xóa các component test và admin functions
+- 🔧 Đã tối ưu hóa next-sitemap.config.js
 - 📦 Đã cài đặt package next-sitemap
-- 🎯 Giữ nguyên API backend để phục vụ sitemap động
+- 🎯 Chỉ giữ lại API `/api/products` và `/api/categories` cần thiết
 
 ## 🚀 Cách sử dụng
 
@@ -105,7 +107,7 @@ Sitemap sẽ bao gồm:
 
 - Tất cả trang tĩnh
 - Tất cả sản phẩm (dynamic)
-- Tất cả danh mục (dynamic)
+- T��t cả danh mục (dynamic)
 - Lastmod timestamp tự động
 - Proper changefreq cho từng loại trang
 
