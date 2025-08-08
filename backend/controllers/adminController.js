@@ -285,57 +285,6 @@ export const adminController = {
     }
   },
 
-  // Generate Robots.txt
-  async generateRobots(req, res) {
-    try {
-      // Frontend URL (where robots.txt should be accessible)
-      const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
-
-      // Test robots.txt accessibility from frontend
-      const response = await fetch(`${frontendUrl}/robots.txt`);
-
-      if (response.ok) {
-        const robotsContent = await response.text();
-
-        // Log generation to analytics (skip if table doesn't exist)
-        try {
-          await executeQuery(
-            `INSERT INTO seo_analytics (url_path, date, page_views, created_at)
-             VALUES ('robots_generation', CURDATE(), 1, NOW())
-             ON DUPLICATE KEY UPDATE
-             page_views = page_views + 1`,
-          );
-        } catch (error) {
-          console.log(
-            "Analytics logging skipped (table may not exist):",
-            error.message,
-          );
-        }
-
-        res.json({
-          success: true,
-          message: "Robots.txt accessible successfully from frontend",
-          data: {
-            content: robotsContent,
-            url: `${frontendUrl}/robots.txt`,
-            size: robotsContent.length,
-            lastGenerated: new Date().toISOString(),
-            note: "Generated dynamically by Next.js frontend",
-          },
-        });
-      } else {
-        throw new Error(
-          `Frontend robots.txt not accessible: ${response.status}`,
-        );
-      }
-    } catch (error) {
-      console.error("Generate robots error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to access robots.txt from frontend: " + error.message,
-      });
-    }
-  },
 
   // Generate Sitemap
   async generateSitemap(req, res) {
