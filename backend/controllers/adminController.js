@@ -285,8 +285,6 @@ export const adminController = {
     }
   },
 
-
-
   // Validate XML
   async validateXml(req, res) {
     try {

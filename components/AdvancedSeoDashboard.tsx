@@ -1173,8 +1173,8 @@ export default function AdvancedSeoDashboard() {
         <TabsContent value="sitemap" className="space-y-6">
           <div className="p-4 bg-blue-50 rounded-lg">
             <p className="text-blue-800">
-              Sitemap được tạo tự động bởi next-sitemap.
-              Cấu hình trong next-sitemap.config.js để tùy chỉnh.
+              Sitemap được tạo tự động bởi next-sitemap. Cấu hình trong
+              next-sitemap.config.js để tùy chỉnh.
             </p>
           </div>
 

@@ -658,8 +658,6 @@ export default function SettingsPage() {
     }
   };
 
-
-
   const calculateSeoScore = () => {
     let score = 0;
 
@@ -1315,7 +1313,8 @@ export default function SettingsPage() {
                         />
                       </div>
                       <div className="text-sm text-gray-600">
-                        Sitemap và Robots.txt sẽ được tạo tự động bởi next-sitemap.
+                        Sitemap và Robots.txt sẽ được tạo tự động bởi
+                        next-sitemap.
                       </div>
                     </div>
 
