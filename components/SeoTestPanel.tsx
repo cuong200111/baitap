@@ -113,18 +113,6 @@ export default function SeoTestPanel() {
     }
     return { url, headers };
   };
-  const testSitemap = () => {
-    const { url, headers }: any = getApiUrlAndHeaders(
-      "/api/admin/generate-sitemap",
-    );
-    return testApiEndpoint(url, "POST", "Sitemap Generation", headers);
-  };
-  const testRobots = () => {
-    const { url, headers }: any = getApiUrlAndHeaders(
-      "/api/admin/generate-robots",
-    );
-    return testApiEndpoint(url, "POST", "Robots.txt Generation", headers);
-  };
   const testSeoSettings = () => {
     const { url, headers }: any = getApiUrlAndHeaders(
       "/api/admin/seo-settings",
