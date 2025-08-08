@@ -371,8 +371,6 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [seoScore, setSeoScore] = useState(85);
-  const [sitemapGenerating, setSitemapGenerating] = useState(false);
-  const [robotsGenerating, setRobotsGenerating] = useState(false);
 
   useEffect(() => {
     loadSettings();
