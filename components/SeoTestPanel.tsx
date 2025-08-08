@@ -128,14 +128,6 @@ export default function SeoTestPanel() {
     const { url, headers }: any = getApiUrlAndHeaders("/api/admin/seo-audit");
     return testApiEndpoint(url, "GET", "SEO Audit", headers);
   };
-  const testSitemapXml = () => {
-    const { url, headers }: any = getApiUrlAndHeaders("/sitemap.xml", false);
-    return testApiEndpoint(url, "GET", "Sitemap XML", headers);
-  };
-  const testRobotsTxt = () => {
-    const { url, headers }: any = getApiUrlAndHeaders("/robots.txt", false);
-    return testApiEndpoint(url, "GET", "Robots.txt", headers);
-  };
 
   // Advanced SEO API tests
   const testContentAnalysis = () => {
