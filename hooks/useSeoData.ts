@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Domain } from "@/config";
+import { useState, useEffect } from 'react';
+import { Domain } from '@/config';
 
 export interface AdminSeoSettings {
   general: {
@@ -94,9 +94,9 @@ export function useSeoData() {
       setError(null);
 
       const response = await fetch(`${Domain}/api/seo/settings`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
@@ -105,65 +105,60 @@ export function useSeoData() {
       }
 
       const result = await response.json();
-
+      
       if (result.success && result.data) {
         setSettings(result.data);
       } else {
-        throw new Error("Invalid response format");
+        throw new Error('Invalid response format');
       }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to load SEO settings",
-      );
-      console.error("Failed to load SEO settings:", err);
-
+      setError(err instanceof Error ? err.message : 'Failed to load SEO settings');
+      console.error('Failed to load SEO settings:', err);
+      
       // Set fallback settings
       setSettings({
         general: {
-          site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
-          site_description:
-            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-          site_keywords:
-            "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
-          site_url: "https://hacom.vn",
-          site_logo: "/logo.png",
-          site_favicon: "/favicon.ico",
-          default_meta_title_pattern: "{title} | HACOM",
-          product_meta_title_pattern: "{product_name} - {category} | HACOM",
-          category_meta_title_pattern:
-            "{category_name} - {description} | HACOM",
+          site_name: 'HACOM - Máy tính, Laptop, Gaming Gear',
+          site_description: 'HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.',
+          site_keywords: 'máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM',
+          site_url: 'https://hacom.vn',
+          site_logo: '/logo.png',
+          site_favicon: '/favicon.ico',
+          default_meta_title_pattern: '{title} | HACOM',
+          product_meta_title_pattern: '{product_name} - {category} | HACOM',
+          category_meta_title_pattern: '{category_name} - {description} | HACOM',
           auto_generate_meta_description: true,
           meta_description_length: 160,
         },
         social: {
-          facebook_app_id: "",
-          twitter_site: "@hacom_vn",
-          linkedin_url: "",
-          youtube_url: "",
-          instagram_url: "",
-          tiktok_url: "",
-          default_og_image: "/og-image.jpg",
+          facebook_app_id: '',
+          twitter_site: '@hacom_vn',
+          linkedin_url: '',
+          youtube_url: '',
+          instagram_url: '',
+          tiktok_url: '',
+          default_og_image: '/og-image.jpg',
         },
         analytics: {
-          google_analytics_id: "",
-          google_tag_manager_id: "",
-          google_search_console_verification: "",
-          bing_webmaster_verification: "",
-          facebook_pixel_id: "",
-          hotjar_id: "",
-          google_ads_id: "",
+          google_analytics_id: '',
+          google_tag_manager_id: '',
+          google_search_console_verification: '',
+          bing_webmaster_verification: '',
+          facebook_pixel_id: '',
+          hotjar_id: '',
+          google_ads_id: '',
           enable_analytics: true,
         },
         schema: {
-          organization_name: "HACOM",
-          organization_logo: "/logo.png",
-          organization_address: "Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
-          organization_phone: "1900 1903",
-          organization_email: "contact@hacom.vn",
-          business_type: "ElectronicsStore",
-          business_hours: "Mo-Su 08:00-22:00",
-          latitude: "21.0285",
-          longitude: "105.8542",
+          organization_name: 'HACOM',
+          organization_logo: '/logo.png',
+          organization_address: 'Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội',
+          organization_phone: '1900 1903',
+          organization_email: 'contact@hacom.vn',
+          business_type: 'ElectronicsStore',
+          business_hours: 'Mo-Su 08:00-22:00',
+          latitude: '21.0285',
+          longitude: '105.8542',
           enable_organization_schema: true,
           enable_breadcrumb_schema: true,
           enable_product_schema: true,
@@ -180,7 +175,7 @@ export function useSeoData() {
           sitemap_include_images: true,
           sitemap_include_videos: true,
           sitemap_max_urls: 50000,
-          robots_txt_custom: "",
+          robots_txt_custom: '',
         },
       });
     } finally {
@@ -193,24 +188,24 @@ export function useSeoData() {
     description?: string;
     keywords?: string;
     path?: string;
-    type?: "page" | "product" | "category";
+    type?: 'page' | 'product' | 'category';
     image?: string;
     productData?: any;
     categoryData?: any;
   }): SeoMetadata => {
     if (!settings) {
       return {
-        title: "HACOM",
-        description: "HACOM - Máy tính, Laptop, Gaming Gear",
-        keywords: "máy tính, laptop, gaming",
-        ogTitle: "HACOM",
-        ogDescription: "HACOM - Máy tính, Laptop, Gaming Gear",
-        ogImage: "/og-image.jpg",
-        ogUrl: "https://hacom.vn",
-        twitterTitle: "HACOM",
-        twitterDescription: "HACOM - Máy tính, Laptop, Gaming Gear",
-        twitterImage: "/og-image.jpg",
-        canonicalUrl: "https://hacom.vn",
+        title: 'HACOM',
+        description: 'HACOM - Máy tính, Laptop, Gaming Gear',
+        keywords: 'máy tính, laptop, gaming',
+        ogTitle: 'HACOM',
+        ogDescription: 'HACOM - Máy tính, Laptop, Gaming Gear',
+        ogImage: '/og-image.jpg',
+        ogUrl: 'https://hacom.vn',
+        twitterTitle: 'HACOM',
+        twitterDescription: 'HACOM - Máy tính, Laptop, Gaming Gear',
+        twitterImage: '/og-image.jpg',
+        canonicalUrl: 'https://hacom.vn',
       };
     }
 
@@ -218,73 +213,58 @@ export function useSeoData() {
       title,
       description,
       keywords,
-      path = "",
-      type = "page",
+      path = '',
+      type = 'page',
       image,
       productData,
       categoryData,
     } = options;
 
-    // Generate title based on pattern and type
-    let finalTitle = title || settings.general.site_name;
+    // Generate title based on pattern and type - ensure strings
+    let finalTitle = String(title || settings.general.site_name || 'HACOM');
     if (title) {
-      if (type === "product" && settings.general.product_meta_title_pattern) {
-        finalTitle = settings.general.product_meta_title_pattern
-          .replace("{product_name}", title)
-          .replace("{category}", productData?.category_name || "");
-      } else if (
-        type === "category" &&
-        settings.general.category_meta_title_pattern
-      ) {
-        finalTitle = settings.general.category_meta_title_pattern
-          .replace("{category_name}", title)
-          .replace("{description}", categoryData?.description || "");
+      const titleStr = String(title);
+      if (type === 'product' && settings.general.product_meta_title_pattern) {
+        finalTitle = String(settings.general.product_meta_title_pattern)
+          .replace('{product_name}', titleStr)
+          .replace('{category}', String(productData?.category_name || ''));
+      } else if (type === 'category' && settings.general.category_meta_title_pattern) {
+        finalTitle = String(settings.general.category_meta_title_pattern)
+          .replace('{category_name}', titleStr)
+          .replace('{description}', String(categoryData?.description || ''));
       } else if (settings.general.default_meta_title_pattern) {
-        finalTitle = settings.general.default_meta_title_pattern.replace(
-          "{title}",
-          title,
-        );
+        finalTitle = String(settings.general.default_meta_title_pattern).replace('{title}', titleStr);
       }
     }
 
     // Generate description
     let finalDescription = description || settings.general.site_description;
     if (settings.general.auto_generate_meta_description && !description) {
-      if (type === "product" && productData) {
+      if (type === 'product' && productData) {
         finalDescription = generateProductDescription(productData, settings);
-      } else if (type === "category" && categoryData) {
+      } else if (type === 'category' && categoryData) {
         finalDescription = generateCategoryDescription(categoryData, settings);
       }
     }
 
     // Truncate description if needed
     if (finalDescription.length > settings.general.meta_description_length) {
-      finalDescription =
-        finalDescription.substring(
-          0,
-          settings.general.meta_description_length - 3,
-        ) + "...";
+      finalDescription = finalDescription.substring(0, settings.general.meta_description_length - 3) + '...';
     }
 
     // Build URLs
     const canonicalUrl = `${settings.general.site_url}${path}`;
     const finalImage = image || settings.social.default_og_image;
-    const fullImageUrl = finalImage.startsWith("http")
-      ? finalImage
-      : `${settings.general.site_url}${finalImage}`;
+    const fullImageUrl = finalImage.startsWith('http') ? finalImage : `${settings.general.site_url}${finalImage}`;
 
     // Generate structured data
-    const structuredData = generateStructuredData(
-      type,
-      {
-        title: finalTitle,
-        description: finalDescription,
-        canonicalUrl,
-        productData,
-        categoryData,
-      },
-      settings,
-    );
+    const structuredData = generateStructuredData(type, {
+      title: finalTitle,
+      description: finalDescription,
+      canonicalUrl,
+      productData,
+      categoryData,
+    }, settings);
 
     return {
       title: finalTitle,
@@ -303,20 +283,18 @@ export function useSeoData() {
   };
 
   const getSiteName = () => {
-    return settings?.general?.site_name || "HACOM";
+    return settings?.general?.site_name || 'HACOM';
   };
 
   const getOrganizationName = () => {
-    return settings?.schema?.organization_name || "HACOM";
+    return settings?.schema?.organization_name || 'HACOM';
   };
 
   const getContactInfo = () => {
     return {
-      phone: settings?.schema?.organization_phone || "1900 1903",
-      email: settings?.schema?.organization_email || "contact@hacom.vn",
-      address:
-        settings?.schema?.organization_address ||
-        "Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
+      phone: settings?.schema?.organization_phone || '1900 1903',
+      email: settings?.schema?.organization_email || 'contact@hacom.vn',
+      address: settings?.schema?.organization_address || 'Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội',
     };
   };
 
@@ -333,10 +311,7 @@ export function useSeoData() {
 }
 
 // Helper functions
-function generateProductDescription(
-  product: any,
-  settings: AdminSeoSettings,
-): string {
+function generateProductDescription(product: any, settings: AdminSeoSettings): string {
   const parts = [];
 
   if (product.name) {
@@ -346,31 +321,24 @@ function generateProductDescription(
   if (product.short_description) {
     parts.push(product.short_description);
   } else if (product.description) {
-    const cleanDesc = product.description
-      .replace(/<[^>]*>/g, "")
-      .substring(0, 100);
+    const cleanDesc = product.description.replace(/<[^>]*>/g, '').substring(0, 100);
     parts.push(cleanDesc);
   }
 
   if (product.price) {
-    const formattedPrice = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
+    const formattedPrice = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
     }).format(product.price);
     parts.push(`Giá: ${formattedPrice}`);
   }
 
-  parts.push(
-    `Bảo hành chính hãng, giao hàng toàn quốc tại ${settings.schema.organization_name}.`,
-  );
+  parts.push(`Bảo hành chính hãng, giao hàng toàn quốc tại ${settings.schema.organization_name}.`);
 
-  return parts.join(" - ");
+  return parts.join(' - ');
 }
 
-function generateCategoryDescription(
-  category: any,
-  settings: AdminSeoSettings,
-): string {
+function generateCategoryDescription(category: any, settings: AdminSeoSettings): string {
   const parts = [];
 
   if (category.name) {
@@ -381,76 +349,60 @@ function generateCategoryDescription(
     parts.push(category.description);
   }
 
-  parts.push(
-    `Giá tốt nhất, bảo hành chính hãng tại ${settings.schema.organization_name}.`,
-  );
+  parts.push(`Giá tốt nhất, bảo hành chính hãng tại ${settings.schema.organization_name}.`);
 
-  return parts.join(" - ");
+  return parts.join(' - ');
 }
 
-function generateStructuredData(
-  type: string,
-  data: any,
-  settings: AdminSeoSettings,
-): any {
+function generateStructuredData(type: string, data: any, settings: AdminSeoSettings): any {
   const structuredData: any = {};
 
   // Organization schema
   if (settings.schema.enable_organization_schema) {
     structuredData.organization = {
-      "@context": "https://schema.org",
-      "@type": "Organization",
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
       name: settings.schema.organization_name,
       url: settings.general.site_url,
       logo: `${settings.general.site_url}${settings.schema.organization_logo}`,
       address: {
-        "@type": "PostalAddress",
-        addressLocality: "Hà Nội",
-        addressCountry: "VN",
+        '@type': 'PostalAddress',
+        addressLocality: 'Hà Nội',
+        addressCountry: 'VN',
         streetAddress: settings.schema.organization_address,
       },
       contactPoint: {
-        "@type": "ContactPoint",
+        '@type': 'ContactPoint',
         telephone: settings.schema.organization_phone,
-        contactType: "customer service",
+        contactType: 'customer service',
         email: settings.schema.organization_email,
       },
-      "@id": `${settings.general.site_url}#organization`,
+      '@id': `${settings.general.site_url}#organization`,
     };
   }
 
   // Product schema
-  if (
-    type === "product" &&
-    settings.schema.enable_product_schema &&
-    data.productData
-  ) {
+  if (type === 'product' && settings.schema.enable_product_schema && data.productData) {
     const product = data.productData;
     structuredData.product = {
-      "@context": "https://schema.org",
-      "@type": "Product",
+      '@context': 'https://schema.org',
+      '@type': 'Product',
       name: product.name,
       description: product.description || product.short_description,
       sku: product.sku,
-      image:
-        product.images && product.images.length > 0
-          ? product.images[0]
-          : settings.social.default_og_image,
+      image: product.images && product.images.length > 0 ? product.images[0] : settings.social.default_og_image,
       offers: {
-        "@type": "Offer",
+        '@type': 'Offer',
         price: product.sale_price || product.price,
-        priceCurrency: "VND",
-        availability:
-          product.stock_quantity > 0
-            ? "https://schema.org/InStock"
-            : "https://schema.org/OutOfStock",
+        priceCurrency: 'VND',
+        availability: product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         seller: {
-          "@type": "Organization",
+          '@type': 'Organization',
           name: settings.schema.organization_name,
         },
       },
       brand: {
-        "@type": "Brand",
+        '@type': 'Brand',
         name: settings.schema.organization_name,
       },
     };
@@ -458,8 +410,8 @@ function generateStructuredData(
 
   // Website/WebPage schema
   structuredData.webpage = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
     name: data.title,
     description: data.description,
     url: data.canonicalUrl,
