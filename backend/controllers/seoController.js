@@ -237,16 +237,29 @@ export const seoController = {
 
           // Convert string values back to appropriate types
           // Special handling for specific fields that should remain strings
-          const stringFields = ['site_name', 'site_description', 'site_keywords', 'site_url', 'organization_name', 'organization_address', 'organization_phone', 'organization_email'];
+          const stringFields = [
+            "site_name",
+            "site_description",
+            "site_keywords",
+            "site_url",
+            "organization_name",
+            "organization_address",
+            "organization_phone",
+            "organization_email",
+          ];
 
           if (stringFields.includes(key)) {
             // Keep as string, just ensure it's not null
-            value = value || '';
+            value = value || "";
           } else if (value === "1" || value === "true") {
             value = true;
           } else if (value === "0" || value === "false") {
             value = false;
-          } else if (!isNaN(value) && value !== "" && !stringFields.includes(key)) {
+          } else if (
+            !isNaN(value) &&
+            value !== "" &&
+            !stringFields.includes(key)
+          ) {
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
               value = numValue;
