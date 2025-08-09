@@ -52,7 +52,7 @@ export function AdminSeoHead({
       <meta property="og:url" content={seoMetadata.ogUrl} />
       <meta
         property="og:type"
-        content={type === "product" ? "product" : "website"}
+        content="website"
       />
       <meta property="og:site_name" content="HACOM" />
 
