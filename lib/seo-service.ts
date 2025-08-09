@@ -69,7 +69,7 @@ class SeoService {
         return this.settings;
       }
 
-      const response = await fetch(`${Domain}/api/admin/seo-settings`, {
+      const response = await fetch(`${Domain}/api/seo/settings`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
