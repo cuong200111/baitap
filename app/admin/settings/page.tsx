@@ -1,80 +1,53 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
+  Save,
   Settings,
+  Globe,
+  BarChart3,
+  Share2,
+  Zap,
+  FileText,
+  MapPin,
+  CheckCircle,
+  AlertCircle,
+  Info,
   Store,
   Mail,
   Truck,
   CreditCard,
   Shield,
   Bell,
-  Save,
   RefreshCw,
-  Upload,
-  AlertCircle,
-  CheckCircle,
-  Globe,
-  Database,
-  Search,
-  TrendingUp,
-  BarChart,
-  FileText,
-  Link,
-  Target,
-  Eye,
-  Download,
-  Zap,
-  Code,
-  Share2,
-  Instagram,
-  Facebook,
-  Twitter,
-  Youtube,
-  Linkedin,
-  Activity,
-  Users,
-  ExternalLink,
-  MapPin,
-  Clock,
-  Star,
-  BookOpen,
-  Cpu,
-  Monitor,
-  Gauge,
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
-import SeoTestPanel from "@/components/SeoTestPanel";
-import SeoStatusDashboard from "@/components/SeoStatusDashboard";
-import SeoSummaryStats from "@/components/SeoSummaryStats";
-import SeoSystemStatus from "@/components/SeoSystemStatus";
-import AdvancedSeoDashboard from "@/components/AdvancedSeoDashboard";
-import SeoGenerationPanel from "@/components/SeoGenerationPanel";
 import AdminInitializer from "@/components/AdminInitializer";
 import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SeoSettings {
   general: {
     site_name: string;
+    site_url: string;
     site_description: string;
     site_keywords: string;
-    site_url: string;
     site_logo: string;
     site_favicon: string;
     default_meta_title_pattern: string;
@@ -86,11 +59,11 @@ interface SeoSettings {
   social: {
     facebook_app_id: string;
     twitter_site: string;
+    default_og_image: string;
     linkedin_url: string;
     youtube_url: string;
     instagram_url: string;
     tiktok_url: string;
-    default_og_image: string;
   };
   analytics: {
     google_analytics_id: string;
@@ -110,8 +83,8 @@ interface SeoSettings {
     organization_email: string;
     business_type: string;
     business_hours: string;
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
     enable_organization_schema: boolean;
     enable_breadcrumb_schema: boolean;
     enable_product_schema: boolean;
@@ -277,100 +250,10 @@ export default function SettingsPage() {
     },
   });
 
-  const [seoSettings, setSeoSettings] = useState<SeoSettings>({
-    general: {
-      site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
-      site_description:
-        "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-      site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
-      site_url: "https://hacom.vn",
-      site_logo: "/logo.png",
-      site_favicon: "/favicon.ico",
-      default_meta_title_pattern: "{title} | HACOM",
-      product_meta_title_pattern: "{product_name} - {category} | HACOM",
-      category_meta_title_pattern: "{category_name} - {description} | HACOM",
-      auto_generate_meta_description: true,
-      meta_description_length: 160,
-    },
-    social: {
-      facebook_app_id: "",
-      twitter_site: "@hacom_vn",
-      linkedin_url: "",
-      youtube_url: "",
-      instagram_url: "",
-      tiktok_url: "",
-      default_og_image: "/og-image.jpg",
-    },
-    analytics: {
-      google_analytics_id: "",
-      google_tag_manager_id: "",
-      google_search_console_verification: "",
-      bing_webmaster_verification: "",
-      facebook_pixel_id: "",
-      hotjar_id: "",
-      google_ads_id: "",
-      enable_analytics: true,
-    },
-    schema: {
-      organization_name: "HACOM",
-      organization_logo: "/logo.png",
-      organization_address: "Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
-      organization_phone: "1900 1903",
-      organization_email: "contact@hacom.vn",
-      business_type: "ElectronicsStore",
-      business_hours: "Mo-Su 08:00-22:00",
-      latitude: "21.0285",
-      longitude: "105.8542",
-      enable_organization_schema: true,
-      enable_breadcrumb_schema: true,
-      enable_product_schema: true,
-      enable_review_schema: true,
-    },
-    technical: {
-      enable_compression: true,
-      enable_caching: true,
-      lazy_load_images: true,
-      minify_html: true,
-      minify_css: true,
-      minify_js: true,
-      enable_sitemap: true,
-      sitemap_include_images: true,
-      sitemap_include_videos: true,
-      sitemap_max_urls: 50000,
-      robots_txt_custom: "",
-    },
-    content: {
-      enable_auto_seo: true,
-      keyword_density_target: 2.5,
-      content_min_words: 300,
-      h1_optimization: true,
-      internal_linking: true,
-      image_alt_optimization: true,
-      enable_faq_schema: true,
-      enable_article_schema: true,
-    },
-    performance: {
-      enable_cdn: false,
-      cdn_url: "",
-      preload_critical_resources: true,
-      defer_non_critical_js: true,
-      optimize_images: true,
-      enable_critical_css: true,
-      lazy_load_threshold: 200,
-    },
-    local: {
-      google_my_business_id: "",
-      enable_local_seo: true,
-      business_category: "Electronics Store",
-      service_areas: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
-      opening_hours: "Thứ 2 - Chủ nhật: 8:00 - 22:00",
-      enable_review_schema: true,
-    },
-  });
-
+  const [seoSettings, setSeoSettings] = useState<SeoSettings | null>(null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [seoScore, setSeoScore] = useState(85);
+  const [seoScore, setSeoScore] = useState(0);
 
   useEffect(() => {
     loadSettings();
@@ -413,184 +296,81 @@ export default function SettingsPage() {
   };
 
   const loadSeoSettings = async () => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
     try {
-      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
+      // Get authentication token
+      const token = localStorage.getItem("token");
+      const headers: any = {
+        "Content-Type": "application/json",
+      };
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      // Try to fetch from backend server (port 4000)
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const response = await fetch(`${backendUrl}/api/seo/settings`, {
+        method: "GET",
         headers,
       });
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data) {
-          // Map the flattened data back to nested structure
-          const mappedData: SeoSettings = {
-            general: {
-              site_name:
-                data.data.general?.site_name || seoSettings.general.site_name,
-              site_description:
-                data.data.general?.site_description ||
-                seoSettings.general.site_description,
-              site_keywords:
-                data.data.general?.site_keywords ||
-                seoSettings.general.site_keywords,
-              site_url:
-                data.data.general?.site_url || seoSettings.general.site_url,
-              site_logo:
-                data.data.general?.site_logo || seoSettings.general.site_logo,
-              site_favicon:
-                data.data.general?.site_favicon ||
-                seoSettings.general.site_favicon,
-              default_meta_title_pattern:
-                data.data.content?.default_meta_title_pattern ||
-                seoSettings.general.default_meta_title_pattern,
-              product_meta_title_pattern:
-                data.data.content?.product_meta_title_pattern ||
-                seoSettings.general.product_meta_title_pattern,
-              category_meta_title_pattern:
-                data.data.content?.category_meta_title_pattern ||
-                seoSettings.general.category_meta_title_pattern,
-              auto_generate_meta_description:
-                data.data.content?.auto_generate_meta_description ??
-                seoSettings.general.auto_generate_meta_description,
-              meta_description_length:
-                data.data.content?.meta_description_length ||
-                seoSettings.general.meta_description_length,
-            },
-            social: {
-              facebook_app_id:
-                data.data.social?.facebook_app_id ||
-                seoSettings.social.facebook_app_id,
-              twitter_site:
-                data.data.social?.twitter_site ||
-                seoSettings.social.twitter_site,
-              linkedin_url:
-                data.data.social?.linkedin_url ||
-                seoSettings.social.linkedin_url,
-              youtube_url:
-                data.data.social?.youtube_url || seoSettings.social.youtube_url,
-              instagram_url:
-                data.data.social?.instagram_url ||
-                seoSettings.social.instagram_url,
-              tiktok_url:
-                data.data.social?.tiktok_url || seoSettings.social.tiktok_url,
-              default_og_image:
-                data.data.social?.default_og_image ||
-                seoSettings.social.default_og_image,
-            },
-            analytics: {
-              google_analytics_id:
-                data.data.analytics?.google_analytics_id ||
-                seoSettings.analytics.google_analytics_id,
-              google_tag_manager_id:
-                data.data.analytics?.google_tag_manager_id ||
-                seoSettings.analytics.google_tag_manager_id,
-              google_search_console_verification:
-                data.data.analytics?.google_search_console_verification ||
-                seoSettings.analytics.google_search_console_verification,
-              bing_webmaster_verification:
-                data.data.analytics?.bing_webmaster_verification ||
-                seoSettings.analytics.bing_webmaster_verification,
-              facebook_pixel_id:
-                data.data.analytics?.facebook_pixel_id ||
-                seoSettings.analytics.facebook_pixel_id,
-              hotjar_id:
-                data.data.analytics?.hotjar_id ||
-                seoSettings.analytics.hotjar_id,
-              google_ads_id:
-                data.data.analytics?.google_ads_id ||
-                seoSettings.analytics.google_ads_id,
-              enable_analytics:
-                data.data.analytics?.enable_analytics ??
-                seoSettings.analytics.enable_analytics,
-            },
-            schema: {
-              organization_name:
-                data.data.schema?.organization_name ||
-                seoSettings.schema.organization_name,
-              organization_logo:
-                data.data.schema?.organization_logo ||
-                seoSettings.schema.organization_logo,
-              organization_address:
-                data.data.schema?.organization_address ||
-                seoSettings.schema.organization_address,
-              organization_phone:
-                data.data.schema?.organization_phone ||
-                seoSettings.schema.organization_phone,
-              organization_email:
-                data.data.schema?.organization_email ||
-                seoSettings.schema.organization_email,
-              business_type:
-                data.data.schema?.business_type ||
-                seoSettings.schema.business_type,
-              business_hours:
-                data.data.schema?.business_hours ||
-                seoSettings.schema.business_hours,
-              latitude:
-                data.data.schema?.latitude || seoSettings.schema.latitude,
-              longitude:
-                data.data.schema?.longitude || seoSettings.schema.longitude,
-              enable_organization_schema:
-                data.data.schema?.enable_organization_schema ??
-                seoSettings.schema.enable_organization_schema,
-              enable_breadcrumb_schema:
-                data.data.schema?.enable_breadcrumb_schema ??
-                seoSettings.schema.enable_breadcrumb_schema,
-              enable_product_schema:
-                data.data.schema?.enable_product_schema ??
-                seoSettings.schema.enable_product_schema,
-              enable_review_schema:
-                data.data.schema?.enable_review_schema ??
-                seoSettings.schema.enable_review_schema,
-            },
-            technical: {
-              enable_compression:
-                data.data.technical?.enable_compression ??
-                seoSettings.technical.enable_compression,
-              enable_caching:
-                data.data.technical?.enable_caching ??
-                seoSettings.technical.enable_caching,
-              lazy_load_images:
-                data.data.technical?.lazy_load_images ??
-                seoSettings.technical.lazy_load_images,
-              minify_html:
-                data.data.technical?.minify_html ??
-                seoSettings.technical.minify_html,
-              minify_css:
-                data.data.technical?.minify_css ??
-                seoSettings.technical.minify_css,
-              minify_js:
-                data.data.technical?.minify_js ??
-                seoSettings.technical.minify_js,
-              enable_sitemap:
-                data.data.sitemap?.enable_sitemap ??
-                seoSettings.technical.enable_sitemap,
-              sitemap_include_images:
-                data.data.sitemap?.sitemap_include_images ??
-                seoSettings.technical.sitemap_include_images,
-              sitemap_include_videos:
-                data.data.sitemap?.sitemap_include_videos ??
-                seoSettings.technical.sitemap_include_videos,
-              sitemap_max_urls:
-                data.data.sitemap?.sitemap_max_urls ||
-                seoSettings.technical.sitemap_max_urls,
-              robots_txt_custom:
-                data.data.robots?.robots_txt_custom ||
-                seoSettings.technical.robots_txt_custom,
-            },
-            content: seoSettings.content,
-            performance: seoSettings.performance,
-            local: seoSettings.local,
-          };
-          setSeoSettings(mappedData);
-        }
+      const result = await response.json();
+
+      if (result.success) {
+        setSeoSettings(result.data);
+        calculateSeoScore(result.data);
+      } else {
+        throw new Error(result.message);
       }
     } catch (error) {
-      console.error("Failed to load SEO settings:", error);
+      console.error("Error loading SEO settings:", error);
+      toast.error("Không thể tải cài đặt SEO");
     }
+  };
+
+  const calculateSeoScore = (seoSettings: SeoSettings) => {
+    let score = 0;
+    let total = 0;
+
+    // General settings (25 points)
+    total += 25;
+    if (seoSettings.general.site_name) score += 5;
+    if (seoSettings.general.site_url) score += 5;
+    if (seoSettings.general.site_description) score += 5;
+    if (seoSettings.general.site_keywords) score += 5;
+    if (seoSettings.general.auto_generate_meta_description) score += 5;
+
+    // Analytics (20 points)
+    total += 20;
+    if (seoSettings.analytics.enable_analytics) score += 5;
+    if (seoSettings.analytics.google_analytics_id) score += 5;
+    if (seoSettings.analytics.google_tag_manager_id) score += 5;
+    if (seoSettings.analytics.google_search_console_verification) score += 5;
+
+    // Schema (20 points)
+    total += 20;
+    if (seoSettings.schema.enable_organization_schema) score += 5;
+    if (seoSettings.schema.enable_product_schema) score += 5;
+    if (seoSettings.schema.organization_name) score += 5;
+    if (seoSettings.schema.organization_address) score += 5;
+
+    // Technical (15 points)
+    total += 15;
+    if (seoSettings.technical.enable_sitemap) score += 5;
+    if (seoSettings.technical.enable_compression) score += 5;
+    if (seoSettings.technical.lazy_load_images) score += 5;
+
+    // Performance (10 points)
+    total += 10;
+    if (seoSettings.performance.optimize_images) score += 5;
+    if (seoSettings.performance.enable_critical_css) score += 5;
+
+    // Content (10 points)
+    total += 10;
+    if (seoSettings.content.enable_auto_seo) score += 5;
+    if (seoSettings.content.content_min_words >= 300) score += 5;
+
+    setSeoScore(Math.round((score / total) * 100));
   };
 
   const handleSaveSettings = async () => {
@@ -628,72 +408,61 @@ export default function SettingsPage() {
     }
   };
 
-  const handleSaveSeoSettings = async () => {
+  const saveSeoSettings = async () => {
+    if (!seoSettings) return;
+
+    setSaving(true);
     try {
-      setSaving(true);
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      const response = await fetch(`${API_DOMAIN}/api/admin/seo-settings`, {
+      // Get authentication token
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để lưu cài đặt");
+        setSaving(false);
+        return;
+      }
+
+      // Try to save to backend server (port 4000)
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const response = await fetch(`${backendUrl}/api/admin/seo-settings`, {
         method: "POST",
-        headers,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(seoSettings),
       });
 
-      const data = await response.json();
-      if (data.success) {
+      const result = await response.json();
+
+      if (result.success) {
         toast.success("Đã lưu cài đặt SEO thành công");
-        calculateSeoScore();
+        calculateSeoScore(seoSettings);
       } else {
-        toast.error("Có lỗi xảy ra khi lưu cài đặt SEO");
+        throw new Error(result.message);
       }
     } catch (error) {
-      console.error("Failed to save SEO settings:", error);
-      toast.error("Có lỗi xảy ra khi lưu cài đặt SEO");
+      console.error("Error saving SEO settings:", error);
+      toast.error("Không thể lưu cài đặt SEO");
     } finally {
       setSaving(false);
     }
   };
 
-  const calculateSeoScore = () => {
-    let score = 0;
+  const updateSeoSetting = (
+    category: keyof SeoSettings,
+    key: string,
+    value: any,
+  ) => {
+    if (!seoSettings) return;
 
-    // Basic SEO settings (40 points)
-    if (seoSettings.general.site_name) score += 5;
-    if (seoSettings.general.site_description) score += 5;
-    if (seoSettings.general.site_keywords) score += 5;
-    if (seoSettings.general.site_url) score += 5;
-    if (seoSettings.general.default_meta_title_pattern) score += 5;
-    if (seoSettings.general.auto_generate_meta_description) score += 5;
-    if (seoSettings.analytics.google_analytics_id) score += 5;
-    if (seoSettings.analytics.google_search_console_verification) score += 5;
-
-    // Schema markup (25 points)
-    if (seoSettings.schema.enable_organization_schema) score += 5;
-    if (seoSettings.schema.enable_product_schema) score += 5;
-    if (seoSettings.schema.enable_breadcrumb_schema) score += 5;
-    if (seoSettings.schema.organization_name) score += 5;
-    if (seoSettings.schema.organization_address) score += 5;
-
-    // Technical SEO (20 points)
-    if (seoSettings.technical.enable_sitemap) score += 5;
-    if (seoSettings.technical.enable_compression) score += 5;
-    if (seoSettings.technical.lazy_load_images) score += 5;
-    if (seoSettings.technical.minify_html) score += 5;
-
-    // Social media (10 points)
-    if (seoSettings.social.twitter_site) score += 3;
-    if (seoSettings.social.facebook_app_id) score += 4;
-    if (seoSettings.social.default_og_image) score += 3;
-
-    // Performance (5 points)
-    if (seoSettings.performance.optimize_images) score += 2.5;
-    if (seoSettings.performance.enable_critical_css) score += 2.5;
-
-    setSeoScore(Math.round(score));
+    setSeoSettings((prev) => ({
+      ...prev!,
+      [category]: {
+        ...prev![category],
+        [key]: value,
+      },
+    }));
   };
 
   const handleInputChange = (
@@ -708,30 +477,6 @@ export default function SettingsPage() {
         [field]: value,
       },
     }));
-  };
-
-  const handleSeoInputChange = (
-    section: keyof SeoSettings,
-    field: string,
-    value: any,
-  ) => {
-    setSeoSettings((prev) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value,
-      },
-    }));
-  };
-
-  const handleTestEmail = async () => {
-    try {
-      toast.info("Đang gửi email thử nghiệm...");
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      toast.success("Email thử nghiệm đã được gửi thành công");
-    } catch (error) {
-      toast.error("Không thể gửi email thử nghiệm");
-    }
   };
 
   if (loading) {
@@ -780,10 +525,8 @@ export default function SettingsPage() {
       <AdminInitializer />
 
       <Tabs defaultValue="seo" className="w-full">
-        <TabsList className="grid w-full grid-cols-10">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="seo">SEO</TabsTrigger>
-          <TabsTrigger value="seo-status">SEO Status</TabsTrigger>
-          <TabsTrigger value="seo-advanced">Advanced SEO</TabsTrigger>
           <TabsTrigger value="general">Chung</TabsTrigger>
           <TabsTrigger value="store">Cửa hàng</TabsTrigger>
           <TabsTrigger value="shipping">Vận chuyển</TabsTrigger>
@@ -793,1118 +536,1110 @@ export default function SettingsPage() {
           <TabsTrigger value="notifications">Thông báo</TabsTrigger>
         </TabsList>
 
-        {/* SEO STATUS TAB - COMPREHENSIVE SYSTEM STATUS */}
-        <TabsContent value="seo-status" className="space-y-6">
-          {/* SEO Files Generation Panel */}
-          <SeoGenerationPanel />
-
-          {/* System Status */}
-          <SeoSystemStatus />
-        </TabsContent>
-
-        {/* ADVANCED SEO TAB - AI-POWERED SEO OPTIMIZATION */}
-        <TabsContent value="seo-advanced" className="space-y-6">
-          <AdvancedSeoDashboard />
-        </TabsContent>
-
-        {/* SEO TAB - COMPREHENSIVE SEO MANAGEMENT */}
+        {/* COMPREHENSIVE SEO TAB - MOVED FROM /admin/seo */}
         <TabsContent value="seo" className="space-y-6">
-          {/* SEO Status Dashboard */}
-          <SeoStatusDashboard />
-
-          {/* SEO Score Dashboard */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Điểm SEO tổng quan
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div
-                    className={`text-4xl font-bold mb-2 ${seoScore >= 80 ? "text-green-600" : seoScore >= 60 ? "text-yellow-600" : "text-red-600"}`}
-                  >
-                    {seoScore}/100
-                  </div>
-                  <p className="text-sm text-gray-600">Điểm SEO tổng thể</p>
-                  <Badge
-                    variant={
-                      seoScore >= 80
-                        ? "default"
-                        : seoScore >= 60
-                          ? "secondary"
-                          : "destructive"
-                    }
-                    className="mt-2"
-                  >
-                    {seoScore >= 80
-                      ? "Xuất sắc"
-                      : seoScore >= 60
-                        ? "Tốt"
-                        : "Cần cải thiện"}
-                  </Badge>
+          {!seoSettings ? (
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p>Đang tải cài đặt SEO...</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Header */}
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <h2 className="text-2xl font-bold">Cài đặt SEO</h2>
+                  <p className="text-muted-foreground mt-2">
+                    Quản lý tất cả các thiết lập SEO cho website
+                  </p>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 mb-2">
-                    <Monitor className="h-8 w-8 mx-auto mb-1" />
-                    98%
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Điểm SEO</p>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`text-2xl font-bold ${
+                          seoScore >= 80
+                            ? "text-green-600"
+                            : seoScore >= 60
+                              ? "text-yellow-600"
+                              : "text-red-600"
+                        }`}
+                      >
+                        {seoScore}%
+                      </div>
+                      {seoScore >= 80 ? (
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                      ) : (
+                        <AlertCircle className="h-5 w-5 text-yellow-600" />
+                      )}
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600">Tối ưu hóa kỹ thuật</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600 mb-2">
-                    <Gauge className="h-8 w-8 mx-auto mb-1" />
-                    92%
-                  </div>
-                  <p className="text-sm text-gray-600">Hiệu suất trang web</p>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 mb-2">
-                    <Activity className="h-8 w-8 mx-auto mb-1" />
-                    85%
-                  </div>
-                  <p className="text-sm text-gray-600">Tối ưu nội dung</p>
+                  <Button onClick={saveSeoSettings} disabled={saving} className="gap-2">
+                    <Save className="h-4 w-4" />
+                    {saving ? "Đang lưu..." : "Lưu cài đặt SEO"}
+                  </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
 
-          <Tabs defaultValue="seo-general" className="w-full">
-            <TabsList className="grid w-full grid-cols-8">
-              <TabsTrigger value="seo-general">Cơ bản</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="social">Social Media</TabsTrigger>
-              <TabsTrigger value="schema">Schema.org</TabsTrigger>
-              <TabsTrigger value="technical">Kỹ thuật</TabsTrigger>
-              <TabsTrigger value="content">Nội dung</TabsTrigger>
-              <TabsTrigger value="performance">Hiệu suất</TabsTrigger>
-              <TabsTrigger value="local">Local SEO</TabsTrigger>
-            </TabsList>
+              {/* SEO Score Alert */}
+              <Alert className="mb-6">
+                <Info className="h-4 w-4" />
+                <AlertDescription>
+                  {seoScore >= 80
+                    ? "Tuyệt vời! Cài đặt SEO của bạn đã được tối ưu hóa tốt."
+                    : seoScore >= 60
+                      ? "Cài đặt SEO khá tốt, nhưng vẫn có thể cải thiện thêm."
+                      : "Cài đặt SEO cần được cải thiện để đạt hiệu quả tối ưu."}
+                </AlertDescription>
+              </Alert>
 
-            {/* SEO General Settings */}
-            <TabsContent value="seo-general" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Search className="h-5 w-5" />
-                    Cài đặt SEO cơ bản
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Các thiết lập cơ bản để tối ưu hóa website cho công cụ tìm
-                    kiếm
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="seo_site_name">Tên website (SEO)</Label>
-                      <Input
-                        id="seo_site_name"
-                        value={seoSettings.general.site_name}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "general",
-                            "site_name",
-                            e.target.value,
-                          )
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="site_url">URL chính của website</Label>
-                      <Input
-                        id="site_url"
-                        value={seoSettings.general.site_url}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "general",
-                            "site_url",
-                            e.target.value,
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
+              {/* SEO Settings Tabs */}
+              <Tabs defaultValue="general" className="space-y-6">
+                <TabsList className="grid w-full grid-cols-8">
+                  <TabsTrigger value="general" className="gap-2">
+                    <Settings className="h-4 w-4" />
+                    Cơ bản
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="social" className="gap-2">
+                    <Share2 className="h-4 w-4" />
+                    Social
+                  </TabsTrigger>
+                  <TabsTrigger value="schema" className="gap-2">
+                    <Globe className="h-4 w-4" />
+                    Schema
+                  </TabsTrigger>
+                  <TabsTrigger value="technical" className="gap-2">
+                    <Zap className="h-4 w-4" />
+                    Kỹ thuật
+                  </TabsTrigger>
+                  <TabsTrigger value="content" className="gap-2">
+                    <FileText className="h-4 w-4" />
+                    Nội dung
+                  </TabsTrigger>
+                  <TabsTrigger value="performance" className="gap-2">
+                    <Zap className="h-4 w-4" />
+                    Hiệu suất
+                  </TabsTrigger>
+                  <TabsTrigger value="local" className="gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Địa phương
+                  </TabsTrigger>
+                </TabsList>
 
-                  <div>
-                    <Label htmlFor="seo_site_description">
-                      Mô tả website (Meta Description)
-                    </Label>
-                    <Textarea
-                      id="seo_site_description"
-                      value={seoSettings.general.site_description}
-                      onChange={(e) =>
-                        handleSeoInputChange(
-                          "general",
-                          "site_description",
-                          e.target.value,
-                        )
-                      }
-                      rows={3}
-                      maxLength={160}
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      {seoSettings.general.site_description.length}/160 ký tự
-                    </p>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="site_keywords">
-                      Từ khóa chính (Keywords)
-                    </Label>
-                    <Input
-                      id="site_keywords"
-                      value={seoSettings.general.site_keywords}
-                      onChange={(e) =>
-                        handleSeoInputChange(
-                          "general",
-                          "site_keywords",
-                          e.target.value,
-                        )
-                      }
-                      placeholder="máy tính, laptop, gaming, linh kiện"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between border-t pt-4">
-                    <div>
-                      <Label htmlFor="auto_meta_description">
-                        Tự động tạo Meta Description
-                      </Label>
-                      <p className="text-sm text-gray-500">
-                        Tự động tạo meta description từ nội dung trang
-                      </p>
-                    </div>
-                    <Switch
-                      id="auto_meta_description"
-                      checked={
-                        seoSettings.general.auto_generate_meta_description
-                      }
-                      onCheckedChange={(checked) =>
-                        handleSeoInputChange(
-                          "general",
-                          "auto_generate_meta_description",
-                          checked,
-                        )
-                      }
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Analytics Settings */}
-            <TabsContent value="analytics" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart className="h-5 w-5" />
-                    Analytics & Tracking
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Cấu hình các công cụ phân tích và theo dõi
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <Label htmlFor="enable_analytics">
-                        Kích hoạt Analytics
-                      </Label>
-                      <p className="text-sm text-gray-500">
-                        Bật/tắt tất cả các công cụ theo dõi
-                      </p>
-                    </div>
-                    <Switch
-                      id="enable_analytics"
-                      checked={seoSettings.analytics.enable_analytics}
-                      onCheckedChange={(checked) =>
-                        handleSeoInputChange(
-                          "analytics",
-                          "enable_analytics",
-                          checked,
-                        )
-                      }
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="google_analytics_id">
-                        Google Analytics 4 ID
-                      </Label>
-                      <Input
-                        id="google_analytics_id"
-                        value={seoSettings.analytics.google_analytics_id}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "analytics",
-                            "google_analytics_id",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="G-XXXXXXXXXX"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="google_tag_manager_id">
-                        Google Tag Manager ID
-                      </Label>
-                      <Input
-                        id="google_tag_manager_id"
-                        value={seoSettings.analytics.google_tag_manager_id}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "analytics",
-                            "google_tag_manager_id",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="GTM-XXXXXXX"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="google_search_console">
-                        Google Search Console
-                      </Label>
-                      <Input
-                        id="google_search_console"
-                        value={
-                          seoSettings.analytics
-                            .google_search_console_verification
-                        }
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "analytics",
-                            "google_search_console_verification",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Mã xác thực GSC"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="facebook_pixel_id">
-                        Facebook Pixel ID
-                      </Label>
-                      <Input
-                        id="facebook_pixel_id"
-                        value={seoSettings.analytics.facebook_pixel_id}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "analytics",
-                            "facebook_pixel_id",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="1234567890123456"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Social Media Settings */}
-            <TabsContent value="social" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Share2 className="h-5 w-5" />
-                    Social Media Integration
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Cấu hình tích hợp mạng xã hội và Open Graph
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="facebook_app_id"
-                        className="flex items-center gap-2"
-                      >
-                        <Facebook className="h-4 w-4" />
-                        Facebook App ID
-                      </Label>
-                      <Input
-                        id="facebook_app_id"
-                        value={seoSettings.social.facebook_app_id}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "social",
-                            "facebook_app_id",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="1234567890123456"
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="twitter_site"
-                        className="flex items-center gap-2"
-                      >
-                        <Twitter className="h-4 w-4" />
-                        Twitter Username
-                      </Label>
-                      <Input
-                        id="twitter_site"
-                        value={seoSettings.social.twitter_site}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "social",
-                            "twitter_site",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="@hacom_vn"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Schema.org Settings */}
-            <TabsContent value="schema" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Code className="h-5 w-5" />
-                    Schema.org Structured Data
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Cấu hình dữ liệu có cấu trúc để tăng hiển thị trong SERP
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="organization_name">Tên tổ chức</Label>
-                      <Input
-                        id="organization_name"
-                        value={seoSettings.schema.organization_name}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "schema",
-                            "organization_name",
-                            e.target.value,
-                          )
-                        }
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="organization_phone">Số điện thoại</Label>
-                      <Input
-                        id="organization_phone"
-                        value={seoSettings.schema.organization_phone}
-                        onChange={(e) =>
-                          handleSeoInputChange(
-                            "schema",
-                            "organization_phone",
-                            e.target.value,
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="organization_address">Địa chỉ</Label>
-                    <Textarea
-                      id="organization_address"
-                      value={seoSettings.schema.organization_address}
-                      onChange={(e) =>
-                        handleSeoInputChange(
-                          "schema",
-                          "organization_address",
-                          e.target.value,
-                        )
-                      }
-                      rows={2}
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="enable_org_schema">
-                        Organization Schema
-                      </Label>
-                      <Switch
-                        id="enable_org_schema"
-                        checked={seoSettings.schema.enable_organization_schema}
-                        onCheckedChange={(checked) =>
-                          handleSeoInputChange(
-                            "schema",
-                            "enable_organization_schema",
-                            checked,
-                          )
-                        }
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="enable_product_schema">
-                        Product Schema
-                      </Label>
-                      <Switch
-                        id="enable_product_schema"
-                        checked={seoSettings.schema.enable_product_schema}
-                        onCheckedChange={(checked) =>
-                          handleSeoInputChange(
-                            "schema",
-                            "enable_product_schema",
-                            checked,
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Technical SEO */}
-            <TabsContent value="technical" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Cpu className="h-5 w-5" />
-                    Technical SEO
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Tối ưu hóa kỹ thuật cho công cụ tìm kiếm
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <h4 className="font-semibold">Sitemap & Robots</h4>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="enable_sitemap">Bật Sitemap</Label>
-                        <Switch
-                          id="enable_sitemap"
-                          checked={seoSettings.technical.enable_sitemap}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "technical",
-                              "enable_sitemap",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="sitemap_include_images">
-                          Bao gồm hình ảnh
-                        </Label>
-                        <Switch
-                          id="sitemap_include_images"
-                          checked={seoSettings.technical.sitemap_include_images}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "technical",
-                              "sitemap_include_images",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        Sitemap và Robots.txt sẽ được tạo tự động bởi
-                        next-sitemap.
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h4 className="font-semibold">
-                        Compression & Minification
-                      </h4>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="enable_compression">
-                          GZIP Compression
-                        </Label>
-                        <Switch
-                          id="enable_compression"
-                          checked={seoSettings.technical.enable_compression}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "technical",
-                              "enable_compression",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="minify_html">Minify HTML</Label>
-                        <Switch
-                          id="minify_html"
-                          checked={seoSettings.technical.minify_html}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "technical",
-                              "minify_html",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="lazy_load_images">
-                          Lazy Load Images
-                        </Label>
-                        <Switch
-                          id="lazy_load_images"
-                          checked={seoSettings.technical.lazy_load_images}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "technical",
-                              "lazy_load_images",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="robots_txt_custom">
-                      Custom Robots.txt Content
-                    </Label>
-                    <Textarea
-                      id="robots_txt_custom"
-                      value={seoSettings.technical.robots_txt_custom}
-                      onChange={(e) =>
-                        handleSeoInputChange(
-                          "technical",
-                          "robots_txt_custom",
-                          e.target.value,
-                        )
-                      }
-                      rows={6}
-                      placeholder="# Custom robots.txt rules"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Content Optimization */}
-            <TabsContent value="content" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BookOpen className="h-5 w-5" />
-                    Content Optimization
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Tối ưu hóa nội dung tự động và cài đặt SEO
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <h4 className="font-semibold">Auto SEO Features</h4>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="enable_auto_seo">Auto SEO</Label>
-                        <Switch
-                          id="enable_auto_seo"
-                          checked={seoSettings.content.enable_auto_seo}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "content",
-                              "enable_auto_seo",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="h1_optimization">H1 Optimization</Label>
-                        <Switch
-                          id="h1_optimization"
-                          checked={seoSettings.content.h1_optimization}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "content",
-                              "h1_optimization",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="internal_linking">
-                          Auto Internal Linking
-                        </Label>
-                        <Switch
-                          id="internal_linking"
-                          checked={seoSettings.content.internal_linking}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "content",
-                              "internal_linking",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="image_alt_optimization">
-                          Image Alt Optimization
-                        </Label>
-                        <Switch
-                          id="image_alt_optimization"
-                          checked={seoSettings.content.image_alt_optimization}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "content",
-                              "image_alt_optimization",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h4 className="font-semibold">
-                        Content Quality Settings
-                      </h4>
-                      <div>
-                        <Label htmlFor="keyword_density_target">
-                          Target Keyword Density (%)
-                        </Label>
-                        <Input
-                          id="keyword_density_target"
-                          type="number"
-                          step="0.1"
-                          min="0"
-                          max="10"
-                          value={seoSettings.content.keyword_density_target}
-                          onChange={(e) =>
-                            handleSeoInputChange(
-                              "content",
-                              "keyword_density_target",
-                              parseFloat(e.target.value),
-                            )
-                          }
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Khuyến nghị: 1-3% cho tối ưu SEO
-                        </p>
-                      </div>
-                      <div>
-                        <Label htmlFor="content_min_words">
-                          Minimum Content Words
-                        </Label>
-                        <Input
-                          id="content_min_words"
-                          type="number"
-                          min="100"
-                          max="2000"
-                          value={seoSettings.content.content_min_words}
-                          onChange={(e) =>
-                            handleSeoInputChange(
-                              "content",
-                              "content_min_words",
-                              parseInt(e.target.value),
-                            )
-                          }
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Khuyến nghị tối thiểu 300 từ cho mỗi trang
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="enable_faq_schema">FAQ Schema</Label>
-                        <Switch
-                          id="enable_faq_schema"
-                          checked={seoSettings.content.enable_faq_schema}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "content",
-                              "enable_faq_schema",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="enable_article_schema">
-                          Article Schema
-                        </Label>
-                        <Switch
-                          id="enable_article_schema"
-                          checked={seoSettings.content.enable_article_schema}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "content",
-                              "enable_article_schema",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t pt-6">
-                    <h4 className="font-semibold mb-4">Meta Title Templates</h4>
-                    <div className="grid grid-cols-1 gap-4">
-                      <div>
-                        <Label htmlFor="default_meta_title">
-                          Default Meta Title Pattern
-                        </Label>
-                        <Input
-                          id="default_meta_title"
-                          value={seoSettings.general.default_meta_title_pattern}
-                          onChange={(e) =>
-                            handleSeoInputChange(
-                              "general",
-                              "default_meta_title_pattern",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="{title} | HACOM"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Variables: {"{title}"}, {"{sitename}"}
-                        </p>
-                      </div>
-                      <div>
-                        <Label htmlFor="product_meta_title">
-                          Product Meta Title Pattern
-                        </Label>
-                        <Input
-                          id="product_meta_title"
-                          value={seoSettings.general.product_meta_title_pattern}
-                          onChange={(e) =>
-                            handleSeoInputChange(
-                              "general",
-                              "product_meta_title_pattern",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="{product_name} - {category} | HACOM"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Variables: {"{product_name}"}, {"{category}"},{" "}
-                          {"{price}"}, {"{sku}"}
-                        </p>
-                      </div>
-                      <div>
-                        <Label htmlFor="category_meta_title">
-                          Category Meta Title Pattern
-                        </Label>
-                        <Input
-                          id="category_meta_title"
-                          value={
-                            seoSettings.general.category_meta_title_pattern
-                          }
-                          onChange={(e) =>
-                            handleSeoInputChange(
-                              "general",
-                              "category_meta_title_pattern",
-                              e.target.value,
-                            )
-                          }
-                          placeholder="{category_name} - {description} | HACOM"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">
-                          Variables: {"{category_name}"}, {"{description}"},{" "}
-                          {"{count}"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Performance Settings */}
-            <TabsContent value="performance" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5" />
-                    Performance Optimization
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Tối ưu hóa hiệu suất website cho SEO và Core Web Vitals
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                      <h4 className="font-semibold">
-                        Image & Resource Optimization
-                      </h4>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label htmlFor="optimize_images">
-                            Optimize Images
-                          </Label>
-                          <p className="text-xs text-gray-500">
-                            WebP conversion, compression
-                          </p>
-                        </div>
-                        <Switch
-                          id="optimize_images"
-                          checked={seoSettings.performance.optimize_images}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "performance",
-                              "optimize_images",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label htmlFor="enable_critical_css">
-                            Critical CSS
-                          </Label>
-                          <p className="text-xs text-gray-500">
-                            Inline critical styles
-                          </p>
-                        </div>
-                        <Switch
-                          id="enable_critical_css"
-                          checked={seoSettings.performance.enable_critical_css}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "performance",
-                              "enable_critical_css",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label htmlFor="defer_non_critical_js">
-                            Defer Non-Critical JS
-                          </Label>
-                          <p className="text-xs text-gray-500">
-                            Improve loading speed
-                          </p>
-                        </div>
-                        <Switch
-                          id="defer_non_critical_js"
-                          checked={
-                            seoSettings.performance.defer_non_critical_js
-                          }
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "performance",
-                              "defer_non_critical_js",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label htmlFor="preload_critical_resources">
-                            Preload Critical Resources
-                          </Label>
-                          <p className="text-xs text-gray-500">
-                            Fonts, CSS, key images
-                          </p>
-                        </div>
-                        <Switch
-                          id="preload_critical_resources"
-                          checked={
-                            seoSettings.performance.preload_critical_resources
-                          }
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "performance",
-                              "preload_critical_resources",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h4 className="font-semibold">CDN & Caching</h4>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label htmlFor="enable_cdn">Enable CDN</Label>
-                          <p className="text-xs text-gray-500">
-                            Content delivery network
-                          </p>
-                        </div>
-                        <Switch
-                          id="enable_cdn"
-                          checked={seoSettings.performance.enable_cdn}
-                          onCheckedChange={(checked) =>
-                            handleSeoInputChange(
-                              "performance",
-                              "enable_cdn",
-                              checked,
-                            )
-                          }
-                        />
-                      </div>
-                      {seoSettings.performance.enable_cdn && (
-                        <div>
-                          <Label htmlFor="cdn_url">CDN URL</Label>
+                {/* General Settings */}
+                <TabsContent value="general">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Cài đặt SEO cơ bản</CardTitle>
+                      <CardDescription>
+                        Các thiết lập cơ bản để tối ưu hóa website cho công cụ tìm kiếm
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="site_name">Tên website (SEO)</Label>
                           <Input
-                            id="cdn_url"
-                            value={seoSettings.performance.cdn_url}
+                            id="site_name"
+                            value={seoSettings.general.site_name}
                             onChange={(e) =>
-                              handleSeoInputChange(
-                                "performance",
-                                "cdn_url",
+                              updateSeoSetting("general", "site_name", e.target.value)
+                            }
+                            placeholder="ZoxVN- Máy tính, Laptop"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="site_url">URL chính của website</Label>
+                          <Input
+                            id="site_url"
+                            value={seoSettings.general.site_url}
+                            onChange={(e) =>
+                              updateSeoSetting("general", "site_url", e.target.value)
+                            }
+                            placeholder="https://hacom.vns"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="site_description">
+                          Mô tả website (Meta Description)
+                        </Label>
+                        <Textarea
+                          id="site_description"
+                          value={seoSettings.general.site_description}
+                          onChange={(e) =>
+                            updateSeoSetting("general", "site_description", e.target.value)
+                          }
+                          placeholder="HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính..."
+                          rows={3}
+                        />
+                        <div className="flex justify-between text-sm text-muted-foreground">
+                          <span>
+                            {seoSettings.general.site_description.length}/160 ký tự
+                          </span>
+                          <Badge
+                            variant={
+                              seoSettings.general.site_description.length <= 160
+                                ? "default"
+                                : "destructive"
+                            }
+                          >
+                            {seoSettings.general.site_description.length <= 160
+                              ? "Tốt"
+                              : "Quá dài"}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="site_keywords">Từ khóa chính (Keywords)</Label>
+                        <Input
+                          id="site_keywords"
+                          value={seoSettings.general.site_keywords}
+                          onChange={(e) =>
+                            updateSeoSetting("general", "site_keywords", e.target.value)
+                          }
+                          placeholder="máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="auto_meta"
+                          checked={seoSettings.general.auto_generate_meta_description}
+                          onCheckedChange={(checked) =>
+                            updateSeoSetting(
+                              "general",
+                              "auto_generate_meta_description",
+                              checked,
+                            )
+                          }
+                        />
+                        <Label htmlFor="auto_meta">Tự động tạo Meta Description</Label>
+                        <Badge variant="secondary">Khuyến nghị</Badge>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">Meta Title Templates</h4>
+                        <div className="grid grid-cols-1 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="default_title">
+                              Default Meta Title Pattern
+                            </Label>
+                            <Input
+                              id="default_title"
+                              value={seoSettings.general.default_meta_title_pattern}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "general",
+                                  "default_meta_title_pattern",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="{title} | HACOM"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Variables: {"{title}"}, {"{sitename}"}
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="product_title">
+                              Product Meta Title Pattern
+                            </Label>
+                            <Input
+                              id="product_title"
+                              value={seoSettings.general.product_meta_title_pattern}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "general",
+                                  "product_meta_title_pattern",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="{product_name} - {category} | HACOM"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Variables: {"{product_name}"}, {"{category}"}, {"{price}"}
+                              , {"{sku}"}
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="category_title">
+                              Category Meta Title Pattern
+                            </Label>
+                            <Input
+                              id="category_title"
+                              value={seoSettings.general.category_meta_title_pattern}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "general",
+                                  "category_meta_title_pattern",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="{category_name} - {description} | HACOM"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Variables: {"{category_name}"}, {"{description}"},{" "}
+                              {"{count}"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                {/* Analytics Settings */}
+                <TabsContent value="analytics">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Analytics & Tracking</CardTitle>
+                      <CardDescription>
+                        Cấu hình các công cụ phân tích và theo dõi
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="flex items-center space-x-2 mb-6">
+                        <Switch
+                          id="enable_analytics"
+                          checked={seoSettings.analytics.enable_analytics}
+                          onCheckedChange={(checked) =>
+                            updateSeoSetting("analytics", "enable_analytics", checked)
+                          }
+                        />
+                        <Label htmlFor="enable_analytics">Kích hoạt Analytics</Label>
+                        <Badge variant="secondary">
+                          Bật/tắt tất cả các công cụ theo dõi
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="ga_id">Google Analytics 4 ID</Label>
+                          <Input
+                            id="ga_id"
+                            value={seoSettings.analytics.google_analytics_id}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "analytics",
+                                "google_analytics_id",
                                 e.target.value,
                               )
                             }
-                            placeholder="https://cdn.hacom.vn"
+                            placeholder="G-XXXXXXXXXX"
                           />
                         </div>
-                      )}
-                      <div>
-                        <Label htmlFor="lazy_load_threshold">
-                          Lazy Load Threshold (px)
-                        </Label>
+                        <div className="space-y-2">
+                          <Label htmlFor="gtm_id">Google Tag Manager ID</Label>
+                          <Input
+                            id="gtm_id"
+                            value={seoSettings.analytics.google_tag_manager_id}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "analytics",
+                                "google_tag_manager_id",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="GTM-XXXXXXX"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="gsc_verification">
+                            Google Search Console
+                          </Label>
+                          <Input
+                            id="gsc_verification"
+                            value={
+                              seoSettings.analytics.google_search_console_verification
+                            }
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "analytics",
+                                "google_search_console_verification",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Mã xác thực GSC"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="fb_pixel">Facebook Pixel ID</Label>
+                          <Input
+                            id="fb_pixel"
+                            value={seoSettings.analytics.facebook_pixel_id}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "analytics",
+                                "facebook_pixel_id",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="1234567890123456"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="bing_verification">
+                            Bing Webmaster Verification
+                          </Label>
+                          <Input
+                            id="bing_verification"
+                            value={seoSettings.analytics.bing_webmaster_verification}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "analytics",
+                                "bing_webmaster_verification",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Mã xác thực Bing"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="hotjar_id">Hotjar ID</Label>
+                          <Input
+                            id="hotjar_id"
+                            value={seoSettings.analytics.hotjar_id}
+                            onChange={(e) =>
+                              updateSeoSetting("analytics", "hotjar_id", e.target.value)
+                            }
+                            placeholder="Hotjar ID"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                {/* Social Media Settings */}
+                <TabsContent value="social">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Social Media Integration</CardTitle>
+                      <CardDescription>
+                        Cấu hình tích hợp mạng xã hội và Open Graph
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="fb_app_id">Facebook App ID</Label>
+                          <Input
+                            id="fb_app_id"
+                            value={seoSettings.social.facebook_app_id}
+                            onChange={(e) =>
+                              updateSeoSetting("social", "facebook_app_id", e.target.value)
+                            }
+                            placeholder="facd"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="twitter_username">Twitter Username</Label>
+                          <Input
+                            id="twitter_username"
+                            value={seoSettings.social.twitter_site}
+                            onChange={(e) =>
+                              updateSeoSetting("social", "twitter_site", e.target.value)
+                            }
+                            placeholder="@hacom_vn"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="linkedin_url">LinkedIn URL</Label>
+                          <Input
+                            id="linkedin_url"
+                            value={seoSettings.social.linkedin_url}
+                            onChange={(e) =>
+                              updateSeoSetting("social", "linkedin_url", e.target.value)
+                            }
+                            placeholder="https://linkedin.com/company/hacom"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="youtube_url">YouTube URL</Label>
+                          <Input
+                            id="youtube_url"
+                            value={seoSettings.social.youtube_url}
+                            onChange={(e) =>
+                              updateSeoSetting("social", "youtube_url", e.target.value)
+                            }
+                            placeholder="https://youtube.com/c/hacom"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="instagram_url">Instagram URL</Label>
+                          <Input
+                            id="instagram_url"
+                            value={seoSettings.social.instagram_url}
+                            onChange={(e) =>
+                              updateSeoSetting("social", "instagram_url", e.target.value)
+                            }
+                            placeholder="https://instagram.com/hacom"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="tiktok_url">TikTok URL</Label>
+                          <Input
+                            id="tiktok_url"
+                            value={seoSettings.social.tiktok_url}
+                            onChange={(e) =>
+                              updateSeoSetting("social", "tiktok_url", e.target.value)
+                            }
+                            placeholder="https://tiktok.com/@hacom"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                {/* Schema.org Settings */}
+                <TabsContent value="schema">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Schema.org Structured Data</CardTitle>
+                      <CardDescription>
+                        Cấu hình dữ liệu có cấu trúc để tăng hiển thị trong SERP
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="org_name">Tên tổ chức</Label>
+                          <Input
+                            id="org_name"
+                            value={seoSettings.schema.organization_name}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "schema",
+                                "organization_name",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="HACOM"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="org_phone">Số điện thoại</Label>
+                          <Input
+                            id="org_phone"
+                            value={seoSettings.schema.organization_phone}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "schema",
+                                "organization_phone",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="1900 19032"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="org_address">Địa chỉ</Label>
                         <Input
-                          id="lazy_load_threshold"
+                          id="org_address"
+                          value={seoSettings.schema.organization_address}
+                          onChange={(e) =>
+                            updateSeoSetting(
+                              "schema",
+                              "organization_address",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội2"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="latitude">Latitude</Label>
+                          <Input
+                            id="latitude"
+                            type="number"
+                            step="0.0001"
+                            value={seoSettings.schema.latitude}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "schema",
+                                "latitude",
+                                parseFloat(e.target.value),
+                              )
+                            }
+                            placeholder="21.0285"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="longitude">Longitude</Label>
+                          <Input
+                            id="longitude"
+                            type="number"
+                            step="0.0001"
+                            value={seoSettings.schema.longitude}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "schema",
+                                "longitude",
+                                parseFloat(e.target.value),
+                              )
+                            }
+                            placeholder="105.8542"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="org_schema"
+                            checked={seoSettings.schema.enable_organization_schema}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting(
+                                "schema",
+                                "enable_organization_schema",
+                                checked,
+                              )
+                            }
+                          />
+                          <Label htmlFor="org_schema">Organization Schema</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="product_schema"
+                            checked={seoSettings.schema.enable_product_schema}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting("schema", "enable_product_schema", checked)
+                            }
+                          />
+                          <Label htmlFor="product_schema">Product Schema</Label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                {/* Technical SEO */}
+                <TabsContent value="technical">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Technical SEO</CardTitle>
+                      <CardDescription>
+                        Tối ưu hóa kỹ thuật cho công cụ tìm kiếm
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">Sitemap & Robots</h4>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="enable_sitemap"
+                            checked={seoSettings.technical.enable_sitemap}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting("technical", "enable_sitemap", checked)
+                            }
+                          />
+                          <Label htmlFor="enable_sitemap">Bật Sitemap</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="sitemap_images"
+                            checked={seoSettings.technical.sitemap_include_images}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting(
+                                "technical",
+                                "sitemap_include_images",
+                                checked,
+                              )
+                            }
+                          />
+                          <Label htmlFor="sitemap_images">Bao gồm hình ảnh</Label>
+                        </div>
+                        <Alert>
+                          <Info className="h-4 w-4" />
+                          <AlertDescription>
+                            Sitemap và Robots.txt sẽ được tạo tự động bởi next-sitemap.
+                          </AlertDescription>
+                        </Alert>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">
+                          Compression & Minification
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="gzip_compression"
+                              checked={seoSettings.technical.enable_compression}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting(
+                                  "technical",
+                                  "enable_compression",
+                                  checked,
+                                )
+                              }
+                            />
+                            <Label htmlFor="gzip_compression">GZIP Compression</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="minify_html"
+                              checked={seoSettings.technical.minify_html}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting("technical", "minify_html", checked)
+                              }
+                            />
+                            <Label htmlFor="minify_html">Minify HTML</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="lazy_load"
+                              checked={seoSettings.technical.lazy_load_images}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting("technical", "lazy_load_images", checked)
+                              }
+                            />
+                            <Label htmlFor="lazy_load">Lazy Load Images</Label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="robots_custom">Custom Robots.txt Content</Label>
+                        <Textarea
+                          id="robots_custom"
+                          value={seoSettings.technical.robots_txt_custom}
+                          onChange={(e) =>
+                            updateSeoSetting(
+                              "technical",
+                              "robots_txt_custom",
+                              e.target.value,
+                            )
+                          }
+                          placeholder="User-agent: *&#10;Disallow: /admin"
+                          rows={4}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                {/* Content Optimization */}
+                <TabsContent value="content">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Content Optimization</CardTitle>
+                      <CardDescription>
+                        Tối ưu hóa nội dung tự động và cài đặt SEO
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">Auto SEO Features</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="auto_seo"
+                              checked={seoSettings.content.enable_auto_seo}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting("content", "enable_auto_seo", checked)
+                              }
+                            />
+                            <Label htmlFor="auto_seo">Auto SEO</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="h1_optimization"
+                              checked={seoSettings.content.h1_optimization}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting("content", "h1_optimization", checked)
+                              }
+                            />
+                            <Label htmlFor="h1_optimization">H1 Optimization</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="internal_linking"
+                              checked={seoSettings.content.internal_linking}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting("content", "internal_linking", checked)
+                              }
+                            />
+                            <Label htmlFor="internal_linking">
+                              Auto Internal Linking
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="image_alt"
+                              checked={seoSettings.content.image_alt_optimization}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting(
+                                  "content",
+                                  "image_alt_optimization",
+                                  checked,
+                                )
+                              }
+                            />
+                            <Label htmlFor="image_alt">Image Alt Optimization</Label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">
+                          Content Quality Settings
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="keyword_density">
+                              Target Keyword Density (%)
+                            </Label>
+                            <Input
+                              id="keyword_density"
+                              type="number"
+                              step="0.1"
+                              value={seoSettings.content.keyword_density_target}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "content",
+                                  "keyword_density_target",
+                                  parseFloat(e.target.value),
+                                )
+                              }
+                              placeholder="2.5"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Khuyến nghị: 1-3% cho tối ưu SEO
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="min_words">Minimum Content Words</Label>
+                            <Input
+                              id="min_words"
+                              type="number"
+                              value={seoSettings.content.content_min_words}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "content",
+                                  "content_min_words",
+                                  parseInt(e.target.value),
+                                )
+                              }
+                              placeholder="300"
+                            />
+                            <p className="text-sm text-muted-foreground">
+                              Khuyến nghị tối thiểu 300 từ cho mỗi trang
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="faq_schema"
+                            checked={seoSettings.content.enable_faq_schema}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting("content", "enable_faq_schema", checked)
+                            }
+                          />
+                          <Label htmlFor="faq_schema">FAQ Schema</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="article_schema"
+                            checked={seoSettings.content.enable_article_schema}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting("content", "enable_article_schema", checked)
+                            }
+                          />
+                          <Label htmlFor="article_schema">Article Schema</Label>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                {/* Performance Optimization */}
+                <TabsContent value="performance">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Performance Optimization</CardTitle>
+                      <CardDescription>
+                        Tối ưu hóa hiệu suất website cho SEO và Core Web Vitals
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">
+                          Image & Resource Optimization
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="optimize_images"
+                              checked={seoSettings.performance.optimize_images}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting("performance", "optimize_images", checked)
+                              }
+                            />
+                            <Label htmlFor="optimize_images">Optimize Images</Label>
+                            <Badge variant="secondary">
+                              WebP conversion, compression
+                            </Badge>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="critical_css"
+                              checked={seoSettings.performance.enable_critical_css}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting(
+                                  "performance",
+                                  "enable_critical_css",
+                                  checked,
+                                )
+                              }
+                            />
+                            <Label htmlFor="critical_css">Critical CSS</Label>
+                            <Badge variant="secondary">Inline critical styles</Badge>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="defer_js"
+                              checked={seoSettings.performance.defer_non_critical_js}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting(
+                                  "performance",
+                                  "defer_non_critical_js",
+                                  checked,
+                                )
+                              }
+                            />
+                            <Label htmlFor="defer_js">Defer Non-Critical JS</Label>
+                            <Badge variant="secondary">Improve loading speed</Badge>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="preload_resources"
+                              checked={seoSettings.performance.preload_critical_resources}
+                              onCheckedChange={(checked) =>
+                                updateSeoSetting(
+                                  "performance",
+                                  "preload_critical_resources",
+                                  checked,
+                                )
+                              }
+                            />
+                            <Label htmlFor="preload_resources">
+                              Preload Critical Resources
+                            </Label>
+                            <Badge variant="secondary">Fonts, CSS, key images</Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">CDN & Caching</h4>
+                        <div className="flex items-center space-x-2">
+                          <Switch
+                            id="enable_cdn"
+                            checked={seoSettings.performance.enable_cdn}
+                            onCheckedChange={(checked) =>
+                              updateSeoSetting("performance", "enable_cdn", checked)
+                            }
+                          />
+                          <Label htmlFor="enable_cdn">Enable CDN</Label>
+                          <Badge variant="secondary">Content delivery network</Badge>
+                        </div>
+
+                        {seoSettings.performance.enable_cdn && (
+                          <div className="space-y-2">
+                            <Label htmlFor="cdn_url">CDN URL</Label>
+                            <Input
+                              id="cdn_url"
+                              value={seoSettings.performance.cdn_url}
+                              onChange={(e) =>
+                                updateSeoSetting("performance", "cdn_url", e.target.value)
+                              }
+                              placeholder="https://cdn.example.com"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="lazy_threshold">Lazy Load Threshold (px)</Label>
+                        <Input
+                          id="lazy_threshold"
                           type="number"
-                          min="0"
-                          max="1000"
                           value={seoSettings.performance.lazy_load_threshold}
                           onChange={(e) =>
-                            handleSeoInputChange(
+                            updateSeoSetting(
                               "performance",
                               "lazy_load_threshold",
                               parseInt(e.target.value),
                             )
                           }
+                          placeholder="200"
                         />
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-sm text-muted-foreground">
                           Distance before loading images (default: 200px)
                         </p>
                       </div>
-                    </div>
-                  </div>
 
-                  <Alert>
-                    <Monitor className="h-4 w-4" />
-                    <AlertDescription>
-                      <strong>Core Web Vitals Impact:</strong> Các tùy chọn này
-                      trực tiếp ảnh hưởng đến LCP, FID, và CLS - những metrics
-                      quan trọng cho SEO. Khuyến nghị bật tất cả để đạt điểm
-                      hiệu suất cao nhất.
-                    </AlertDescription>
-                  </Alert>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                      <Alert>
+                        <Info className="h-4 w-4" />
+                        <AlertDescription>
+                          <strong>Core Web Vitals Impact:</strong> Các tùy chọn này trực
+                          tiếp ảnh hưởng đến LCP, FID, và CLS - những metrics quan trọng
+                          cho SEO. Khuyến nghị bật tất cả để đạt điểm hiệu suất cao
+                          nhất.
+                        </AlertDescription>
+                      </Alert>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
 
-            {/* Local SEO */}
-            <TabsContent value="local" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="h-5 w-5" />
-                    Local SEO
-                  </CardTitle>
-                  <p className="text-sm text-gray-600">
-                    Tối ưu hóa cho tìm kiếm địa phương
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label htmlFor="enable_local_seo">Enable Local SEO</Label>
-                      <p className="text-sm text-gray-500">
-                        Bật các tính năng tối ưu cho tìm kiếm địa phương
-                      </p>
-                    </div>
-                    <Switch
-                      id="enable_local_seo"
-                      checked={seoSettings.local.enable_local_seo}
-                      onCheckedChange={(checked) =>
-                        handleSeoInputChange(
-                          "local",
-                          "enable_local_seo",
-                          checked,
-                        )
-                      }
-                    />
-                  </div>
+                {/* Local SEO */}
+                <TabsContent value="local">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Local SEO</CardTitle>
+                      <CardDescription>
+                        Tối ưu hóa cho tìm kiếm địa phương
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="flex items-center space-x-2 mb-6">
+                        <Switch
+                          id="enable_local_seo"
+                          checked={seoSettings.local.enable_local_seo}
+                          onCheckedChange={(checked) =>
+                            updateSeoSetting("local", "enable_local_seo", checked)
+                          }
+                        />
+                        <Label htmlFor="enable_local_seo">Enable Local SEO</Label>
+                        <Badge variant="secondary">
+                          Bật các tính năng tối ưu cho tìm kiếm địa phương
+                        </Badge>
+                      </div>
 
-                  <div>
-                    <Label htmlFor="opening_hours">Opening Hours</Label>
-                    <Textarea
-                      id="opening_hours"
-                      value={seoSettings.local.opening_hours}
-                      onChange={(e) =>
-                        handleSeoInputChange(
-                          "local",
-                          "opening_hours",
-                          e.target.value,
-                        )
-                      }
-                      rows={3}
-                      placeholder="Thứ 2 - Chủ nhật: 8:00 - 22:00"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="business_category">Business Category</Label>
+                          <Input
+                            id="business_category"
+                            value={seoSettings.local.business_category}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "local",
+                                "business_category",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Electronics Store"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="gmb_id">Google My Business ID</Label>
+                          <Input
+                            id="gmb_id"
+                            value={seoSettings.local.google_my_business_id}
+                            onChange={(e) =>
+                              updateSeoSetting(
+                                "local",
+                                "google_my_business_id",
+                                e.target.value,
+                              )
+                            }
+                            placeholder="Google My Business ID"
+                          />
+                        </div>
+                      </div>
 
-          {/* SEO Actions */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Search className="h-4 w-4" />
-                  <span>Cài đặt SEO được tối ưu hóa cho công cụ t��m kiếm</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Button onClick={calculateSeoScore} variant="outline">
-                    <Activity className="h-4 w-4 mr-2" />
-                    Tính điểm SEO
-                  </Button>
-                  <Button onClick={handleSaveSeoSettings} disabled={saving}>
-                    {saving ? (
-                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                    ) : (
-                      <Save className="h-4 w-4 mr-2" />
-                    )}
-                    {saving ? "Đang lưu..." : "Lưu cài đặt SEO"}
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                      <div className="space-y-2">
+                        <Label htmlFor="opening_hours">Opening Hours</Label>
+                        <Input
+                          id="opening_hours"
+                          value={seoSettings.local.opening_hours}
+                          onChange={(e) =>
+                            updateSeoSetting("local", "opening_hours", e.target.value)
+                          }
+                          placeholder="Thứ 2 - Chủ nhật: 8:00 - 22:00"
+                        />
+                      </div>
 
-          {/* SEO Summary Statistics */}
-          <SeoSummaryStats />
+                      <div className="space-y-2">
+                        <Label htmlFor="service_areas">Service Areas</Label>
+                        <Input
+                          id="service_areas"
+                          value={
+                            Array.isArray(seoSettings.local.service_areas)
+                              ? seoSettings.local.service_areas.join(", ")
+                              : seoSettings.local.service_areas
+                          }
+                          onChange={(e) =>
+                            updateSeoSetting(
+                              "local",
+                              "service_areas",
+                              e.target.value.split(",").map((area) => area.trim()),
+                            )
+                          }
+                          placeholder="Hà Nội, TP.HCM, Đà Nẵng"
+                        />
+                        <p className="text-sm text-muted-foreground">
+                          Ngăn cách bằng dấu phẩy
+                        </p>
+                      </div>
 
-          {/* SEO Testing Panel */}
-          <SeoTestPanel />
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="review_schema"
+                          checked={seoSettings.local.enable_review_schema}
+                          onCheckedChange={(checked) =>
+                            updateSeoSetting("local", "enable_review_schema", checked)
+                          }
+                        />
+                        <Label htmlFor="review_schema">Enable Review Schema</Label>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </>
+          )}
         </TabsContent>
 
-        {/* Original Settings Tabs... */}
+        {/* General Settings */}
         <TabsContent value="general" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Globe className="h-5 w-5" />
-                Thông tin chung
+                <Settings className="h-5 w-5" />
+                Cài đặt chung
               </CardTitle>
+              <p className="text-sm text-gray-600">
+                Các thiết lập cơ bản cho website
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1922,13 +1657,123 @@ export default function SettingsPage() {
                   <Label htmlFor="contact_email">Email liên hệ</Label>
                   <Input
                     id="contact_email"
-                    type="email"
                     value={settings.general.contact_email}
                     onChange={(e) =>
+                      handleInputChange("general", "contact_email", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="site_description">Mô tả website</Label>
+                <Textarea
+                  id="site_description"
+                  value={settings.general.site_description}
+                  onChange={(e) =>
+                    handleInputChange("general", "site_description", e.target.value)
+                  }
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="contact_phone">Số điện thoại</Label>
+                  <Input
+                    id="contact_phone"
+                    value={settings.general.contact_phone}
+                    onChange={(e) =>
+                      handleInputChange("general", "contact_phone", e.target.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="timezone">Múi giờ</Label>
+                  <Input
+                    id="timezone"
+                    value={settings.general.timezone}
+                    onChange={(e) =>
+                      handleInputChange("general", "timezone", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Store Settings */}
+        <TabsContent value="store" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Store className="h-5 w-5" />
+                Cài đặt cửa hàng
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="store_enabled">Kích hoạt cửa hàng</Label>
+                  <p className="text-sm text-gray-500">
+                    Bật/tắt chức năng mua hàng
+                  </p>
+                </div>
+                <Switch
+                  id="store_enabled"
+                  checked={settings.store.store_enabled}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("store", "store_enabled", checked)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="allow_guest_checkout">
+                    Cho phép thanh toán không cần đăng ký
+                  </Label>
+                  <p className="text-sm text-gray-500">
+                    Khách hàng có thể mua hàng mà không cần tài khoản
+                  </p>
+                </div>
+                <Switch
+                  id="allow_guest_checkout"
+                  checked={settings.store.allow_guest_checkout}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("store", "allow_guest_checkout", checked)
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="min_order_amount">Số tiền đơn hàng tối thiểu</Label>
+                  <Input
+                    id="min_order_amount"
+                    type="number"
+                    value={settings.store.min_order_amount}
+                    onChange={(e) =>
                       handleInputChange(
-                        "general",
-                        "contact_email",
-                        e.target.value,
+                        "store",
+                        "min_order_amount",
+                        parseInt(e.target.value),
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="max_order_amount">Số tiền đơn hàng tối đa</Label>
+                  <Input
+                    id="max_order_amount"
+                    type="number"
+                    value={settings.store.max_order_amount}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "store",
+                        "max_order_amount",
+                        parseInt(e.target.value),
                       )
                     }
                   />
@@ -1938,87 +1783,79 @@ export default function SettingsPage() {
           </Card>
         </TabsContent>
 
-        {/* Store Settings Tab */}
-        <TabsContent value="store" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Store className="h-5 w-5" />
-                Cài đặt cửa hàng
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="store_enabled">Kích hoạt cửa hàng</Label>
-                    <Switch
-                      id="store_enabled"
-                      checked={settings.store.store_enabled}
-                      onCheckedChange={(checked) =>
-                        handleInputChange("store", "store_enabled", checked)
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="maintenance_mode">Chế độ bảo trì</Label>
-                    <Switch
-                      id="maintenance_mode"
-                      checked={settings.store.maintenance_mode}
-                      onCheckedChange={(checked) =>
-                        handleInputChange("store", "maintenance_mode", checked)
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="allow_guest_checkout">
-                      Cho phép đặt hàng không cần đăng ký
-                    </Label>
-                    <Switch
-                      id="allow_guest_checkout"
-                      checked={settings.store.allow_guest_checkout}
-                      onCheckedChange={(checked) =>
-                        handleInputChange(
-                          "store",
-                          "allow_guest_checkout",
-                          checked,
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {settings.store.maintenance_mode && (
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    Chế độ bảo trì đã được kích hoạt. Khách hàng sẽ không thể
-                    truy cập website.
-                  </AlertDescription>
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Add other remaining tabs with simplified content */}
+        {/* Shipping Settings */}
         <TabsContent value="shipping" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Truck className="h-5 w-5" />
-                Cài đặt vận chuyển
+                Vận chuyển
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p>Cài đặt vận chuyển sẽ được thêm vào sau.</p>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="free_shipping_threshold">
+                    Miễn phí vận chuyển từ
+                  </Label>
+                  <Input
+                    id="free_shipping_threshold"
+                    type="number"
+                    value={settings.shipping.free_shipping_threshold}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "shipping",
+                        "free_shipping_threshold",
+                        parseInt(e.target.value),
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="default_shipping_cost">Phí vận chuyển mặc định</Label>
+                  <Input
+                    id="default_shipping_cost"
+                    type="number"
+                    value={settings.shipping.default_shipping_cost}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "shipping",
+                        "default_shipping_cost",
+                        parseInt(e.target.value),
+                      )
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label htmlFor="same_day_delivery">Giao hàng trong ngày</Label>
+                <Switch
+                  id="same_day_delivery"
+                  checked={settings.shipping.same_day_delivery}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("shipping", "same_day_delivery", checked)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label htmlFor="international_shipping">
+                  Giao hàng quốc tế
+                </Label>
+                <Switch
+                  id="international_shipping"
+                  checked={settings.shipping.international_shipping}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("shipping", "international_shipping", checked)
+                  }
+                />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
+        {/* Payment Settings */}
         <TabsContent value="payment" className="space-y-6">
           <Card>
             <CardHeader>
@@ -2027,83 +1864,240 @@ export default function SettingsPage() {
                 Phương thức thanh toán
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p>Cài đặt thanh toán sẽ được thêm vào sau.</p>
+            <CardContent className="space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="cod_enabled">Thanh toán khi nhận hàng (COD)</Label>
+                  <Switch
+                    id="cod_enabled"
+                    checked={settings.payment.cod_enabled}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("payment", "cod_enabled", checked)
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="bank_transfer_enabled">
+                    Chuyển khoản ngân hàng
+                  </Label>
+                  <Switch
+                    id="bank_transfer_enabled"
+                    checked={settings.payment.bank_transfer_enabled}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("payment", "bank_transfer_enabled", checked)
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="vnpay_enabled">VNPay</Label>
+                  <Switch
+                    id="vnpay_enabled"
+                    checked={settings.payment.vnpay_enabled}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("payment", "vnpay_enabled", checked)
+                    }
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
+        {/* Email Settings */}
         <TabsContent value="email" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Mail className="h-5 w-5" />
-                Cài đặt email
+                Cài đặt Email
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <Button onClick={handleTestEmail} variant="outline">
-                <Mail className="h-4 w-4 mr-2" />
-                Gửi email thử nghiệm
-              </Button>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="smtp_host">SMTP Host</Label>
+                  <Input
+                    id="smtp_host"
+                    value={settings.email.smtp_host}
+                    onChange={(e) =>
+                      handleInputChange("email", "smtp_host", e.target.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="smtp_port">SMTP Port</Label>
+                  <Input
+                    id="smtp_port"
+                    type="number"
+                    value={settings.email.smtp_port}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "email",
+                        "smtp_port",
+                        parseInt(e.target.value),
+                      )
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="from_email">Email gửi</Label>
+                  <Input
+                    id="from_email"
+                    value={settings.email.from_email}
+                    onChange={(e) =>
+                      handleInputChange("email", "from_email", e.target.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="from_name">Tên người gửi</Label>
+                  <Input
+                    id="from_name"
+                    value={settings.email.from_name}
+                    onChange={(e) =>
+                      handleInputChange("email", "from_name", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Label htmlFor="email_notifications">
+                  Kích hoạt thông báo email
+                </Label>
+                <Switch
+                  id="email_notifications"
+                  checked={settings.email.email_notifications}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("email", "email_notifications", checked)
+                  }
+                />
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
+        {/* Security Settings */}
         <TabsContent value="security" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Cài đặt bảo mật
+                Bảo mật
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p>Cài đặt bảo mật sẽ được thêm vào sau.</p>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="enable_2fa">Xác thực 2 bước</Label>
+                  <p className="text-sm text-gray-500">
+                    Tăng cường bảo mật tài khoản
+                  </p>
+                </div>
+                <Switch
+                  id="enable_2fa"
+                  checked={settings.security.enable_2fa}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("security", "enable_2fa", checked)
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="password_min_length">
+                    Độ dài mật khẩu tối thiểu
+                  </Label>
+                  <Input
+                    id="password_min_length"
+                    type="number"
+                    value={settings.security.password_min_length}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "security",
+                        "password_min_length",
+                        parseInt(e.target.value),
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="session_timeout">
+                    Thời gian hết hạn phiên (phút)
+                  </Label>
+                  <Input
+                    id="session_timeout"
+                    type="number"
+                    value={settings.security.session_timeout}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "security",
+                        "session_timeout",
+                        parseInt(e.target.value),
+                      )
+                    }
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
+        {/* Notifications Settings */}
         <TabsContent value="notifications" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Bell className="h-5 w-5" />
-                Cài đặt thông báo
+                Thông báo
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p>Cài đặt thông báo sẽ được thêm vào sau.</p>
+            <CardContent className="space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="order_notifications">Thông báo đơn hàng</Label>
+                  <Switch
+                    id="order_notifications"
+                    checked={settings.notifications.order_notifications}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("notifications", "order_notifications", checked)
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="low_stock_alerts">Cảnh báo hết hàng</Label>
+                  <Switch
+                    id="low_stock_alerts"
+                    checked={settings.notifications.low_stock_alerts}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("notifications", "low_stock_alerts", checked)
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="user_registration_alerts">
+                    Thông báo đăng ký người dùng
+                  </Label>
+                  <Switch
+                    id="user_registration_alerts"
+                    checked={settings.notifications.user_registration_alerts}
+                    onCheckedChange={(checked) =>
+                      handleInputChange(
+                        "notifications",
+                        "user_registration_alerts",
+                        checked,
+                      )
+                    }
+                  />
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Save Actions */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Database className="h-4 w-4" />
-              <span>Các thay đổi sẽ được lưu vào cơ sở dữ liệu</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button onClick={loadSettings} variant="outline">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Khôi phục
-              </Button>
-              <Button onClick={handleSaveSettings} disabled={saving}>
-                {saving ? (
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                ) : (
-                  <Save className="h-4 w-4 mr-2" />
-                )}
-                {saving ? "Đang lưu..." : "Lưu tất cả cài đặt"}
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
