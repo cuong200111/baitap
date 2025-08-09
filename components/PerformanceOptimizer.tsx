@@ -62,19 +62,46 @@ export function OptimizedImage({
 
   const loadSettings = async () => {
     try {
-      const response = await fetch("/api/seo/settings");
-      const result = await response.json();
-      if (result.success) {
-        setSettings(result.data);
+      // Try to fetch from backend server (port 4000)
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${backendUrl}/api/seo/settings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        // Convert to WebP if optimization is enabled
-        if (result.data.performance.optimize_images && !src.includes(".webp")) {
-          const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
-          setImgSrc(webpSrc);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setSettings(result.data);
+
+          // Convert to WebP if optimization is enabled
+          if (result.data.performance?.optimize_images && !src.includes(".webp")) {
+            const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+            setImgSrc(webpSrc);
+          }
+          return;
         }
       }
+
+      // If backend call fails, use fallback settings
+      throw new Error('Backend not available');
     } catch (error) {
-      console.error("Error loading performance settings:", error);
+      console.warn("Performance settings not available from backend, using defaults:", error.message);
+      // Set fallback settings
+      setSettings({
+        performance: {
+          optimize_images: false,
+          enable_critical_css: false,
+          defer_non_critical_js: false,
+          preload_critical_resources: false,
+          lazy_load_threshold: 200
+        },
+        technical: {
+          lazy_load_images: true
+        }
+      });
     }
   };
 
