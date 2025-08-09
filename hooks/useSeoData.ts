@@ -93,7 +93,7 @@ export function useSeoData() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${Domain}/api/admin/seo-settings`, {
+      const response = await fetch(`${Domain}/api/seo/settings`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
