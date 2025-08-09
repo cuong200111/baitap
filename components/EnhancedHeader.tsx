@@ -318,7 +318,7 @@ export function EnhancedHeader() {
               </div>
               <div>
                 <div className="font-bold text-xl text-gray-900 tracking-tight">
-                  {useSiteName()}
+                  {siteName}
                 </div>
                 <div className="text-xs text-gray-500 font-medium">
                   Siêu thị công nghệ
