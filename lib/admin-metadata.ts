@@ -160,10 +160,11 @@ export async function generateAdminMetadata(options: {
     finalDescription = finalDescription.substring(0, maxLength - 3) + '...';
   }
 
-  // Build URLs
-  const canonicalUrl = `${adminSeoData.general.site_url}${path}`;
-  const finalImage = image || adminSeoData.social.default_og_image;
-  const fullImageUrl = finalImage.startsWith('http') ? finalImage : `${adminSeoData.general.site_url}${finalImage}`;
+  // Build URLs - ensure strings
+  const siteUrl = String(adminSeoData.general.site_url || 'https://hacom.vn');
+  const canonicalUrl = `${siteUrl}${path}`;
+  const finalImage = String(image || adminSeoData.social.default_og_image || '/og-image.jpg');
+  const fullImageUrl = finalImage.startsWith('http') ? finalImage : `${siteUrl}${finalImage}`;
 
   return {
     title: finalTitle,
