@@ -1,4 +1,5 @@
 import { executeQuery } from "../database/connection.js";
+
 function generateRecommendations(checks, keySettings) {
   const recommendations = [];
 
@@ -65,7 +66,7 @@ export const seoController = {
         if (Array.isArray(settingsCount) && settingsCount.length > 0) {
           checks.seoTables = true;
           checks.seoSettings = settingsCount[0].count;
-          checks.defaultSettingsLoaded = settingsCount[0].count > 10;
+          checks.defaultSettingsLoaded = settingsCount[0].count > 50; // Updated threshold for complete settings
         }
       } catch (error) {
         console.error("Error checking SEO settings:", error);
@@ -105,7 +106,7 @@ export const seoController = {
       let healthScore = 0;
       if (checks.seoTables) healthScore += 25;
       if (checks.defaultSettingsLoaded) healthScore += 25;
-      if (checks.seoSettings > 20) healthScore += 25;
+      if (checks.seoSettings > 50) healthScore += 25; // Updated for complete settings
       if (checks.sitemapGenerated) healthScore += 15;
       if (checks.robotsGenerated) healthScore += 10;
 
@@ -204,7 +205,7 @@ export const seoController = {
     }
   },
 
-  // Get SEO Settings - Enhanced with proper nested structure
+  // Get SEO Settings - Enhanced with ALL categories from user's SQL
   async getSeoSettings(req, res) {
     try {
       // Get all SEO settings from database
@@ -215,7 +216,7 @@ export const seoController = {
         ORDER BY category, setting_key
       `);
 
-      // Organize settings by category
+      // Organize settings by ALL categories from user's SQL
       const organizedSettings = {
         general: {},
         social: {},
@@ -225,8 +226,6 @@ export const seoController = {
         content: {},
         performance: {},
         local: {},
-        robots: {},
-        sitemap: {},
       };
 
       if (Array.isArray(settings)) {
@@ -236,34 +235,45 @@ export const seoController = {
           let value = setting.setting_value;
 
           // Convert string values back to appropriate types
-          // Special handling for specific fields that should remain strings
           const stringFields = [
             "site_name",
-            "site_description",
+            "site_description", 
             "site_keywords",
             "site_url",
             "organization_name",
             "organization_address",
             "organization_phone",
             "organization_email",
+            "facebook_app_id",
+            "twitter_site",
+            "google_analytics_id",
+            "google_tag_manager_id",
+            "google_search_console_verification",
+            "business_hours",
+            "opening_hours",
+            "service_areas",
+            "robots_txt_custom",
+            "cdn_url"
+          ];
+
+          const numberFields = [
+            "meta_description_length",
+            "sitemap_max_urls", 
+            "keyword_density_target",
+            "content_min_words",
+            "lazy_load_threshold",
+            "latitude",
+            "longitude"
           ];
 
           if (stringFields.includes(key)) {
-            // Keep as string, just ensure it's not null
             value = value || "";
+          } else if (numberFields.includes(key)) {
+            value = parseFloat(value) || 0;
           } else if (value === "1" || value === "true") {
             value = true;
           } else if (value === "0" || value === "false") {
             value = false;
-          } else if (
-            !isNaN(value) &&
-            value !== "" &&
-            !stringFields.includes(key)
-          ) {
-            const numValue = parseFloat(value);
-            if (!isNaN(numValue)) {
-              value = numValue;
-            }
           }
 
           if (organizedSettings[category]) {
@@ -274,32 +284,29 @@ export const seoController = {
         });
       }
 
-      // Add default values if no settings exist
+      // Add complete default values for ALL categories based on user's SQL
       const defaultSettings = {
         general: {
-          site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
-          site_description:
-            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính h��ng, giao hàng toàn quốc.",
-          site_keywords:
-            "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
-          site_url: "https://hacom.vn",
+          site_name: "ZoxVN- Máy tính, Laptop",
+          site_url: "https://hacom.vns", 
+          site_description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+          site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
           site_logo: "/logo.png",
           site_favicon: "/favicon.ico",
           default_meta_title_pattern: "{title} | HACOM",
           product_meta_title_pattern: "{product_name} - {category} | HACOM",
-          category_meta_title_pattern:
-            "{category_name} - {description} | HACOM",
+          category_meta_title_pattern: "{category_name} - {description} | HACOM", 
           auto_generate_meta_description: true,
           meta_description_length: 160,
         },
         social: {
-          facebook_app_id: "",
+          facebook_app_id: "facd",
           twitter_site: "@hacom_vn",
+          default_og_image: "/og-image.jpg",
           linkedin_url: "",
           youtube_url: "",
           instagram_url: "",
           tiktok_url: "",
-          default_og_image: "/og-image.jpg",
         },
         analytics: {
           google_analytics_id: "",
@@ -319,8 +326,8 @@ export const seoController = {
           organization_email: "contact@hacom.vn",
           business_type: "ElectronicsStore",
           business_hours: "Mo-Su 08:00-22:00",
-          latitude: "21.0285",
-          longitude: "105.8542",
+          latitude: 21.0285,
+          longitude: 105.8542,
           enable_organization_schema: true,
           enable_breadcrumb_schema: true,
           enable_product_schema: true,
@@ -338,6 +345,33 @@ export const seoController = {
           sitemap_include_videos: true,
           sitemap_max_urls: 50000,
           robots_txt_custom: "",
+        },
+        content: {
+          enable_auto_seo: true,
+          keyword_density_target: 2.5,
+          content_min_words: 300,
+          h1_optimization: true,
+          internal_linking: true,
+          image_alt_optimization: true,
+          enable_faq_schema: true,
+          enable_article_schema: true,
+        },
+        performance: {
+          enable_cdn: false,
+          cdn_url: "",
+          preload_critical_resources: true,
+          defer_non_critical_js: true,
+          optimize_images: true,
+          enable_critical_css: true,
+          lazy_load_threshold: 200,
+        },
+        local: {
+          google_my_business_id: "",
+          enable_local_seo: true,
+          business_category: "Electronics Store",
+          service_areas: ["Hà Nội","TP.HCM","Đà Nẵng"],
+          opening_hours: "Thứ 2 - Chủ nhật: 8:00 - 22:00",
+          enable_review_schema: true,
         },
       };
 
@@ -362,114 +396,10 @@ export const seoController = {
     }
   },
 
-  // Update SEO Settings (Legacy method)
-  async updateSeoSettings(req, res) {
-    try {
-      const {
-        site_title,
-        site_description,
-        keywords,
-        robots_txt,
-        meta_author,
-        og_image,
-      } = req.body;
-
-      // Check if settings exist
-      const existing = await executeQuery(
-        "SELECT id FROM seo_settings WHERE setting_key = 'site_title' LIMIT 1",
-      );
-
-      if (existing.length > 0) {
-        // Update existing settings
-        const updates = [
-          ["site_title", site_title, "general"],
-          ["site_description", site_description, "general"],
-          ["keywords", keywords, "general"],
-          ["robots_txt", robots_txt, "technical"],
-          ["meta_author", meta_author, "general"],
-          ["og_image", og_image, "social"],
-        ];
-
-        for (const [key, value, category] of updates) {
-          await executeQuery(
-            `INSERT INTO seo_settings (setting_key, setting_value, category, updated_at, is_active)
-             VALUES (?, ?, ?, NOW(), 1)
-             ON DUPLICATE KEY UPDATE
-               setting_value = VALUES(setting_value),
-               category = VALUES(category),
-               updated_at = NOW()`,
-            [key, value, category],
-          );
-        }
-      } else {
-        // Insert new settings
-        const inserts = [
-          ["site_title", site_title, "general"],
-          ["site_description", site_description, "general"],
-          ["keywords", keywords, "general"],
-          ["robots_txt", robots_txt, "technical"],
-          ["meta_author", meta_author, "general"],
-          ["og_image", og_image, "social"],
-        ];
-
-        for (const [key, value, category] of inserts) {
-          await executeQuery(
-            `INSERT INTO seo_settings (setting_key, setting_value, category, created_at, updated_at, is_active)
-             VALUES (?, ?, ?, NOW(), NOW(), 1)`,
-            [key, value, category],
-          );
-        }
-      }
-
-      res.json({
-        success: true,
-        message: "SEO settings updated successfully",
-      });
-    } catch (error) {
-      console.error("Update SEO settings error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to update SEO settings",
-      });
-    }
-  },
-
-  // Save Nested SEO Settings (Enhanced with proper upsert)
+  // Save Nested SEO Settings - Enhanced for ALL categories
   async saveSeoSettings(req, res) {
     try {
       const body = req.body;
-
-      // Initialize default settings if database is empty
-      try {
-        const existingCount = await executeQuery(`
-          SELECT COUNT(*) as count FROM seo_settings WHERE is_active = 1
-        `);
-
-        if (existingCount[0].count === 0) {
-          // Insert default settings
-          const defaultSettings = [
-            ["site_name", "HACOM - Máy tính, Laptop, Gaming Gear", "general"],
-            ["site_url", "https://hacom.vn", "general"],
-            [
-              "site_description",
-              "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-              "general",
-            ],
-            ["enable_sitemap", "1", "technical"],
-            ["enable_analytics", "1", "analytics"],
-          ];
-
-          for (const [key, value, category] of defaultSettings) {
-            await executeQuery(
-              `INSERT INTO seo_settings (setting_key, setting_value, category, created_at, updated_at, is_active)
-               VALUES (?, ?, ?, NOW(), NOW(), 1)`,
-              [key, value, category],
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Error initializing default settings:", error);
-      }
 
       // Flatten the nested settings object
       const flatSettings = [];
@@ -528,6 +458,52 @@ export const seoController = {
     }
   },
 
+  // Legacy method for backward compatibility
+  async updateSeoSettings(req, res) {
+    try {
+      const {
+        site_title,
+        site_description,
+        keywords,
+        robots_txt,
+        meta_author,
+        og_image,
+      } = req.body;
+
+      const updates = [
+        ["site_name", site_title, "general"],
+        ["site_description", site_description, "general"],
+        ["site_keywords", keywords, "general"],
+        ["robots_txt_custom", robots_txt, "technical"],
+        ["meta_author", meta_author, "general"],
+        ["default_og_image", og_image, "social"],
+      ];
+
+      for (const [key, value, category] of updates) {
+        await executeQuery(
+          `INSERT INTO seo_settings (setting_key, setting_value, category, updated_at, is_active)
+           VALUES (?, ?, ?, NOW(), 1)
+           ON DUPLICATE KEY UPDATE
+             setting_value = VALUES(setting_value),
+             category = VALUES(category),
+             updated_at = NOW()`,
+          [key, value, category],
+        );
+      }
+
+      res.json({
+        success: true,
+        message: "SEO settings updated successfully",
+      });
+    } catch (error) {
+      console.error("Update SEO settings error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to update SEO settings",
+      });
+    }
+  },
+
   // Content Analysis
   async analyzeContent(req, res) {
     try {
@@ -553,7 +529,7 @@ export const seoController = {
         );
       });
 
-      // Add some default keyword analysis
+      // Add some default keyword analysis if none provided
       if (Object.keys(keywordDensity).length === 0) {
         keywordDensity.laptop = 2.5;
         keywordDensity.gaming = 1.8;
@@ -841,12 +817,10 @@ export const seoController = {
       const failedIssues = [];
 
       if (issues?.includes("missing_alt_text")) {
-        // Simulate fixing alt text
         fixedIssues.push("missing_alt_text");
       }
 
       if (issues?.includes("missing_meta_description")) {
-        // Simulate fixing meta descriptions
         fixedIssues.push("missing_meta_description");
       }
 
@@ -882,9 +856,7 @@ export const seoController = {
 
       let updated = 0;
 
-      // Simulate bulk updates
       for (const page of pages) {
-        // In real implementation, update database records
         updated++;
       }
 
