@@ -283,18 +283,18 @@ export function useSeoData() {
   };
 
   const getSiteName = () => {
-    return settings?.general?.site_name || 'HACOM';
+    return String(settings?.general?.site_name || 'HACOM');
   };
 
   const getOrganizationName = () => {
-    return settings?.schema?.organization_name || 'HACOM';
+    return String(settings?.schema?.organization_name || 'HACOM');
   };
 
   const getContactInfo = () => {
     return {
-      phone: settings?.schema?.organization_phone || '1900 1903',
-      email: settings?.schema?.organization_email || 'contact@hacom.vn',
-      address: settings?.schema?.organization_address || 'Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội',
+      phone: String(settings?.schema?.organization_phone || '1900 1903'),
+      email: String(settings?.schema?.organization_email || 'contact@hacom.vn'),
+      address: String(settings?.schema?.organization_address || 'Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội'),
     };
   };
 
