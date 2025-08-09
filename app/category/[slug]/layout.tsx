@@ -21,7 +21,7 @@ export async function generateMetadata({
       // Fallback for category not found
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
-        "Danh mục bạn đang tìm kiếm không tồn t���i hoặc đã bị xóa.",
+        "Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
         undefined,
       );
     }
@@ -31,7 +31,7 @@ export async function generateMetadata({
     if (!data.success || !data.data) {
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
-        "Danh mục bạn đang tìm kiếm không tồn tại ho��c đã bị xóa.",
+        "Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
         undefined,
       );
     }
