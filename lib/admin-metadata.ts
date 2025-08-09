@@ -169,11 +169,11 @@ export async function generateAdminMetadata(options: {
   return {
     title: finalTitle,
     description: finalDescription,
-    keywords: keywords || adminSeoData.general.site_keywords,
-    authors: [{ name: adminSeoData.schema.organization_name }],
-    creator: adminSeoData.schema.organization_name,
-    publisher: adminSeoData.schema.organization_name,
-    applicationName: adminSeoData.general.site_name,
+    keywords: String(keywords || adminSeoData.general.site_keywords || 'máy tính, laptop, gaming'),
+    authors: [{ name: String(adminSeoData.schema.organization_name || 'HACOM') }],
+    creator: String(adminSeoData.schema.organization_name || 'HACOM'),
+    publisher: String(adminSeoData.schema.organization_name || 'HACOM'),
+    applicationName: String(adminSeoData.general.site_name || 'HACOM'),
     alternates: {
       canonical: canonicalUrl,
     },
@@ -181,7 +181,7 @@ export async function generateAdminMetadata(options: {
       title: finalTitle,
       description: finalDescription,
       url: canonicalUrl,
-      siteName: adminSeoData.general.site_name,
+      siteName: String(adminSeoData.general.site_name || 'HACOM'),
       images: [
         {
           url: fullImageUrl,
@@ -197,8 +197,8 @@ export async function generateAdminMetadata(options: {
       card: 'summary_large_image',
       title: finalTitle,
       description: finalDescription,
-      site: adminSeoData.social.twitter_site,
-      creator: adminSeoData.social.twitter_site,
+      site: String(adminSeoData.social.twitter_site || '@hacom_vn'),
+      creator: String(adminSeoData.social.twitter_site || '@hacom_vn'),
       images: [fullImageUrl],
     },
     robots: {
@@ -213,10 +213,10 @@ export async function generateAdminMetadata(options: {
       },
     },
     verification: {
-      google: adminSeoData.analytics.google_search_console_verification,
+      google: String(adminSeoData.analytics.google_search_console_verification || ''),
     },
     other: {
-      'application-name': adminSeoData.general.site_name,
+      'application-name': String(adminSeoData.general.site_name || 'HACOM'),
       'msapplication-TileColor': '#dc2626',
       'theme-color': '#dc2626',
     },
