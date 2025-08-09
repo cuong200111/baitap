@@ -10,6 +10,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
   try {
     seoSettings = await seoService.loadSettings();
+    console.log('✅ SEO settings loaded for metadata:', {
+      site_name: seoSettings.general.site_name,
+      description_length: seoSettings.general.site_description?.length || 0
+    });
   } catch (error) {
     console.error('Failed to load SEO settings in metadata, using defaults:', error);
     // Use default settings if API fails
