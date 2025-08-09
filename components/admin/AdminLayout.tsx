@@ -14,6 +14,7 @@ import {
   LogOut,
   Image as ImageIcon,
 } from "lucide-react";
+import { useSiteName } from "@/contexts/SeoContext";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
