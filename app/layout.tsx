@@ -49,7 +49,9 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <DevErrorSuppressor />
         <ErrorBoundary>
-          <Providers>{children}</Providers>
+          <SeoProvider>
+            <Providers>{children}</Providers>
+          </SeoProvider>
         </ErrorBoundary>
       </body>
     </html>
