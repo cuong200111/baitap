@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import SeoProvider from "@/components/providers/SeoProvider";
 import { generateAdminMetadata } from "@/lib/admin-metadata";
-import SeoAnalytics from "@/components/SeoAnalytics";
-import StructuredData from "@/components/StructuredData";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DevErrorSuppressor from "@/components/DevErrorSuppressor";
 import "@/lib/error-handler"; // Auto-setup global error handling
