@@ -1,57 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Test SEO API</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Test SEO API</h1>
     <button onclick="testSeoSettings()">Test SEO Settings API</button>
     <button onclick="testSeoStatus()">Test SEO Status API</button>
     <pre id="result"></pre>
 
     <script>
-        const resultDiv = document.getElementById('result');
+      const resultDiv = document.getElementById("result");
 
-        async function testSeoSettings() {
-            try {
-                resultDiv.innerHTML = 'Testing /api/seo/settings...\n';
-                
-                const response = await fetch('http://localhost:4000/api/seo/settings');
-                resultDiv.innerHTML += `Status: ${response.status}\n`;
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    resultDiv.innerHTML += `Success: ${data.success}\n`;
-                    resultDiv.innerHTML += `Data keys: ${Object.keys(data.data || {}).join(', ')}\n`;
-                    resultDiv.innerHTML += `Site name: ${data.data?.general?.site_name || 'N/A'}\n`;
-                } else {
-                    const errorText = await response.text();
-                    resultDiv.innerHTML += `Error: ${errorText}\n`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML += `Error: ${error.message}\n`;
-            }
-        }
+      async function testSeoSettings() {
+        try {
+          resultDiv.innerHTML = "Testing /api/seo/settings...\n";
 
-        async function testSeoStatus() {
-            try {
-                resultDiv.innerHTML = 'Testing /api/seo/status...\n';
-                
-                const response = await fetch('http://localhost:4000/api/seo/status');
-                resultDiv.innerHTML += `Status: ${response.status}\n`;
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    resultDiv.innerHTML += `Success: ${data.success}\n`;
-                    resultDiv.innerHTML += `Health Score: ${data.data?.healthScore || 'N/A'}\n`;
-                } else {
-                    const errorText = await response.text();
-                    resultDiv.innerHTML += `Error: ${errorText}\n`;
-                }
-            } catch (error) {
-                resultDiv.innerHTML += `Error: ${error.message}\n`;
-            }
+          const response = await fetch(
+            "http://localhost:4000/api/seo/settings",
+          );
+          resultDiv.innerHTML += `Status: ${response.status}\n`;
+
+          if (response.ok) {
+            const data = await response.json();
+            resultDiv.innerHTML += `Success: ${data.success}\n`;
+            resultDiv.innerHTML += `Data keys: ${Object.keys(data.data || {}).join(", ")}\n`;
+            resultDiv.innerHTML += `Site name: ${data.data?.general?.site_name || "N/A"}\n`;
+          } else {
+            const errorText = await response.text();
+            resultDiv.innerHTML += `Error: ${errorText}\n`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML += `Error: ${error.message}\n`;
         }
+      }
+
+      async function testSeoStatus() {
+        try {
+          resultDiv.innerHTML = "Testing /api/seo/status...\n";
+
+          const response = await fetch("http://localhost:4000/api/seo/status");
+          resultDiv.innerHTML += `Status: ${response.status}\n`;
+
+          if (response.ok) {
+            const data = await response.json();
+            resultDiv.innerHTML += `Success: ${data.success}\n`;
+            resultDiv.innerHTML += `Health Score: ${data.data?.healthScore || "N/A"}\n`;
+          } else {
+            const errorText = await response.text();
+            resultDiv.innerHTML += `Error: ${errorText}\n`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML += `Error: ${error.message}\n`;
+        }
+      }
     </script>
-</body>
+  </body>
 </html>

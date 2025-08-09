@@ -10,28 +10,33 @@ export async function generateMetadata(): Promise<Metadata> {
 
   try {
     seoSettings = await seoService.loadSettings();
-    console.log('✅ SEO settings loaded for metadata:', {
+    console.log("✅ SEO settings loaded for metadata:", {
       site_name: seoSettings.general.site_name,
-      description_length: seoSettings.general.site_description?.length || 0
+      description_length: seoSettings.general.site_description?.length || 0,
     });
   } catch (error) {
-    console.error('Failed to load SEO settings in metadata, using defaults:', error);
+    console.error(
+      "Failed to load SEO settings in metadata, using defaults:",
+      error,
+    );
     // Use default settings if API fails
     seoSettings = {
       general: {
-        site_name: 'HACOM - Máy tính, Laptop',
-        site_url: 'https://hacom.vn',
-        site_description: 'HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.',
-        site_keywords: 'máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM',
-        site_favicon: '/favicon.ico'
+        site_name: "HACOM - Máy tính, Laptop",
+        site_url: "https://hacom.vn",
+        site_description:
+          "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+        site_keywords:
+          "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
+        site_favicon: "/favicon.ico",
       },
       social: {
-        twitter_site: '@hacom_vn',
-        default_og_image: '/og-image.jpg'
+        twitter_site: "@hacom_vn",
+        default_og_image: "/og-image.jpg",
       },
       schema: {
-        organization_name: 'HACOM'
-      }
+        organization_name: "HACOM",
+      },
     };
   }
 

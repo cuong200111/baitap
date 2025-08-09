@@ -86,7 +86,9 @@ class SeoService {
       });
 
       if (!response.ok) {
-        console.warn(`Failed to load SEO settings (${response.status}), using defaults`);
+        console.warn(
+          `Failed to load SEO settings (${response.status}), using defaults`,
+        );
         return this.getDefaultSettings();
       }
 
@@ -94,7 +96,9 @@ class SeoService {
 
       if (data.success && data.data) {
         this.settings = data.data;
-        console.log(`✅ SEO settings loaded: ${Object.keys(data.data).join(', ')}`);
+        console.log(
+          `✅ SEO settings loaded: ${Object.keys(data.data).join(", ")}`,
+        );
         return this.settings;
       }
 
