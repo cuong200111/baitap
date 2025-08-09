@@ -1187,7 +1187,7 @@ export default function SettingsPage() {
                               placeholder="https://yourdomain.com/images/og-category.jpg"
                             />
                             <p className="text-xs text-muted-foreground">
-                              Hình ảnh mặc định cho các trang danh mục. Danh mục có hình riêng sẽ ưu tiên hình của danh mục.
+                              Hình ảnh mặc định cho các trang danh mục. Danh m���c có hình riêng sẽ ưu tiên hình của danh mục.
                             </p>
                           </div>
                         </div>
@@ -1245,6 +1245,11 @@ export default function SettingsPage() {
                           </AlertDescription>
                         </Alert>
                       </div>
+
+                      <Separator />
+
+                      {/* Open Graph Image Preview & Testing */}
+                      <OpenGraphImagePreview seoSettings={seoSettings} />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -1957,7 +1962,7 @@ export default function SettingsPage() {
                                 .map((area) => area.trim()),
                             )
                           }
-                          placeholder="Hà Nội, TP.HCM, Đà Nẵng"
+                          placeholder="H�� Nội, TP.HCM, Đà Nẵng"
                         />
                         <p className="text-sm text-muted-foreground">
                           Ngăn cách bằng dấu phẩy
