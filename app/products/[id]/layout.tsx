@@ -31,10 +31,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       return await generateProductMetadata(
         "Sản phẩm không tồn tại",
         "Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
-        "Sản phẩm",
         undefined,
         undefined,
-        `/products/${params.id}`,
+        undefined
       );
     }
 
