@@ -27,7 +27,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     if (process.env.NODE_ENV === "development") {
       console.warn("🛡️ ErrorBoundary caught error:", error);
       console.warn("Error info:", errorInfo);
-      
+
       // Ignore common development fetch errors
       if (
         error.message.includes("Failed to fetch") ||
@@ -51,8 +51,17 @@ export class ErrorBoundary extends React.Component<Props, State> {
       if (process.env.NODE_ENV === "development") {
         return (
           this.props.fallback || (
-            <div style={{ padding: "20px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "8px" }}>
-              <h3 style={{ color: "#dc2626", margin: "0 0 10px 0" }}>Development Error (Auto-recovering...)</h3>
+            <div
+              style={{
+                padding: "20px",
+                background: "#fef2f2",
+                border: "1px solid #fecaca",
+                borderRadius: "8px",
+              }}
+            >
+              <h3 style={{ color: "#dc2626", margin: "0 0 10px 0" }}>
+                Development Error (Auto-recovering...)
+              </h3>
               <p style={{ color: "#7f1d1d", margin: "0", fontSize: "14px" }}>
                 {this.state.error?.message || "An error occurred"}
               </p>

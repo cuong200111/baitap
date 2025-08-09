@@ -3,9 +3,10 @@ import { seoService } from "@/lib/seo-service";
 export async function generateMetadata() {
   const seoData = await seoService.generatePageSeo({
     title: "Đăng nhập",
-    description: "Đăng nhập vào tài khoản HACOM của bạn để mua sắm, theo dõi đơn hàng và quản lý thông tin cá nhân.",
+    description:
+      "Đăng nhập vào tài khoản HACOM của bạn để mua sắm, theo dõi đơn hàng và quản lý thông tin cá nhân.",
     path: "/login",
-    type: "page"
+    type: "page",
   });
 
   return {

@@ -41,7 +41,7 @@ export default function DevErrorSuppressor() {
         console.log('🛡️ Development error suppression active');
       })();
     `;
-    
+
     document.head.appendChild(script);
 
     return () => {

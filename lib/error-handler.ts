@@ -8,31 +8,31 @@ export function setupGlobalErrorHandling() {
   const originalError = console.error;
   console.error = (...args) => {
     const message = args.join(" ");
-    
+
     // Ignore FullStory and RSC payload errors in development
     if (
       message.includes("Failed to fetch") &&
-      (message.includes("fullstory") || 
-       message.includes("RSC payload") ||
-       message.includes("edge.fullstory.com") ||
-       message.includes("fetchServerResponse"))
+      (message.includes("fullstory") ||
+        message.includes("RSC payload") ||
+        message.includes("edge.fullstory.com") ||
+        message.includes("fetchServerResponse"))
     ) {
       console.warn("🔇 Suppressed development error:", message);
       return;
     }
-    
+
     originalError.apply(console, args);
   };
 
   // Handle unhandled promise rejections
   window.addEventListener("unhandledrejection", (event) => {
     const message = event.reason?.message || String(event.reason);
-    
+
     if (
       message.includes("Failed to fetch") &&
-      (message.includes("fullstory") || 
-       message.includes("RSC payload") ||
-       message.includes("edge.fullstory.com"))
+      (message.includes("fullstory") ||
+        message.includes("RSC payload") ||
+        message.includes("edge.fullstory.com"))
     ) {
       console.warn("🔇 Suppressed unhandled rejection:", message);
       event.preventDefault();
