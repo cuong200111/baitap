@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { DynamicCategoryMegaMenu } from "./DynamicCategoryMegaMenu";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteName } from "@/contexts/SeoContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
