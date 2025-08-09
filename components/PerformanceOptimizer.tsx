@@ -63,11 +63,12 @@ export function OptimizedImage({
   const loadSettings = async () => {
     try {
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -77,7 +78,10 @@ export function OptimizedImage({
           setSettings(result.data);
 
           // Convert to WebP if optimization is enabled
-          if (result.data.performance?.optimize_images && !src.includes(".webp")) {
+          if (
+            result.data.performance?.optimize_images &&
+            !src.includes(".webp")
+          ) {
             const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
             setImgSrc(webpSrc);
           }
@@ -86,9 +90,12 @@ export function OptimizedImage({
       }
 
       // If backend call fails, use fallback settings
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     } catch (error) {
-      console.warn("Performance settings not available from backend, using defaults:", error.message);
+      console.warn(
+        "Performance settings not available from backend, using defaults:",
+        error.message,
+      );
       // Set fallback settings
       setSettings({
         performance: {
@@ -96,11 +103,11 @@ export function OptimizedImage({
           enable_critical_css: false,
           defer_non_critical_js: false,
           preload_critical_resources: false,
-          lazy_load_threshold: 200
+          lazy_load_threshold: 200,
         },
         technical: {
-          lazy_load_images: true
-        }
+          lazy_load_images: true,
+        },
       });
     }
   };
@@ -201,11 +208,12 @@ export function CriticalCSS() {
   const loadSettings = async () => {
     try {
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -218,14 +226,17 @@ export function CriticalCSS() {
       }
 
       // If backend call fails, use fallback settings
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     } catch (error) {
-      console.warn("Performance settings not available from backend, using defaults:", error.message);
+      console.warn(
+        "Performance settings not available from backend, using defaults:",
+        error.message,
+      );
       // Set fallback settings
       setSettings({
         performance: {
-          enable_critical_css: false
-        }
+          enable_critical_css: false,
+        },
       });
     }
   };
@@ -303,11 +314,12 @@ export function ScriptDeferrer() {
   const loadSettings = async () => {
     try {
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -320,14 +332,17 @@ export function ScriptDeferrer() {
       }
 
       // If backend call fails, use fallback settings
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     } catch (error) {
-      console.warn("Performance settings not available from backend, using defaults:", error.message);
+      console.warn(
+        "Performance settings not available from backend, using defaults:",
+        error.message,
+      );
       // Set fallback settings
       setSettings({
         performance: {
-          defer_non_critical_js: false
-        }
+          defer_non_critical_js: false,
+        },
       });
     }
   };
@@ -374,11 +389,12 @@ export function ResourcePreloader() {
   const loadSettings = async () => {
     try {
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -391,14 +407,17 @@ export function ResourcePreloader() {
       }
 
       // If backend call fails, use fallback settings
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     } catch (error) {
-      console.warn("Performance settings not available from backend, using defaults:", error.message);
+      console.warn(
+        "Performance settings not available from backend, using defaults:",
+        error.message,
+      );
       // Set fallback settings
       setSettings({
         performance: {
-          preload_critical_resources: false
-        }
+          preload_critical_resources: false,
+        },
       });
     }
   };

@@ -79,11 +79,12 @@ export default function SeoHead({ data }: SeoHeadProps) {
       if (typeof window === "undefined") return;
 
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -96,9 +97,12 @@ export default function SeoHead({ data }: SeoHeadProps) {
       }
 
       // If backend call fails, throw error to use fallback
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     } catch (error) {
-      console.warn("SEO settings not available from backend, using defaults:", error.message);
+      console.warn(
+        "SEO settings not available from backend, using defaults:",
+        error.message,
+      );
       // Set fallback settings
       setSeoSettings({
         general: {

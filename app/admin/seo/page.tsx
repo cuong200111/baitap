@@ -136,11 +136,12 @@ export default function SeoAdminPage() {
   const loadSeoSettings = async () => {
     try {
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
       const result = await response.json();
@@ -214,7 +215,8 @@ export default function SeoAdminPage() {
     setSaving(true);
     try {
       // Try to save to backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/admin/seo-settings`, {
         method: "POST",
         headers: {

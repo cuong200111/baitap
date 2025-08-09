@@ -43,11 +43,12 @@ export default function SeoProvider({ children }: SeoProviderProps) {
       }
 
       // Try to fetch from backend server (port 4000)
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -60,9 +61,12 @@ export default function SeoProvider({ children }: SeoProviderProps) {
       }
 
       // If backend call fails, throw error to use fallback
-      throw new Error('Backend not available');
+      throw new Error("Backend not available");
     } catch (error) {
-      console.warn("SEO settings not available from backend, using defaults:", error.message);
+      console.warn(
+        "SEO settings not available from backend, using defaults:",
+        error.message,
+      );
       // Set default settings if API fails
       setSeoSettings({
         general: {
@@ -74,9 +78,10 @@ export default function SeoProvider({ children }: SeoProviderProps) {
             "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
           default_meta_title_pattern: "{title} | HACOM",
           product_meta_title_pattern: "{product_name} - {category} | HACOM",
-          category_meta_title_pattern: "{category_name} - {description} | HACOM",
+          category_meta_title_pattern:
+            "{category_name} - {description} | HACOM",
           auto_generate_meta_description: true,
-          meta_description_length: 160
+          meta_description_length: 160,
         },
         social: {
           facebook_app_id: "",
@@ -101,19 +106,19 @@ export default function SeoProvider({ children }: SeoProviderProps) {
           enable_organization_schema: true,
           enable_breadcrumb_schema: true,
           enable_product_schema: true,
-          enable_review_schema: true
+          enable_review_schema: true,
         },
         technical: {
           lazy_load_images: true,
-          enable_sitemap: true
+          enable_sitemap: true,
         },
         performance: {
           optimize_images: true,
           enable_critical_css: true,
           defer_non_critical_js: true,
           preload_critical_resources: true,
-          lazy_load_threshold: 200
-        }
+          lazy_load_threshold: 200,
+        },
       });
     } finally {
       setIsLoading(false);
