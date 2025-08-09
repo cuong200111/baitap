@@ -435,16 +435,17 @@ export function ResourcePreloader() {
       document.head.appendChild(link);
     };
 
-    // Critical resources to preload
+    // Critical resources to preload (disabled to prevent 404 errors)
     const criticalResources = [
-      {
-        href: "/fonts/inter-v12-latin-regular.woff2",
-        as: "font",
-        type: "font/woff2",
-      },
-      { href: "/css/critical.css", as: "style" },
-      { href: "/images/hero-bg.webp", as: "image" },
-      { href: "/images/logo.webp", as: "image" },
+      // Disabled hardcoded resources that don't exist
+      // {
+      //   href: "/fonts/inter-v12-latin-regular.woff2",
+      //   as: "font",
+      //   type: "font/woff2",
+      // },
+      // { href: "/css/critical.css", as: "style" },
+      // { href: "/images/hero-bg.webp", as: "image" },
+      // { href: "/images/logo.webp", as: "image" },
     ];
 
     criticalResources.forEach((resource) => {
