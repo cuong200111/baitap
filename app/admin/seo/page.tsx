@@ -135,7 +135,14 @@ export default function SeoAdminPage() {
 
   const loadSeoSettings = async () => {
     try {
-      const response = await fetch("/api/seo/settings");
+      // Try to fetch from backend server (port 4000)
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${backendUrl}/api/seo/settings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       const result = await response.json();
 
       if (result.success) {
