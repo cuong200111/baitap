@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { seoService } from "@/lib/seo-service";
-import Analytics from "@/components/Analytics";
+import SeoAnalytics from "@/components/SeoAnalytics";
 import StructuredData from "@/components/StructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,7 +73,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body suppressHydrationWarning={true}>
-        <Analytics />
+        <SeoAnalytics />
         <StructuredData type="organization" />
         <StructuredData type="website" />
         <Providers>{children}</Providers>
