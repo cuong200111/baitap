@@ -502,11 +502,14 @@ export async function generateCategoryMetadata(
       `Khám phá danh mục ${categoryName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
     // Smart Open Graph image selection
-    const ogImage =
-      categoryImage ||
-      settings.social.category_og_image ||
-      settings.social.default_og_image;
+    let ogImage = categoryImage; // Use actual category image first (already has full URL from layout)
 
+    if (!ogImage) {
+      // Fallback to settings images
+      ogImage = settings.social.category_og_image || settings.social.default_og_image;
+    }
+
+    // Handle URL formatting - if categoryImage already has full URL, use it directly
     const fullImageUrl = ogImage?.startsWith("http")
       ? ogImage
       : `${settings.general.site_url}${ogImage}`;
