@@ -395,3 +395,45 @@ export const seoService = new SeoService();
 
 // Export default for easier imports
 export default seoService;
+
+// Helper function for generating category metadata
+export async function generateCategoryMetadata(
+  categoryName: string,
+  categoryDescription?: string,
+  categoryImage?: string
+) {
+  try {
+    const settings = await seoService.loadSettings();
+
+    const title = `${categoryName} | ${settings.general.site_name}`;
+    const description = categoryDescription ||
+      `Khám phá danh mục ${categoryName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
+
+    return {
+      title,
+      description,
+      keywords: `${categoryName}, ${settings.general.site_keywords}`,
+      openGraph: {
+        title,
+        description,
+        images: categoryImage ? [{ url: categoryImage }] : undefined,
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: categoryImage ? [categoryImage] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating category metadata:', error);
+
+    // Fallback metadata
+    return {
+      title: `${categoryName} | HACOM`,
+      description: `Khám phá danh mục ${categoryName} tại HACOM. Chuyên cung cấp máy tính, laptop, gaming gear chính hãng.`,
+      keywords: `${categoryName}, máy tính, laptop, gaming, HACOM`,
+    };
+  }
+}
