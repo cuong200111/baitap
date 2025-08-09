@@ -236,11 +236,17 @@ export const seoController = {
           let value = setting.setting_value;
 
           // Convert string values back to appropriate types
-          if (value === "1" || value === "true") {
+          // Special handling for specific fields that should remain strings
+          const stringFields = ['site_name', 'site_description', 'site_keywords', 'site_url', 'organization_name', 'organization_address', 'organization_phone', 'organization_email'];
+
+          if (stringFields.includes(key)) {
+            // Keep as string, just ensure it's not null
+            value = value || '';
+          } else if (value === "1" || value === "true") {
             value = true;
           } else if (value === "0" || value === "false") {
             value = false;
-          } else if (!isNaN(value) && value !== "") {
+          } else if (!isNaN(value) && value !== "" && !stringFields.includes(key)) {
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
               value = numValue;
@@ -260,7 +266,7 @@ export const seoController = {
         general: {
           site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
           site_description:
-            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính h��ng, giao hàng toàn quốc.",
           site_keywords:
             "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
           site_url: "https://hacom.vn",
