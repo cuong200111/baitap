@@ -64,7 +64,6 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const siteName = useSiteName();
 
   return (
     <div className="flex h-screen bg-gray-100">
