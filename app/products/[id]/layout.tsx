@@ -58,10 +58,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       product.description ||
         product.short_description ||
         `Mua ${product.name} chính hãng tại HACOM với giá tốt nhất.`,
-      categoryName,
-      product.price,
       productImage,
-      `/products/${params.id}`,
+      product.price,
+      product.sku
     );
   } catch (error) {
     console.error("Error generating product metadata:", error);
