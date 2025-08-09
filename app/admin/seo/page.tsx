@@ -135,14 +135,22 @@ export default function SeoAdminPage() {
 
   const loadSeoSettings = async () => {
     try {
+      // Get authentication token
+      const token = localStorage.getItem("token");
+      const headers: any = {
+        "Content-Type": "application/json",
+      };
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       // Try to fetch from backend server (port 4000)
       const backendUrl =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
       const response = await fetch(`${backendUrl}/api/seo/settings`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
       });
       const result = await response.json();
 
@@ -787,7 +795,7 @@ export default function SeoAdminPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="org_phone">Số điện thoại</Label>
+                  <Label htmlFor="org_phone">Số đi��n thoại</Label>
                   <Input
                     id="org_phone"
                     value={settings.schema.organization_phone}
