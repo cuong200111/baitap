@@ -52,7 +52,7 @@ export default function SeoStatusDashboard() {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
-      const response = await fetch(`${Domain}/api/admin/seo-status`, { headers });
+      const response = await fetch(`${Domain}/api/seo/status`, { headers });
       const data = await response.json();
       
       if (data.success) {
