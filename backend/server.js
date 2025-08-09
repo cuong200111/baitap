@@ -97,6 +97,7 @@ app.use("/api/shipping", shippingRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/buy-now", buyNowRoutes);
 app.use("/api/seo", seoRoutes);
+app.use("/api/seo/analytics", seoAnalyticsRoutes);
 app.use("/api/utils", utilsRoutes);
 app.use("/api/config", configRoutes);
 app.use("/api/addresses", addressesRoutes);
