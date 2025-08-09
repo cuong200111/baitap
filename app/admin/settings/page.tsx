@@ -40,6 +40,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import AdminInitializer from "@/components/AdminInitializer";
+import OpenGraphImagePreview from "@/components/OpenGraphImagePreview";
 import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SeoSettings {
