@@ -69,10 +69,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     return await generateProductMetadata(
       "Sản phẩm HACOM",
       "Khám phá sản phẩm chất lượng cao tại HACOM với giá tốt nhất.",
-      "Sản phẩm",
       undefined,
       undefined,
-      `/products/${params.id}`,
+      undefined
     );
   }
 }
