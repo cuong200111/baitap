@@ -979,103 +979,265 @@ export default function SettingsPage() {
                     <CardHeader>
                       <CardTitle>Social Media Integration</CardTitle>
                       <CardDescription>
-                        Cấu hình tích hợp mạng xã hội và Open Graph
+                        Cấu hình tích hợp mạng xã hội và Open Graph để tối ưu chia sẻ link
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="fb_app_id">Facebook App ID</Label>
-                          <Input
-                            id="fb_app_id"
-                            value={seoSettings.social.facebook_app_id}
-                            onChange={(e) =>
-                              updateSeoSetting(
-                                "social",
-                                "facebook_app_id",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="facd"
-                          />
+                      {/* Social Media Accounts */}
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold">Tài khoản mạng xã hội</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="fb_app_id">Facebook App ID</Label>
+                            <Input
+                              id="fb_app_id"
+                              value={seoSettings.social.facebook_app_id}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "facebook_app_id",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="1234567890123456"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="twitter_username">
+                              Twitter Username
+                            </Label>
+                            <Input
+                              id="twitter_username"
+                              value={seoSettings.social.twitter_site}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "twitter_site",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="@hacom_vn"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="linkedin_url">LinkedIn URL</Label>
+                            <Input
+                              id="linkedin_url"
+                              value={seoSettings.social.linkedin_url}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "linkedin_url",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://linkedin.com/company/hacom"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="youtube_url">YouTube URL</Label>
+                            <Input
+                              id="youtube_url"
+                              value={seoSettings.social.youtube_url}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "youtube_url",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://youtube.com/c/hacom"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="instagram_url">Instagram URL</Label>
+                            <Input
+                              id="instagram_url"
+                              value={seoSettings.social.instagram_url}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "instagram_url",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://instagram.com/hacom"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="tiktok_url">TikTok URL</Label>
+                            <Input
+                              id="tiktok_url"
+                              value={seoSettings.social.tiktok_url}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "tiktok_url",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://tiktok.com/@hacom"
+                            />
+                          </div>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="twitter_username">
-                            Twitter Username
-                          </Label>
-                          <Input
-                            id="twitter_username"
-                            value={seoSettings.social.twitter_site}
-                            onChange={(e) =>
-                              updateSeoSetting(
-                                "social",
-                                "twitter_site",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="@hacom_vn"
-                          />
+                      </div>
+
+                      <Separator />
+
+                      {/* Open Graph Images Section */}
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="text-lg font-semibold">Open Graph Images</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Cấu hình hình ảnh hiển thị khi chia sẻ link trên mạng xã hội.
+                            Khuyến nghị: 1200x630px (tỷ lệ 1.91:1) cho hiệu quả tốt nhất.
+                          </p>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="linkedin_url">LinkedIn URL</Label>
-                          <Input
-                            id="linkedin_url"
-                            value={seoSettings.social.linkedin_url}
-                            onChange={(e) =>
-                              updateSeoSetting(
-                                "social",
-                                "linkedin_url",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="https://linkedin.com/company/hacom"
-                          />
+
+                        {/* Default OG Image */}
+                        <div className="space-y-4 p-4 border rounded-lg">
+                          <h5 className="font-medium">Hình ảnh mặc định</h5>
+                          <div className="space-y-2">
+                            <Label htmlFor="default_og_image">URL hình ảnh mặc định</Label>
+                            <Input
+                              id="default_og_image"
+                              value={seoSettings.social.default_og_image}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "default_og_image",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://yourdomain.com/images/og-default.jpg"
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              Hình ảnh này sẽ được sử dụng khi không có hình ảnh cụ thể cho trang.
+                            </p>
+                          </div>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="youtube_url">YouTube URL</Label>
-                          <Input
-                            id="youtube_url"
-                            value={seoSettings.social.youtube_url}
-                            onChange={(e) =>
-                              updateSeoSetting(
-                                "social",
-                                "youtube_url",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="https://youtube.com/c/hacom"
-                          />
+
+                        {/* Homepage OG Image */}
+                        <div className="space-y-4 p-4 border rounded-lg">
+                          <h5 className="font-medium">Hình ảnh trang chủ</h5>
+                          <div className="space-y-2">
+                            <Label htmlFor="home_og_image">URL hình ảnh trang chủ</Label>
+                            <Input
+                              id="home_og_image"
+                              value={seoSettings.social.home_og_image || ""}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "home_og_image",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://yourdomain.com/images/og-homepage.jpg"
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              Hình ảnh đặc biệt cho trang chủ khi được chia sẻ.
+                            </p>
+                          </div>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="instagram_url">Instagram URL</Label>
-                          <Input
-                            id="instagram_url"
-                            value={seoSettings.social.instagram_url}
-                            onChange={(e) =>
-                              updateSeoSetting(
-                                "social",
-                                "instagram_url",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="https://instagram.com/hacom"
-                          />
+
+                        {/* Products OG Image */}
+                        <div className="space-y-4 p-4 border rounded-lg">
+                          <h5 className="font-medium">Hình ảnh sản phẩm</h5>
+                          <div className="space-y-2">
+                            <Label htmlFor="product_og_image">URL hình ảnh sản phẩm mặc định</Label>
+                            <Input
+                              id="product_og_image"
+                              value={seoSettings.social.product_og_image || ""}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "product_og_image",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://yourdomain.com/images/og-product.jpg"
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              Hình ảnh mặc định cho các trang sản phẩm. Sản phẩm có hình riêng sẽ ưu tiên hình của sản phẩm.
+                            </p>
+                          </div>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="tiktok_url">TikTok URL</Label>
-                          <Input
-                            id="tiktok_url"
-                            value={seoSettings.social.tiktok_url}
-                            onChange={(e) =>
-                              updateSeoSetting(
-                                "social",
-                                "tiktok_url",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="https://tiktok.com/@hacom"
-                          />
+
+                        {/* Categories OG Image */}
+                        <div className="space-y-4 p-4 border rounded-lg">
+                          <h5 className="font-medium">Hình ảnh danh mục</h5>
+                          <div className="space-y-2">
+                            <Label htmlFor="category_og_image">URL hình ảnh danh mục mặc định</Label>
+                            <Input
+                              id="category_og_image"
+                              value={seoSettings.social.category_og_image || ""}
+                              onChange={(e) =>
+                                updateSeoSetting(
+                                  "social",
+                                  "category_og_image",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="https://yourdomain.com/images/og-category.jpg"
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              Hình ảnh mặc định cho các trang danh mục. Danh mục có hình riêng sẽ ưu tiên hình của danh mục.
+                            </p>
+                          </div>
                         </div>
+
+                        {/* Login/Register OG Images */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-4 p-4 border rounded-lg">
+                            <h5 className="font-medium">Hình ảnh trang đăng nhập</h5>
+                            <div className="space-y-2">
+                              <Label htmlFor="login_og_image">URL hình ảnh đăng nhập</Label>
+                              <Input
+                                id="login_og_image"
+                                value={seoSettings.social.login_og_image || ""}
+                                onChange={(e) =>
+                                  updateSeoSetting(
+                                    "social",
+                                    "login_og_image",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="https://yourdomain.com/images/og-login.jpg"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-4 p-4 border rounded-lg">
+                            <h5 className="font-medium">Hình ảnh trang đăng ký</h5>
+                            <div className="space-y-2">
+                              <Label htmlFor="register_og_image">URL hình ảnh đăng ký</Label>
+                              <Input
+                                id="register_og_image"
+                                value={seoSettings.social.register_og_image || ""}
+                                onChange={(e) =>
+                                  updateSeoSetting(
+                                    "social",
+                                    "register_og_image",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="https://yourdomain.com/images/og-register.jpg"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* OG Image Guidelines */}
+                        <Alert>
+                          <Info className="h-4 w-4" />
+                          <AlertDescription>
+                            <strong>Hướng dẫn tối ưu Open Graph:</strong><br />
+                            • Kích thước khuyến nghị: 1200x630px (tỷ lệ 1.91:1)<br />
+                            • Định dạng: JPG hoặc PNG<br />
+                            • Dung lượng tối đa: 8MB<br />
+                            • Tránh văn bản quá nhỏ, ưu tiên hình ảnh rõ nét<br />
+                            • Kiểm tra hiển thị trên Facebook Debugger và Twitter Card Validator
+                          </AlertDescription>
+                        </Alert>
                       </div>
                     </CardContent>
                   </Card>
