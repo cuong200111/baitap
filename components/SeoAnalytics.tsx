@@ -6,6 +6,7 @@ import { seoService } from "@/lib/seo-service";
 
 export default function SeoAnalytics() {
   const [analytics, setAnalytics] = useState<any>(null);
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     async function loadAnalyticsSettings() {
@@ -20,7 +21,8 @@ export default function SeoAnalytics() {
     loadAnalyticsSettings();
   }, []);
 
-  if (!analytics?.enable_analytics) {
+  // Disable analytics in development to prevent conflicts
+  if (!analytics?.enable_analytics || isDevelopment) {
     return null;
   }
 
