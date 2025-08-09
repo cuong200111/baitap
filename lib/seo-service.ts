@@ -506,7 +506,8 @@ export async function generateCategoryMetadata(
 
     if (!ogImage) {
       // Fallback to settings images
-      ogImage = settings.social.category_og_image || settings.social.default_og_image;
+      ogImage =
+        settings.social.category_og_image || settings.social.default_og_image;
     }
 
     // Handle URL formatting - if categoryImage already has full URL, use it directly
@@ -566,7 +567,8 @@ export async function generateProductMetadata(
 
     if (!ogImage) {
       // Fallback to settings images
-      ogImage = settings.social.product_og_image || settings.social.default_og_image;
+      ogImage =
+        settings.social.product_og_image || settings.social.default_og_image;
     }
 
     // Handle URL formatting - if productImage already has full URL, use it directly

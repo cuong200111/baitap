@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     let productImage = undefined;
     if (product.image) {
       // If product has main image, use it with Domain uploads path
-      productImage = product.image.startsWith('http')
+      productImage = product.image.startsWith("http")
         ? product.image
         : `${Domain}/uploads/${product.image}`;
     } else if (
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     ) {
       // If product has images array, use first image
       const firstImage = product.images[0];
-      productImage = firstImage.startsWith('http')
+      productImage = firstImage.startsWith("http")
         ? firstImage
         : `${Domain}/uploads/${firstImage}`;
     }

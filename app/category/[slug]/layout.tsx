@@ -42,7 +42,7 @@ export async function generateMetadata({
     let categoryImage = undefined;
     if (category.image) {
       // If category has image, use it with Domain uploads path
-      categoryImage = category.image.startsWith('http')
+      categoryImage = category.image.startsWith("http")
         ? category.image
         : `${Domain}/uploads/${category.image}`;
     }
