@@ -41,7 +41,7 @@ interface AdminSeoData {
 // Fetch admin SEO settings
 async function fetchAdminSeoSettings(): Promise<AdminSeoData> {
   try {
-    const response = await fetch(`${Domain}/api/admin/seo-settings`, {
+    const response = await fetch(`${Domain}/api/seo/settings`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
