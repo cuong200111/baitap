@@ -50,10 +50,7 @@ export function AdminSeoHead({
       <meta property="og:description" content={seoMetadata.ogDescription} />
       <meta property="og:image" content={seoMetadata.ogImage} />
       <meta property="og:url" content={seoMetadata.ogUrl} />
-      <meta
-        property="og:type"
-        content="website"
-      />
+      <meta property="og:type" content="website" />
       <meta property="og:site_name" content="HACOM" />
 
       {/* Twitter Card meta tags */}
