@@ -84,7 +84,7 @@ export function Header() {
           const configData = data.data;
           setConfig({
             app: {
-              name: configData.app?.name || "ZOXVN",
+              name: configData.app?.name || siteName,
               description:
                 configData.app?.description || "Máy tính, Laptop, Gaming Gear",
             },
