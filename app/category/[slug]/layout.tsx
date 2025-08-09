@@ -21,7 +21,7 @@ export async function generateMetadata({
       // Fallback for category not found
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
-        "Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
+        "Danh mục bạn đang tìm kiếm không tồn t���i hoặc đã bị xóa.",
         undefined,
       );
     }
@@ -38,8 +38,14 @@ export async function generateMetadata({
 
     const category = data.data;
 
-    // Get category image if available
-    const categoryImage = category.image || undefined;
+    // Get category image from backend uploads
+    let categoryImage = undefined;
+    if (category.image) {
+      // If category has image, use it with Domain uploads path
+      categoryImage = category.image.startsWith('http')
+        ? category.image
+        : `${Domain}/uploads/${category.image}`;
+    }
 
     // Generate description if not available
     let description = category.description;
