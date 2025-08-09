@@ -74,7 +74,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b">
-          <h1 className="text-xl font-bold text-red-600">ZOXVN Admin</h1>
+          <h1 className="text-xl font-bold text-red-600">{siteName} Admin</h1>
           <Button
             variant="ghost"
             size="sm"
