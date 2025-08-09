@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { seoService } from "@/lib/seo-service";
+import { generateAdminMetadata } from "@/lib/admin-metadata";
 import SeoAnalytics from "@/components/SeoAnalytics";
 import StructuredData from "@/components/StructuredData";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -9,37 +9,32 @@ import DevErrorSuppressor from "@/components/DevErrorSuppressor";
 import "@/lib/error-handler"; // Auto-setup global error handling
 
 export async function generateMetadata(): Promise<Metadata> {
-  let seoSettings;
-
   try {
-    seoSettings = await seoService.loadSettings();
-    console.log("✅ SEO settings loaded for metadata:", {
-      site_name: seoSettings.general.site_name,
-      description_length: seoSettings.general.site_description?.length || 0,
+    console.log("🔍 Loading admin SEO settings for root layout metadata...");
+    const metadata = await generateAdminMetadata({
+      title: undefined, // Use default site name
+      description: undefined, // Use default site description
+      path: "/",
+      type: "page",
     });
+
+    console.log("✅ Admin SEO metadata generated:", {
+      title: metadata.title,
+      description: metadata.description?.substring(0, 50) + "...",
+    });
+
+    return metadata;
   } catch (error) {
-    console.error(
-      "Failed to load SEO settings in metadata, using defaults:",
-      error,
-    );
-    // Use default settings if API fails
-    seoSettings = {
-      general: {
-        site_name: "HACOM - Máy tính, Laptop",
-        site_url: "https://hacom.vn",
-        site_description:
-          "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-        site_keywords:
-          "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
-        site_favicon: "/favicon.ico",
+    console.error("Failed to generate admin metadata, using fallback:", error);
+
+    // Fallback metadata
+    return {
+      title: {
+        default: "HACOM - Máy tính, Laptop, Gaming Gear",
+        template: "%s | HACOM",
       },
-      social: {
-        twitter_site: "@hacom_vn",
-        default_og_image: "/og-image.jpg",
-      },
-      schema: {
-        organization_name: "HACOM",
-      },
+      description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+      keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
     };
   }
 
