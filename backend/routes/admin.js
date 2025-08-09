@@ -3,6 +3,7 @@ import { adminController } from "../controllers/adminController.js";
 import { reportsController } from "../controllers/reportsController.js";
 import { shippingController } from "../controllers/shippingController.js";
 import { seoController } from "../controllers/seoController.js";
+import { settingsController } from "../controllers/settingsController.js";
 import { authenticateToken, requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -40,9 +41,7 @@ router.post("/seo-link-optimization", seoController.optimizeLinks);
 router.get("/seo-test-all", seoController.testAllSeo);
 router.post("/seo-test-all", seoController.testAllSeo);
 
-// Robots & Sitemap
-router.post("/generate-robots", adminController.generateRobots);
-router.post("/generate-sitemap", adminController.generateSitemap);
+// XML Validation (keeping for general use)
 router.post("/validate-xml", adminController.validateXml);
 
 // Shipping Management
@@ -57,5 +56,11 @@ router.post("/warehouses", shippingController.createWarehouse);
 router.get("/reports/customers", reportsController.getCustomerReports);
 router.get("/reports/products", reportsController.getProductReports);
 router.get("/reports/sales", reportsController.getSalesReports);
+
+// Settings Management
+router.get("/settings", settingsController.getSettings);
+router.post("/settings", settingsController.saveSettings);
+router.get("/settings/:key", settingsController.getSetting);
+router.put("/settings/:key", settingsController.updateSetting);
 
 export default router;

@@ -400,7 +400,7 @@ router.post(
 
         await executeQuery(
           `INSERT INTO product_categories (product_id, category_id) VALUES ${placeholders}`,
-          flatValues
+          flatValues,
         );
       }
       // Get created product
@@ -451,7 +451,7 @@ router.put(
       .withMessage("Valid stock quantity required"),
   ],
   async (req, res) => {
-    console.log(body)
+    console.log(body);
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -537,7 +537,7 @@ router.put(
 
           await executeQuery(
             `INSERT INTO product_categories (product_id, category_id) VALUES ${placeholders}`,
-            flatValues
+            flatValues,
           );
         }
       }
@@ -571,6 +571,20 @@ router.delete(
   [param("id").isInt().withMessage("Invalid product ID")],
   async (req, res) => {
     try {
+      console.log("🗑️ DELETE /api/products/:id request received");
+      console.log("   - Product ID:", req.params.id);
+      console.log("   - User:", req.user ? `${req.user.email} (${req.user.role})` : "No user");
+
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        console.log("❌ Validation errors:", errors.array());
+        return res.status(400).json({
+          success: false,
+          message: "Validation failed",
+          errors: errors.array(),
+        });
+      }
+
       const { id } = req.params;
 
       // Check if product exists

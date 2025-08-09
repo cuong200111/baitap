@@ -48,8 +48,6 @@ const formatPrice = (price: number) => {
   }).format(price);
 };
 
-
-
 interface Product {
   id: number;
   name: string;
@@ -178,7 +176,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const calculateDiscount = (price: number, salePrice?: number) => {
     if (!salePrice) return 0;
-    return Math.round(((Number(price) - Number(salePrice)) / Number(price)) * 100);
+    return Math.round(
+      ((Number(price) - Number(salePrice)) / Number(price)) * 100,
+    );
   };
 
   const sortProducts = (products: Product[]) => {
@@ -208,7 +208,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const renderProductCard = (product: Product) => {
     const discount = calculateDiscount(product.price, product.sale_price);
-    console.log(discount)
+    console.log(discount);
     const finalPrice = product.sale_price || product.price;
 
     if (viewMode === "list") {
@@ -219,7 +219,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               <div className="flex space-x-4">
                 <div className="flex-shrink-0">
                   <img
-                    src={getMediaUrl (
+                    src={getMediaUrl(
                       (product.images && product.images[0]) || "",
                     )}
                     alt={product.name}
@@ -296,7 +296,9 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               <div className="absolute top-2 right-2">
                 <Badge className="bg-yellow-500 text-black">HOT</Badge>
               </div>
-            ):""}
+            ) : (
+              ""
+            )}
             {product.stock_quantity === 0 && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <Badge variant="secondary">Hết hàng</Badge>
@@ -369,8 +371,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
               Danh mục không tồn tại
             </h1>
             <p className="text-gray-600 mb-4">
-              Chúng tôi không tìm thấy danh mục "
-              {params.slug.replace(/-/g, " ")}" trong database.
+              Chúng tôi không tìm thấy danh mục &quot;
+              {params.slug.replace(/-/g, " ")}&quot; trong database.
             </p>
             <div className="flex justify-center space-x-4">
               <Button onClick={() => window.history.back()} variant="outline">

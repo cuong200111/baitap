@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { DynamicCategoryMegaMenu } from "./DynamicCategoryMegaMenu";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteName } from "@/contexts/SeoContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,12 +24,33 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Domain } from "@/config";
 
+interface SiteConfig {
+  app: {
+    name: string;
+    description: string;
+  };
+  contact: {
+    phone: string;
+  };
+}
+
 export function Header() {
   const { user, logout, isAdmin, isAuthenticated } = useAuth();
+  const siteName = useSiteName();
   const [cartCount, setCartCount] = useState(0);
+  const [config, setConfig] = useState<SiteConfig>({
+    app: {
+      name: siteName,
+      description: "Máy tính, Laptop, Gaming Gear",
+    },
+    contact: {
+      phone: "1900.1903",
+    },
+  });
 
   useEffect(() => {
     loadCartCount();
+    fetchConfig();
 
     // Reload cart count when page becomes visible (after user adds items)
     const handleVisibilityChange = () => {
@@ -54,6 +76,30 @@ export function Header() {
       clearInterval(interval);
     };
   }, [user, isAuthenticated]);
+
+  const fetchConfig = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/api/config");
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          const configData = data.data;
+          setConfig({
+            app: {
+              name: configData.app?.name || siteName,
+              description:
+                configData.app?.description || "Máy tính, Laptop, Gaming Gear",
+            },
+            contact: {
+              phone: configData.contact?.phone || "1900.1903",
+            },
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch header config:", error);
+    }
+  };
 
   const loadCartCount = async () => {
     try {
@@ -127,8 +173,8 @@ export function Header() {
       {/* Top banner */}
       <div className="bg-red-600 text-white text-center py-2 text-sm">
         <div className="container mx-auto px-4">
-          🔥 KHUYẾN MÃI HOT: Gi��m đến 50% cho tất cả s���n phẩm Gaming - Miễn
-          phí giao hàng toàn quốc
+          🔥 KHUYẾN MÃI HOT: Giảm đến 50% cho tất cả sản phẩm Gaming - Miễn phí
+          giao hàng toàn quốc
         </div>
       </div>
 
@@ -140,7 +186,7 @@ export function Header() {
             <div className="flex items-center space-x-6">
               <div className="flex items-center text-gray-600">
                 <Phone className="h-4 w-4 mr-1" />
-                <span>Hotline: 1900.1903</span>
+                <span>Hotline: {config.contact.phone}</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <MapPin className="h-4 w-4 mr-1" />
@@ -198,11 +244,17 @@ export function Header() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">H</span>
+                <span className="text-white font-bold text-lg">
+                  {config.app.name.charAt(0).toUpperCase()}
+                </span>
               </div>
               <div>
-                <div className="font-bold text-xl text-gray-900">HACOM</div>
-                <div className="text-xs text-gray-500">Siêu thị máy tính</div>
+                <div className="font-bold text-xl text-gray-900">
+                  {config.app.name}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {config.app.description}
+                </div>
               </div>
             </Link>
 

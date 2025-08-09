@@ -14,7 +14,7 @@ export const adminController = {
           COUNT(CASE WHEN stock_quantity <= 5 THEN 1 END) as low_stock
         FROM products
       `,
-        []
+        [],
       );
 
       // Get categories statistics
@@ -25,7 +25,7 @@ export const adminController = {
           COUNT(CASE WHEN is_active = 1 THEN 1 END) as active
         FROM categories
       `,
-        []
+        [],
       );
 
       // Get users statistics
@@ -37,7 +37,7 @@ export const adminController = {
           COUNT(CASE WHEN role = 'admin' THEN 1 END) as admins
         FROM users
       `,
-        []
+        [],
       );
 
       // Get orders statistics
@@ -54,7 +54,7 @@ export const adminController = {
           COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed
         FROM orders
       `,
-        []
+        [],
       );
 
       // Get revenue from delivered and completed orders
@@ -65,7 +65,7 @@ export const adminController = {
           COALESCE(SUM(CASE WHEN status IN ('cancelled', 'failed') THEN total_amount ELSE 0 END), 0) as lost_revenue
         FROM orders
       `,
-        []
+        [],
       );
 
       // Get successful and failed orders count
@@ -76,7 +76,7 @@ export const adminController = {
           COUNT(CASE WHEN status IN ('cancelled', 'failed') THEN 1 END) as failed_orders
         FROM orders
       `,
-        []
+        [],
       );
 
       const dashboardStats = {
@@ -205,7 +205,7 @@ export const adminController = {
         try {
           const existing = await executeQuery(
             "SELECT id FROM categories WHERE slug = ?",
-            [category.slug]
+            [category.slug],
           );
 
           if (existing.length === 0) {
@@ -218,7 +218,7 @@ export const adminController = {
                 category.description,
                 category.image,
                 category.sort_order,
-              ]
+              ],
             );
             created++;
           }
@@ -250,7 +250,7 @@ export const adminController = {
       // Check if admin already exists
       const existingAdmin = await executeQuery(
         "SELECT id FROM users WHERE email = ?",
-        [adminEmail]
+        [adminEmail],
       );
 
       if (existingAdmin.length > 0) {
@@ -268,7 +268,7 @@ export const adminController = {
       const result = await executeQuery(
         `INSERT INTO users (email, password, full_name, role, is_active, created_at) 
          VALUES (?, ?, ?, 'admin', 1, NOW())`,
-        [adminEmail, hashedPassword, "Admin ZOXVN"]
+        [adminEmail, hashedPassword, "Admin ZOXVN"],
       );
 
       res.json({
@@ -285,95 +285,11 @@ export const adminController = {
     }
   },
 
-  // Generate Robots.txt
-  async generateRobots(req, res) {
-    try {
-      const robotsContent = `User-agent: *
-Allow: /
-
-# Sitemap
-Sitemap: ${req.protocol}://${req.get("host")}/sitemap.xml
-
-# Crawl-delay
-Crawl-delay: 1`;
-
-      res.json({
-        success: true,
-        data: { content: robotsContent },
-      });
-    } catch (error) {
-      console.error("Generate robots error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to generate robots.txt",
-      });
-    }
-  },
-
-  // Generate Sitemap
-  async generateSitemap(req, res) {
-    try {
-      const baseUrl = `${req.protocol}://${req.get("host")}`;
-      
-      // Get categories
-      const categories = await executeQuery(
-        "SELECT slug FROM categories WHERE is_active = 1"
-      );
-      
-      // Get products
-      const products = await executeQuery(
-        "SELECT id FROM products WHERE status = 'active'"
-      );
-
-      let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>`;
-
-      // Add category URLs
-      for (const category of categories) {
-        sitemap += `
-  <url>
-    <loc>${baseUrl}/category/${category.slug}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`;
-      }
-
-      // Add product URLs
-      for (const product of products) {
-        sitemap += `
-  <url>
-    <loc>${baseUrl}/products/${product.id}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>`;
-      }
-
-      sitemap += `
-</urlset>`;
-
-      res.json({
-        success: true,
-        data: { content: sitemap },
-      });
-    } catch (error) {
-      console.error("Generate sitemap error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to generate sitemap",
-      });
-    }
-  },
-
   // Validate XML
   async validateXml(req, res) {
     try {
       const { xml } = req.body;
-      
+
       if (!xml) {
         return res.status(400).json({
           success: false,
@@ -382,13 +298,13 @@ Crawl-delay: 1`;
       }
 
       // Basic XML validation
-      const isValid = xml.includes('<?xml') && xml.includes('</');
-      
+      const isValid = xml.includes("<?xml") && xml.includes("</");
+
       res.json({
         success: true,
-        data: { 
+        data: {
           isValid,
-          message: isValid ? "XML is valid" : "XML is invalid"
+          message: isValid ? "XML is valid" : "XML is invalid",
         },
       });
     } catch (error) {

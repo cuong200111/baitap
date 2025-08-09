@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+export const dynamic = "force-dynamic";
+
+import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -63,7 +65,7 @@ interface TrackingEvent {
   is_current: boolean;
 }
 
-export default function TrackOrderPage() {
+function TrackOrderPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialOrderNumber = searchParams.get("order_number") || "";
@@ -156,7 +158,7 @@ export default function TrackOrderPage() {
         };
         setOrderInfo(mockOrder);
       } else {
-        setError("Không tìm thấy đơn h��ng với thông tin đã nhập");
+        setError("Không tìm thấy đơn hàng với thông tin đã nhập");
       }
     } catch (error) {
       console.error("Failed to track order:", error);
@@ -504,5 +506,24 @@ export default function TrackOrderPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TrackOrderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
+            <div className="animate-pulse space-y-6">
+              <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+              <div className="h-64 bg-gray-200 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <TrackOrderPageContent />
+    </Suspense>
   );
 }

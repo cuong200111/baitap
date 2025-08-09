@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  initializing: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (
     email: string,
@@ -18,6 +19,7 @@ interface AuthContextType {
   logout: () => void;
   isAdmin: boolean;
   isAuthenticated: boolean;
+  hasToken: boolean;
   checkAuth: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -27,6 +29,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
+    // During SSR, return a default context to prevent errors
+    if (typeof window === "undefined") {
+      return {
+        user: null,
+        loading: true,
+        initializing: true,
+        login: async () => {},
+        register: async () => {},
+        logout: () => {},
+        isAdmin: false,
+        isAuthenticated: false,
+        hasToken: false,
+        checkAuth: async () => {},
+        refreshUser: async () => {},
+      } as AuthContextType;
+    }
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
@@ -55,9 +73,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initializing, setInitializing] = useState(true);
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
 
-  const checkAuth = async () => {
+  // Optimistic authentication - check token immediately without API call
+  const initializeAuth = () => {
+    if (typeof window === "undefined") return; // Skip during SSR
+
+    const token = getToken();
+    if (token) {
+      // We have a token, assume user is authenticated initially
+      // This prevents immediate redirects while we verify the token
+      setLoading(true);
+      setInitializing(false);
+      // Verify token in background
+      verifyToken();
+    } else {
+      // No token, user is definitely not authenticated
+      setLoading(false);
+      setInitializing(false);
+    }
+  };
+
+  const verifyToken = async () => {
     const token = getToken();
     if (!token) {
       setLoading(false);
@@ -69,14 +108,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (response.success && response.data) {
         setUser(response.data);
       } else {
-        // Only remove token if it's actually invalid (401/403), not for network errors
-        if (response.status === 401 || response.status === 403) {
-          console.log("Token is invalid, removing...");
+        console.log("Profile fetch failed:", response);
+
+        // Handle specific error codes
+        if (response.code === "TOKEN_EXPIRED") {
+          console.log("🔑 Token expired, removing...");
           removeToken();
+          setUser(null);
+        } else if (response.code === "INVALID_TOKEN") {
+          console.log("🔑 Invalid token, removing...");
+          removeToken();
+          setUser(null);
+        } else if (response.code === "NO_TOKEN") {
+          console.log("🔑 No token provided");
+          removeToken();
+          setUser(null);
+        } else if (response.status === 401 || response.status === 403) {
+          console.log("🔑 Auth error, removing token");
+          removeToken();
+          setUser(null);
         } else {
           console.log(
-            "Profile fetch failed but token might be valid, keeping it",
+            "🔄 Profile fetch failed but token might be valid, keeping it",
           );
+          // Keep token for server errors - might be temporary
         }
       }
     } catch (error: any) {
@@ -86,8 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (error?.response?.status === 401 || error?.response?.status === 403) {
         console.log("Authentication error, removing token");
         removeToken();
-      } else if (error?.cancelled) {
-        console.log("Request was cancelled, keeping token");
+        setUser(null);
       } else {
         console.log("Network error during auth check, keeping token for retry");
         // Keep the token for network errors - user might be offline temporarily
@@ -97,9 +151,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const checkAuth = async () => {
+    setLoading(true);
+    await verifyToken();
+  };
+
   useEffect(() => {
-    checkAuth();
+    // Mark as client-side after hydration
+    setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    // Only initialize auth after we're on the client side
+    if (isClient) {
+      initializeAuth();
+    }
+  }, [isClient]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -132,7 +199,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         throw new Error(response.message || "Login failed");
       }
     } catch (error: any) {
-
       // Handle different error formats
       let errorMessage = "Đăng nhập thất bại";
 
@@ -217,12 +283,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const value: AuthContextType = {
     user,
-    loading,
+    loading: isClient ? loading : true, // Always loading during SSR
+    initializing: isClient ? initializing : true, // Always initializing during SSR
     login,
     register,
     logout,
     isAdmin: user?.role === "admin",
     isAuthenticated: !!user,
+    hasToken: isClient ? !!getToken() : false, // No token during SSR
     checkAuth,
     refreshUser,
   };

@@ -66,6 +66,7 @@ import SeoSummaryStats from "@/components/SeoSummaryStats";
 import SeoSystemStatus from "@/components/SeoSystemStatus";
 import AdvancedSeoDashboard from "@/components/AdvancedSeoDashboard";
 import SeoGenerationPanel from "@/components/SeoGenerationPanel";
+import AdminInitializer from "@/components/AdminInitializer";
 import { API_DOMAIN } from "@/lib/api-helpers";
 
 interface SeoSettings {
@@ -370,8 +371,6 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [seoScore, setSeoScore] = useState(85);
-  const [sitemapGenerating, setSitemapGenerating] = useState(false);
-  const [robotsGenerating, setRobotsGenerating] = useState(false);
 
   useEffect(() => {
     loadSettings();
@@ -381,7 +380,30 @@ export default function SettingsPage() {
   const loadSettings = async () => {
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để xem cài đặt");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(`${API_DOMAIN}/api/admin/settings`, {
+        headers,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.data) {
+          setSettings(data.data);
+        }
+      } else {
+        console.error("Failed to load settings:", response.status);
+      }
     } catch (error) {
       console.error("Failed to load settings:", error);
       toast.error("Không thể tải cài đặt");
@@ -574,8 +596,30 @@ export default function SettingsPage() {
   const handleSaveSettings = async () => {
     try {
       setSaving(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Đã lưu cài đặt thành công");
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để lưu cài đặt");
+        return;
+      }
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(`${API_DOMAIN}/api/admin/settings`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(settings),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Đã lưu cài đặt thành công");
+      } else {
+        toast.error("Có lỗi xảy ra khi lưu cài đặt");
+      }
     } catch (error) {
       console.error("Failed to save settings:", error);
       toast.error("Có lỗi xảy ra khi lưu cài đặt");
@@ -611,62 +655,6 @@ export default function SettingsPage() {
       toast.error("Có lỗi xảy ra khi lưu cài đặt SEO");
     } finally {
       setSaving(false);
-    }
-  };
-
-  const generateSitemap = async () => {
-    try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      setSitemapGenerating(true);
-      const response = await fetch(`${API_DOMAIN}/api/admin/generate-sitemap`, {
-        method: "POST",
-        headers,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        toast.success(`Đã tạo sitemap thành công! Tổng ${data.urlCount} URL`);
-      } else {
-        toast.error("Có lỗi xảy ra khi tạo sitemap");
-      }
-    } catch (error) {
-      console.error("Failed to generate sitemap:", error);
-      toast.error("Có lỗi xảy ra khi tạo sitemap");
-    } finally {
-      setSitemapGenerating(false);
-    }
-  };
-
-  const generateRobotsTxt = async () => {
-    try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      };
-      setRobotsGenerating(true);
-      const response = await fetch(`${API_DOMAIN}/api/admin/generate-robots`, {
-        method: "POST",
-        headers,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        toast.success("Đã tạo robots.txt thành công!");
-      } else {
-        toast.error("Có lỗi xảy ra khi tạo robots.txt");
-      }
-    } catch (error) {
-      console.error("Failed to generate robots.txt:", error);
-      toast.error("Có lỗi xảy ra khi tạo robots.txt");
-    } finally {
-      setRobotsGenerating(false);
     }
   };
 
@@ -787,6 +775,9 @@ export default function SettingsPage() {
           </Button>
         </div>
       </div>
+
+      {/* Admin Initializer */}
+      <AdminInitializer />
 
       <Tabs defaultValue="seo" className="w-full">
         <TabsList className="grid w-full grid-cols-10">
@@ -1321,32 +1312,9 @@ export default function SettingsPage() {
                           }
                         />
                       </div>
-                      <div className="flex gap-2">
-                        <Button
-                          onClick={generateSitemap}
-                          disabled={sitemapGenerating}
-                          className="flex-1"
-                        >
-                          {sitemapGenerating ? (
-                            <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2" />
-                          ) : (
-                            <FileText className="h-4 w-4 mr-2" />
-                          )}
-                          {sitemapGenerating ? "Đang tạo..." : "Tạo Sitemap"}
-                        </Button>
-                        <Button
-                          onClick={generateRobotsTxt}
-                          disabled={robotsGenerating}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          {robotsGenerating ? (
-                            <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
-                          ) : (
-                            <FileText className="h-4 w-4 mr-2" />
-                          )}
-                          {robotsGenerating ? "Đang tạo..." : "Tạo Robots.txt"}
-                        </Button>
+                      <div className="text-sm text-gray-600">
+                        Sitemap và Robots.txt sẽ được tạo tự động bởi
+                        next-sitemap.
                       </div>
                     </div>
 
@@ -1859,7 +1827,7 @@ export default function SettingsPage() {
                     <div>
                       <Label htmlFor="enable_local_seo">Enable Local SEO</Label>
                       <p className="text-sm text-gray-500">
-                        Bật các tính n��ng tối ưu cho tìm kiếm địa phương
+                        Bật các tính năng tối ưu cho tìm kiếm địa phương
                       </p>
                     </div>
                     <Switch
@@ -1902,7 +1870,7 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Search className="h-4 w-4" />
-                  <span>Cài đặt SEO được tối ưu hóa cho công cụ tìm kiếm</span>
+                  <span>Cài đặt SEO được tối ưu hóa cho công cụ t��m kiếm</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button onClick={calculateSeoScore} variant="outline">

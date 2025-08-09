@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+export const dynamic = "force-dynamic";
+
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,12 +28,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Product,
-  Category,
-  formatPrice,
-  getMediaUrl,
-} from "@/config";
+import { Product, Category, formatPrice, getMediaUrl } from "@/config";
 import { apiWrappers } from "@/lib/api-wrapper";
 
 interface Filters {
@@ -44,7 +41,7 @@ interface Filters {
   sort: string;
 }
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -273,12 +270,14 @@ export default function ProductsPage() {
                 <Badge variant="destructive">-{discount}%</Badge>
               </div>
             )}
-              {product.featured ? (
+            {product.featured ? (
               <div className="absolute top-2 right-2">
                 <Badge className="bg-yellow-500 text-black">HOT</Badge>
               </div>
-            ):""}
-            
+            ) : (
+              ""
+            )}
+
             {product.stock_quantity === 0 && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <Badge variant="secondary">Hết hàng</Badge>
@@ -366,7 +365,7 @@ export default function ProductsPage() {
                     <div className="relative">
                       <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
-                        placeholder="Tìm sản phẩm..."
+                        placeholder="Tìm s���n phẩm..."
                         value={filters.search}
                         onChange={(e) =>
                           handleFilterChange("search", e.target.value)
@@ -638,5 +637,40 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div className="lg:col-span-1">
+                  <div className="h-64 bg-gray-200 rounded-lg"></div>
+                </div>
+                <div className="lg:col-span-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {[...Array(6)].map((_, i) => (
+                      <div key={i} className="animate-pulse">
+                        <div className="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                        <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                        <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
+                        <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <ProductsPageContent />
+    </Suspense>
   );
 }

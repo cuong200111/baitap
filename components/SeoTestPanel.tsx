@@ -113,18 +113,6 @@ export default function SeoTestPanel() {
     }
     return { url, headers };
   };
-  const testSitemap = () => {
-    const { url, headers }: any = getApiUrlAndHeaders(
-      "/api/admin/generate-sitemap",
-    );
-    return testApiEndpoint(url, "POST", "Sitemap Generation", headers);
-  };
-  const testRobots = () => {
-    const { url, headers }: any = getApiUrlAndHeaders(
-      "/api/admin/generate-robots",
-    );
-    return testApiEndpoint(url, "POST", "Robots.txt Generation", headers);
-  };
   const testSeoSettings = () => {
     const { url, headers }: any = getApiUrlAndHeaders(
       "/api/admin/seo-settings",
@@ -139,14 +127,6 @@ export default function SeoTestPanel() {
   const testSeoAudit = () => {
     const { url, headers }: any = getApiUrlAndHeaders("/api/admin/seo-audit");
     return testApiEndpoint(url, "GET", "SEO Audit", headers);
-  };
-  const testSitemapXml = () => {
-    const { url, headers }: any = getApiUrlAndHeaders("/sitemap.xml", false);
-    return testApiEndpoint(url, "GET", "Sitemap XML", headers);
-  };
-  const testRobotsTxt = () => {
-    const { url, headers }: any = getApiUrlAndHeaders("/robots.txt", false);
-    return testApiEndpoint(url, "GET", "Robots.txt", headers);
   };
 
   // Advanced SEO API tests
@@ -275,10 +255,6 @@ export default function SeoTestPanel() {
     { name: "SEO Status Check", test: testSeoStatus, icon: Activity },
     { name: "SEO Audit", test: testSeoAudit, icon: CheckCircle },
     { name: "SEO Settings API", test: testSeoSettings, icon: Activity },
-    { name: "Sitemap Generation", test: testSitemap, icon: FileText },
-    { name: "Robots.txt Generation", test: testRobots, icon: Search },
-    { name: "Sitemap XML", test: testSitemapXml, icon: Link },
-    { name: "Robots.txt", test: testRobotsTxt, icon: FileText },
     { name: "Content Analysis", test: testContentAnalysis, icon: FileText },
     { name: "Performance API", test: testPerformance, icon: Activity },
     {

@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { SimpleDbCategoryMenu } from "./SimpleDbCategoryMenu";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdminSiteName } from "@/contexts/AdminSeoContext";
 import { CartPopup } from "./CartPopup";
 import {
   DropdownMenu,
@@ -53,7 +54,9 @@ interface SearchSuggestion {
 }
 
 export function EnhancedHeader() {
-  const { user, logout, isAdmin, isAuthenticated } = useAuth();
+  const { user, logout, isAdmin, isAuthenticated, loading, initializing } =
+    useAuth();
+  const siteName = useAdminSiteName();
   const [cartCount, setCartCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -66,6 +69,9 @@ export function EnhancedHeader() {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Wait for auth to finish initializing before setting up cart functionality
+    if (initializing || loading) return;
+
     if (isAuthenticated && user?.id) {
       loadCartCount();
     } else {
@@ -99,7 +105,7 @@ export function EnhancedHeader() {
       window.removeEventListener("cartUpdated", handleCartUpdate);
       if (interval) clearInterval(interval);
     };
-  }, [user, isAuthenticated]);
+  }, [user, isAuthenticated, loading, initializing]);
 
   // Handle click outside search to close results
   useEffect(() => {
@@ -228,7 +234,7 @@ export function EnhancedHeader() {
           <div className="flex items-center justify-center space-x-4">
             <span className="animate-pulse">🔥</span>
             <span className="font-medium">
-              KHUYẾN MÃI HOT: Giảm đến 50% cho tất cả sản phẩm Gaming
+              KHUYẾN MÃI HOT: Giảm đ��n 50% cho tất cả sản phẩm Gaming
             </span>
             <span className="hidden md:inline">•</span>
             <span className="hidden md:inline">
@@ -312,7 +318,7 @@ export function EnhancedHeader() {
               </div>
               <div>
                 <div className="font-bold text-xl text-gray-900 tracking-tight">
-                  ZOXVN
+                  {siteName}
                 </div>
                 <div className="text-xs text-gray-500 font-medium">
                   Siêu thị công nghệ
@@ -402,7 +408,7 @@ export function EnhancedHeader() {
                             onClick={handleSearch}
                             className="w-full text-left text-sm text-red-600 hover:text-red-700 font-medium flex items-center justify-between"
                           >
-                            <span>Xem tất c�� kết quả cho "{searchQuery}"</span>
+                            <span>Xem tất cả kết quả cho "{searchQuery}"</span>
                             <ArrowRight className="h-4 w-4" />
                           </button>
                         </div>
