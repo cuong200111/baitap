@@ -69,17 +69,24 @@ class SeoService {
         return this.settings;
       }
 
-      const response = await fetch(`${Domain}/api/seo/settings`, {
+      // Use different URL for server-side vs client-side
+      const baseUrl = this.isClient
+        ? Domain
+        : process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+      console.log(`🔍 Loading SEO settings from: ${baseUrl}/api/seo/settings`);
+
+      const response = await fetch(`${baseUrl}/api/seo/settings`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        // Don't require auth for getting public SEO settings
-        cache: "force-cache",
+        // Don't cache on server-side
+        cache: this.isClient ? "force-cache" : "no-store",
       });
 
       if (!response.ok) {
-        console.warn("Failed to load SEO settings, using defaults");
+        console.warn(`Failed to load SEO settings (${response.status}), using defaults`);
         return this.getDefaultSettings();
       }
 
@@ -87,9 +94,11 @@ class SeoService {
 
       if (data.success && data.data) {
         this.settings = data.data;
+        console.log(`✅ SEO settings loaded: ${Object.keys(data.data).join(', ')}`);
         return this.settings;
       }
 
+      console.warn("SEO API returned invalid data, using defaults");
       return this.getDefaultSettings();
     } catch (error) {
       console.error("Error loading SEO settings:", error);
