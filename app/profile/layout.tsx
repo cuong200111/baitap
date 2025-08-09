@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Quản lý thông tin tài khoản, cập nhật thông tin cá nhân và địa chỉ của bạn tại HACOM",
     "thông tin cá nhân, tài khoản, hồ sơ, HACOM",
     undefined,
-    "profile"
+    "profile",
   );
 }
 

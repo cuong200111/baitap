@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Cảm ơn bạn đã đặt hàng tại HACOM. Đơn hàng của bạn đã được ghi nhận và sẽ được xử lý trong thời gian sớm nhất.",
     "đặt hàng, thành công, cảm ơn, HACOM",
     undefined,
-    "success"
+    "success",
   );
 }
 

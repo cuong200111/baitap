@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Tạo tài khoản HACOM mới để trải nghiệm mua sắm tuyệt vời. Đăng ký ngay để nhận ưu đãi đặc biệt và theo dõi đơn hàng.",
     "đăng ký, tài khoản, thành viên, HACOM",
     undefined,
-    "register"
+    "register",
   );
 }
 

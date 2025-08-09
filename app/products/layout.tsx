@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Khám phá toàn bộ sản phẩm tại HACOM - máy tính, laptop, gaming gear, linh kiện với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
     "máy tính, laptop, gaming gear, sản phẩm, HACOM",
     undefined,
-    "products"
+    "products",
   );
 }
 

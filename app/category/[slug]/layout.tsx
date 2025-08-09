@@ -22,7 +22,7 @@ export async function generateMetadata({
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
         "Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
-        undefined
+        undefined,
       );
     }
 
@@ -32,7 +32,7 @@ export async function generateMetadata({
       return await generateCategoryMetadata(
         "Danh mục không tồn tại",
         "Danh mục bạn đang tìm kiếm không tồn tại ho��c đã bị xóa.",
-        undefined
+        undefined,
       );
     }
 
@@ -50,7 +50,7 @@ export async function generateMetadata({
     return await generateCategoryMetadata(
       category.name,
       description,
-      categoryImage
+      categoryImage,
     );
   } catch (error) {
     console.error("Error generating category metadata:", error);
@@ -59,7 +59,7 @@ export async function generateMetadata({
     return await generateCategoryMetadata(
       "Danh mục sản phẩm HACOM",
       "Khám phá các danh mục sản phẩm chất lượng cao tại HACOM với giá tốt nhất.",
-      undefined
+      undefined,
     );
   }
 }

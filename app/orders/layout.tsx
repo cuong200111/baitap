@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Theo dõi trạng thái và lịch sử đơn hàng của bạn. Xem chi tiết đơn hàng, tình trạng giao hàng và thông tin thanh toán.",
     "đơn hàng, lịch sử, theo dõi, HACOM",
     undefined,
-    "orders"
+    "orders",
   );
 }
 

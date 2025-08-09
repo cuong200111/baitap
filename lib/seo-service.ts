@@ -402,17 +402,18 @@ export async function generatePageMetadata(
   description?: string,
   keywords?: string,
   ogImage?: string,
-  pageType?: string
+  pageType?: string,
 ) {
   try {
     const settings = await seoService.loadSettings();
 
     const fullTitle = `${title} | ${settings.general.site_name}`;
-    const finalDescription = description ||
+    const finalDescription =
+      description ||
       `${title} tại ${settings.general.site_name}. ${settings.general.site_description}`;
-    const finalKeywords = keywords ?
-      `${keywords}, ${settings.general.site_keywords}` :
-      settings.general.site_keywords;
+    const finalKeywords = keywords
+      ? `${keywords}, ${settings.general.site_keywords}`
+      : settings.general.site_keywords;
 
     // Smart Open Graph image selection
     let finalOgImage = ogImage;
@@ -422,13 +423,25 @@ export async function generatePageMetadata(
         const pathname = window.location.pathname;
         if (pathname === "/" && settings.social.home_og_image) {
           finalOgImage = settings.social.home_og_image;
-        } else if (pathname.includes("/login") && settings.social.login_og_image) {
+        } else if (
+          pathname.includes("/login") &&
+          settings.social.login_og_image
+        ) {
           finalOgImage = settings.social.login_og_image;
-        } else if (pathname.includes("/register") && settings.social.register_og_image) {
+        } else if (
+          pathname.includes("/register") &&
+          settings.social.register_og_image
+        ) {
           finalOgImage = settings.social.register_og_image;
-        } else if (pathname.includes("/products") && settings.social.product_og_image) {
+        } else if (
+          pathname.includes("/products") &&
+          settings.social.product_og_image
+        ) {
           finalOgImage = settings.social.product_og_image;
-        } else if (pathname.includes("/category") && settings.social.category_og_image) {
+        } else if (
+          pathname.includes("/category") &&
+          settings.social.category_og_image
+        ) {
           finalOgImage = settings.social.category_og_image;
         }
       }
@@ -439,7 +452,7 @@ export async function generatePageMetadata(
       }
     }
 
-    const fullImageUrl = finalOgImage?.startsWith('http')
+    const fullImageUrl = finalOgImage?.startsWith("http")
       ? finalOgImage
       : `${settings.general.site_url}${finalOgImage}`;
 

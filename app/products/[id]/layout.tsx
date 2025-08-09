@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         "Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
         undefined,
         undefined,
-        undefined
+        undefined,
       );
     }
 
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         `Mua ${product.name} chính hãng tại HACOM với giá tốt nhất.`,
       productImage,
       product.price,
-      product.sku
+      product.sku,
     );
   } catch (error) {
     console.error("Error generating product metadata:", error);
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       "Khám phá sản phẩm chất lượng cao tại HACOM với giá tốt nhất.",
       undefined,
       undefined,
-      undefined
+      undefined,
     );
   }
 }

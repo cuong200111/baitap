@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Xem và quản lý sản phẩm trong giỏ hàng của bạn. Cập nhật số lượng, xóa sản phẩm và tiến hành thanh toán.",
     "giỏ hàng, mua sắm, thanh toán, HACOM",
     undefined,
-    "cart"
+    "cart",
   );
 }
 

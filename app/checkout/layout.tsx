@@ -6,7 +6,7 @@ export async function generateMetadata() {
     "Hoàn tất đơn hàng của bạn. Nhập thông tin giao hàng, chọn phương thức thanh toán và xác nhận đơn hàng.",
     "thanh toán, đơn hàng, giỏ hàng, HACOM",
     undefined,
-    "checkout"
+    "checkout",
   );
 }
 
