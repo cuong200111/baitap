@@ -1,90 +1,98 @@
 "use client";
 
-import React from "react";
+import React, { ErrorInfo, ReactNode } from "react";
 
-interface ErrorBoundaryState {
+interface Props {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface State {
   hasError: boolean;
   error?: Error;
 }
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<{ error?: Error; reset: () => void }>;
-}
-
-class ErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
-  constructor(props: ErrorBoundaryProps) {
+export class ErrorBoundary extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    // Don't show error boundary for AbortError or other cancellation errors
-    if (
-      error.name === "AbortError" ||
-      error.message?.includes("aborted") ||
-      error.message?.includes("cancelled")
-    ) {
-      console.log("Ignored AbortError in ErrorBoundary:", error.message);
-      return { hasError: false };
-    }
-
-    // Update state so the next render will show the fallback UI
+  static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Don't log AbortErrors or cancellation errors
-    if (
-      error.name === "AbortError" ||
-      error.message?.includes("aborted") ||
-      error.message?.includes("cancelled")
-    ) {
-      return;
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Log error details in development
+    if (process.env.NODE_ENV === "development") {
+      console.warn("🛡️ ErrorBoundary caught error:", error);
+      console.warn("Error info:", errorInfo);
+      
+      // Ignore common development fetch errors
+      if (
+        error.message.includes("Failed to fetch") ||
+        error.message.includes("NetworkError") ||
+        error.message.includes("FullStory") ||
+        error.message.includes("RSC payload")
+      ) {
+        console.warn("⚠️ Ignoring development fetch error, continuing...");
+        // Reset error state after a short delay
+        setTimeout(() => {
+          this.setState({ hasError: false, error: undefined });
+        }, 100);
+        return;
+      }
     }
-
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
   }
-
-  reset = () => {
-    this.setState({ hasError: false, error: undefined });
-  };
 
   render() {
     if (this.state.hasError) {
-      if (this.props.fallback) {
-        const FallbackComponent = this.props.fallback;
+      // In development, show minimal error info and auto-recover
+      if (process.env.NODE_ENV === "development") {
         return (
-          <FallbackComponent error={this.state.error} reset={this.reset} />
+          this.props.fallback || (
+            <div style={{ padding: "20px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "8px" }}>
+              <h3 style={{ color: "#dc2626", margin: "0 0 10px 0" }}>Development Error (Auto-recovering...)</h3>
+              <p style={{ color: "#7f1d1d", margin: "0", fontSize: "14px" }}>
+                {this.state.error?.message || "An error occurred"}
+              </p>
+            </div>
+          )
         );
       }
 
-      // Default fallback UI
+      // In production, show user-friendly error
       return (
-        <div className="min-h-[200px] flex items-center justify-center">
-          <div className="text-center">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              Something went wrong
-            </h2>
-            <p className="text-gray-600 mb-4">
-              {this.state.error?.message || "An unexpected error occurred"}
-            </p>
-            <button
-              onClick={this.reset}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-            >
-              Try again
-            </button>
+        this.props.fallback || (
+          <div style={{ padding: "20px", textAlign: "center" }}>
+            <h2>Something went wrong</h2>
+            <p>Please refresh the page or try again later.</p>
           </div>
-        </div>
+        )
       );
     }
 
     return this.props.children;
   }
+}
+
+// Hook-based error boundary for functional components
+export function useErrorHandler() {
+  return (error: Error, errorInfo: ErrorInfo) => {
+    if (process.env.NODE_ENV === "development") {
+      // Ignore common development errors
+      if (
+        error.message.includes("Failed to fetch") ||
+        error.message.includes("NetworkError") ||
+        error.message.includes("FullStory") ||
+        error.message.includes("RSC payload")
+      ) {
+        console.warn("🛡️ Ignoring development error:", error.message);
+        return;
+      }
+    }
+    console.error("Application error:", error, errorInfo);
+  };
 }
 
 export default ErrorBoundary;
