@@ -577,7 +577,11 @@ export default function SettingsPage() {
                       )}
                     </div>
                   </div>
-                  <Button onClick={saveSeoSettings} disabled={saving} className="gap-2">
+                  <Button
+                    onClick={saveSeoSettings}
+                    disabled={saving}
+                    className="gap-2"
+                  >
                     <Save className="h-4 w-4" />
                     {saving ? "Đang lưu..." : "Lưu cài đặt SEO"}
                   </Button>
@@ -639,7 +643,8 @@ export default function SettingsPage() {
                     <CardHeader>
                       <CardTitle>Cài đặt SEO cơ bản</CardTitle>
                       <CardDescription>
-                        Các thiết lập cơ bản để tối ưu hóa website cho công cụ tìm kiếm
+                        Các thiết lập cơ bản để tối ưu hóa website cho công cụ
+                        tìm kiếm
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -650,18 +655,28 @@ export default function SettingsPage() {
                             id="site_name"
                             value={seoSettings.general.site_name}
                             onChange={(e) =>
-                              updateSeoSetting("general", "site_name", e.target.value)
+                              updateSeoSetting(
+                                "general",
+                                "site_name",
+                                e.target.value,
+                              )
                             }
                             placeholder="ZoxVN- Máy tính, Laptop"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="site_url">URL chính của website</Label>
+                          <Label htmlFor="site_url">
+                            URL chính của website
+                          </Label>
                           <Input
                             id="site_url"
                             value={seoSettings.general.site_url}
                             onChange={(e) =>
-                              updateSeoSetting("general", "site_url", e.target.value)
+                              updateSeoSetting(
+                                "general",
+                                "site_url",
+                                e.target.value,
+                              )
                             }
                             placeholder="https://hacom.vns"
                           />
@@ -676,14 +691,19 @@ export default function SettingsPage() {
                           id="site_description"
                           value={seoSettings.general.site_description}
                           onChange={(e) =>
-                            updateSeoSetting("general", "site_description", e.target.value)
+                            updateSeoSetting(
+                              "general",
+                              "site_description",
+                              e.target.value,
+                            )
                           }
                           placeholder="HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính..."
                           rows={3}
                         />
                         <div className="flex justify-between text-sm text-muted-foreground">
                           <span>
-                            {seoSettings.general.site_description.length}/160 ký tự
+                            {seoSettings.general.site_description.length}/160 ký
+                            tự
                           </span>
                           <Badge
                             variant={
@@ -700,12 +720,18 @@ export default function SettingsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="site_keywords">Từ khóa chính (Keywords)</Label>
+                        <Label htmlFor="site_keywords">
+                          Từ khóa chính (Keywords)
+                        </Label>
                         <Input
                           id="site_keywords"
                           value={seoSettings.general.site_keywords}
                           onChange={(e) =>
-                            updateSeoSetting("general", "site_keywords", e.target.value)
+                            updateSeoSetting(
+                              "general",
+                              "site_keywords",
+                              e.target.value,
+                            )
                           }
                           placeholder="máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM"
                         />
@@ -714,7 +740,9 @@ export default function SettingsPage() {
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="auto_meta"
-                          checked={seoSettings.general.auto_generate_meta_description}
+                          checked={
+                            seoSettings.general.auto_generate_meta_description
+                          }
                           onCheckedChange={(checked) =>
                             updateSeoSetting(
                               "general",
@@ -723,14 +751,18 @@ export default function SettingsPage() {
                             )
                           }
                         />
-                        <Label htmlFor="auto_meta">Tự động tạo Meta Description</Label>
+                        <Label htmlFor="auto_meta">
+                          Tự động tạo Meta Description
+                        </Label>
                         <Badge variant="secondary">Khuyến nghị</Badge>
                       </div>
 
                       <Separator />
 
                       <div className="space-y-4">
-                        <h4 className="text-lg font-semibold">Meta Title Templates</h4>
+                        <h4 className="text-lg font-semibold">
+                          Meta Title Templates
+                        </h4>
                         <div className="grid grid-cols-1 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor="default_title">
@@ -738,7 +770,9 @@ export default function SettingsPage() {
                             </Label>
                             <Input
                               id="default_title"
-                              value={seoSettings.general.default_meta_title_pattern}
+                              value={
+                                seoSettings.general.default_meta_title_pattern
+                              }
                               onChange={(e) =>
                                 updateSeoSetting(
                                   "general",
@@ -758,7 +792,9 @@ export default function SettingsPage() {
                             </Label>
                             <Input
                               id="product_title"
-                              value={seoSettings.general.product_meta_title_pattern}
+                              value={
+                                seoSettings.general.product_meta_title_pattern
+                              }
                               onChange={(e) =>
                                 updateSeoSetting(
                                   "general",
@@ -769,8 +805,8 @@ export default function SettingsPage() {
                               placeholder="{product_name} - {category} | HACOM"
                             />
                             <p className="text-sm text-muted-foreground">
-                              Variables: {"{product_name}"}, {"{category}"}, {"{price}"}
-                              , {"{sku}"}
+                              Variables: {"{product_name}"}, {"{category}"},{" "}
+                              {"{price}"}, {"{sku}"}
                             </p>
                           </div>
                           <div className="space-y-2">
@@ -779,7 +815,9 @@ export default function SettingsPage() {
                             </Label>
                             <Input
                               id="category_title"
-                              value={seoSettings.general.category_meta_title_pattern}
+                              value={
+                                seoSettings.general.category_meta_title_pattern
+                              }
                               onChange={(e) =>
                                 updateSeoSetting(
                                   "general",
@@ -815,10 +853,16 @@ export default function SettingsPage() {
                           id="enable_analytics"
                           checked={seoSettings.analytics.enable_analytics}
                           onCheckedChange={(checked) =>
-                            updateSeoSetting("analytics", "enable_analytics", checked)
+                            updateSeoSetting(
+                              "analytics",
+                              "enable_analytics",
+                              checked,
+                            )
                           }
                         />
-                        <Label htmlFor="enable_analytics">Kích hoạt Analytics</Label>
+                        <Label htmlFor="enable_analytics">
+                          Kích hoạt Analytics
+                        </Label>
                         <Badge variant="secondary">
                           Bật/tắt tất cả các công cụ theo dõi
                         </Badge>
@@ -862,7 +906,8 @@ export default function SettingsPage() {
                           <Input
                             id="gsc_verification"
                             value={
-                              seoSettings.analytics.google_search_console_verification
+                              seoSettings.analytics
+                                .google_search_console_verification
                             }
                             onChange={(e) =>
                               updateSeoSetting(
@@ -895,7 +940,9 @@ export default function SettingsPage() {
                           </Label>
                           <Input
                             id="bing_verification"
-                            value={seoSettings.analytics.bing_webmaster_verification}
+                            value={
+                              seoSettings.analytics.bing_webmaster_verification
+                            }
                             onChange={(e) =>
                               updateSeoSetting(
                                 "analytics",
@@ -912,7 +959,11 @@ export default function SettingsPage() {
                             id="hotjar_id"
                             value={seoSettings.analytics.hotjar_id}
                             onChange={(e) =>
-                              updateSeoSetting("analytics", "hotjar_id", e.target.value)
+                              updateSeoSetting(
+                                "analytics",
+                                "hotjar_id",
+                                e.target.value,
+                              )
                             }
                             placeholder="Hotjar ID"
                           />
@@ -939,18 +990,28 @@ export default function SettingsPage() {
                             id="fb_app_id"
                             value={seoSettings.social.facebook_app_id}
                             onChange={(e) =>
-                              updateSeoSetting("social", "facebook_app_id", e.target.value)
+                              updateSeoSetting(
+                                "social",
+                                "facebook_app_id",
+                                e.target.value,
+                              )
                             }
                             placeholder="facd"
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="twitter_username">Twitter Username</Label>
+                          <Label htmlFor="twitter_username">
+                            Twitter Username
+                          </Label>
                           <Input
                             id="twitter_username"
                             value={seoSettings.social.twitter_site}
                             onChange={(e) =>
-                              updateSeoSetting("social", "twitter_site", e.target.value)
+                              updateSeoSetting(
+                                "social",
+                                "twitter_site",
+                                e.target.value,
+                              )
                             }
                             placeholder="@hacom_vn"
                           />
@@ -961,7 +1022,11 @@ export default function SettingsPage() {
                             id="linkedin_url"
                             value={seoSettings.social.linkedin_url}
                             onChange={(e) =>
-                              updateSeoSetting("social", "linkedin_url", e.target.value)
+                              updateSeoSetting(
+                                "social",
+                                "linkedin_url",
+                                e.target.value,
+                              )
                             }
                             placeholder="https://linkedin.com/company/hacom"
                           />
@@ -972,7 +1037,11 @@ export default function SettingsPage() {
                             id="youtube_url"
                             value={seoSettings.social.youtube_url}
                             onChange={(e) =>
-                              updateSeoSetting("social", "youtube_url", e.target.value)
+                              updateSeoSetting(
+                                "social",
+                                "youtube_url",
+                                e.target.value,
+                              )
                             }
                             placeholder="https://youtube.com/c/hacom"
                           />
@@ -983,7 +1052,11 @@ export default function SettingsPage() {
                             id="instagram_url"
                             value={seoSettings.social.instagram_url}
                             onChange={(e) =>
-                              updateSeoSetting("social", "instagram_url", e.target.value)
+                              updateSeoSetting(
+                                "social",
+                                "instagram_url",
+                                e.target.value,
+                              )
                             }
                             placeholder="https://instagram.com/hacom"
                           />
@@ -994,7 +1067,11 @@ export default function SettingsPage() {
                             id="tiktok_url"
                             value={seoSettings.social.tiktok_url}
                             onChange={(e) =>
-                              updateSeoSetting("social", "tiktok_url", e.target.value)
+                              updateSeoSetting(
+                                "social",
+                                "tiktok_url",
+                                e.target.value,
+                              )
                             }
                             placeholder="https://tiktok.com/@hacom"
                           />
@@ -1104,7 +1181,9 @@ export default function SettingsPage() {
                         <div className="flex items-center space-x-2">
                           <Switch
                             id="org_schema"
-                            checked={seoSettings.schema.enable_organization_schema}
+                            checked={
+                              seoSettings.schema.enable_organization_schema
+                            }
                             onCheckedChange={(checked) =>
                               updateSeoSetting(
                                 "schema",
@@ -1113,14 +1192,20 @@ export default function SettingsPage() {
                               )
                             }
                           />
-                          <Label htmlFor="org_schema">Organization Schema</Label>
+                          <Label htmlFor="org_schema">
+                            Organization Schema
+                          </Label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Switch
                             id="product_schema"
                             checked={seoSettings.schema.enable_product_schema}
                             onCheckedChange={(checked) =>
-                              updateSeoSetting("schema", "enable_product_schema", checked)
+                              updateSeoSetting(
+                                "schema",
+                                "enable_product_schema",
+                                checked,
+                              )
                             }
                           />
                           <Label htmlFor="product_schema">Product Schema</Label>
@@ -1141,13 +1226,19 @@ export default function SettingsPage() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="space-y-4">
-                        <h4 className="text-lg font-semibold">Sitemap & Robots</h4>
+                        <h4 className="text-lg font-semibold">
+                          Sitemap & Robots
+                        </h4>
                         <div className="flex items-center space-x-2">
                           <Switch
                             id="enable_sitemap"
                             checked={seoSettings.technical.enable_sitemap}
                             onCheckedChange={(checked) =>
-                              updateSeoSetting("technical", "enable_sitemap", checked)
+                              updateSeoSetting(
+                                "technical",
+                                "enable_sitemap",
+                                checked,
+                              )
                             }
                           />
                           <Label htmlFor="enable_sitemap">Bật Sitemap</Label>
@@ -1155,7 +1246,9 @@ export default function SettingsPage() {
                         <div className="flex items-center space-x-2">
                           <Switch
                             id="sitemap_images"
-                            checked={seoSettings.technical.sitemap_include_images}
+                            checked={
+                              seoSettings.technical.sitemap_include_images
+                            }
                             onCheckedChange={(checked) =>
                               updateSeoSetting(
                                 "technical",
@@ -1164,12 +1257,15 @@ export default function SettingsPage() {
                               )
                             }
                           />
-                          <Label htmlFor="sitemap_images">Bao gồm hình ảnh</Label>
+                          <Label htmlFor="sitemap_images">
+                            Bao gồm hình ảnh
+                          </Label>
                         </div>
                         <Alert>
                           <Info className="h-4 w-4" />
                           <AlertDescription>
-                            Sitemap và Robots.txt sẽ được tạo tự động bởi next-sitemap.
+                            Sitemap và Robots.txt sẽ được tạo tự động bởi
+                            next-sitemap.
                           </AlertDescription>
                         </Alert>
                       </div>
@@ -1193,14 +1289,20 @@ export default function SettingsPage() {
                                 )
                               }
                             />
-                            <Label htmlFor="gzip_compression">GZIP Compression</Label>
+                            <Label htmlFor="gzip_compression">
+                              GZIP Compression
+                            </Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="minify_html"
                               checked={seoSettings.technical.minify_html}
                               onCheckedChange={(checked) =>
-                                updateSeoSetting("technical", "minify_html", checked)
+                                updateSeoSetting(
+                                  "technical",
+                                  "minify_html",
+                                  checked,
+                                )
                               }
                             />
                             <Label htmlFor="minify_html">Minify HTML</Label>
@@ -1210,7 +1312,11 @@ export default function SettingsPage() {
                               id="lazy_load"
                               checked={seoSettings.technical.lazy_load_images}
                               onCheckedChange={(checked) =>
-                                updateSeoSetting("technical", "lazy_load_images", checked)
+                                updateSeoSetting(
+                                  "technical",
+                                  "lazy_load_images",
+                                  checked,
+                                )
                               }
                             />
                             <Label htmlFor="lazy_load">Lazy Load Images</Label>
@@ -1219,7 +1325,9 @@ export default function SettingsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="robots_custom">Custom Robots.txt Content</Label>
+                        <Label htmlFor="robots_custom">
+                          Custom Robots.txt Content
+                        </Label>
                         <Textarea
                           id="robots_custom"
                           value={seoSettings.technical.robots_txt_custom}
@@ -1249,14 +1357,20 @@ export default function SettingsPage() {
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="space-y-4">
-                        <h4 className="text-lg font-semibold">Auto SEO Features</h4>
+                        <h4 className="text-lg font-semibold">
+                          Auto SEO Features
+                        </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="auto_seo"
                               checked={seoSettings.content.enable_auto_seo}
                               onCheckedChange={(checked) =>
-                                updateSeoSetting("content", "enable_auto_seo", checked)
+                                updateSeoSetting(
+                                  "content",
+                                  "enable_auto_seo",
+                                  checked,
+                                )
                               }
                             />
                             <Label htmlFor="auto_seo">Auto SEO</Label>
@@ -1266,17 +1380,27 @@ export default function SettingsPage() {
                               id="h1_optimization"
                               checked={seoSettings.content.h1_optimization}
                               onCheckedChange={(checked) =>
-                                updateSeoSetting("content", "h1_optimization", checked)
+                                updateSeoSetting(
+                                  "content",
+                                  "h1_optimization",
+                                  checked,
+                                )
                               }
                             />
-                            <Label htmlFor="h1_optimization">H1 Optimization</Label>
+                            <Label htmlFor="h1_optimization">
+                              H1 Optimization
+                            </Label>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="internal_linking"
                               checked={seoSettings.content.internal_linking}
                               onCheckedChange={(checked) =>
-                                updateSeoSetting("content", "internal_linking", checked)
+                                updateSeoSetting(
+                                  "content",
+                                  "internal_linking",
+                                  checked,
+                                )
                               }
                             />
                             <Label htmlFor="internal_linking">
@@ -1286,7 +1410,9 @@ export default function SettingsPage() {
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="image_alt"
-                              checked={seoSettings.content.image_alt_optimization}
+                              checked={
+                                seoSettings.content.image_alt_optimization
+                              }
                               onCheckedChange={(checked) =>
                                 updateSeoSetting(
                                   "content",
@@ -1295,7 +1421,9 @@ export default function SettingsPage() {
                                 )
                               }
                             />
-                            <Label htmlFor="image_alt">Image Alt Optimization</Label>
+                            <Label htmlFor="image_alt">
+                              Image Alt Optimization
+                            </Label>
                           </div>
                         </div>
                       </div>
@@ -1330,7 +1458,9 @@ export default function SettingsPage() {
                             </p>
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="min_words">Minimum Content Words</Label>
+                            <Label htmlFor="min_words">
+                              Minimum Content Words
+                            </Label>
                             <Input
                               id="min_words"
                               type="number"
@@ -1357,7 +1487,11 @@ export default function SettingsPage() {
                             id="faq_schema"
                             checked={seoSettings.content.enable_faq_schema}
                             onCheckedChange={(checked) =>
-                              updateSeoSetting("content", "enable_faq_schema", checked)
+                              updateSeoSetting(
+                                "content",
+                                "enable_faq_schema",
+                                checked,
+                              )
                             }
                           />
                           <Label htmlFor="faq_schema">FAQ Schema</Label>
@@ -1367,7 +1501,11 @@ export default function SettingsPage() {
                             id="article_schema"
                             checked={seoSettings.content.enable_article_schema}
                             onCheckedChange={(checked) =>
-                              updateSeoSetting("content", "enable_article_schema", checked)
+                              updateSeoSetting(
+                                "content",
+                                "enable_article_schema",
+                                checked,
+                              )
                             }
                           />
                           <Label htmlFor="article_schema">Article Schema</Label>
@@ -1397,10 +1535,16 @@ export default function SettingsPage() {
                               id="optimize_images"
                               checked={seoSettings.performance.optimize_images}
                               onCheckedChange={(checked) =>
-                                updateSeoSetting("performance", "optimize_images", checked)
+                                updateSeoSetting(
+                                  "performance",
+                                  "optimize_images",
+                                  checked,
+                                )
                               }
                             />
-                            <Label htmlFor="optimize_images">Optimize Images</Label>
+                            <Label htmlFor="optimize_images">
+                              Optimize Images
+                            </Label>
                             <Badge variant="secondary">
                               WebP conversion, compression
                             </Badge>
@@ -1408,7 +1552,9 @@ export default function SettingsPage() {
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="critical_css"
-                              checked={seoSettings.performance.enable_critical_css}
+                              checked={
+                                seoSettings.performance.enable_critical_css
+                              }
                               onCheckedChange={(checked) =>
                                 updateSeoSetting(
                                   "performance",
@@ -1418,12 +1564,16 @@ export default function SettingsPage() {
                               }
                             />
                             <Label htmlFor="critical_css">Critical CSS</Label>
-                            <Badge variant="secondary">Inline critical styles</Badge>
+                            <Badge variant="secondary">
+                              Inline critical styles
+                            </Badge>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="defer_js"
-                              checked={seoSettings.performance.defer_non_critical_js}
+                              checked={
+                                seoSettings.performance.defer_non_critical_js
+                              }
                               onCheckedChange={(checked) =>
                                 updateSeoSetting(
                                   "performance",
@@ -1432,13 +1582,20 @@ export default function SettingsPage() {
                                 )
                               }
                             />
-                            <Label htmlFor="defer_js">Defer Non-Critical JS</Label>
-                            <Badge variant="secondary">Improve loading speed</Badge>
+                            <Label htmlFor="defer_js">
+                              Defer Non-Critical JS
+                            </Label>
+                            <Badge variant="secondary">
+                              Improve loading speed
+                            </Badge>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="preload_resources"
-                              checked={seoSettings.performance.preload_critical_resources}
+                              checked={
+                                seoSettings.performance
+                                  .preload_critical_resources
+                              }
                               onCheckedChange={(checked) =>
                                 updateSeoSetting(
                                   "performance",
@@ -1450,7 +1607,9 @@ export default function SettingsPage() {
                             <Label htmlFor="preload_resources">
                               Preload Critical Resources
                             </Label>
-                            <Badge variant="secondary">Fonts, CSS, key images</Badge>
+                            <Badge variant="secondary">
+                              Fonts, CSS, key images
+                            </Badge>
                           </div>
                         </div>
                       </div>
@@ -1464,11 +1623,17 @@ export default function SettingsPage() {
                             id="enable_cdn"
                             checked={seoSettings.performance.enable_cdn}
                             onCheckedChange={(checked) =>
-                              updateSeoSetting("performance", "enable_cdn", checked)
+                              updateSeoSetting(
+                                "performance",
+                                "enable_cdn",
+                                checked,
+                              )
                             }
                           />
                           <Label htmlFor="enable_cdn">Enable CDN</Label>
-                          <Badge variant="secondary">Content delivery network</Badge>
+                          <Badge variant="secondary">
+                            Content delivery network
+                          </Badge>
                         </div>
 
                         {seoSettings.performance.enable_cdn && (
@@ -1478,7 +1643,11 @@ export default function SettingsPage() {
                               id="cdn_url"
                               value={seoSettings.performance.cdn_url}
                               onChange={(e) =>
-                                updateSeoSetting("performance", "cdn_url", e.target.value)
+                                updateSeoSetting(
+                                  "performance",
+                                  "cdn_url",
+                                  e.target.value,
+                                )
                               }
                               placeholder="https://cdn.example.com"
                             />
@@ -1487,7 +1656,9 @@ export default function SettingsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="lazy_threshold">Lazy Load Threshold (px)</Label>
+                        <Label htmlFor="lazy_threshold">
+                          Lazy Load Threshold (px)
+                        </Label>
                         <Input
                           id="lazy_threshold"
                           type="number"
@@ -1509,10 +1680,10 @@ export default function SettingsPage() {
                       <Alert>
                         <Info className="h-4 w-4" />
                         <AlertDescription>
-                          <strong>Core Web Vitals Impact:</strong> Các tùy chọn này trực
-                          tiếp ảnh hưởng đến LCP, FID, và CLS - những metrics quan trọng
-                          cho SEO. Khuyến nghị bật tất cả để đạt điểm hiệu suất cao
-                          nhất.
+                          <strong>Core Web Vitals Impact:</strong> Các tùy chọn
+                          này trực tiếp ảnh hưởng đến LCP, FID, và CLS - những
+                          metrics quan trọng cho SEO. Khuyến nghị bật tất cả để
+                          đạt điểm hiệu suất cao nhất.
                         </AlertDescription>
                       </Alert>
                     </CardContent>
@@ -1534,10 +1705,16 @@ export default function SettingsPage() {
                           id="enable_local_seo"
                           checked={seoSettings.local.enable_local_seo}
                           onCheckedChange={(checked) =>
-                            updateSeoSetting("local", "enable_local_seo", checked)
+                            updateSeoSetting(
+                              "local",
+                              "enable_local_seo",
+                              checked,
+                            )
                           }
                         />
-                        <Label htmlFor="enable_local_seo">Enable Local SEO</Label>
+                        <Label htmlFor="enable_local_seo">
+                          Enable Local SEO
+                        </Label>
                         <Badge variant="secondary">
                           Bật các tính năng tối ưu cho tìm kiếm địa phương
                         </Badge>
@@ -1545,7 +1722,9 @@ export default function SettingsPage() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <Label htmlFor="business_category">Business Category</Label>
+                          <Label htmlFor="business_category">
+                            Business Category
+                          </Label>
                           <Input
                             id="business_category"
                             value={seoSettings.local.business_category}
@@ -1582,7 +1761,11 @@ export default function SettingsPage() {
                           id="opening_hours"
                           value={seoSettings.local.opening_hours}
                           onChange={(e) =>
-                            updateSeoSetting("local", "opening_hours", e.target.value)
+                            updateSeoSetting(
+                              "local",
+                              "opening_hours",
+                              e.target.value,
+                            )
                           }
                           placeholder="Thứ 2 - Chủ nhật: 8:00 - 22:00"
                         />
@@ -1601,7 +1784,9 @@ export default function SettingsPage() {
                             updateSeoSetting(
                               "local",
                               "service_areas",
-                              e.target.value.split(",").map((area) => area.trim()),
+                              e.target.value
+                                .split(",")
+                                .map((area) => area.trim()),
                             )
                           }
                           placeholder="Hà Nội, TP.HCM, Đà Nẵng"
@@ -1616,10 +1801,16 @@ export default function SettingsPage() {
                           id="review_schema"
                           checked={seoSettings.local.enable_review_schema}
                           onCheckedChange={(checked) =>
-                            updateSeoSetting("local", "enable_review_schema", checked)
+                            updateSeoSetting(
+                              "local",
+                              "enable_review_schema",
+                              checked,
+                            )
                           }
                         />
-                        <Label htmlFor="review_schema">Enable Review Schema</Label>
+                        <Label htmlFor="review_schema">
+                          Enable Review Schema
+                        </Label>
                       </div>
                     </CardContent>
                   </Card>
@@ -1659,7 +1850,11 @@ export default function SettingsPage() {
                     id="contact_email"
                     value={settings.general.contact_email}
                     onChange={(e) =>
-                      handleInputChange("general", "contact_email", e.target.value)
+                      handleInputChange(
+                        "general",
+                        "contact_email",
+                        e.target.value,
+                      )
                     }
                   />
                 </div>
@@ -1671,7 +1866,11 @@ export default function SettingsPage() {
                   id="site_description"
                   value={settings.general.site_description}
                   onChange={(e) =>
-                    handleInputChange("general", "site_description", e.target.value)
+                    handleInputChange(
+                      "general",
+                      "site_description",
+                      e.target.value,
+                    )
                   }
                   rows={3}
                 />
@@ -1684,7 +1883,11 @@ export default function SettingsPage() {
                     id="contact_phone"
                     value={settings.general.contact_phone}
                     onChange={(e) =>
-                      handleInputChange("general", "contact_phone", e.target.value)
+                      handleInputChange(
+                        "general",
+                        "contact_phone",
+                        e.target.value,
+                      )
                     }
                   />
                 </div>
@@ -1749,7 +1952,9 @@ export default function SettingsPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="min_order_amount">Số tiền đơn hàng tối thiểu</Label>
+                  <Label htmlFor="min_order_amount">
+                    Số tiền đơn hàng tối thiểu
+                  </Label>
                   <Input
                     id="min_order_amount"
                     type="number"
@@ -1764,7 +1969,9 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="max_order_amount">Số tiền đơn hàng tối đa</Label>
+                  <Label htmlFor="max_order_amount">
+                    Số tiền đơn hàng tối đa
+                  </Label>
                   <Input
                     id="max_order_amount"
                     type="number"
@@ -1812,7 +2019,9 @@ export default function SettingsPage() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="default_shipping_cost">Phí vận chuyển mặc định</Label>
+                  <Label htmlFor="default_shipping_cost">
+                    Phí vận chuyển mặc định
+                  </Label>
                   <Input
                     id="default_shipping_cost"
                     type="number"
@@ -1847,7 +2056,11 @@ export default function SettingsPage() {
                   id="international_shipping"
                   checked={settings.shipping.international_shipping}
                   onCheckedChange={(checked) =>
-                    handleInputChange("shipping", "international_shipping", checked)
+                    handleInputChange(
+                      "shipping",
+                      "international_shipping",
+                      checked,
+                    )
                   }
                 />
               </div>
@@ -1867,7 +2080,9 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="cod_enabled">Thanh toán khi nhận hàng (COD)</Label>
+                  <Label htmlFor="cod_enabled">
+                    Thanh toán khi nhận hàng (COD)
+                  </Label>
                   <Switch
                     id="cod_enabled"
                     checked={settings.payment.cod_enabled}
@@ -1884,7 +2099,11 @@ export default function SettingsPage() {
                     id="bank_transfer_enabled"
                     checked={settings.payment.bank_transfer_enabled}
                     onCheckedChange={(checked) =>
-                      handleInputChange("payment", "bank_transfer_enabled", checked)
+                      handleInputChange(
+                        "payment",
+                        "bank_transfer_enabled",
+                        checked,
+                      )
                     }
                   />
                 </div>
@@ -2058,12 +2277,18 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="order_notifications">Thông báo đơn hàng</Label>
+                  <Label htmlFor="order_notifications">
+                    Thông báo đơn hàng
+                  </Label>
                   <Switch
                     id="order_notifications"
                     checked={settings.notifications.order_notifications}
                     onCheckedChange={(checked) =>
-                      handleInputChange("notifications", "order_notifications", checked)
+                      handleInputChange(
+                        "notifications",
+                        "order_notifications",
+                        checked,
+                      )
                     }
                   />
                 </div>
@@ -2073,7 +2298,11 @@ export default function SettingsPage() {
                     id="low_stock_alerts"
                     checked={settings.notifications.low_stock_alerts}
                     onCheckedChange={(checked) =>
-                      handleInputChange("notifications", "low_stock_alerts", checked)
+                      handleInputChange(
+                        "notifications",
+                        "low_stock_alerts",
+                        checked,
+                      )
                     }
                   />
                 </div>
