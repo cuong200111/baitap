@@ -1,16 +1,15 @@
-import { Domain } from "@/config";
+// SEO Service - Load settings from database and apply to metadata
+import { Domain } from '@/config';
 
 export interface SeoSettings {
   general: {
     site_name: string;
+    site_url: string;
     site_description: string;
     site_keywords: string;
-    site_url: string;
     site_logo: string;
     site_favicon: string;
     default_meta_title_pattern: string;
-    product_meta_title_pattern: string;
-    category_meta_title_pattern: string;
     auto_generate_meta_description: boolean;
     meta_description_length: number;
   };
@@ -22,6 +21,7 @@ export interface SeoSettings {
   analytics: {
     google_analytics_id: string;
     google_tag_manager_id: string;
+    google_search_console_verification: string;
     enable_analytics: boolean;
   };
   schema: {
@@ -34,290 +34,299 @@ export interface SeoSettings {
     enable_organization_schema: boolean;
     enable_product_schema: boolean;
   };
-}
-
-// Cache for SEO settings
-let seoSettingsCache: SeoSettings | null = null;
-let cacheTimestamp = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-export async function getSeoSettings(): Promise<SeoSettings> {
-  // Return cached settings if available and not expired
-  if (seoSettingsCache && Date.now() - cacheTimestamp < CACHE_DURATION) {
-    return seoSettingsCache;
-  }
-
-  // Skip API call during build time or if we're in a server environment without backend access
-  if (typeof window === "undefined" && process.env.NODE_ENV !== "production") {
-    // During development, return default settings to avoid connection issues during SSR
-    return getDefaultSeoSettings();
-  }
-
-  try {
-    const response = await fetch(`${Domain}/api/admin/seo-settings`, {
-      next: { revalidate: 300 }, // Revalidate every 5 minutes
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      if (data.success && data.data) {
-        seoSettingsCache = data.data;
-        cacheTimestamp = Date.now();
-        return data.data;
-      }
-    }
-  } catch (error) {
-    // Silently handle fetch errors during SSR
-    if (typeof window === "undefined") {
-      // Server side - don't log fetch errors
-    } else {
-      console.error("Failed to fetch SEO settings:", error);
-    }
-  }
-
-  // Return default settings if API fails
-  return getDefaultSeoSettings();
-}
-
-function getDefaultSeoSettings(): SeoSettings {
-  return {
-    general: {
-      site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
-      site_description:
-        "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá t��t nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-      site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
-      site_url: "https://hacom.vn",
-      site_logo: "/logo.png",
-      site_favicon: "/favicon.ico",
-      default_meta_title_pattern: "{title} | HACOM",
-      product_meta_title_pattern: "{product_name} - {category} | HACOM",
-      category_meta_title_pattern: "{category_name} - {description} | HACOM",
-      auto_generate_meta_description: true,
-      meta_description_length: 160,
-    },
-    social: {
-      facebook_app_id: "",
-      twitter_site: "@hacom_vn",
-      default_og_image: "/og-image.jpg",
-    },
-    analytics: {
-      google_analytics_id: "",
-      google_tag_manager_id: "",
-      enable_analytics: true,
-    },
-    schema: {
-      organization_name: "HACOM",
-      organization_logo: "/logo.png",
-      organization_address: "Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
-      organization_phone: "1900 1903",
-      organization_email: "contact@hacom.vn",
-      business_type: "ElectronicsStore",
-      enable_organization_schema: true,
-      enable_product_schema: true,
-    },
+  technical: {
+    enable_sitemap: boolean;
+    enable_compression: boolean;
+    enable_caching: boolean;
+    lazy_load_images: boolean;
+    sitemap_max_urls: number;
   };
 }
 
 export interface PageSeoData {
   title: string;
   description: string;
-  keywords?: string;
-  url?: string;
-  image?: string;
-  type?: string;
+  keywords: string;
+  canonical: string;
+  ogTitle: string;
+  ogDescription: string;
+  ogImage: string;
+  ogUrl: string;
+  twitterTitle: string;
+  twitterDescription: string;
+  twitterImage: string;
+  structuredData?: any;
 }
 
-export function generateMetadata(
-  pageData: PageSeoData,
-  seoSettings: SeoSettings,
-) {
-  const {
-    title,
-    description,
-    keywords,
-    url,
-    image,
-    type = "website",
-  } = pageData;
-  const settings = seoSettings.general;
-  const social = seoSettings.social;
+class SeoService {
+  private settings: SeoSettings | null = null;
+  private isClient = typeof window !== 'undefined';
 
-  // Generate meta title using pattern
-  let metaTitle = title;
-  if (settings.default_meta_title_pattern && title !== settings.site_name) {
-    metaTitle = settings.default_meta_title_pattern
-      .replace("{title}", title)
-      .replace("{sitename}", settings.site_name);
-  }
+  // Load SEO settings from API
+  async loadSettings(): Promise<SeoSettings> {
+    try {
+      if (this.settings) {
+        return this.settings;
+      }
 
-  // Ensure title length is reasonable
-  if (metaTitle.length > 60) {
-    metaTitle = metaTitle.substring(0, 57) + "...";
-  }
-
-  // Generate meta description
-  let metaDescription = description;
-  if (metaDescription.length > settings.meta_description_length) {
-    metaDescription =
-      metaDescription.substring(0, settings.meta_description_length - 3) +
-      "...";
-  }
-
-  // Build full URL
-  const fullUrl = url ? `${settings.site_url}${url}` : settings.site_url;
-
-  // Use provided image or default OG image
-  const ogImage = image || social.default_og_image;
-  const fullImageUrl = ogImage?.startsWith("http")
-    ? ogImage
-    : `${settings.site_url}${ogImage}`;
-
-  return {
-    title: metaTitle,
-    description: metaDescription,
-    keywords: keywords || settings.site_keywords,
-    openGraph: {
-      title: metaTitle,
-      description: metaDescription,
-      url: fullUrl,
-      siteName: settings.site_name,
-      images: [
-        {
-          url: fullImageUrl,
-          width: 1200,
-          height: 630,
-          alt: metaTitle,
+      const response = await fetch(`${Domain}/api/admin/seo-settings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ],
-      locale: "vi_VN",
-      type: type,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: metaTitle,
-      description: metaDescription,
-      site: social.twitter_site,
-      images: [fullImageUrl],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
+        // Don't require auth for getting public SEO settings
+        cache: 'force-cache',
+      });
+
+      if (!response.ok) {
+        console.warn('Failed to load SEO settings, using defaults');
+        return this.getDefaultSettings();
+      }
+
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        this.settings = data.data;
+        return this.settings;
+      }
+
+      return this.getDefaultSettings();
+    } catch (error) {
+      console.error('Error loading SEO settings:', error);
+      return this.getDefaultSettings();
+    }
+  }
+
+  // Get default settings if API fails
+  private getDefaultSettings(): SeoSettings {
+    return {
+      general: {
+        site_name: 'HACOM - Máy tính, Laptop',
+        site_url: 'https://hacom.vn',
+        site_description: 'HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.',
+        site_keywords: 'máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM',
+        site_logo: '/logo.png',
+        site_favicon: '/favicon.ico',
+        default_meta_title_pattern: '{title} | HACOM',
+        auto_generate_meta_description: true,
+        meta_description_length: 160,
       },
-    },
-    alternates: {
-      canonical: fullUrl,
-    },
-    other: {
-      // Schema.org structured data
-      "application/ld+json": JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        name: metaTitle,
-        description: metaDescription,
-        url: fullUrl,
-        isPartOf: {
-          "@type": "WebSite",
-          name: settings.site_name,
-          url: settings.site_url,
+      social: {
+        facebook_app_id: '',
+        twitter_site: '@hacom_vn',
+        default_og_image: '/og-image.jpg',
+      },
+      analytics: {
+        google_analytics_id: '',
+        google_tag_manager_id: '',
+        google_search_console_verification: '',
+        enable_analytics: true,
+      },
+      schema: {
+        organization_name: 'HACOM',
+        organization_logo: '/logo.png',
+        organization_address: 'Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội',
+        organization_phone: '1900 1903',
+        organization_email: 'contact@hacom.vn',
+        business_type: 'ElectronicsStore',
+        enable_organization_schema: true,
+        enable_product_schema: true,
+      },
+      technical: {
+        enable_sitemap: true,
+        enable_compression: true,
+        enable_caching: true,
+        lazy_load_images: true,
+        sitemap_max_urls: 50000,
+      },
+    };
+  }
+
+  // Generate page-specific SEO data
+  async generatePageSeo(options: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+    path?: string;
+    type?: 'page' | 'product' | 'category';
+    image?: string;
+    productData?: any;
+    categoryData?: any;
+  }): Promise<PageSeoData> {
+    const settings = await this.loadSettings();
+    const { title, description, keywords, path = '', type = 'page', image, productData, categoryData } = options;
+
+    // Generate title based on pattern
+    let finalTitle = title || settings.general.site_name;
+    if (title && settings.general.default_meta_title_pattern) {
+      finalTitle = settings.general.default_meta_title_pattern.replace('{title}', title);
+    }
+
+    // Generate description
+    let finalDescription = description || settings.general.site_description;
+    if (settings.general.auto_generate_meta_description && !description) {
+      if (type === 'product' && productData) {
+        finalDescription = this.generateProductDescription(productData, settings);
+      } else if (type === 'category' && categoryData) {
+        finalDescription = this.generateCategoryDescription(categoryData, settings);
+      }
+    }
+
+    // Truncate description if needed
+    if (finalDescription.length > settings.general.meta_description_length) {
+      finalDescription = finalDescription.substring(0, settings.general.meta_description_length - 3) + '...';
+    }
+
+    // Build canonical URL
+    const canonical = `${settings.general.site_url}${path}`;
+
+    // Build image URL
+    const finalImage = image || settings.social.default_og_image;
+    const fullImageUrl = finalImage.startsWith('http') ? finalImage : `${settings.general.site_url}${finalImage}`;
+
+    return {
+      title: finalTitle,
+      description: finalDescription,
+      keywords: keywords || settings.general.site_keywords,
+      canonical,
+      ogTitle: finalTitle,
+      ogDescription: finalDescription,
+      ogImage: fullImageUrl,
+      ogUrl: canonical,
+      twitterTitle: finalTitle,
+      twitterDescription: finalDescription,
+      twitterImage: fullImageUrl,
+      structuredData: this.generateStructuredData(type, { title: finalTitle, description: finalDescription, ...options }, settings),
+    };
+  }
+
+  // Generate product description
+  private generateProductDescription(product: any, settings: SeoSettings): string {
+    const parts = [];
+    
+    if (product.name) {
+      parts.push(product.name);
+    }
+    
+    if (product.short_description) {
+      parts.push(product.short_description);
+    } else if (product.description) {
+      const cleanDesc = product.description.replace(/<[^>]*>/g, '').substring(0, 100);
+      parts.push(cleanDesc);
+    }
+    
+    if (product.price) {
+      const formattedPrice = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+      }).format(product.price);
+      parts.push(`Giá: ${formattedPrice}`);
+    }
+    
+    parts.push('Bảo hành chính hãng, giao hàng toàn quốc tại HACOM.');
+    
+    return parts.join(' - ');
+  }
+
+  // Generate category description
+  private generateCategoryDescription(category: any, settings: SeoSettings): string {
+    const parts = [];
+    
+    if (category.name) {
+      parts.push(`${category.name} chất lượng cao`);
+    }
+    
+    if (category.description) {
+      parts.push(category.description);
+    }
+    
+    parts.push('Giá tốt nhất, bảo hành chính hãng tại HACOM.');
+    
+    return parts.join(' - ');
+  }
+
+  // Generate structured data (JSON-LD)
+  private generateStructuredData(type: string, data: any, settings: SeoSettings): any {
+    const structuredData: any = {};
+
+    // Organization schema
+    if (settings.schema.enable_organization_schema) {
+      structuredData.organization = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: settings.schema.organization_name,
+        url: settings.general.site_url,
+        logo: `${settings.general.site_url}${settings.schema.organization_logo}`,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Hà Nội',
+          addressCountry: 'VN',
+          streetAddress: settings.schema.organization_address,
         },
-        ...(seoSettings.schema.enable_organization_schema && {
-          publisher: {
-            "@type": "Organization",
-            name: seoSettings.schema.organization_name,
-            logo: `${settings.site_url}${seoSettings.schema.organization_logo}`,
-            address: seoSettings.schema.organization_address,
-            telephone: seoSettings.schema.organization_phone,
-            email: seoSettings.schema.organization_email,
+        contactPoint: {
+          '@type': 'ContactPoint',
+          telephone: settings.schema.organization_phone,
+          contactType: 'customer service',
+          email: settings.schema.organization_email,
+        },
+        '@id': `${settings.general.site_url}#organization`,
+      };
+    }
+
+    // Product schema
+    if (type === 'product' && settings.schema.enable_product_schema && data.productData) {
+      const product = data.productData;
+      structuredData.product = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description || product.short_description,
+        sku: product.sku,
+        image: product.images && product.images.length > 0 ? product.images[0] : settings.social.default_og_image,
+        offers: {
+          '@type': 'Offer',
+          price: product.sale_price || product.price,
+          priceCurrency: 'VND',
+          availability: product.stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          seller: {
+            '@type': 'Organization',
+            name: settings.schema.organization_name,
           },
-        }),
-      }),
-    },
-  };
-}
+        },
+        brand: {
+          '@type': 'Brand',
+          name: settings.schema.organization_name,
+        },
+      };
+    }
 
-// Helper functions for specific page types
-export async function generatePageMetadata(
-  title: string,
-  description: string,
-  url?: string,
-  image?: string,
-) {
-  const seoSettings = await getSeoSettings();
+    // Website/WebPage schema
+    structuredData.webpage = {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: data.title,
+      description: data.description,
+      url: data.canonical,
+      mainEntity: structuredData.product || structuredData.organization,
+    };
 
-  return generateMetadata(
-    {
-      title,
-      description,
-      url,
-      image,
-    },
-    seoSettings,
-  );
-}
-
-export async function generateProductMetadata(
-  productName: string,
-  productDescription: string,
-  category: string,
-  price?: number,
-  image?: string,
-  url?: string,
-) {
-  const seoSettings = await getSeoSettings();
-  const settings = seoSettings.general;
-
-  // Use product title pattern
-  let title = productName;
-  if (settings.product_meta_title_pattern) {
-    title = settings.product_meta_title_pattern
-      .replace("{product_name}", productName)
-      .replace("{category}", category)
-      .replace("{sitename}", settings.site_name);
+    return structuredData;
   }
 
-  return generateMetadata(
-    {
-      title,
-      description: productDescription,
-      url,
-      image,
-      type: "website",
-    },
-    seoSettings,
-  );
-}
-
-export async function generateCategoryMetadata(
-  categoryName: string,
-  categoryDescription: string,
-  url?: string,
-  image?: string,
-) {
-  const seoSettings = await getSeoSettings();
-  const settings = seoSettings.general;
-
-  // Use category title pattern
-  let title = categoryName;
-  if (settings.category_meta_title_pattern) {
-    title = settings.category_meta_title_pattern
-      .replace("{category_name}", categoryName)
-      .replace("{description}", categoryDescription)
-      .replace("{sitename}", settings.site_name);
+  // Get settings for a specific category
+  async getSettings(category?: keyof SeoSettings): Promise<SeoSettings | any> {
+    const settings = await this.loadSettings();
+    return category ? settings[category] : settings;
   }
 
-  return generateMetadata(
-    {
-      title,
-      description: categoryDescription,
-      url,
-      image,
-    },
-    seoSettings,
-  );
+  // Clear cached settings
+  clearCache(): void {
+    this.settings = null;
+  }
 }
+
+// Export singleton instance
+export const seoService = new SeoService();
+
+// Export default for easier imports
+export default seoService;
