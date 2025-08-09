@@ -6,7 +6,14 @@ import { useAdminSeo } from "@/contexts/AdminSeoContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function DemoSeoPage() {
-  const { settings, loading, error, getSiteName, getOrganizationName, getContactInfo } = useAdminSeo();
+  const {
+    settings,
+    loading,
+    error,
+    getSiteName,
+    getOrganizationName,
+    getContactInfo,
+  } = useAdminSeo();
 
   if (loading) {
     return (
@@ -30,7 +37,9 @@ export default function DemoSeoPage() {
       <AppLayout>
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">Lỗi tải SEO settings</h1>
+            <h1 className="text-2xl font-bold text-red-600 mb-4">
+              Lỗi tải SEO settings
+            </h1>
             <p className="text-gray-600">{error}</p>
           </div>
         </div>
@@ -46,7 +55,7 @@ export default function DemoSeoPage() {
     <AppLayout>
       <div className="container mx-auto px-4 py-8">
         <AdminPageTitle title="Demo Admin SEO Settings" />
-        
+
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Site Info */}
           <Card>
@@ -61,15 +70,21 @@ export default function DemoSeoPage() {
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Site URL:</dt>
-                  <dd className="text-gray-900">{settings?.general?.site_url}</dd>
+                  <dd className="text-gray-900">
+                    {settings?.general?.site_url}
+                  </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Description:</dt>
-                  <dd className="text-gray-900 text-sm">{settings?.general?.site_description}</dd>
+                  <dd className="text-gray-900 text-sm">
+                    {settings?.general?.site_description}
+                  </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Keywords:</dt>
-                  <dd className="text-gray-900 text-sm">{settings?.general?.site_keywords}</dd>
+                  <dd className="text-gray-900 text-sm">
+                    {settings?.general?.site_keywords}
+                  </dd>
                 </div>
               </dl>
             </CardContent>
@@ -96,11 +111,15 @@ export default function DemoSeoPage() {
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Address:</dt>
-                  <dd className="text-gray-900 text-sm">{contactInfo.address}</dd>
+                  <dd className="text-gray-900 text-sm">
+                    {contactInfo.address}
+                  </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Business Type:</dt>
-                  <dd className="text-gray-900">{settings?.schema?.business_type}</dd>
+                  <dd className="text-gray-900">
+                    {settings?.schema?.business_type}
+                  </dd>
                 </div>
               </dl>
             </CardContent>
@@ -114,31 +133,41 @@ export default function DemoSeoPage() {
             <CardContent>
               <dl className="space-y-2">
                 <div>
-                  <dt className="font-medium text-gray-600">Google Analytics:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Google Analytics:
+                  </dt>
                   <dd className="text-gray-900 font-mono text-sm">
-                    {settings?.analytics?.google_analytics_id || 'Chưa cấu hình'}
+                    {settings?.analytics?.google_analytics_id ||
+                      "Chưa cấu hình"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">GTM ID:</dt>
                   <dd className="text-gray-900 font-mono text-sm">
-                    {settings?.analytics?.google_tag_manager_id || 'Chưa cấu hình'}
+                    {settings?.analytics?.google_tag_manager_id ||
+                      "Chưa cấu hình"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Twitter Site:</dt>
-                  <dd className="text-gray-900">{settings?.social?.twitter_site}</dd>
-                </div>
-                <div>
-                  <dt className="font-medium text-gray-600">Facebook App ID:</dt>
-                  <dd className="text-gray-900 font-mono text-sm">
-                    {settings?.social?.facebook_app_id || 'Chưa cấu hình'}
+                  <dd className="text-gray-900">
+                    {settings?.social?.twitter_site}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Analytics Enabled:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Facebook App ID:
+                  </dt>
+                  <dd className="text-gray-900 font-mono text-sm">
+                    {settings?.social?.facebook_app_id || "Chưa cấu hình"}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-medium text-gray-600">
+                    Analytics Enabled:
+                  </dt>
                   <dd className="text-gray-900">
-                    {settings?.analytics?.enable_analytics ? 'Bật' : 'Tắt'}
+                    {settings?.analytics?.enable_analytics ? "Bật" : "Tắt"}
                   </dd>
                 </div>
               </dl>
@@ -155,30 +184,36 @@ export default function DemoSeoPage() {
                 <div>
                   <dt className="font-medium text-gray-600">Sitemap:</dt>
                   <dd className="text-gray-900">
-                    {settings?.technical?.enable_sitemap ? 'Bật' : 'Tắt'}
+                    {settings?.technical?.enable_sitemap ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Compression:</dt>
                   <dd className="text-gray-900">
-                    {settings?.technical?.enable_compression ? 'Bật' : 'Tắt'}
+                    {settings?.technical?.enable_compression ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Caching:</dt>
                   <dd className="text-gray-900">
-                    {settings?.technical?.enable_caching ? 'Bật' : 'Tắt'}
+                    {settings?.technical?.enable_caching ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Lazy Load Images:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Lazy Load Images:
+                  </dt>
                   <dd className="text-gray-900">
-                    {settings?.technical?.lazy_load_images ? 'Bật' : 'Tắt'}
+                    {settings?.technical?.lazy_load_images ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Max Sitemap URLs:</dt>
-                  <dd className="text-gray-900">{settings?.technical?.sitemap_max_urls}</dd>
+                  <dt className="font-medium text-gray-600">
+                    Max Sitemap URLs:
+                  </dt>
+                  <dd className="text-gray-900">
+                    {settings?.technical?.sitemap_max_urls}
+                  </dd>
                 </div>
               </dl>
             </CardContent>
@@ -192,32 +227,40 @@ export default function DemoSeoPage() {
             <CardContent>
               <dl className="space-y-2">
                 <div>
-                  <dt className="font-medium text-gray-600">Organization Schema:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Organization Schema:
+                  </dt>
                   <dd className="text-gray-900">
-                    {settings?.schema?.enable_organization_schema ? 'Bật' : 'Tắt'}
+                    {settings?.schema?.enable_organization_schema
+                      ? "Bật"
+                      : "Tắt"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Product Schema:</dt>
                   <dd className="text-gray-900">
-                    {settings?.schema?.enable_product_schema ? 'Bật' : 'Tắt'}
+                    {settings?.schema?.enable_product_schema ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Breadcrumb Schema:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Breadcrumb Schema:
+                  </dt>
                   <dd className="text-gray-900">
-                    {settings?.schema?.enable_breadcrumb_schema ? 'Bật' : 'Tắt'}
+                    {settings?.schema?.enable_breadcrumb_schema ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Review Schema:</dt>
                   <dd className="text-gray-900">
-                    {settings?.schema?.enable_review_schema ? 'Bật' : 'Tắt'}
+                    {settings?.schema?.enable_review_schema ? "Bật" : "Tắt"}
                   </dd>
                 </div>
                 <div>
                   <dt className="font-medium text-gray-600">Business Hours:</dt>
-                  <dd className="text-gray-900">{settings?.schema?.business_hours}</dd>
+                  <dd className="text-gray-900">
+                    {settings?.schema?.business_hours}
+                  </dd>
                 </div>
               </dl>
             </CardContent>
@@ -231,32 +274,46 @@ export default function DemoSeoPage() {
             <CardContent>
               <dl className="space-y-2">
                 <div>
-                  <dt className="font-medium text-gray-600">Default Pattern:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Default Pattern:
+                  </dt>
                   <dd className="text-gray-900 font-mono text-sm">
                     {settings?.general?.default_meta_title_pattern}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Product Pattern:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Product Pattern:
+                  </dt>
                   <dd className="text-gray-900 font-mono text-sm">
                     {settings?.general?.product_meta_title_pattern}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Category Pattern:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Category Pattern:
+                  </dt>
                   <dd className="text-gray-900 font-mono text-sm">
                     {settings?.general?.category_meta_title_pattern}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Auto Meta Description:</dt>
+                  <dt className="font-medium text-gray-600">
+                    Auto Meta Description:
+                  </dt>
                   <dd className="text-gray-900">
-                    {settings?.general?.auto_generate_meta_description ? 'Bật' : 'Tắt'}
+                    {settings?.general?.auto_generate_meta_description
+                      ? "Bật"
+                      : "Tắt"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="font-medium text-gray-600">Meta Description Length:</dt>
-                  <dd className="text-gray-900">{settings?.general?.meta_description_length}</dd>
+                  <dt className="font-medium text-gray-600">
+                    Meta Description Length:
+                  </dt>
+                  <dd className="text-gray-900">
+                    {settings?.general?.meta_description_length}
+                  </dd>
                 </div>
               </dl>
             </CardContent>
@@ -264,12 +321,29 @@ export default function DemoSeoPage() {
         </div>
 
         <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-          <h3 className="font-semibold text-blue-900 mb-2">📝 Hướng dẫn sử dụng</h3>
+          <h3 className="font-semibold text-blue-900 mb-2">
+            📝 Hướng dẫn sử dụng
+          </h3>
           <ul className="text-blue-800 text-sm space-y-1">
-            <li>• Tất cả dữ liệu trên được lấy từ API <code className="bg-blue-200 px-1 rounded">/admin/seo-settings</code></li>
-            <li>• Title và metadata được tự động generate theo pattern từ admin</li>
-            <li>• Hook <code className="bg-blue-200 px-1 rounded">useAdminSeo()</code> cung cấp real-time data</li>
-            <li>• Component <code className="bg-blue-200 px-1 rounded">AdminPageTitle</code> sử dụng site name từ admin</li>
+            <li>
+              • Tất cả dữ liệu trên được lấy từ API{" "}
+              <code className="bg-blue-200 px-1 rounded">
+                /admin/seo-settings
+              </code>
+            </li>
+            <li>
+              • Title và metadata được tự động generate theo pattern từ admin
+            </li>
+            <li>
+              • Hook{" "}
+              <code className="bg-blue-200 px-1 rounded">useAdminSeo()</code>{" "}
+              cung cấp real-time data
+            </li>
+            <li>
+              • Component{" "}
+              <code className="bg-blue-200 px-1 rounded">AdminPageTitle</code>{" "}
+              sử dụng site name từ admin
+            </li>
             <li>• Contact info và organization data được sync từ database</li>
           </ul>
         </div>

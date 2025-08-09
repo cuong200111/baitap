@@ -1,7 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useSeoData, type AdminSeoSettings, type SeoMetadata } from '@/hooks/useSeoData';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+  useSeoData,
+  type AdminSeoSettings,
+  type SeoMetadata,
+} from "@/hooks/useSeoData";
 
 interface AdminSeoContextType {
   settings: AdminSeoSettings | null;
@@ -13,7 +17,7 @@ interface AdminSeoContextType {
     description?: string;
     keywords?: string;
     path?: string;
-    type?: 'page' | 'product' | 'category';
+    type?: "page" | "product" | "category";
     image?: string;
     productData?: any;
     categoryData?: any;
@@ -27,7 +31,9 @@ interface AdminSeoContextType {
   };
 }
 
-const AdminSeoContext = createContext<AdminSeoContextType | undefined>(undefined);
+const AdminSeoContext = createContext<AdminSeoContextType | undefined>(
+  undefined,
+);
 
 export function AdminSeoProvider({ children }: { children: React.ReactNode }) {
   const {
@@ -62,7 +68,7 @@ export function AdminSeoProvider({ children }: { children: React.ReactNode }) {
 export function useAdminSeo() {
   const context = useContext(AdminSeoContext);
   if (context === undefined) {
-    throw new Error('useAdminSeo must be used within an AdminSeoProvider');
+    throw new Error("useAdminSeo must be used within an AdminSeoProvider");
   }
   return context;
 }
@@ -88,7 +94,7 @@ export function useAdminSeoMetadata(options: {
   description?: string;
   keywords?: string;
   path?: string;
-  type?: 'page' | 'product' | 'category';
+  type?: "page" | "product" | "category";
   image?: string;
   productData?: any;
   categoryData?: any;

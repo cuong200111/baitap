@@ -33,11 +33,11 @@ export async function generateMetadata(): Promise<Metadata> {
         default: "HACOM - Máy tính, Laptop, Gaming Gear",
         template: "%s | HACOM",
       },
-      description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+      description:
+        "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
       keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
     };
   }
-
 }
 
 export default function RootLayout({

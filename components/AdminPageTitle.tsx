@@ -1,6 +1,6 @@
 "use client";
 
-import { useAdminSiteName } from '@/contexts/AdminSeoContext';
+import { useAdminSiteName } from "@/contexts/AdminSeoContext";
 
 interface AdminPageTitleProps {
   title?: string;
@@ -12,8 +12,8 @@ interface AdminPageTitleProps {
 export function AdminPageTitle({
   title,
   showSiteName = true,
-  separator = ' | ',
-  className = '',
+  separator = " | ",
+  className = "",
 }: AdminPageTitleProps) {
   const siteName = useAdminSiteName();
 
