@@ -4,7 +4,9 @@ export async function generateMetadata() {
   return await generatePageMetadata(
     "Đăng ký tài khoản",
     "Tạo tài khoản HACOM mới để trải nghiệm mua sắm tuyệt vời. Đăng ký ngay để nhận ưu đãi đặc biệt và theo dõi đơn hàng.",
-    "/register",
+    "đăng ký, tài khoản, thành viên, HACOM",
+    undefined,
+    "register"
   );
 }
 
