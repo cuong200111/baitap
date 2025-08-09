@@ -4,7 +4,9 @@ export async function generateMetadata() {
   return await generatePageMetadata(
     "Thanh toán & Hóa đơn",
     "Quản lý thông tin thanh toán, xem lịch sử hóa đơn và cập nhật phương thức thanh toán của bạn.",
-    "/billing",
+    "thanh toán, hóa đơn, phương thức, HACOM",
+    undefined,
+    "billing"
   );
 }
 
