@@ -437,3 +437,47 @@ export async function generateCategoryMetadata(
     };
   }
 }
+
+// Helper function for generating product metadata
+export async function generateProductMetadata(
+  productName: string,
+  productDescription?: string,
+  productImage?: string,
+  productPrice?: number,
+  productSku?: string
+) {
+  try {
+    const settings = await seoService.loadSettings();
+
+    const title = `${productName} | ${settings.general.site_name}`;
+    const description = productDescription ||
+      `${productName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
+
+    return {
+      title,
+      description,
+      keywords: `${productName}, ${settings.general.site_keywords}`,
+      openGraph: {
+        title,
+        description,
+        images: productImage ? [{ url: productImage }] : undefined,
+        type: 'product',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: productImage ? [productImage] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error('Error generating product metadata:', error);
+
+    // Fallback metadata
+    return {
+      title: `${productName} | HACOM`,
+      description: `${productName} tại HACOM. Chuyên cung cấp máy tính, laptop, gaming gear chính hãng.`,
+      keywords: `${productName}, máy tính, laptop, gaming, HACOM`,
+    };
+  }
+}
