@@ -142,6 +142,13 @@ async function createSeoTables() {
       [46, "instagram_url", "", "social", NULL, 1],
       [47, "tiktok_url", "", "social", NULL, 1],
 
+      // Open Graph Images for different page types
+      [101, "home_og_image", "", "social", "Open Graph image cho trang chủ", 1],
+      [102, "product_og_image", "", "social", "Open Graph image cho sản phẩm", 1],
+      [103, "category_og_image", "", "social", "Open Graph image cho danh mục", 1],
+      [104, "login_og_image", "", "social", "Open Graph image cho trang đăng nhập", 1],
+      [105, "register_og_image", "", "social", "Open Graph image cho trang đăng ký", 1],
+
       // Analytics Settings - Exact from user's SQL
       [13, "google_analytics_id", "", "analytics", "Google Analytics ID", 1],
       [
