@@ -214,6 +214,18 @@ export default function SeoAdminPage() {
 
     setSaving(true);
     try {
+      // Get authentication token
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast({
+          title: "Lỗi",
+          description: "Vui lòng đăng nhập để lưu cài đặt",
+          variant: "destructive"
+        });
+        setSaving(false);
+        return;
+      }
+
       // Try to save to backend server (port 4000)
       const backendUrl =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
@@ -221,6 +233,7 @@ export default function SeoAdminPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(settings),
       });
