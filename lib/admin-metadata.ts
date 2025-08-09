@@ -127,19 +127,20 @@ export async function generateAdminMetadata(options: {
     categoryData,
   } = options;
 
-  // Generate title based on pattern and type
-  let finalTitle = title || adminSeoData.general.site_name;
+  // Generate title based on pattern and type - ensure all values are strings
+  let finalTitle = String(title || adminSeoData.general.site_name || 'HACOM');
   if (title) {
+    const titleStr = String(title);
     if (type === 'product' && adminSeoData.general.product_meta_title_pattern) {
-      finalTitle = adminSeoData.general.product_meta_title_pattern
-        .replace('{product_name}', title)
-        .replace('{category}', productData?.category_name || '');
+      finalTitle = String(adminSeoData.general.product_meta_title_pattern)
+        .replace('{product_name}', titleStr)
+        .replace('{category}', String(productData?.category_name || ''));
     } else if (type === 'category' && adminSeoData.general.category_meta_title_pattern) {
-      finalTitle = adminSeoData.general.category_meta_title_pattern
-        .replace('{category_name}', title)
-        .replace('{description}', categoryData?.description || '');
+      finalTitle = String(adminSeoData.general.category_meta_title_pattern)
+        .replace('{category_name}', titleStr)
+        .replace('{description}', String(categoryData?.description || ''));
     } else if (adminSeoData.general.default_meta_title_pattern) {
-      finalTitle = adminSeoData.general.default_meta_title_pattern.replace('{title}', title);
+      finalTitle = String(adminSeoData.general.default_meta_title_pattern).replace('{title}', titleStr);
     }
   }
 
