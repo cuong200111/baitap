@@ -410,6 +410,15 @@ export async function generateCategoryMetadata(
       categoryDescription ||
       `Khám phá danh mục ${categoryName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
+    // Smart Open Graph image selection
+    const ogImage = categoryImage ||
+                   settings.social.category_og_image ||
+                   settings.social.default_og_image;
+
+    const fullImageUrl = ogImage?.startsWith('http')
+      ? ogImage
+      : `${settings.general.site_url}${ogImage}`;
+
     return {
       title,
       description,
@@ -417,14 +426,16 @@ export async function generateCategoryMetadata(
       openGraph: {
         title,
         description,
-        images: categoryImage ? [{ url: categoryImage }] : undefined,
+        images: [{ url: fullImageUrl }],
         type: "website",
+        siteName: settings.general.site_name,
       },
       twitter: {
         card: "summary_large_image",
         title,
         description,
-        images: categoryImage ? [categoryImage] : undefined,
+        images: [fullImageUrl],
+        site: settings.social.twitter_site,
       },
     };
   } catch (error) {
