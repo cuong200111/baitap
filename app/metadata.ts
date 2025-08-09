@@ -3,9 +3,10 @@ import { seoService } from "@/lib/seo-service";
 export async function generateMetadata() {
   const seoData = await seoService.generatePageSeo({
     title: "HACOM - Máy tính, Laptop, Gaming Gear",
-    description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+    description:
+      "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
     path: "/",
-    type: "page"
+    type: "page",
   });
 
   return {

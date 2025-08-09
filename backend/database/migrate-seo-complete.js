@@ -51,48 +51,89 @@ async function createSeoTables() {
     // Insert default SEO settings
     const defaultSettings = [
       // General Settings
-      ['site_name', 'HACOM - Máy tính, Laptop', 'general', 'Tên website chính'],
-      ['site_url', 'https://hacom.vn', 'general', 'URL chính của website'],
-      ['site_description', 'HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.', 'general', 'Mô tả website'],
-      ['site_keywords', 'máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM', 'general', 'Từ khóa chính'],
-      ['site_logo', '/logo.png', 'general', 'Logo website'],
-      ['site_favicon', '/favicon.ico', 'general', 'Favicon'],
-      ['default_meta_title_pattern', '{title} | HACOM', 'general', 'Pattern cho meta title mặc định'],
-      ['auto_generate_meta_description', '1', 'general', 'Tự động tạo meta description'],
-      ['meta_description_length', '160', 'general', 'Độ dài tối đa meta description'],
+      ["site_name", "HACOM - Máy tính, Laptop", "general", "Tên website chính"],
+      ["site_url", "https://hacom.vn", "general", "URL chính của website"],
+      [
+        "site_description",
+        "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+        "general",
+        "Mô tả website",
+      ],
+      [
+        "site_keywords",
+        "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
+        "general",
+        "Từ khóa chính",
+      ],
+      ["site_logo", "/logo.png", "general", "Logo website"],
+      ["site_favicon", "/favicon.ico", "general", "Favicon"],
+      [
+        "default_meta_title_pattern",
+        "{title} | HACOM",
+        "general",
+        "Pattern cho meta title mặc định",
+      ],
+      [
+        "auto_generate_meta_description",
+        "1",
+        "general",
+        "Tự động tạo meta description",
+      ],
+      [
+        "meta_description_length",
+        "160",
+        "general",
+        "Độ dài tối đa meta description",
+      ],
 
       // Social Settings
-      ['facebook_app_id', '', 'social', 'Facebook App ID'],
-      ['twitter_site', '@hacom_vn', 'social', 'Twitter handle'],
-      ['default_og_image', '/og-image.jpg', 'social', 'Open Graph image mặc định'],
+      ["facebook_app_id", "", "social", "Facebook App ID"],
+      ["twitter_site", "@hacom_vn", "social", "Twitter handle"],
+      [
+        "default_og_image",
+        "/og-image.jpg",
+        "social",
+        "Open Graph image mặc định",
+      ],
 
       // Analytics Settings
-      ['google_analytics_id', '', 'analytics', 'Google Analytics ID'],
-      ['google_tag_manager_id', '', 'analytics', 'Google Tag Manager ID'],
-      ['google_search_console_verification', '', 'analytics', 'Google Search Console verification'],
-      ['enable_analytics', '1', 'analytics', 'Bật Analytics'],
+      ["google_analytics_id", "", "analytics", "Google Analytics ID"],
+      ["google_tag_manager_id", "", "analytics", "Google Tag Manager ID"],
+      [
+        "google_search_console_verification",
+        "",
+        "analytics",
+        "Google Search Console verification",
+      ],
+      ["enable_analytics", "1", "analytics", "Bật Analytics"],
 
       // Schema Settings
-      ['organization_name', 'HACOM', 'schema', 'Tên tổ chức'],
-      ['organization_logo', '/logo.png', 'schema', 'Logo tổ chức'],
-      ['organization_address', 'Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội', 'schema', 'Địa chỉ tổ chức'],
-      ['organization_phone', '1900 1903', 'schema', 'Số điện thoại'],
-      ['organization_email', 'contact@hacom.vn', 'schema', 'Email liên hệ'],
-      ['business_type', 'ElectronicsStore', 'schema', 'Loại hình kinh doanh'],
-      ['enable_organization_schema', '1', 'schema', 'Bật Organization Schema'],
-      ['enable_product_schema', '1', 'schema', 'Bật Product Schema'],
+      ["organization_name", "HACOM", "schema", "Tên tổ chức"],
+      ["organization_logo", "/logo.png", "schema", "Logo tổ chức"],
+      [
+        "organization_address",
+        "Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
+        "schema",
+        "Địa chỉ tổ chức",
+      ],
+      ["organization_phone", "1900 1903", "schema", "Số điện thoại"],
+      ["organization_email", "contact@hacom.vn", "schema", "Email liên hệ"],
+      ["business_type", "ElectronicsStore", "schema", "Loại hình kinh doanh"],
+      ["enable_organization_schema", "1", "schema", "Bật Organization Schema"],
+      ["enable_product_schema", "1", "schema", "Bật Product Schema"],
 
       // Technical Settings
-      ['enable_sitemap', '1', 'technical', 'Bật sitemap'],
-      ['enable_compression', '1', 'technical', 'Bật nén'],
-      ['enable_caching', '1', 'technical', 'Bật cache'],
-      ['lazy_load_images', '1', 'technical', 'Lazy load images'],
-      ['sitemap_max_urls', '50000', 'technical', 'Số URL tối đa trong sitemap']
+      ["enable_sitemap", "1", "technical", "Bật sitemap"],
+      ["enable_compression", "1", "technical", "Bật nén"],
+      ["enable_caching", "1", "technical", "Bật cache"],
+      ["lazy_load_images", "1", "technical", "Lazy load images"],
+      ["sitemap_max_urls", "50000", "technical", "Số URL tối đa trong sitemap"],
     ];
 
     console.log("🔄 Inserting default SEO settings...");
     for (const [key, value, category, description] of defaultSettings) {
-      await executeQuery(`
+      await executeQuery(
+        `
         INSERT INTO seo_settings (setting_key, setting_value, category, description, is_active)
         VALUES (?, ?, ?, ?, 1)
         ON DUPLICATE KEY UPDATE
@@ -100,30 +141,34 @@ async function createSeoTables() {
           category = VALUES(category),
           description = VALUES(description),
           updated_at = NOW()
-      `, [key, value, category, description]);
+      `,
+        [key, value, category, description],
+      );
     }
 
     console.log("✅ Inserted default SEO settings");
 
     // Insert some sample analytics data
     const sampleAnalytics = [
-      ['/', new Date().toISOString().split('T')[0], 1250],
-      ['/products', new Date().toISOString().split('T')[0], 850],
-      ['/category/laptop', new Date().toISOString().split('T')[0], 420],
-      ['sitemap_generation', new Date().toISOString().split('T')[0], 1],
-      ['robots_generation', new Date().toISOString().split('T')[0], 1]
+      ["/", new Date().toISOString().split("T")[0], 1250],
+      ["/products", new Date().toISOString().split("T")[0], 850],
+      ["/category/laptop", new Date().toISOString().split("T")[0], 420],
+      ["sitemap_generation", new Date().toISOString().split("T")[0], 1],
+      ["robots_generation", new Date().toISOString().split("T")[0], 1],
     ];
 
     for (const [url_path, date, page_views] of sampleAnalytics) {
-      await executeQuery(`
+      await executeQuery(
+        `
         INSERT IGNORE INTO seo_analytics (url_path, date, page_views)
         VALUES (?, ?, ?)
-      `, [url_path, date, page_views]);
+      `,
+        [url_path, date, page_views],
+      );
     }
 
     console.log("✅ Inserted sample analytics data");
     console.log("🎉 SEO tables migration completed successfully!");
-
   } catch (error) {
     console.error("❌ Error creating SEO tables:", error);
     throw error;

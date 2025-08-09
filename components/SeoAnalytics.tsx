@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import Script from 'next/script';
-import { seoService } from '@/lib/seo-service';
+import { useEffect, useState } from "react";
+import Script from "next/script";
+import { seoService } from "@/lib/seo-service";
 
 export default function SeoAnalytics() {
   const [analytics, setAnalytics] = useState<any>(null);
@@ -10,10 +10,10 @@ export default function SeoAnalytics() {
   useEffect(() => {
     async function loadAnalyticsSettings() {
       try {
-        const settings = await seoService.getSettings('analytics');
+        const settings = await seoService.getSettings("analytics");
         setAnalytics(settings);
       } catch (error) {
-        console.error('Error loading analytics settings:', error);
+        console.error("Error loading analytics settings:", error);
       }
     }
 
@@ -61,7 +61,7 @@ export default function SeoAnalytics() {
               src={`https://www.googletagmanager.com/ns.html?id=${analytics.google_tag_manager_id}`}
               height="0"
               width="0"
-              style={{ display: 'none', visibility: 'hidden' }}
+              style={{ display: "none", visibility: "hidden" }}
             ></iframe>
           </noscript>
         </>

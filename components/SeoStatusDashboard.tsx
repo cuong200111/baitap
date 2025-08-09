@@ -39,7 +39,7 @@ interface SeoStatus {
 export default function SeoStatusDashboard() {
   const [status, setStatus] = useState<SeoStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log(status)
+  console.log(status);
   useEffect(() => {
     loadSeoStatus();
   }, []);
@@ -47,14 +47,15 @@ export default function SeoStatusDashboard() {
   const loadSeoStatus = async () => {
     try {
       setLoading(true);
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token =
+        typeof window !== "undefined" ? localStorage.getItem("token") : null;
       const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
       const response = await fetch(`${Domain}/api/seo/status`, { headers });
       const data = await response.json();
-      
+
       if (data.success) {
         setStatus(data.data);
       }
@@ -113,7 +114,9 @@ export default function SeoStatusDashboard() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className={`text-4xl font-bold mb-2 ${getHealthColor(status.healthScore)}`}>
+              <div
+                className={`text-4xl font-bold mb-2 ${getHealthColor(status.healthScore)}`}
+              >
                 {status.healthScore}%
               </div>
               <p className="text-sm text-gray-600 mb-2">SEO Health Score</p>
@@ -121,7 +124,7 @@ export default function SeoStatusDashboard() {
                 {getHealthStatus(status.healthScore).text}
               </Badge>
             </div>
-            
+
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600 mb-2">
                 {status?.checks?.seoSettings}
@@ -135,7 +138,7 @@ export default function SeoStatusDashboard() {
                 )}
               </div>
             </div>
-            
+
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600 mb-2">
                 <Database className="h-8 w-8 mx-auto mb-1" />
@@ -149,7 +152,7 @@ export default function SeoStatusDashboard() {
                 )}
               </div>
             </div>
-            
+
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600 mb-2">
                 <FileText className="h-8 w-8 mx-auto mb-1" />
@@ -173,8 +176,12 @@ export default function SeoStatusDashboard() {
           {/* Progress Bar */}
           <div className="mt-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Overall SEO Completion</span>
-              <span className="text-sm text-gray-600">{status.healthScore}%</span>
+              <span className="text-sm font-medium">
+                Overall SEO Completion
+              </span>
+              <span className="text-sm text-gray-600">
+                {status.healthScore}%
+              </span>
             </div>
             <Progress value={status.healthScore} className="h-2" />
           </div>
@@ -238,7 +245,9 @@ export default function SeoStatusDashboard() {
               {status.recommendations.map((recommendation, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">{recommendation}</span>
+                  <span className="text-sm text-gray-700">
+                    {recommendation}
+                  </span>
                 </div>
               ))}
             </div>
@@ -258,14 +267,19 @@ export default function SeoStatusDashboard() {
           <CardContent>
             <div className="space-y-2">
               {status.recentActivity.slice(0, 5).map((activity, index) => (
-                <div key={index} className="flex items-center justify-between py-2 border-b last:border-b-0">
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2 border-b last:border-b-0"
+                >
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     <span className="text-sm">{activity.url_path}</span>
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-600">{activity.date}</div>
-                    <div className="text-xs text-gray-500">{activity.page_views} views</div>
+                    <div className="text-xs text-gray-500">
+                      {activity.page_views} views
+                    </div>
                   </div>
                 </div>
               ))}

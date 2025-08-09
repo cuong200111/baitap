@@ -213,14 +213,14 @@ app.use((error, req, res, next) => {
 // Start server
 const startServer = async () => {
   app.listen(PORT, async () => {
-  console.log(`🚀 HACOM Backend API running on port ${PORT}`);
-  console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+    console.log(`🚀 HACOM Backend API running on port ${PORT}`);
+    console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
 
-  // Initialize SEO system
-  await initSeo();
-});
+    // Initialize SEO system
+    await initSeo();
+  });
 };
 
 // Handle graceful shutdown

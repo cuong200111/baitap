@@ -1,13 +1,13 @@
-import { createSeoTables } from './database/migrate-seo-complete.js';
+import { createSeoTables } from "./database/migrate-seo-complete.js";
 
 // Initialize SEO tables and settings
 async function initSeo() {
   try {
-    console.log('🔄 Initializing SEO system...');
+    console.log("🔄 Initializing SEO system...");
     await createSeoTables();
-    console.log('✅ SEO system initialized successfully');
+    console.log("✅ SEO system initialized successfully");
   } catch (error) {
-    console.error('❌ Failed to initialize SEO system:', error);
+    console.error("❌ Failed to initialize SEO system:", error);
   }
 }
 

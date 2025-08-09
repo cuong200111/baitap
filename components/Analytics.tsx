@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import Script from 'next/script';
-import { seoService } from '@/lib/seo-service';
+import { useEffect, useState } from "react";
+import Script from "next/script";
+import { seoService } from "@/lib/seo-service";
 
 export default function Analytics() {
-  const [analyticsId, setAnalyticsId] = useState<string>('');
-  const [tagManagerId, setTagManagerId] = useState<string>('');
+  const [analyticsId, setAnalyticsId] = useState<string>("");
+  const [tagManagerId, setTagManagerId] = useState<string>("");
 
   useEffect(() => {
     async function loadAnalyticsIds() {
@@ -17,7 +17,7 @@ export default function Analytics() {
           setTagManagerId(seoSettings.analytics.google_tag_manager_id);
         }
       } catch (error) {
-        console.error('Failed to load analytics settings:', error);
+        console.error("Failed to load analytics settings:", error);
       }
     }
 
@@ -68,7 +68,7 @@ export default function Analytics() {
               src={`https://www.googletagmanager.com/ns.html?id=${tagManagerId}`}
               height="0"
               width="0"
-              style={{ display: 'none', visibility: 'hidden' }}
+              style={{ display: "none", visibility: "hidden" }}
             />
           </noscript>
         </>
