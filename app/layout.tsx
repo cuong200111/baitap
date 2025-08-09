@@ -4,6 +4,7 @@ import { Providers } from "@/components/providers";
 import { seoService } from "@/lib/seo-service";
 import SeoAnalytics from "@/components/SeoAnalytics";
 import StructuredData from "@/components/StructuredData";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export async function generateMetadata(): Promise<Metadata> {
   let seoSettings;
@@ -108,7 +109,9 @@ export default function RootLayout({
         <SeoAnalytics />
         <StructuredData type="organization" />
         <StructuredData type="website" />
-        <Providers>{children}</Providers>
+        <ErrorBoundary>
+          <Providers>{children}</Providers>
+        </ErrorBoundary>
       </body>
     </html>
   );
