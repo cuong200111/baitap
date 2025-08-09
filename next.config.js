@@ -16,9 +16,10 @@ const nextConfig = {
   async generateBuildId() {
     return "build-" + Date.now();
   },
-  // allowedDevOrigins: [
-  //   "b622dc178809418abc65fe2ebec69108-b88d5d526d3548389438554db.fly.dev",
-  // ],
+  allowedDevOrigins: [
+    "3cfc8c7752d043b88bb068c84cfe872f-9bad89a83f764b089d82856a4.fly.dev",
+    "b622dc178809418abc65fe2ebec69108-b88d5d526d3548389438554db.fly.dev",
+  ],
   images: {
     remotePatterns: [
       {
@@ -49,6 +50,12 @@ const nextConfig = {
         ...config.watchOptions,
         aggregateTimeout: 300,
         poll: 1000,
+      };
+
+      // Add error handling for fetch failures
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fetch: false,
       };
     }
     return config;
