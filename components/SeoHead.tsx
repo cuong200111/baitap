@@ -218,14 +218,67 @@ export default function SeoHead({ data }: SeoHeadProps) {
     return seoSettings.general.site_url;
   };
 
-  // Generate Open Graph image
+  // Generate Open Graph image based on page type and specific settings
   const generateOgImage = () => {
+    // First priority: explicit ogImage from props
     if (data?.ogImage) {
       return data.ogImage.startsWith("http")
         ? data.ogImage
         : `${seoSettings.general.site_url}${data.ogImage}`;
     }
-    return `${seoSettings.general.site_url}${seoSettings.social.default_og_image}`;
+
+    // Second priority: product-specific image from product data
+    if (data?.pageType === "product" && data.productData?.image) {
+      return data.productData.image.startsWith("http")
+        ? data.productData.image
+        : `${seoSettings.general.site_url}${data.productData.image}`;
+    }
+
+    // Third priority: category-specific image from category data
+    if (data?.pageType === "category" && data.categoryData?.image) {
+      return data.categoryData.image.startsWith("http")
+        ? data.categoryData.image
+        : `${seoSettings.general.site_url}${data.categoryData.image}`;
+    }
+
+    // Fourth priority: page-type specific OG images from settings
+    const baseUrl = seoSettings.general.site_url;
+    const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+
+    if (pathname === "/" && seoSettings.social.home_og_image) {
+      return seoSettings.social.home_og_image.startsWith("http")
+        ? seoSettings.social.home_og_image
+        : `${baseUrl}${seoSettings.social.home_og_image}`;
+    }
+
+    if (pathname.includes("/login") && seoSettings.social.login_og_image) {
+      return seoSettings.social.login_og_image.startsWith("http")
+        ? seoSettings.social.login_og_image
+        : `${baseUrl}${seoSettings.social.login_og_image}`;
+    }
+
+    if (pathname.includes("/register") && seoSettings.social.register_og_image) {
+      return seoSettings.social.register_og_image.startsWith("http")
+        ? seoSettings.social.register_og_image
+        : `${baseUrl}${seoSettings.social.register_og_image}`;
+    }
+
+    if (data?.pageType === "product" && seoSettings.social.product_og_image) {
+      return seoSettings.social.product_og_image.startsWith("http")
+        ? seoSettings.social.product_og_image
+        : `${baseUrl}${seoSettings.social.product_og_image}`;
+    }
+
+    if (data?.pageType === "category" && seoSettings.social.category_og_image) {
+      return seoSettings.social.category_og_image.startsWith("http")
+        ? seoSettings.social.category_og_image
+        : `${baseUrl}${seoSettings.social.category_og_image}`;
+    }
+
+    // Final fallback: default OG image
+    return seoSettings.social.default_og_image.startsWith("http")
+      ? seoSettings.social.default_og_image
+      : `${baseUrl}${seoSettings.social.default_og_image}`;
   };
 
   // Generate Organization Schema
