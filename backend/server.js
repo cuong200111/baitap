@@ -24,6 +24,7 @@ import cartRoutes from "./routes/cart.js";
 import buyNowRoutes from "./routes/buy-now.js";
 import sitemetaRoutes from "./routes/sitemeta.js";
 import seoRoutes from "./routes/seo.js";
+import seoAnalyticsRoutes from "./routes/seo-analytics.js";
 import utilsRoutes from "./routes/utils.js";
 import configRoutes from "./routes/config.js";
 import addressesRoutes from "./routes/addresses.js";
