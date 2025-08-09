@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { SeoProvider } from "@/contexts/SeoContext";
+import { AdminSeoProvider } from "@/contexts/AdminSeoContext";
 import { Toaster } from "sonner";
 import { useState } from "react";
 import { GlobalErrorHandler } from "./GlobalErrorHandler";
@@ -12,13 +13,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SeoProvider>
-        <AuthProvider>
-          <GlobalErrorHandler />
-          {children}
-          <Toaster position="top-right" />
-        </AuthProvider>
-      </SeoProvider>
+      <AdminSeoProvider>
+        <SeoProvider>
+          <AuthProvider>
+            <GlobalErrorHandler />
+            {children}
+            <Toaster position="top-right" />
+          </AuthProvider>
+        </SeoProvider>
+      </AdminSeoProvider>
     </QueryClientProvider>
   );
 }
