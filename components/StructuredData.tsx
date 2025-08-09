@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getSeoSettings, SeoSettings } from '@/lib/seo-service';
+import { seoService, SeoSettings } from '@/lib/seo-service';
 
 interface StructuredDataProps {
   type?: 'organization' | 'website' | 'breadcrumb' | 'product';
@@ -14,7 +14,7 @@ export default function StructuredData({ type = 'organization', data }: Structur
   useEffect(() => {
     async function loadSeoSettings() {
       try {
-        const settings = await getSeoSettings();
+        const settings = await seoService.loadSettings();
         setSeoSettings(settings);
       } catch (error) {
         console.error('Failed to load SEO settings:', error);

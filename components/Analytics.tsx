@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Script from 'next/script';
-import { getSeoSettings } from '@/lib/seo-service';
+import { seoService } from '@/lib/seo-service';
 
 export default function Analytics() {
   const [analyticsId, setAnalyticsId] = useState<string>('');
@@ -11,7 +11,7 @@ export default function Analytics() {
   useEffect(() => {
     async function loadAnalyticsIds() {
       try {
-        const seoSettings = await getSeoSettings();
+        const seoSettings = await seoService.loadSettings();
         if (seoSettings.analytics.enable_analytics) {
           setAnalyticsId(seoSettings.analytics.google_analytics_id);
           setTagManagerId(seoSettings.analytics.google_tag_manager_id);
