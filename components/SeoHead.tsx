@@ -78,13 +78,27 @@ export default function SeoHead({ data }: SeoHeadProps) {
       // Only load on client side
       if (typeof window === "undefined") return;
 
-      const response = await fetch("/api/seo/settings");
-      const result = await response.json();
-      if (result.success) {
-        setSeoSettings(result.data);
+      // Try to fetch from backend server (port 4000)
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${backendUrl}/api/seo/settings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setSeoSettings(result.data);
+          return;
+        }
       }
+
+      // If backend call fails, throw error to use fallback
+      throw new Error('Backend not available');
     } catch (error) {
-      console.error("Error loading SEO settings:", error);
+      console.warn("SEO settings not available from backend, using defaults:", error.message);
       // Set fallback settings
       setSeoSettings({
         general: {
