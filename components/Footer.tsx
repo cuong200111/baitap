@@ -11,7 +11,7 @@ import {
   Youtube,
   Zap,
 } from "lucide-react";
-import { useSiteName, useContactInfo } from "@/contexts/SeoContext";
+import { useAdminSiteName, useAdminContactInfo } from "@/contexts/AdminSeoContext";
 
 interface SiteConfig {
   app: {
