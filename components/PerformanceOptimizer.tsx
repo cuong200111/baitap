@@ -200,13 +200,33 @@ export function CriticalCSS() {
 
   const loadSettings = async () => {
     try {
-      const response = await fetch("/api/seo/settings");
-      const result = await response.json();
-      if (result.success) {
-        setSettings(result.data);
+      // Try to fetch from backend server (port 4000)
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${backendUrl}/api/seo/settings`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setSettings(result.data);
+          return;
+        }
       }
+
+      // If backend call fails, use fallback settings
+      throw new Error('Backend not available');
     } catch (error) {
-      console.error("Error loading performance settings:", error);
+      console.warn("Performance settings not available from backend, using defaults:", error.message);
+      // Set fallback settings
+      setSettings({
+        performance: {
+          enable_critical_css: false
+        }
+      });
     }
   };
 
