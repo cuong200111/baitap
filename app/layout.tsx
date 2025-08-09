@@ -5,6 +5,7 @@ import { seoService } from "@/lib/seo-service";
 import SeoAnalytics from "@/components/SeoAnalytics";
 import StructuredData from "@/components/StructuredData";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import DevErrorSuppressor from "@/components/DevErrorSuppressor";
 import "@/lib/error-handler"; // Auto-setup global error handling
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -107,6 +108,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body suppressHydrationWarning={true}>
+        <DevErrorSuppressor />
         <SeoAnalytics />
         <StructuredData type="organization" />
         <StructuredData type="website" />
