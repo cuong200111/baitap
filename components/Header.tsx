@@ -36,10 +36,11 @@ interface SiteConfig {
 
 export function Header() {
   const { user, logout, isAdmin, isAuthenticated } = useAuth();
+  const siteName = useSiteName();
   const [cartCount, setCartCount] = useState(0);
   const [config, setConfig] = useState<SiteConfig>({
     app: {
-      name: "ZOXVN",
+      name: siteName,
       description: "Máy tính, Laptop, Gaming Gear",
     },
     contact: {
