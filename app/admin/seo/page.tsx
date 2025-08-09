@@ -228,7 +228,7 @@ export default function SeoAdminPage() {
         toast({
           title: "Lỗi",
           description: "Vui lòng đăng nhập để lưu cài đặt",
-          variant: "destructive"
+          variant: "destructive",
         });
         setSaving(false);
         return;
@@ -241,7 +241,7 @@ export default function SeoAdminPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(settings),
       });

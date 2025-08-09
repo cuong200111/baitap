@@ -400,13 +400,14 @@ export default seoService;
 export async function generateCategoryMetadata(
   categoryName: string,
   categoryDescription?: string,
-  categoryImage?: string
+  categoryImage?: string,
 ) {
   try {
     const settings = await seoService.loadSettings();
 
     const title = `${categoryName} | ${settings.general.site_name}`;
-    const description = categoryDescription ||
+    const description =
+      categoryDescription ||
       `Khám phá danh mục ${categoryName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
     return {
@@ -417,17 +418,17 @@ export async function generateCategoryMetadata(
         title,
         description,
         images: categoryImage ? [{ url: categoryImage }] : undefined,
-        type: 'website',
+        type: "website",
       },
       twitter: {
-        card: 'summary_large_image',
+        card: "summary_large_image",
         title,
         description,
         images: categoryImage ? [categoryImage] : undefined,
       },
     };
   } catch (error) {
-    console.error('Error generating category metadata:', error);
+    console.error("Error generating category metadata:", error);
 
     // Fallback metadata
     return {
@@ -444,13 +445,14 @@ export async function generateProductMetadata(
   productDescription?: string,
   productImage?: string,
   productPrice?: number,
-  productSku?: string
+  productSku?: string,
 ) {
   try {
     const settings = await seoService.loadSettings();
 
     const title = `${productName} | ${settings.general.site_name}`;
-    const description = productDescription ||
+    const description =
+      productDescription ||
       `${productName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
     return {
@@ -461,17 +463,17 @@ export async function generateProductMetadata(
         title,
         description,
         images: productImage ? [{ url: productImage }] : undefined,
-        type: 'product',
+        type: "product",
       },
       twitter: {
-        card: 'summary_large_image',
+        card: "summary_large_image",
         title,
         description,
         images: productImage ? [productImage] : undefined,
       },
     };
   } catch (error) {
-    console.error('Error generating product metadata:', error);
+    console.error("Error generating product metadata:", error);
 
     // Fallback metadata
     return {
