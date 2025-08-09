@@ -28,6 +28,7 @@ import utilsRoutes from "./routes/utils.js";
 import configRoutes from "./routes/config.js";
 import addressesRoutes from "./routes/addresses.js";
 import initRoutes from "./routes/init.js";
+import { initSeo } from "./init-seo.js";
 
 dotenv.config();
 
@@ -211,12 +212,15 @@ app.use((error, req, res, next) => {
 
 // Start server
 const startServer = async () => {
-  app.listen(PORT, () => {
-    console.log(`🚀 HACOM Backend API running on port ${PORT}`);
-    console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
-    console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
-  });
+  app.listen(PORT, async () => {
+  console.log(`🚀 HACOM Backend API running on port ${PORT}`);
+  console.log(`📱 Health check: http://localhost:${PORT}/api/health`);
+  console.log(`📚 API Base URL: http://localhost:${PORT}/api`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+
+  // Initialize SEO system
+  await initSeo();
+});
 };
 
 // Handle graceful shutdown
