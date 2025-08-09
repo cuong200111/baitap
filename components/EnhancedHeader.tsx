@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { SimpleDbCategoryMenu } from "./SimpleDbCategoryMenu";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteName } from "@/contexts/SeoContext";
 import { CartPopup } from "./CartPopup";
 import {
   DropdownMenu,
@@ -232,7 +233,7 @@ export function EnhancedHeader() {
           <div className="flex items-center justify-center space-x-4">
             <span className="animate-pulse">🔥</span>
             <span className="font-medium">
-              KHUYẾN MÃI HOT: Giảm đến 50% cho tất cả sản phẩm Gaming
+              KHUYẾN MÃI HOT: Giảm đ��n 50% cho tất cả sản phẩm Gaming
             </span>
             <span className="hidden md:inline">•</span>
             <span className="hidden md:inline">
@@ -316,7 +317,7 @@ export function EnhancedHeader() {
               </div>
               <div>
                 <div className="font-bold text-xl text-gray-900 tracking-tight">
-                  ZOXVN
+                  {useSiteName()}
                 </div>
                 <div className="text-xs text-gray-500 font-medium">
                   Siêu thị công nghệ

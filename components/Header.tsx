@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { DynamicCategoryMegaMenu } from "./DynamicCategoryMegaMenu";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteName } from "@/contexts/SeoContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,10 +36,11 @@ interface SiteConfig {
 
 export function Header() {
   const { user, logout, isAdmin, isAuthenticated } = useAuth();
+  const siteName = useSiteName();
   const [cartCount, setCartCount] = useState(0);
   const [config, setConfig] = useState<SiteConfig>({
     app: {
-      name: "ZOXVN",
+      name: siteName,
       description: "Máy tính, Laptop, Gaming Gear",
     },
     contact: {
@@ -84,7 +86,7 @@ export function Header() {
           const configData = data.data;
           setConfig({
             app: {
-              name: configData.app?.name || "ZOXVN",
+              name: configData.app?.name || siteName,
               description:
                 configData.app?.description || "Máy tính, Laptop, Gaming Gear",
             },

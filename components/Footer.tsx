@@ -11,6 +11,7 @@ import {
   Youtube,
   Zap,
 } from "lucide-react";
+import { useSiteName, useContactInfo } from "@/contexts/SeoContext";
 
 interface SiteConfig {
   app: {
@@ -30,15 +31,17 @@ interface SiteConfig {
 }
 
 export function Footer() {
+  const siteName = useSiteName();
+  const contactInfo = useContactInfo();
   const [config, setConfig] = useState<SiteConfig>({
     app: {
-      name: "ZOXVN",
+      name: siteName,
       description: "Máy tính, Laptop, Gaming Gear",
     },
     contact: {
-      phone: "1900.1903",
-      email: "info@zoxvn.com",
-      address: "123 Đường ABC, Quận 1, TP.HCM",
+      phone: contactInfo.phone,
+      email: contactInfo.email,
+      address: contactInfo.address,
       hours: "8:00 - 22:00 (T2-CN)",
     },
     social: {},
