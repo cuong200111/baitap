@@ -396,6 +396,84 @@ export const seoService = new SeoService();
 // Export default for easier imports
 export default seoService;
 
+// Helper function for generating general page metadata
+export async function generatePageMetadata(
+  title: string,
+  description?: string,
+  keywords?: string,
+  ogImage?: string,
+  pageType?: string
+) {
+  try {
+    const settings = await seoService.loadSettings();
+
+    const fullTitle = `${title} | ${settings.general.site_name}`;
+    const finalDescription = description ||
+      `${title} tại ${settings.general.site_name}. ${settings.general.site_description}`;
+    const finalKeywords = keywords ?
+      `${keywords}, ${settings.general.site_keywords}` :
+      settings.general.site_keywords;
+
+    // Smart Open Graph image selection
+    let finalOgImage = ogImage;
+    if (!finalOgImage) {
+      // Select appropriate OG image based on page type or path
+      if (typeof window !== "undefined") {
+        const pathname = window.location.pathname;
+        if (pathname === "/" && settings.social.home_og_image) {
+          finalOgImage = settings.social.home_og_image;
+        } else if (pathname.includes("/login") && settings.social.login_og_image) {
+          finalOgImage = settings.social.login_og_image;
+        } else if (pathname.includes("/register") && settings.social.register_og_image) {
+          finalOgImage = settings.social.register_og_image;
+        } else if (pathname.includes("/products") && settings.social.product_og_image) {
+          finalOgImage = settings.social.product_og_image;
+        } else if (pathname.includes("/category") && settings.social.category_og_image) {
+          finalOgImage = settings.social.category_og_image;
+        }
+      }
+
+      // Fallback to default
+      if (!finalOgImage) {
+        finalOgImage = settings.social.default_og_image;
+      }
+    }
+
+    const fullImageUrl = finalOgImage?.startsWith('http')
+      ? finalOgImage
+      : `${settings.general.site_url}${finalOgImage}`;
+
+    return {
+      title: fullTitle,
+      description: finalDescription,
+      keywords: finalKeywords,
+      openGraph: {
+        title: fullTitle,
+        description: finalDescription,
+        images: [{ url: fullImageUrl }],
+        type: "website",
+        siteName: settings.general.site_name,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: fullTitle,
+        description: finalDescription,
+        images: [fullImageUrl],
+        site: settings.social.twitter_site,
+      },
+    };
+  } catch (error) {
+    console.error("Error generating page metadata:", error);
+
+    // Fallback metadata
+    return {
+      title: `${title} | HACOM`,
+      description: `${title} tại HACOM. Chuyên cung cấp máy tính, laptop, gaming gear chính hãng.`,
+      keywords: `${title}, máy tính, laptop, gaming, HACOM`,
+    };
+  }
+}
+
 // Helper function for generating category metadata
 export async function generateCategoryMetadata(
   categoryName: string,
