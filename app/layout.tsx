@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-// import SeoProvider from "@/components/providers/SeoProvider";
+import SeoProvider from "@/components/providers/SeoProvider";
 import { generateAdminMetadata } from "@/lib/admin-metadata";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DevErrorSuppressor from "@/components/DevErrorSuppressor";
