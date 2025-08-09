@@ -237,7 +237,7 @@ export const seoController = {
           // Convert string values back to appropriate types
           const stringFields = [
             "site_name",
-            "site_description", 
+            "site_description",
             "site_keywords",
             "site_url",
             "organization_name",
@@ -253,17 +253,17 @@ export const seoController = {
             "opening_hours",
             "service_areas",
             "robots_txt_custom",
-            "cdn_url"
+            "cdn_url",
           ];
 
           const numberFields = [
             "meta_description_length",
-            "sitemap_max_urls", 
+            "sitemap_max_urls",
             "keyword_density_target",
             "content_min_words",
             "lazy_load_threshold",
             "latitude",
-            "longitude"
+            "longitude",
           ];
 
           if (stringFields.includes(key)) {
@@ -288,14 +288,17 @@ export const seoController = {
       const defaultSettings = {
         general: {
           site_name: "ZoxVN- Máy tính, Laptop",
-          site_url: "https://hacom.vns", 
-          site_description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-          site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
+          site_url: "https://hacom.vns",
+          site_description:
+            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+          site_keywords:
+            "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
           site_logo: "/logo.png",
           site_favicon: "/favicon.ico",
           default_meta_title_pattern: "{title} | HACOM",
           product_meta_title_pattern: "{product_name} - {category} | HACOM",
-          category_meta_title_pattern: "{category_name} - {description} | HACOM", 
+          category_meta_title_pattern:
+            "{category_name} - {description} | HACOM",
           auto_generate_meta_description: true,
           meta_description_length: 160,
         },
@@ -369,7 +372,7 @@ export const seoController = {
           google_my_business_id: "",
           enable_local_seo: true,
           business_category: "Electronics Store",
-          service_areas: ["Hà Nội","TP.HCM","Đà Nẵng"],
+          service_areas: ["Hà Nội", "TP.HCM", "Đà Nẵng"],
           opening_hours: "Thứ 2 - Chủ nhật: 8:00 - 22:00",
           enable_review_schema: true,
         },

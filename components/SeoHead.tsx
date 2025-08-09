@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
+import { useEffect, useState } from "react";
+import Head from "next/head";
 
 interface SeoData {
   title?: string;
@@ -76,32 +76,35 @@ export default function SeoHead({ data }: SeoHeadProps) {
   const loadSeoSettings = async () => {
     try {
       // Only load on client side
-      if (typeof window === 'undefined') return;
+      if (typeof window === "undefined") return;
 
-      const response = await fetch('/api/seo/settings');
+      const response = await fetch("/api/seo/settings");
       const result = await response.json();
       if (result.success) {
         setSeoSettings(result.data);
       }
     } catch (error) {
-      console.error('Error loading SEO settings:', error);
+      console.error("Error loading SEO settings:", error);
       // Set fallback settings
       setSeoSettings({
         general: {
           site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
           site_url: "https://hacom.vn",
-          site_description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
-          site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
+          site_description:
+            "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+          site_keywords:
+            "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
           default_meta_title_pattern: "{title} | HACOM",
           product_meta_title_pattern: "{product_name} - {category} | HACOM",
-          category_meta_title_pattern: "{category_name} - {description} | HACOM",
+          category_meta_title_pattern:
+            "{category_name} - {description} | HACOM",
           auto_generate_meta_description: true,
-          meta_description_length: 160
+          meta_description_length: 160,
         },
         social: {
           facebook_app_id: "",
           twitter_site: "@hacom_vn",
-          default_og_image: "/og-image.jpg"
+          default_og_image: "/og-image.jpg",
         },
         analytics: {
           google_analytics_id: "",
@@ -109,7 +112,7 @@ export default function SeoHead({ data }: SeoHeadProps) {
           google_search_console_verification: "",
           bing_webmaster_verification: "",
           facebook_pixel_id: "",
-          enable_analytics: false
+          enable_analytics: false,
         },
         schema: {
           organization_name: "HACOM",
@@ -124,8 +127,8 @@ export default function SeoHead({ data }: SeoHeadProps) {
           enable_organization_schema: true,
           enable_breadcrumb_schema: true,
           enable_product_schema: true,
-          enable_review_schema: true
-        }
+          enable_review_schema: true,
+        },
       });
     }
   };
@@ -138,27 +141,27 @@ export default function SeoHead({ data }: SeoHeadProps) {
   const generateTitle = () => {
     if (data?.title) {
       let titlePattern = seoSettings.general.default_meta_title_pattern;
-      
-      if (data.pageType === 'product' && data.productData) {
+
+      if (data.pageType === "product" && data.productData) {
         titlePattern = seoSettings.general.product_meta_title_pattern;
         return titlePattern
-          .replace('{product_name}', data.productData.name || data.title)
-          .replace('{category}', data.productData.category || '')
-          .replace('{price}', data.productData.price || '')
-          .replace('{sku}', data.productData.sku || '');
-      } else if (data.pageType === 'category' && data.categoryData) {
+          .replace("{product_name}", data.productData.name || data.title)
+          .replace("{category}", data.productData.category || "")
+          .replace("{price}", data.productData.price || "")
+          .replace("{sku}", data.productData.sku || "");
+      } else if (data.pageType === "category" && data.categoryData) {
         titlePattern = seoSettings.general.category_meta_title_pattern;
         return titlePattern
-          .replace('{category_name}', data.categoryData.name || data.title)
-          .replace('{description}', data.categoryData.description || '')
-          .replace('{count}', data.categoryData.count || '');
+          .replace("{category_name}", data.categoryData.name || data.title)
+          .replace("{description}", data.categoryData.description || "")
+          .replace("{count}", data.categoryData.count || "");
       }
-      
+
       return titlePattern
-        .replace('{title}', data.title)
-        .replace('{sitename}', seoSettings.general.site_name);
+        .replace("{title}", data.title)
+        .replace("{sitename}", seoSettings.general.site_name);
     }
-    
+
     return seoSettings.general.site_name;
   };
 
@@ -166,8 +169,8 @@ export default function SeoHead({ data }: SeoHeadProps) {
   const generateDescription = () => {
     if (data?.description) {
       const maxLength = seoSettings.general.meta_description_length;
-      return data.description.length > maxLength 
-        ? data.description.substring(0, maxLength - 3) + '...'
+      return data.description.length > maxLength
+        ? data.description.substring(0, maxLength - 3) + "..."
         : data.description;
     }
     return seoSettings.general.site_description;
@@ -186,7 +189,7 @@ export default function SeoHead({ data }: SeoHeadProps) {
     if (data?.canonical) {
       return data.canonical;
     }
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return `${seoSettings.general.site_url}${window.location.pathname}`;
     }
     return seoSettings.general.site_url;
@@ -195,7 +198,9 @@ export default function SeoHead({ data }: SeoHeadProps) {
   // Generate Open Graph image
   const generateOgImage = () => {
     if (data?.ogImage) {
-      return data.ogImage.startsWith('http') ? data.ogImage : `${seoSettings.general.site_url}${data.ogImage}`;
+      return data.ogImage.startsWith("http")
+        ? data.ogImage
+        : `${seoSettings.general.site_url}${data.ogImage}`;
     }
     return `${seoSettings.general.site_url}${seoSettings.social.default_og_image}`;
   };
@@ -207,32 +212,36 @@ export default function SeoHead({ data }: SeoHeadProps) {
     return {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": seoSettings.schema.organization_name,
-      "url": seoSettings.general.site_url,
-      "logo": `${seoSettings.general.site_url}${seoSettings.schema.organization_logo}`,
-      "description": seoSettings.general.site_description,
-      "address": {
+      name: seoSettings.schema.organization_name,
+      url: seoSettings.general.site_url,
+      logo: `${seoSettings.general.site_url}${seoSettings.schema.organization_logo}`,
+      description: seoSettings.general.site_description,
+      address: {
         "@type": "PostalAddress",
-        "streetAddress": seoSettings.schema.organization_address,
-        "addressCountry": "VN"
+        streetAddress: seoSettings.schema.organization_address,
+        addressCountry: "VN",
       },
-      "contactPoint": {
+      contactPoint: {
         "@type": "ContactPoint",
-        "telephone": seoSettings.schema.organization_phone,
-        "contactType": "customer service",
-        "email": seoSettings.schema.organization_email
+        telephone: seoSettings.schema.organization_phone,
+        contactType: "customer service",
+        email: seoSettings.schema.organization_email,
       },
-      "sameAs": [
-        seoSettings.social.facebook_app_id ? `https://facebook.com/${seoSettings.social.facebook_app_id}` : null,
-        seoSettings.social.twitter_site ? `https://twitter.com/${seoSettings.social.twitter_site.replace('@', '')}` : null,
+      sameAs: [
+        seoSettings.social.facebook_app_id
+          ? `https://facebook.com/${seoSettings.social.facebook_app_id}`
+          : null,
+        seoSettings.social.twitter_site
+          ? `https://twitter.com/${seoSettings.social.twitter_site.replace("@", "")}`
+          : null,
       ].filter(Boolean),
-      "geo": {
+      geo: {
         "@type": "GeoCoordinates",
-        "latitude": seoSettings.schema.latitude,
-        "longitude": seoSettings.schema.longitude
+        latitude: seoSettings.schema.latitude,
+        longitude: seoSettings.schema.longitude,
       },
-      "openingHours": seoSettings.schema.business_hours,
-      "@id": `${seoSettings.general.site_url}#organization`
+      openingHours: seoSettings.schema.business_hours,
+      "@id": `${seoSettings.general.site_url}#organization`,
     };
   };
 
@@ -241,77 +250,81 @@ export default function SeoHead({ data }: SeoHeadProps) {
     return {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": seoSettings.general.site_name,
-      "url": seoSettings.general.site_url,
-      "description": seoSettings.general.site_description,
-      "publisher": {
-        "@id": `${seoSettings.general.site_url}#organization`
+      name: seoSettings.general.site_name,
+      url: seoSettings.general.site_url,
+      description: seoSettings.general.site_description,
+      publisher: {
+        "@id": `${seoSettings.general.site_url}#organization`,
       },
-      "potentialAction": {
+      potentialAction: {
         "@type": "SearchAction",
-        "target": {
+        target: {
           "@type": "EntryPoint",
-          "urlTemplate": `${seoSettings.general.site_url}/search?q={search_term_string}`
+          urlTemplate: `${seoSettings.general.site_url}/search?q={search_term_string}`,
         },
-        "query-input": "required name=search_term_string"
-      }
+        "query-input": "required name=search_term_string",
+      },
     };
   };
 
   // Generate Breadcrumb Schema
   const generateBreadcrumbSchema = () => {
-    if (!seoSettings.schema.enable_breadcrumb_schema || !data?.breadcrumbs) return null;
+    if (!seoSettings.schema.enable_breadcrumb_schema || !data?.breadcrumbs)
+      return null;
 
     const breadcrumbList = data.breadcrumbs.map((crumb, index) => ({
       "@type": "ListItem",
-      "position": index + 1,
-      "name": crumb.name,
-      "item": `${seoSettings.general.site_url}${crumb.url}`
+      position: index + 1,
+      name: crumb.name,
+      item: `${seoSettings.general.site_url}${crumb.url}`,
     }));
 
     return {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      "itemListElement": breadcrumbList
+      itemListElement: breadcrumbList,
     };
   };
 
   // Generate Product Schema
   const generateProductSchema = () => {
-    if (!seoSettings.schema.enable_product_schema || !data?.productData) return null;
+    if (!seoSettings.schema.enable_product_schema || !data?.productData)
+      return null;
 
     const product = data.productData;
     return {
       "@context": "https://schema.org",
       "@type": "Product",
-      "name": product.name,
-      "description": product.description,
-      "sku": product.sku,
-      "mpn": product.mpn,
-      "brand": {
+      name: product.name,
+      description: product.description,
+      sku: product.sku,
+      mpn: product.mpn,
+      brand: {
         "@type": "Brand",
-        "name": product.brand || seoSettings.schema.organization_name
+        name: product.brand || seoSettings.schema.organization_name,
       },
-      "image": product.images?.map((img: string) => 
-        img.startsWith('http') ? img : `${seoSettings.general.site_url}${img}`
+      image: product.images?.map((img: string) =>
+        img.startsWith("http") ? img : `${seoSettings.general.site_url}${img}`,
       ),
-      "offers": {
+      offers: {
         "@type": "Offer",
-        "url": `${seoSettings.general.site_url}/products/${product.id}`,
-        "priceCurrency": "VND",
-        "price": product.price,
-        "availability": product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-        "seller": {
-          "@id": `${seoSettings.general.site_url}#organization`
-        }
+        url: `${seoSettings.general.site_url}/products/${product.id}`,
+        priceCurrency: "VND",
+        price: product.price,
+        availability: product.inStock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        seller: {
+          "@id": `${seoSettings.general.site_url}#organization`,
+        },
       },
       ...(product.aggregateRating && {
-        "aggregateRating": {
+        aggregateRating: {
           "@type": "AggregateRating",
-          "ratingValue": product.aggregateRating.ratingValue,
-          "reviewCount": product.aggregateRating.reviewCount
-        }
-      })
+          ratingValue: product.aggregateRating.ratingValue,
+          reviewCount: product.aggregateRating.reviewCount,
+        },
+      }),
     };
   };
 
@@ -322,13 +335,15 @@ export default function SeoHead({ data }: SeoHeadProps) {
       generateWebsiteSchema(),
       generateBreadcrumbSchema(),
       generateProductSchema(),
-      data?.structuredData
+      data?.structuredData,
     ].filter(Boolean);
 
-    return schemas.length > 0 ? {
-      "@context": "https://schema.org",
-      "@graph": schemas
-    } : null;
+    return schemas.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@graph": schemas,
+        }
+      : null;
   };
 
   const title = generateTitle();
@@ -347,10 +362,10 @@ export default function SeoHead({ data }: SeoHeadProps) {
       <meta name="robots" content="index, follow" />
       <meta name="author" content={seoSettings.schema.organization_name} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      
+
       {/* Canonical URL */}
       <link rel="canonical" href={canonical} />
-      
+
       {/* Open Graph Tags */}
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
@@ -359,36 +374,48 @@ export default function SeoHead({ data }: SeoHeadProps) {
       <meta property="og:type" content={data?.ogType || "website"} />
       <meta property="og:site_name" content={seoSettings.general.site_name} />
       {seoSettings.social.facebook_app_id && (
-        <meta property="fb:app_id" content={seoSettings.social.facebook_app_id} />
+        <meta
+          property="fb:app_id"
+          content={seoSettings.social.facebook_app_id}
+        />
       )}
-      
+
       {/* Twitter Card Tags */}
-      <meta name="twitter:card" content={data?.twitterCard || "summary_large_image"} />
+      <meta
+        name="twitter:card"
+        content={data?.twitterCard || "summary_large_image"}
+      />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
       {seoSettings.social.twitter_site && (
         <meta name="twitter:site" content={seoSettings.social.twitter_site} />
       )}
-      
+
       {/* Search Engine Verification */}
       {seoSettings.analytics.google_search_console_verification && (
-        <meta name="google-site-verification" content={seoSettings.analytics.google_search_console_verification} />
+        <meta
+          name="google-site-verification"
+          content={seoSettings.analytics.google_search_console_verification}
+        />
       )}
       {seoSettings.analytics.bing_webmaster_verification && (
-        <meta name="msvalidate.01" content={seoSettings.analytics.bing_webmaster_verification} />
+        <meta
+          name="msvalidate.01"
+          content={seoSettings.analytics.bing_webmaster_verification}
+        />
       )}
-      
+
       {/* Structured Data */}
       {combinedSchema && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(combinedSchema)
+            __html: JSON.stringify(combinedSchema),
           }}
         />
       )}
-      
+
       {/* Analytics Scripts */}
       {seoSettings.analytics.enable_analytics && (
         <>
@@ -406,12 +433,12 @@ export default function SeoHead({ data }: SeoHeadProps) {
                     function gtag(){dataLayer.push(arguments);}
                     gtag('js', new Date());
                     gtag('config', '${seoSettings.analytics.google_analytics_id}');
-                  `
+                  `,
                 }}
               />
             </>
           )}
-          
+
           {/* Google Tag Manager */}
           {seoSettings.analytics.google_tag_manager_id && (
             <>
@@ -423,20 +450,20 @@ export default function SeoHead({ data }: SeoHeadProps) {
                     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
                     })(window,document,'script','dataLayer','${seoSettings.analytics.google_tag_manager_id}');
-                  `
+                  `,
                 }}
               />
               <noscript>
-                <iframe 
+                <iframe
                   src={`https://www.googletagmanager.com/ns.html?id=${seoSettings.analytics.google_tag_manager_id}`}
-                  height="0" 
-                  width="0" 
-                  style={{ display: 'none', visibility: 'hidden' }}
+                  height="0"
+                  width="0"
+                  style={{ display: "none", visibility: "hidden" }}
                 />
               </noscript>
             </>
           )}
-          
+
           {/* Facebook Pixel */}
           {seoSettings.analytics.facebook_pixel_id && (
             <script
@@ -452,7 +479,7 @@ export default function SeoHead({ data }: SeoHeadProps) {
                   'https://connect.facebook.net/en_US/fbevents.js');
                   fbq('init', '${seoSettings.analytics.facebook_pixel_id}');
                   fbq('track', 'PageView');
-                `
+                `,
               }}
             />
           )}

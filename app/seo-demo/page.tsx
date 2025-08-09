@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useSeo } from '@/components/providers/SeoProvider';
-import { OptimizedImage } from '@/components/PerformanceOptimizer';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Globe, Zap, BarChart3 } from 'lucide-react';
+import { useEffect } from "react";
+import { useSeo } from "@/components/providers/SeoProvider";
+import { OptimizedImage } from "@/components/PerformanceOptimizer";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, Globe, Zap, BarChart3 } from "lucide-react";
 
 export default function SeoDemo() {
   const { updateSeoData } = useSeo();
@@ -14,39 +20,40 @@ export default function SeoDemo() {
     // Update SEO data for this page
     updateSeoData({
       title: "SEO Demo - Hệ thống SEO hoàn chỉnh",
-      description: "Trang demo giới thiệu hệ thống SEO tự động với analytics, schema.org, và tối ưu hóa hiệu suất. Tích hợp Google Analytics, Facebook Pixel và các công cụ SEO chuyên nghiệp.",
+      description:
+        "Trang demo giới thiệu hệ thống SEO tự động với analytics, schema.org, và tối ưu hóa hiệu suất. Tích hợp Google Analytics, Facebook Pixel và các công cụ SEO chuyên nghiệp.",
       keywords: "SEO demo, tối ưu hóa, analytics, schema.org, meta tags",
       pageType: "demo",
       ogType: "article",
       ogImage: "/images/seo-demo-og.jpg",
       breadcrumbs: [
         { name: "Trang chủ", url: "/" },
-        { name: "SEO Demo", url: "/seo-demo" }
+        { name: "SEO Demo", url: "/seo-demo" },
       ],
       structuredData: {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "Hệ thống SEO hoàn chỉnh cho HACOM",
-        "description": "Demo hệ thống SEO tự động với đầy đủ tính năng",
-        "author": {
+        headline: "Hệ thống SEO hoàn chỉnh cho HACOM",
+        description: "Demo hệ thống SEO tự động với đầy đủ tính năng",
+        author: {
           "@type": "Organization",
-          "name": "HACOM"
+          name: "HACOM",
         },
-        "publisher": {
+        publisher: {
           "@type": "Organization",
-          "name": "HACOM",
-          "logo": {
+          name: "HACOM",
+          logo: {
             "@type": "ImageObject",
-            "url": "https://hacom.vn/logo.png"
-          }
+            url: "https://hacom.vn/logo.png",
+          },
         },
-        "datePublished": "2024-01-15T10:00:00+07:00",
-        "dateModified": "2024-01-15T10:00:00+07:00",
-        "mainEntityOfPage": {
+        datePublished: "2024-01-15T10:00:00+07:00",
+        dateModified: "2024-01-15T10:00:00+07:00",
+        mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": "https://hacom.vn/seo-demo"
-        }
-      }
+          "@id": "https://hacom.vn/seo-demo",
+        },
+      },
     });
   }, [updateSeoData]);
 
@@ -54,27 +61,28 @@ export default function SeoDemo() {
     {
       icon: <Globe className="h-8 w-8 text-blue-600" />,
       title: "Meta Tags Tự Động",
-      description: "Tự động tạo title, description, keywords và Open Graph tags",
-      implemented: true
+      description:
+        "Tự động tạo title, description, keywords và Open Graph tags",
+      implemented: true,
     },
     {
       icon: <BarChart3 className="h-8 w-8 text-green-600" />,
       title: "Analytics Tích Hợp",
       description: "Google Analytics 4, GTM, Facebook Pixel, Hotjar",
-      implemented: true
+      implemented: true,
     },
     {
       icon: <CheckCircle className="h-8 w-8 text-purple-600" />,
-      title: "Schema.org Markup", 
+      title: "Schema.org Markup",
       description: "Organization, Product, Breadcrumb, Review schemas",
-      implemented: true
+      implemented: true,
     },
     {
       icon: <Zap className="h-8 w-8 text-orange-600" />,
       title: "Performance Optimization",
       description: "Lazy loading, WebP images, critical CSS, defer JS",
-      implemented: true
-    }
+      implemented: true,
+    },
   ];
 
   const technicalFeatures = [
@@ -87,7 +95,7 @@ export default function SeoDemo() {
     "Critical CSS inlining",
     "Non-critical JS deferring",
     "Resource preloading",
-    "SEO analytics và monitoring"
+    "SEO analytics và monitoring",
   ];
 
   return (
@@ -97,8 +105,9 @@ export default function SeoDemo() {
           Hệ thống SEO Hoàn chỉnh
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Demo hệ thống SEO tự động với đầy đủ tính năng theo yêu cầu của bạn. 
-          Tích hợp analytics, schema.org, tối ưu hóa hiệu suất và quản lý SEO toàn diện.
+          Demo hệ thống SEO tự động với đầy đủ tính năng theo yêu cầu của bạn.
+          Tích hợp analytics, schema.org, tối ưu hóa hiệu suất và quản lý SEO
+          toàn diện.
         </p>
       </div>
 
@@ -107,9 +116,7 @@ export default function SeoDemo() {
         {seoFeatures.map((feature, index) => (
           <Card key={index} className="text-center">
             <CardHeader>
-              <div className="flex justify-center mb-2">
-                {feature.icon}
-              </div>
+              <div className="flex justify-center mb-2">{feature.icon}</div>
               <CardTitle className="text-lg">{feature.title}</CardTitle>
             </CardHeader>
             <CardContent>
@@ -139,13 +146,13 @@ export default function SeoDemo() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               "✅ General (Cơ bản)",
-              "✅ Analytics (Phân tích)", 
+              "✅ Analytics (Phân tích)",
               "✅ Social (Mạng xã hội)",
               "✅ Schema (Dữ liệu có cấu trúc)",
               "✅ Technical (Kỹ thuật)",
               "✅ Content (Nội dung)",
               "✅ Performance (Hiệu suất)",
-              "✅ Local (Địa phương)"
+              "✅ Local (Địa phương)",
             ].map((category, index) => (
               <Badge key={index} variant="default" className="justify-start">
                 {category}
@@ -231,9 +238,10 @@ export default function SeoDemo() {
           🎉 Hệ thống SEO đang hoạt động!
         </h3>
         <p className="text-green-700">
-          Trang này đang sử dụng hệ thống SEO hoàn chỉnh với meta tags, 
-          schema.org markup, analytics tracking và performance optimization. 
-          Kiểm tra View Source để xem các meta tags và structured data được tạo tự động.
+          Trang này đang sử dụng hệ thống SEO hoàn chỉnh với meta tags,
+          schema.org markup, analytics tracking và performance optimization.
+          Kiểm tra View Source để xem các meta tags và structured data được tạo
+          tự động.
         </p>
       </div>
     </div>

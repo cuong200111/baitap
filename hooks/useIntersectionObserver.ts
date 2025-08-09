@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useIntersectionObserver({
   threshold = 0.1,
-  rootMargin = '0px',
+  rootMargin = "0px",
   root = null,
 }: {
   threshold?: number;
@@ -15,10 +15,11 @@ export function useIntersectionObserver({
   useEffect(() => {
     if (!node) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setEntry(entry),
-      { threshold, rootMargin, root }
-    );
+    const observer = new IntersectionObserver(([entry]) => setEntry(entry), {
+      threshold,
+      rootMargin,
+      root,
+    });
 
     observer.observe(node);
 

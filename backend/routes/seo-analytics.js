@@ -6,7 +6,14 @@ const router = express.Router();
 // Log SEO analytics (sitemap generation, robots.txt access, etc.)
 router.post("/log", async (req, res) => {
   try {
-    const { url_path, date, page_views, bounce_rate, avg_time_on_page, organic_traffic } = req.body;
+    const {
+      url_path,
+      date,
+      page_views,
+      bounce_rate,
+      avg_time_on_page,
+      organic_traffic,
+    } = req.body;
 
     if (!url_path || !date) {
       return res.status(400).json({
@@ -30,10 +37,10 @@ router.post("/log", async (req, res) => {
         url_path,
         date,
         page_views || 1,
-        bounce_rate || 0.00,
+        bounce_rate || 0.0,
         avg_time_on_page || 0,
         organic_traffic || 0,
-      ]
+      ],
     );
 
     res.json({
@@ -65,7 +72,7 @@ router.get("/data", async (req, res) => {
         organic_traffic
       FROM seo_analytics
     `;
-    
+
     const conditions = [];
     const params = [];
 

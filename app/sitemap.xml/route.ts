@@ -1,24 +1,28 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 async function getSeoSettings() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/seo/settings`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/seo/settings`,
+    );
     const result = await response.json();
     return result.success ? result.data : null;
   } catch (error) {
-    console.error('Error fetching SEO settings:', error);
+    console.error("Error fetching SEO settings:", error);
     return null;
   }
 }
 
 async function generateSitemapIndex() {
   const seoSettings = await getSeoSettings();
-  const baseUrl = seoSettings?.general?.site_url || 'https://hacom.vn';
-  const includeImages = seoSettings?.technical?.sitemap_include_images !== false;
-  const includeVideos = seoSettings?.technical?.sitemap_include_videos !== false;
-  
+  const baseUrl = seoSettings?.general?.site_url || "https://hacom.vn";
+  const includeImages =
+    seoSettings?.technical?.sitemap_include_images !== false;
+  const includeVideos =
+    seoSettings?.technical?.sitemap_include_videos !== false;
+
   const currentDate = new Date().toISOString();
-  
+
   let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main pages sitemap -->
@@ -69,35 +73,38 @@ export async function GET() {
   try {
     // Log sitemap generation for analytics
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/seo/analytics/log`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          url_path: 'sitemap_generation',
-          date: new Date().toISOString().split('T')[0],
-          page_views: 1
-        })
-      });
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/api/seo/analytics/log`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url_path: "sitemap_generation",
+            date: new Date().toISOString().split("T")[0],
+            page_views: 1,
+          }),
+        },
+      );
     } catch (logError) {
-      console.error('Error logging sitemap generation:', logError);
+      console.error("Error logging sitemap generation:", logError);
     }
 
     const sitemapContent = await generateSitemapIndex();
-    
+
     return new NextResponse(sitemapContent, {
       status: 200,
       headers: {
-        'Content-Type': 'application/xml',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        "Content-Type": "application/xml",
+        "Cache-Control": "public, max-age=3600, s-maxage=3600",
       },
     });
   } catch (error) {
-    console.error('Error generating sitemap:', error);
-    
-    return new NextResponse('Error generating sitemap', {
+    console.error("Error generating sitemap:", error);
+
+    return new NextResponse("Error generating sitemap", {
       status: 500,
       headers: {
-        'Content-Type': 'text/plain',
+        "Content-Type": "text/plain",
       },
     });
   }

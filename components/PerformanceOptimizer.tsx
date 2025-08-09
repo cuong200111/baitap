@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useEffect, useState } from "react";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 interface PerformanceSettings {
   performance: {
@@ -27,7 +27,7 @@ interface OptimizedImageProps {
   className?: string;
   priority?: boolean;
   quality?: number;
-  placeholder?: 'blur' | 'empty';
+  placeholder?: "blur" | "empty";
   blurDataURL?: string;
 }
 
@@ -47,7 +47,7 @@ export function OptimizedImage({
   className,
   priority = false,
   quality = 75,
-  placeholder = 'empty',
+  placeholder = "empty",
   blurDataURL,
   ...props
 }: OptimizedImageProps) {
@@ -62,19 +62,19 @@ export function OptimizedImage({
 
   const loadSettings = async () => {
     try {
-      const response = await fetch('/api/seo/settings');
+      const response = await fetch("/api/seo/settings");
       const result = await response.json();
       if (result.success) {
         setSettings(result.data);
-        
+
         // Convert to WebP if optimization is enabled
-        if (result.data.performance.optimize_images && !src.includes('.webp')) {
-          const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+        if (result.data.performance.optimize_images && !src.includes(".webp")) {
+          const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, ".webp");
           setImgSrc(webpSrc);
         }
       }
     } catch (error) {
-      console.error('Error loading performance settings:', error);
+      console.error("Error loading performance settings:", error);
     }
   };
 
@@ -85,7 +85,7 @@ export function OptimizedImage({
   const handleError = () => {
     setHasError(true);
     // Fallback to original format if WebP fails
-    if (imgSrc.includes('.webp')) {
+    if (imgSrc.includes(".webp")) {
       setImgSrc(src);
     }
   };
@@ -93,10 +93,10 @@ export function OptimizedImage({
   // Generate srcSet for responsive images
   const generateSrcSet = () => {
     if (!settings?.performance.optimize_images) return undefined;
-    
-    const baseSrc = imgSrc.replace(/\.(jpg|jpeg|png|webp)$/i, '');
-    const ext = imgSrc.split('.').pop();
-    
+
+    const baseSrc = imgSrc.replace(/\.(jpg|jpeg|png|webp)$/i, "");
+    const ext = imgSrc.split(".").pop();
+
     return `
       ${baseSrc}_480w.${ext} 480w,
       ${baseSrc}_768w.${ext} 768w,
@@ -110,31 +110,31 @@ export function OptimizedImage({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* Placeholder/Loading state */}
-      {!isLoaded && placeholder === 'blur' && (
-        <div 
+      {!isLoaded && placeholder === "blur" && (
+        <div
           className="absolute inset-0 bg-gray-200 animate-pulse"
           style={{
             backgroundImage: blurDataURL ? `url(${blurDataURL})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'blur(5px)',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(5px)",
           }}
         />
       )}
-      
+
       {/* Main image */}
       <img
         src={hasError ? src : imgSrc}
         alt={alt}
         width={width}
         height={height}
-        loading={shouldLazyLoad ? 'lazy' : 'eager'}
+        loading={shouldLazyLoad ? "lazy" : "eager"}
         srcSet={generateSrcSet()}
         sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, 1920px"
         onLoad={handleLoad}
         onError={handleError}
         className={`transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
+          isLoaded ? "opacity-100" : "opacity-0"
         }`}
         {...props}
       />
@@ -143,11 +143,11 @@ export function OptimizedImage({
 }
 
 // Lazy Loading Component
-export function LazyComponent({ 
-  children, 
-  threshold = 0.1, 
-  rootMargin = '50px',
-  fallback 
+export function LazyComponent({
+  children,
+  threshold = 0.1,
+  rootMargin = "50px",
+  fallback,
 }: LazyComponentProps) {
   const [ref, isIntersecting] = useIntersectionObserver({
     threshold,
@@ -156,7 +156,9 @@ export function LazyComponent({
 
   return (
     <div ref={ref}>
-      {isIntersecting ? children : (fallback || <div className="h-48 bg-gray-100 animate-pulse" />)}
+      {isIntersecting
+        ? children
+        : fallback || <div className="h-48 bg-gray-100 animate-pulse" />}
     </div>
   );
 }
@@ -171,13 +173,13 @@ export function CriticalCSS() {
 
   const loadSettings = async () => {
     try {
-      const response = await fetch('/api/seo/settings');
+      const response = await fetch("/api/seo/settings");
       const result = await response.json();
       if (result.success) {
         setSettings(result.data);
       }
     } catch (error) {
-      console.error('Error loading performance settings:', error);
+      console.error("Error loading performance settings:", error);
     }
   };
 
@@ -228,8 +230,8 @@ export function CriticalCSS() {
     `;
 
     // Create and inject critical CSS
-    const styleElement = document.createElement('style');
-    styleElement.type = 'text/css';
+    const styleElement = document.createElement("style");
+    styleElement.type = "text/css";
     styleElement.innerHTML = criticalCSS;
     document.head.appendChild(styleElement);
 
@@ -253,13 +255,13 @@ export function ScriptDeferrer() {
 
   const loadSettings = async () => {
     try {
-      const response = await fetch('/api/seo/settings');
+      const response = await fetch("/api/seo/settings");
       const result = await response.json();
       if (result.success) {
         setSettings(result.data);
       }
     } catch (error) {
-      console.error('Error loading performance settings:', error);
+      console.error("Error loading performance settings:", error);
     }
   };
 
@@ -268,7 +270,7 @@ export function ScriptDeferrer() {
 
     // Defer non-critical scripts
     const deferScript = (src: string, async = true) => {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = src;
       script.async = async;
       script.defer = true;
@@ -277,16 +279,16 @@ export function ScriptDeferrer() {
 
     // List of non-critical scripts to defer
     const nonCriticalScripts = [
-      '/js/chat-widget.js',
-      '/js/social-sharing.js',
-      '/js/analytics-enhanced.js',
-      '/js/marketing-tools.js'
+      "/js/chat-widget.js",
+      "/js/social-sharing.js",
+      "/js/analytics-enhanced.js",
+      "/js/marketing-tools.js",
     ];
 
     // Defer scripts after page load
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
       setTimeout(() => {
-        nonCriticalScripts.forEach(script => deferScript(script));
+        nonCriticalScripts.forEach((script) => deferScript(script));
       }, 1000);
     });
   }, [settings]);
@@ -304,13 +306,13 @@ export function ResourcePreloader() {
 
   const loadSettings = async () => {
     try {
-      const response = await fetch('/api/seo/settings');
+      const response = await fetch("/api/seo/settings");
       const result = await response.json();
       if (result.success) {
         setSettings(result.data);
       }
     } catch (error) {
-      console.error('Error loading performance settings:', error);
+      console.error("Error loading performance settings:", error);
     }
   };
 
@@ -319,8 +321,8 @@ export function ResourcePreloader() {
 
     // Preload critical resources
     const preloadResource = (href: string, as: string, type?: string) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
+      const link = document.createElement("link");
+      link.rel = "preload";
       link.href = href;
       link.as = as;
       if (type) link.type = type;
@@ -329,13 +331,17 @@ export function ResourcePreloader() {
 
     // Critical resources to preload
     const criticalResources = [
-      { href: '/fonts/inter-v12-latin-regular.woff2', as: 'font', type: 'font/woff2' },
-      { href: '/css/critical.css', as: 'style' },
-      { href: '/images/hero-bg.webp', as: 'image' },
-      { href: '/images/logo.webp', as: 'image' }
+      {
+        href: "/fonts/inter-v12-latin-regular.woff2",
+        as: "font",
+        type: "font/woff2",
+      },
+      { href: "/css/critical.css", as: "style" },
+      { href: "/images/hero-bg.webp", as: "image" },
+      { href: "/images/logo.webp", as: "image" },
     ];
 
-    criticalResources.forEach(resource => {
+    criticalResources.forEach((resource) => {
       preloadResource(resource.href, resource.as, resource.type);
     });
   }, [settings]);
@@ -344,7 +350,11 @@ export function ResourcePreloader() {
 }
 
 // Main Performance Optimizer Component
-export default function PerformanceOptimizer({ children }: { children: React.ReactNode }) {
+export default function PerformanceOptimizer({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <CriticalCSS />
