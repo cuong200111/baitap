@@ -60,6 +60,11 @@ interface SeoSettings {
     facebook_app_id: string;
     twitter_site: string;
     default_og_image: string;
+    home_og_image?: string;
+    product_og_image?: string;
+    category_og_image?: string;
+    login_og_image?: string;
+    register_og_image?: string;
     linkedin_url: string;
     youtube_url: string;
     instagram_url: string;
