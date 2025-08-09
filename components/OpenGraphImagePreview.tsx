@@ -23,24 +23,41 @@ interface OpenGraphPreviewProps {
   seoSettings: any;
 }
 
-export default function OpenGraphImagePreview({ seoSettings }: OpenGraphPreviewProps) {
+export default function OpenGraphImagePreview({
+  seoSettings,
+}: OpenGraphPreviewProps) {
   const [testUrl, setTestUrl] = useState("");
   const [pageType, setPageType] = useState("home");
 
   const getOpenGraphImage = (type: string) => {
     const baseUrl = seoSettings?.general?.site_url || "https://yourdomain.com";
-    
+
     switch (type) {
       case "home":
-        return seoSettings?.social?.home_og_image || seoSettings?.social?.default_og_image;
+        return (
+          seoSettings?.social?.home_og_image ||
+          seoSettings?.social?.default_og_image
+        );
       case "product":
-        return seoSettings?.social?.product_og_image || seoSettings?.social?.default_og_image;
+        return (
+          seoSettings?.social?.product_og_image ||
+          seoSettings?.social?.default_og_image
+        );
       case "category":
-        return seoSettings?.social?.category_og_image || seoSettings?.social?.default_og_image;
+        return (
+          seoSettings?.social?.category_og_image ||
+          seoSettings?.social?.default_og_image
+        );
       case "login":
-        return seoSettings?.social?.login_og_image || seoSettings?.social?.default_og_image;
+        return (
+          seoSettings?.social?.login_og_image ||
+          seoSettings?.social?.default_og_image
+        );
       case "register":
-        return seoSettings?.social?.register_og_image || seoSettings?.social?.default_og_image;
+        return (
+          seoSettings?.social?.register_og_image ||
+          seoSettings?.social?.default_og_image
+        );
       default:
         return seoSettings?.social?.default_og_image;
     }
@@ -48,8 +65,8 @@ export default function OpenGraphImagePreview({ seoSettings }: OpenGraphPreviewP
 
   const generateMetaTags = (type: string) => {
     const ogImage = getOpenGraphImage(type);
-    const fullImageUrl = ogImage?.startsWith("http") 
-      ? ogImage 
+    const fullImageUrl = ogImage?.startsWith("http")
+      ? ogImage
       : `${seoSettings?.general?.site_url || "https://yourdomain.com"}${ogImage}`;
 
     return `<!-- Open Graph Meta Tags -->
@@ -80,13 +97,14 @@ ${seoSettings?.social?.facebook_app_id ? `<meta property="fb:app_id" content="${
 
   const validateImageUrl = (url: string) => {
     if (!url) return { valid: false, message: "Chưa có URL hình ảnh" };
-    if (!url.includes(".")) return { valid: false, message: "URL không hợp lệ" };
+    if (!url.includes("."))
+      return { valid: false, message: "URL không hợp lệ" };
     return { valid: true, message: "URL hợp lệ" };
   };
 
   const testOnSocialPlatforms = (imageUrl: string) => {
-    const fullUrl = imageUrl?.startsWith("http") 
-      ? imageUrl 
+    const fullUrl = imageUrl?.startsWith("http")
+      ? imageUrl
       : `${seoSettings?.general?.site_url || "https://yourdomain.com"}${imageUrl}`;
 
     const testUrls = {
@@ -126,14 +144,18 @@ ${seoSettings?.social?.facebook_app_id ? `<meta property="fb:app_id" content="${
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Image Preview */}
                 <div className="space-y-4">
-                  <h4 className="font-semibold">Hình ảnh Open Graph hiện tại</h4>
+                  <h4 className="font-semibold">
+                    Hình ảnh Open Graph hiện tại
+                  </h4>
                   <div className="border rounded-lg p-4 bg-gray-50">
                     {getOpenGraphImage(type) ? (
                       <div className="space-y-2">
                         <img
-                          src={getOpenGraphImage(type)?.startsWith("http") 
-                            ? getOpenGraphImage(type) 
-                            : `${seoSettings?.general?.site_url || ""}${getOpenGraphImage(type)}`}
+                          src={
+                            getOpenGraphImage(type)?.startsWith("http")
+                              ? getOpenGraphImage(type)
+                              : `${seoSettings?.general?.site_url || ""}${getOpenGraphImage(type)}`
+                          }
                           alt={`Open Graph preview for ${type}`}
                           className="w-full max-w-sm mx-auto rounded border"
                           style={{ aspectRatio: "1.91/1" }}
@@ -142,7 +164,13 @@ ${seoSettings?.social?.facebook_app_id ? `<meta property="fb:app_id" content="${
                           }}
                         />
                         <div className="text-sm text-center">
-                          <Badge variant={validateImageUrl(getOpenGraphImage(type)).valid ? "default" : "destructive"}>
+                          <Badge
+                            variant={
+                              validateImageUrl(getOpenGraphImage(type)).valid
+                                ? "default"
+                                : "destructive"
+                            }
+                          >
                             {validateImageUrl(getOpenGraphImage(type)).message}
                           </Badge>
                         </div>
@@ -179,17 +207,26 @@ ${seoSettings?.social?.facebook_app_id ? `<meta property="fb:app_id" content="${
               <div className="space-y-4">
                 <h4 className="font-semibold">Kiểm tra trên mạng xã hội</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {Object.entries(testOnSocialPlatforms(getOpenGraphImage(type))).map(([platform, url]) => (
+                  {Object.entries(
+                    testOnSocialPlatforms(getOpenGraphImage(type)),
+                  ).map(([platform, url]) => (
                     <Button
                       key={platform}
                       variant="outline"
                       className="flex items-center gap-2"
                       onClick={() => window.open(url, "_blank")}
                     >
-                      {platform === "facebook" && <Facebook className="h-4 w-4" />}
-                      {platform === "twitter" && <Twitter className="h-4 w-4" />}
-                      {platform === "linkedin" && <Linkedin className="h-4 w-4" />}
-                      Kiểm tra trên {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                      {platform === "facebook" && (
+                        <Facebook className="h-4 w-4" />
+                      )}
+                      {platform === "twitter" && (
+                        <Twitter className="h-4 w-4" />
+                      )}
+                      {platform === "linkedin" && (
+                        <Linkedin className="h-4 w-4" />
+                      )}
+                      Kiểm tra trên{" "}
+                      {platform.charAt(0).toUpperCase() + platform.slice(1)}
                     </Button>
                   ))}
                 </div>
@@ -199,14 +236,22 @@ ${seoSettings?.social?.facebook_app_id ? `<meta property="fb:app_id" content="${
               <Alert>
                 <CheckCircle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Khuyến nghị tối ưu cho {type}:</strong><br />
-                  • Kích thước: 1200x630px (tỷ lệ 1.91:1)<br />
-                  • Định dạng: JPG hoặc PNG<br />
-                  • Dung lượng: Dưới 8MB<br />
-                  • Nội dung: Rõ ràng, dễ đọc ngay cả khi thu nhỏ<br />
-                  {type === "product" && "• Hiển thị sản phẩm chính, tên thương hiệu rõ ràng"}
-                  {type === "category" && "• Thể hiện đặc trưng của danh mục sản phẩm"}
-                  {type === "home" && "• Thể hiện thương hiệu và giá trị cốt lõi"}
+                  <strong>Khuyến nghị tối ưu cho {type}:</strong>
+                  <br />
+                  • Kích thước: 1200x630px (tỷ lệ 1.91:1)
+                  <br />
+                  • Định dạng: JPG hoặc PNG
+                  <br />
+                  • Dung lượng: Dưới 8MB
+                  <br />
+                  • Nội dung: Rõ ràng, dễ đọc ngay cả khi thu nhỏ
+                  <br />
+                  {type === "product" &&
+                    "• Hiển thị sản phẩm chính, tên thương hiệu rõ ràng"}
+                  {type === "category" &&
+                    "• Thể hiện đặc trưng của danh mục sản phẩm"}
+                  {type === "home" &&
+                    "• Thể hiện thương hiệu và giá trị cốt lõi"}
                 </AlertDescription>
               </Alert>
             </TabsContent>

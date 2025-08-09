@@ -243,7 +243,8 @@ export default function SeoHead({ data }: SeoHeadProps) {
 
     // Fourth priority: page-type specific OG images from settings
     const baseUrl = seoSettings.general.site_url;
-    const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+    const pathname =
+      typeof window !== "undefined" ? window.location.pathname : "";
 
     if (pathname === "/" && seoSettings.social.home_og_image) {
       return seoSettings.social.home_og_image.startsWith("http")
@@ -257,7 +258,10 @@ export default function SeoHead({ data }: SeoHeadProps) {
         : `${baseUrl}${seoSettings.social.login_og_image}`;
     }
 
-    if (pathname.includes("/register") && seoSettings.social.register_og_image) {
+    if (
+      pathname.includes("/register") &&
+      seoSettings.social.register_og_image
+    ) {
       return seoSettings.social.register_og_image.startsWith("http")
         ? seoSettings.social.register_og_image
         : `${baseUrl}${seoSettings.social.register_og_image}`;

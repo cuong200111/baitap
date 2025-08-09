@@ -985,13 +985,16 @@ export default function SettingsPage() {
                     <CardHeader>
                       <CardTitle>Social Media Integration</CardTitle>
                       <CardDescription>
-                        Cấu hình tích hợp mạng xã hội và Open Graph để tối ưu chia sẻ link
+                        Cấu hình tích hợp mạng xã hội và Open Graph để tối ưu
+                        chia sẻ link
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       {/* Social Media Accounts */}
                       <div className="space-y-4">
-                        <h4 className="text-lg font-semibold">Tài khoản mạng xã hội</h4>
+                        <h4 className="text-lg font-semibold">
+                          Tài khoản mạng xã hội
+                        </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <Label htmlFor="fb_app_id">Facebook App ID</Label>
@@ -1093,10 +1096,13 @@ export default function SettingsPage() {
                       {/* Open Graph Images Section */}
                       <div className="space-y-4">
                         <div>
-                          <h4 className="text-lg font-semibold">Open Graph Images</h4>
+                          <h4 className="text-lg font-semibold">
+                            Open Graph Images
+                          </h4>
                           <p className="text-sm text-muted-foreground">
-                            Cấu hình hình ảnh hiển thị khi chia sẻ link trên mạng xã hội.
-                            Khuyến nghị: 1200x630px (tỷ lệ 1.91:1) cho hiệu quả tốt nhất.
+                            Cấu hình hình ảnh hiển thị khi chia sẻ link trên
+                            mạng xã hội. Khuyến nghị: 1200x630px (tỷ lệ 1.91:1)
+                            cho hiệu quả tốt nhất.
                           </p>
                         </div>
 
@@ -1104,7 +1110,9 @@ export default function SettingsPage() {
                         <div className="space-y-4 p-4 border rounded-lg">
                           <h5 className="font-medium">Hình ảnh mặc định</h5>
                           <div className="space-y-2">
-                            <Label htmlFor="default_og_image">URL hình ảnh mặc định</Label>
+                            <Label htmlFor="default_og_image">
+                              URL hình ảnh mặc định
+                            </Label>
                             <Input
                               id="default_og_image"
                               value={seoSettings.social.default_og_image}
@@ -1118,7 +1126,8 @@ export default function SettingsPage() {
                               placeholder="https://yourdomain.com/images/og-default.jpg"
                             />
                             <p className="text-xs text-muted-foreground">
-                              Hình ảnh này sẽ được sử dụng khi không có hình ảnh cụ thể cho trang.
+                              Hình ảnh này sẽ được sử dụng khi không có hình ảnh
+                              cụ thể cho trang.
                             </p>
                           </div>
                         </div>
@@ -1127,7 +1136,9 @@ export default function SettingsPage() {
                         <div className="space-y-4 p-4 border rounded-lg">
                           <h5 className="font-medium">Hình ảnh trang chủ</h5>
                           <div className="space-y-2">
-                            <Label htmlFor="home_og_image">URL hình ảnh trang chủ</Label>
+                            <Label htmlFor="home_og_image">
+                              URL hình ảnh trang chủ
+                            </Label>
                             <Input
                               id="home_og_image"
                               value={seoSettings.social.home_og_image || ""}
@@ -1150,7 +1161,9 @@ export default function SettingsPage() {
                         <div className="space-y-4 p-4 border rounded-lg">
                           <h5 className="font-medium">Hình ảnh sản phẩm</h5>
                           <div className="space-y-2">
-                            <Label htmlFor="product_og_image">URL hình ảnh sản phẩm mặc định</Label>
+                            <Label htmlFor="product_og_image">
+                              URL hình ảnh sản phẩm mặc định
+                            </Label>
                             <Input
                               id="product_og_image"
                               value={seoSettings.social.product_og_image || ""}
@@ -1164,7 +1177,8 @@ export default function SettingsPage() {
                               placeholder="https://yourdomain.com/images/og-product.jpg"
                             />
                             <p className="text-xs text-muted-foreground">
-                              Hình ảnh mặc định cho các trang sản phẩm. Sản phẩm có hình riêng sẽ ưu tiên hình của sản phẩm.
+                              Hình ảnh mặc định cho các trang sản phẩm. Sản phẩm
+                              có hình riêng sẽ ưu tiên hình của sản phẩm.
                             </p>
                           </div>
                         </div>
@@ -1173,7 +1187,9 @@ export default function SettingsPage() {
                         <div className="space-y-4 p-4 border rounded-lg">
                           <h5 className="font-medium">Hình ảnh danh mục</h5>
                           <div className="space-y-2">
-                            <Label htmlFor="category_og_image">URL hình ảnh danh mục mặc định</Label>
+                            <Label htmlFor="category_og_image">
+                              URL hình ảnh danh mục mặc định
+                            </Label>
                             <Input
                               id="category_og_image"
                               value={seoSettings.social.category_og_image || ""}
@@ -1187,7 +1203,8 @@ export default function SettingsPage() {
                               placeholder="https://yourdomain.com/images/og-category.jpg"
                             />
                             <p className="text-xs text-muted-foreground">
-                              Hình ảnh mặc định cho các trang danh mục. Danh m���c có hình riêng sẽ ưu tiên hình của danh mục.
+                              Hình ảnh mặc định cho các trang danh mục. Danh
+                              m���c có hình riêng sẽ ưu tiên hình của danh mục.
                             </p>
                           </div>
                         </div>
@@ -1195,9 +1212,13 @@ export default function SettingsPage() {
                         {/* Login/Register OG Images */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-4 p-4 border rounded-lg">
-                            <h5 className="font-medium">Hình ảnh trang đăng nhập</h5>
+                            <h5 className="font-medium">
+                              Hình ảnh trang đăng nhập
+                            </h5>
                             <div className="space-y-2">
-                              <Label htmlFor="login_og_image">URL hình ảnh đăng nhập</Label>
+                              <Label htmlFor="login_og_image">
+                                URL hình ảnh đăng nhập
+                              </Label>
                               <Input
                                 id="login_og_image"
                                 value={seoSettings.social.login_og_image || ""}
@@ -1213,12 +1234,18 @@ export default function SettingsPage() {
                             </div>
                           </div>
                           <div className="space-y-4 p-4 border rounded-lg">
-                            <h5 className="font-medium">Hình ảnh trang đăng ký</h5>
+                            <h5 className="font-medium">
+                              Hình ảnh trang đăng ký
+                            </h5>
                             <div className="space-y-2">
-                              <Label htmlFor="register_og_image">URL hình ảnh đăng ký</Label>
+                              <Label htmlFor="register_og_image">
+                                URL hình ảnh đăng ký
+                              </Label>
                               <Input
                                 id="register_og_image"
-                                value={seoSettings.social.register_og_image || ""}
+                                value={
+                                  seoSettings.social.register_og_image || ""
+                                }
                                 onChange={(e) =>
                                   updateSeoSetting(
                                     "social",
@@ -1236,12 +1263,17 @@ export default function SettingsPage() {
                         <Alert>
                           <Info className="h-4 w-4" />
                           <AlertDescription>
-                            <strong>Hướng dẫn tối ưu Open Graph:</strong><br />
-                            • Kích thước khuyến nghị: 1200x630px (tỷ lệ 1.91:1)<br />
-                            • Định dạng: JPG hoặc PNG<br />
-                            • Dung lượng tối đa: 8MB<br />
-                            • Tránh văn bản quá nhỏ, ưu tiên hình ảnh rõ nét<br />
-                            • Kiểm tra hiển thị trên Facebook Debugger và Twitter Card Validator
+                            <strong>Hướng dẫn tối ưu Open Graph:</strong>
+                            <br />
+                            • Kích thước khuyến nghị: 1200x630px (tỷ lệ 1.91:1)
+                            <br />
+                            • Định dạng: JPG hoặc PNG
+                            <br />
+                            • Dung lượng tối đa: 8MB
+                            <br />
+                            • Tránh văn bản quá nhỏ, ưu tiên hình ảnh rõ nét
+                            <br />• Kiểm tra hiển thị trên Facebook Debugger và
+                            Twitter Card Validator
                           </AlertDescription>
                         </Alert>
                       </div>

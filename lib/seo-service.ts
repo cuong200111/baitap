@@ -411,11 +411,12 @@ export async function generateCategoryMetadata(
       `Khám phá danh mục ${categoryName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
     // Smart Open Graph image selection
-    const ogImage = categoryImage ||
-                   settings.social.category_og_image ||
-                   settings.social.default_og_image;
+    const ogImage =
+      categoryImage ||
+      settings.social.category_og_image ||
+      settings.social.default_og_image;
 
-    const fullImageUrl = ogImage?.startsWith('http')
+    const fullImageUrl = ogImage?.startsWith("http")
       ? ogImage
       : `${settings.general.site_url}${ogImage}`;
 
@@ -467,11 +468,12 @@ export async function generateProductMetadata(
       `${productName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
     // Smart Open Graph image selection for products
-    const ogImage = productImage ||
-                   settings.social.product_og_image ||
-                   settings.social.default_og_image;
+    const ogImage =
+      productImage ||
+      settings.social.product_og_image ||
+      settings.social.default_og_image;
 
-    const fullImageUrl = ogImage?.startsWith('http')
+    const fullImageUrl = ogImage?.startsWith("http")
       ? ogImage
       : `${settings.general.site_url}${ogImage}`;
 
@@ -489,10 +491,10 @@ export async function generateProductMetadata(
           product: {
             price: {
               amount: productPrice,
-              currency: 'VND'
-            }
-          }
-        })
+              currency: "VND",
+            },
+          },
+        }),
       },
       twitter: {
         card: "summary_large_image",
