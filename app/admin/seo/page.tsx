@@ -213,7 +213,9 @@ export default function SeoAdminPage() {
 
     setSaving(true);
     try {
-      const response = await fetch("/api/admin/seo-settings", {
+      // Try to save to backend server (port 4000)
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const response = await fetch(`${backendUrl}/api/admin/seo-settings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
