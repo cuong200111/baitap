@@ -6,7 +6,30 @@ import SeoAnalytics from "@/components/SeoAnalytics";
 import StructuredData from "@/components/StructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const seoSettings = await seoService.loadSettings();
+  let seoSettings;
+
+  try {
+    seoSettings = await seoService.loadSettings();
+  } catch (error) {
+    console.error('Failed to load SEO settings in metadata, using defaults:', error);
+    // Use default settings if API fails
+    seoSettings = {
+      general: {
+        site_name: 'HACOM - Máy tính, Laptop',
+        site_url: 'https://hacom.vn',
+        site_description: 'HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.',
+        site_keywords: 'máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM',
+        site_favicon: '/favicon.ico'
+      },
+      social: {
+        twitter_site: '@hacom_vn',
+        default_og_image: '/og-image.jpg'
+      },
+      schema: {
+        organization_name: 'HACOM'
+      }
+    };
+  }
 
   return {
     title: {
