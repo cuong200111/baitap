@@ -559,11 +559,14 @@ export async function generateProductMetadata(
       `${productName} tại ${settings.general.site_name}. ${settings.general.site_description}`;
 
     // Smart Open Graph image selection for products
-    const ogImage =
-      productImage ||
-      settings.social.product_og_image ||
-      settings.social.default_og_image;
+    let ogImage = productImage; // Use actual product image first (already has full URL from layout)
 
+    if (!ogImage) {
+      // Fallback to settings images
+      ogImage = settings.social.product_og_image || settings.social.default_og_image;
+    }
+
+    // Handle URL formatting - if productImage already has full URL, use it directly
     const fullImageUrl = ogImage?.startsWith("http")
       ? ogImage
       : `${settings.general.site_url}${ogImage}`;
