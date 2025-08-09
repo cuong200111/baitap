@@ -576,16 +576,8 @@ export async function generateProductMetadata(
         title,
         description,
         images: [{ url: fullImageUrl }],
-        type: "product",
+        type: "website",
         siteName: settings.general.site_name,
-        ...(productPrice && {
-          product: {
-            price: {
-              amount: productPrice,
-              currency: "VND",
-            },
-          },
-        }),
       },
       twitter: {
         card: "summary_large_image",
