@@ -39,19 +39,24 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
     const product = data.data;
 
-    // Get the main image
+    // Get the main image from backend uploads
     let productImage = undefined;
-    if (
+    if (product.image) {
+      // If product has main image, use it with Domain uploads path
+      productImage = product.image.startsWith('http')
+        ? product.image
+        : `${Domain}/uploads/${product.image}`;
+    } else if (
       product.images &&
       Array.isArray(product.images) &&
       product.images.length > 0
     ) {
-      productImage = product.images[0];
+      // If product has images array, use first image
+      const firstImage = product.images[0];
+      productImage = firstImage.startsWith('http')
+        ? firstImage
+        : `${Domain}/uploads/${firstImage}`;
     }
-
-    // Get category name (assuming it's in the product data)
-    const categoryName =
-      product.category_name || product.category || "Sản phẩm";
 
     return await generateProductMetadata(
       product.name,
