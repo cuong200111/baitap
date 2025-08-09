@@ -48,11 +48,10 @@ export default function RootLayout({
     <html lang="vi">
       <body suppressHydrationWarning={true}>
         <DevErrorSuppressor />
-        <SeoAnalytics />
-        <StructuredData type="organization" />
-        <StructuredData type="website" />
         <ErrorBoundary>
-          <Providers>{children}</Providers>
+          <SeoProvider>
+            <Providers>{children}</Providers>
+          </SeoProvider>
         </ErrorBoundary>
       </body>
     </html>
