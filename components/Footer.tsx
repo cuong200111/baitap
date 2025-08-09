@@ -31,8 +31,8 @@ interface SiteConfig {
 }
 
 export function Footer() {
-  const siteName = useSiteName();
-  const contactInfo = useContactInfo();
+  const siteName = useAdminSiteName();
+  const contactInfo = useAdminContactInfo();
   const [config, setConfig] = useState<SiteConfig>({
     app: {
       name: siteName,
