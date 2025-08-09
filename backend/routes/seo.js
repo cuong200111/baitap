@@ -1,8 +1,20 @@
 import express from "express";
 import { checkSeoHealth, generateMetaTags, generateSchemaOrg } from "../lib/seo-utils.js";
+import { seoController } from "../controllers/seoController.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
+
+// Public SEO endpoints (no authentication required)
+
+// Get SEO settings (public - for frontend to load)
+router.get("/settings", seoController.getSeoSettings);
+
+// Get SEO status (public - for SEO health checks)
+router.get("/status", seoController.getSeoStatus);
+
+// Content analysis (public - for content optimization)
+router.post("/content-analysis", seoController.analyzeContent);
 
 // Get SEO health check
 router.get("/health", requireAuth, async (req, res) => {
