@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { SimpleDbCategoryMenu } from "./SimpleDbCategoryMenu";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteName } from "@/contexts/SeoContext";
 import { CartPopup } from "./CartPopup";
 import {
   DropdownMenu,
