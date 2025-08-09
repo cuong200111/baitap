@@ -16,12 +16,11 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     if (!response.ok) {
       // Fallback for product not found
       return await generateProductMetadata(
-        "Sản phẩm không t��n tại",
+        "Sản phẩm không tồn tại",
         "Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
-        "Sản phẩm",
         undefined,
         undefined,
-        `/products/${params.id}`,
+        undefined,
       );
     }
 
