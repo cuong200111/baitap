@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { getSeoSettings } from "@/lib/seo-service";
+import { seoService } from "@/lib/seo-service";
 import Analytics from "@/components/Analytics";
 import StructuredData from "@/components/StructuredData";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const seoSettings = await getSeoSettings();
+  const seoSettings = await seoService.loadSettings();
 
   return {
     title: {
