@@ -45,6 +45,32 @@ export async function generateMetadata({
       categoryImage = category.image.startsWith("http")
         ? category.image
         : `${Domain}/uploads/${category.image}`;
+    } else {
+      // If category has no image, try to get first product image from this category
+      try {
+        const productsResponse = await fetch(`${Domain}/api/products?category=${params.slug}&limit=1`, {
+          next: { revalidate: 300 }
+        });
+
+        if (productsResponse.ok) {
+          const productsData = await productsResponse.json();
+          if (productsData.success && productsData.data && productsData.data.length > 0) {
+            const firstProduct = productsData.data[0];
+            if (firstProduct.image) {
+              categoryImage = firstProduct.image.startsWith("http")
+                ? firstProduct.image
+                : `${Domain}/uploads/${firstProduct.image}`;
+            } else if (firstProduct.images && Array.isArray(firstProduct.images) && firstProduct.images.length > 0) {
+              const firstImage = firstProduct.images[0];
+              categoryImage = firstImage.startsWith("http")
+                ? firstImage
+                : `${Domain}/uploads/${firstImage}`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching category products for image:", error);
+      }
     }
 
     // Generate description if not available
