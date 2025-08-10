@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔍 Kiểm tra Backend Status</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .status-box {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .status-running {
+        border-color: #22c55e;
+        background: #f0f9ff;
+      }
+      .status-error {
+        border-color: #ef4444;
+        background: #fef2f2;
+      }
+      .status-loading {
+        border-color: #f59e0b;
+        background: #fffbeb;
+      }
+      .test-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px;
+      }
+      .test-btn:hover {
+        background: #2563eb;
+      }
+      .code {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        font-family: monospace;
+        margin: 10px 0;
+      }
+      .problem-explanation {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px 0;
+      }
+      .solution {
+        background: #d1ecf1;
+        border: 1px solid #17a2b8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 Kiểm tra tình trạng Backend Server</h1>
+
+    <div class="problem-explanation">
+      <h3>🚨 VẤN ĐỀ HIỆN TẠI:</h3>
+      <p>
+        <strong>og:image</strong> hiển thị sai ảnh vì <strong>Backend server không chạy</strong>
+      </p>
+      <ul>
+        <li>
+          Trang <code>/products/7</code> cần lấy dữ liệu từ
+          <code>http://localhost:4000/api/products/7</code>
+        </li>
+        <li>Nếu backend không chạy → API thất bại → dùng ảnh mặc định</li>
+        <li>
+          Ảnh <code>file-1754323204656-522680178.jpg</code> là từ SEO settings,
+          không phải ảnh sản phẩm 7
+        </li>
+      </ul>
+    </div>
+
+    <div class="status-box status-loading" id="statusBox">
+      <h2>🔄 Đang kiểm tra...</h2>
+      <p id="statusMessage">Vui lòng chờ...</p>
+    </div>
+
+    <div>
+      <button class="test-btn" onclick="checkBackendStatus()">
+        🔄 Kiểm tra lại Backend
+      </button>
+      <button class="test-btn" onclick="checkProductAPI()">
+        🧪 Test API sản phẩm 7
+      </button>
+      <button class="test-btn" onclick="checkOGImage()">
+        🖼️ Kiểm tra og:image hiện tại
+      </button>
+    </div>
+
+    <div id="apiResults" style="margin-top: 20px;"></div>
+
+    <div class="solution">
+      <h3>✅ CÁCH SỬA LỖI:</h3>
+      <h4>1. Khởi động Backend Server:</h4>
+      <div class="code">
+        # Mở terminal mới<br />
+        cd backend<br />
+        npm install<br />
+        npm start
+        <br /><br />
+        # Hoặc:<br />
+        node server.js
+      </div>
+
+      <h4>2. Kiểm tra Backend đã chạy:</h4>
+      <div class="code">
+        # Backend sẽ chạy trên cổng 4000<br />
+        # Bạn sẽ thấy: "Server running on port 4000"
+      </div>
+
+      <h4>3. Test lại trang sản phẩm:</h4>
+      <div class="code">
+        # Sau khi backend chạy:<br />
+        http://localhost:3000/products/7<br />
+        # og:image sẽ hiển thị ảnh đúng của sản phẩm 7
+      </div>
+    </div>
+
+    <script>
+      const Domain = "http://localhost:4000";
+
+      async function checkBackendStatus() {
+        const statusBox = document.getElementById("statusBox");
+        const statusMessage = document.getElementById("statusMessage");
+
+        statusBox.className = "status-box status-loading";
+        statusMessage.textContent = "Đang kiểm tra backend server...";
+
+        try {
+          const response = await fetch(`${Domain}/api/products`);
+
+          if (response.ok) {
+            statusBox.className = "status-box status-running";
+            statusBox.innerHTML = `
+              <h2>✅ Backend đang chạy!</h2>
+              <p>Server backend hoạt động bình thường trên cổng 4000</p>
+              <p><strong>Giờ og:image sẽ hoạt động đúng!</strong></p>
+            `;
+          } else {
+            throw new Error(`HTTP ${response.status}`);
+          }
+        } catch (error) {
+          statusBox.className = "status-box status-error";
+          statusBox.innerHTML = `
+            <h2>❌ Backend KHÔNG chạy!</h2>
+            <p><strong>Lỗi:</strong> ${error.message}</p>
+            <p>Đây là nguyên nhân og:image hiển thị sai!</p>
+            <p><strong>Cần khởi động backend server để sửa lỗi</strong></p>
+          `;
+        }
+      }
+
+      async function checkProductAPI() {
+        const resultsDiv = document.getElementById("apiResults");
+        resultsDiv.innerHTML = "<h3>🧪 Đang test API sản phẩm 7...</h3>";
+
+        try {
+          const response = await fetch(`${Domain}/api/products/7`);
+
+          if (response.ok) {
+            const data = await response.json();
+            
+            if (data.success && data.data) {
+              const product = data.data;
+              resultsDiv.innerHTML = `
+                <h3>✅ API sản phẩm 7 hoạt động!</h3>
+                <div class="code">
+                  <strong>Dữ liệu sản phẩm 7:</strong><br>
+                  ID: ${product.id}<br>
+                  Tên: ${product.name}<br>
+                  Ảnh chính: ${product.image || 'Không có'}<br>
+                  Ảnh gallery: ${product.images ? product.images.length + ' ảnh' : 'Không có'}<br>
+                  <br>
+                  <strong>og:image sẽ dùng:</strong> 
+                  ${product.image ? `${Domain}/uploads/${product.image}` : 'Ảnh từ gallery hoặc mặc định'}
+                </div>
+              `;
+            } else {
+              resultsDiv.innerHTML = `<h3>⚠️ API trả về dữ liệu không hợp lệ</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+          } else {
+            throw new Error(`HTTP ${response.status}`);
+          }
+        } catch (error) {
+          resultsDiv.innerHTML = `
+            <h3>❌ Không thể kết nối API sản phẩm 7</h3>
+            <p><strong>Lỗi:</strong> ${error.message}</p>
+            <p>Backend server chưa chạy!</p>
+          `;
+        }
+      }
+
+      async function checkOGImage() {
+        const resultsDiv = document.getElementById("apiResults");
+        resultsDiv.innerHTML = "<h3>🖼️ Đang kiểm tra og:image hiện tại...</h3>";
+
+        try {
+          const response = await fetch("http://localhost:3000/products/7");
+          const html = await response.text();
+
+          const ogImageMatch = html.match(
+            /<meta\s+property="og:image"\s+content="([^"]+)"/
+          );
+          const ogImage = ogImageMatch ? ogImageMatch[1] : null;
+
+          const isBackendImage = ogImage && ogImage.includes("/uploads/");
+          const isCorrectDomain = ogImage && ogImage.includes("localhost:4000");
+
+          resultsDiv.innerHTML = `
+            <h3>📄 og:image hiện tại:</h3>
+            <div class="code">
+              <strong>URL:</strong> ${ogImage || 'Không tìm thấy'}<br>
+              <strong>Từ backend:</strong> ${isBackendImage ? '✅ Có' : '❌ Không'}<br>
+              <strong>Domain đúng:</strong> ${isCorrectDomain ? '✅ Có' : '❌ Không'}<br>
+              <br>
+              ${
+                isBackendImage && isCorrectDomain
+                  ? '<strong style="color: green;">✅ og:image hoạt động đúng!</strong>'
+                  : '<strong style="color: red;">❌ og:image dùng ảnh fallback (backend chưa chạy)</strong>'
+              }
+            </div>
+          `;
+        } catch (error) {
+          resultsDiv.innerHTML = `
+            <h3>❌ Lỗi kiểm tra og:image</h3>
+            <p><strong>Lỗi:</strong> ${error.message}</p>
+          `;
+        }
+      }
+
+      // Tự động kiểm tra khi trang load
+      window.addEventListener("DOMContentLoaded", function () {
+        checkBackendStatus();
+      });
+    </script>
+  </body>
+</html>
