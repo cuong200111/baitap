@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
     const product = data.data;
 
-    // Get the main image from backend uploads
+    // Get the main image from backend uploads - prioritize product.image
     let productImage = undefined;
     if (product.image) {
       // If product has main image, use it with Domain uploads path
@@ -57,6 +57,16 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         : `${Domain}/uploads/${firstImage}`;
     }
 
+    // Debug log for checking what image is being used
+    console.log(`Product ${params.id} image logic:`, {
+      productId: params.id,
+      hasMainImage: !!product.image,
+      mainImage: product.image,
+      hasImagesArray: !!(product.images && Array.isArray(product.images)),
+      imagesCount: product.images ? product.images.length : 0,
+      selectedImage: productImage
+    });
+
     return await generateProductMetadata(
       product.name,
       product.description ||
@@ -72,7 +82,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     // Fallback metadata
     return await generateProductMetadata(
       "Sản phẩm HACOM",
-      "Khám phá sản phẩm chất lượng cao tại HACOM với giá tốt nhất.",
+      "Khám phá sản phẩm chất l��ợng cao tại HACOM với giá tốt nhất.",
       undefined,
       undefined,
       undefined,
