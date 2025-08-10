@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔧 Backend Status & Fix Tool</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+        background: #f8fafc;
+      }
+      .status-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin: 20px 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .status-ok { border-left: 4px solid #22c55e; }
+      .status-error { border-left: 4px solid #ef4444; }
+      .status-loading { border-left: 4px solid #f59e0b; }
+      
+      .big-status {
+        text-align: center;
+        padding: 40px 20px;
+        margin: 20px 0;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .status-ok-big { background: #dcfce7; color: #166534; }
+      .status-error-big { background: #fef2f2; color: #991b1b; }
+      .status-loading-big { background: #fef3c7; color: #92400e; }
+      
+      .btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        margin: 8px;
+        transition: all 0.2s;
+      }
+      .btn:hover { background: #2563eb; transform: translateY(-1px); }
+      .btn-success { background: #22c55e; }
+      .btn-success:hover { background: #16a34a; }
+      
+      .code-block {
+        background: #1f2937;
+        color: #f9fafb;
+        padding: 16px;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        margin: 12px 0;
+        overflow-x: auto;
+      }
+      .step {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 12px 0;
+      }
+      .step-number {
+        background: #3b82f6;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 12px;
+        margin-right: 12px;
+      }
+      .results {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 16px 0;
+        font-family: monospace;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="status-card">
+      <h1>🔧 Backend Status Checker & Fix Tool</h1>
+      <p>Tool này sẽ giúp bạn kiểm tra và khởi động backend server để fix lỗi og:image.</p>
+    </div>
+
+    <div id="mainStatus" class="big-status status-loading-big">
+      🔄 Đang kiểm tra backend server...
+    </div>
+
+    <div class="status-card">
+      <h3>🧪 Kiểm tra nhanh</h3>
+      <button class="btn" onclick="checkBackend()">🔍 Kiểm tra Backend</button>
+      <button class="btn" onclick="testOGImage()">🖼️ Test og:image</button>
+      <button class="btn" onclick="showFullGuide()">📖 Hướng dẫn chi tiết</button>
+      
+      <div id="quickResults" class="results" style="display: none;"></div>
+    </div>
+
+    <div id="fixGuide" style="display: none;">
+      <div class="status-card status-error">
+        <h3>❌ Backend Server Không Chạy</h3>
+        <p><strong>Nguyên nhân:</strong> Tất cả test og:image thất bại vì backend không chạy.</p>
+        <p><strong>Giải pháp:</strong> Khởi động backend server theo hướng dẫn bên dưới.</p>
+      </div>
+
+      <div class="status-card">
+        <h3>🚀 Cách khởi động Backend Server</h3>
+        
+        <div class="step">
+          <span class="step-number">1</span>
+          <strong>Mở Terminal/Command Prompt mới</strong>
+          <p>Mở terminal riêng biệt (không dùng terminal đang chạy frontend)</p>
+        </div>
+
+        <div class="step">
+          <span class="step-number">2</span>
+          <strong>Di chuyển vào thư mục backend</strong>
+          <div class="code-block">cd backend</div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">3</span>
+          <strong>Cài đặt dependencies (nếu chưa có)</strong>
+          <div class="code-block">npm install</div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">4</span>
+          <strong>Khởi động server</strong>
+          <div class="code-block">npm start</div>
+          <p><em>Hoặc nếu npm start không hoạt động:</em></p>
+          <div class="code-block">node server.js</div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">5</span>
+          <strong>Xác nhận server đã chạy</strong>
+          <p>Bạn sẽ thấy trong terminal:</p>
+          <div class="code-block">Server running on port 4000<br>Connected to MySQL database</div>
+        </div>
+
+        <div class="step">
+          <span class="step-number">6</span>
+          <strong>Test lại</strong>
+          <button class="btn btn-success" onclick="checkBackend()">✅ Kiểm tra lại Backend</button>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <h3>🎯 Sau khi Backend chạy</h3>
+        <ul>
+          <li>✅ og:image sẽ hiển thị ảnh đúng của sản phẩm</li>
+          <li>✅ Trang <code>/products/7</code> sẽ dùng ảnh sản phẩm 7</li>
+          <li>✅ Trang <code>/category/dien-thoai</code> sẽ dùng ảnh category hoặc sản phẩm đầu tiên</li>
+          <li>✅ Social media sharing sẽ hoạt động đúng</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      const BACKEND_URL = 'http://localhost:4000';
+      const FRONTEND_URL = 'http://localhost:3000';
+
+      async function checkBackend() {
+        const mainStatus = document.getElementById('mainStatus');
+        const results = document.getElementById('quickResults');
+        
+        mainStatus.className = 'big-status status-loading-big';
+        mainStatus.textContent = '🔄 Đang kiểm tra backend...';
+        
+        results.style.display = 'block';
+        results.innerHTML = '⏳ Kiểm tra kết nối backend server...';
+
+        try {
+          // Test backend API
+          const response = await fetch(`${BACKEND_URL}/api/products`);
+          
+          if (response.ok) {
+            mainStatus.className = 'big-status status-ok-big';
+            mainStatus.innerHTML = '✅ Backend Server Đang Chạy!<br><small>og:image sẽ hoạt động đúng</small>';
+            
+            results.innerHTML = `
+              ✅ Backend API: OK (${response.status})<br>
+              ✅ Cổng 4000: Hoạt động<br>
+              ✅ og:image logic: Sẵn sàng<br><br>
+              <strong>Giờ bạn có thể test lại og:image!</strong>
+            `;
+            
+            document.getElementById('fixGuide').style.display = 'none';
+            
+            // Auto test og:image
+            setTimeout(testOGImage, 1000);
+            
+          } else {
+            throw new Error(`HTTP ${response.status}`);
+          }
+        } catch (error) {
+          mainStatus.className = 'big-status status-error-big';
+          mainStatus.innerHTML = '❌ Backend Server KHÔNG chạy!<br><small>Cần khởi động để fix og:image</small>';
+          
+          results.innerHTML = `
+            ❌ Backend API: FAILED<br>
+            ❌ Lỗi: ${error.message}<br>
+            ❌ Cổng 4000: Không kết nối được<br><br>
+            <strong>➡️ Cần khởi động backend server!</strong>
+          `;
+          
+          showFullGuide();
+        }
+      }
+
+      async function testOGImage() {
+        const results = document.getElementById('quickResults');
+        results.style.display = 'block';
+        results.innerHTML = '🖼️ Đang test og:image...';
+
+        const testPages = [
+          { url: `${FRONTEND_URL}/products/7`, name: 'Sản phẩm 7' },
+          { url: `${FRONTEND_URL}/category/dien-thoai`, name: 'Category điện thoại' }
+        ];
+
+        let resultHTML = '<strong>📊 Kết quả test og:image:</strong><br><br>';
+
+        for (const page of testPages) {
+          try {
+            const response = await fetch(page.url);
+            const html = await response.text();
+            
+            const ogImageMatch = html.match(/<meta\s+property="og:image"\s+content="([^"]+)"/);
+            const ogImage = ogImageMatch ? ogImageMatch[1] : null;
+            
+            if (ogImage) {
+              const isBackendImage = ogImage.includes('/uploads/');
+              const status = isBackendImage ? '✅' : '⚠️';
+              resultHTML += `${status} ${page.name}: ${ogImage}<br>`;
+            } else {
+              resultHTML += `❌ ${page.name}: Không tìm thấy og:image<br>`;
+            }
+          } catch (error) {
+            resultHTML += `❌ ${page.name}: Lỗi fetch (${error.message})<br>`;
+          }
+        }
+
+        results.innerHTML = resultHTML;
+      }
+
+      function showFullGuide() {
+        document.getElementById('fixGuide').style.display = 'block';
+      }
+
+      // Auto check on load
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(checkBackend, 500);
+      });
+    </script>
+  </body>
+</html>
