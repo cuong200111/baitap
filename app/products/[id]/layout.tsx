@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       mainImage: product.image,
       hasImagesArray: !!(product.images && Array.isArray(product.images)),
       imagesCount: product.images ? product.images.length : 0,
-      selectedImage: productImage
+      selectedImage: productImage,
     });
 
     return await generateProductMetadata(

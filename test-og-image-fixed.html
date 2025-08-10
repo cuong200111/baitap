@@ -116,16 +116,20 @@
         <h4>✨ NEW LOGIC:</h4>
         <ul>
           <li>
-            <strong>🛍️ Product pages:</strong> Use product's main image (product.image) or first image from gallery (product.images[0])
+            <strong>🛍️ Product pages:</strong> Use product's main image
+            (product.image) or first image from gallery (product.images[0])
           </li>
           <li>
-            <strong>🏷️ Category pages:</strong> Use category image first, if not available → use first product image from that category
+            <strong>🏷️ Category pages:</strong> Use category image first, if not
+            available → use first product image from that category
           </li>
           <li>
-            <strong>🔄 Fallback:</strong> Only use SEO settings if no real images found
+            <strong>🔄 Fallback:</strong> Only use SEO settings if no real
+            images found
           </li>
           <li>
-            <strong>🌐 Backend:</strong> All images served from <code>http://localhost:4000/uploads/</code>
+            <strong>🌐 Backend:</strong> All images served from
+            <code>http://localhost:4000/uploads/</code>
           </li>
         </ul>
       </div>
@@ -136,7 +140,9 @@
       <div class="test-grid" id="productTests">
         <!-- Will be populated by JavaScript -->
       </div>
-      <button class="test-btn" onclick="testProductPages()">🔄 Test Product OG:Images</button>
+      <button class="test-btn" onclick="testProductPages()">
+        🔄 Test Product OG:Images
+      </button>
     </div>
 
     <div class="test-section">
@@ -144,7 +150,9 @@
       <div class="test-grid" id="categoryTests">
         <!-- Will be populated by JavaScript -->
       </div>
-      <button class="test-btn" onclick="testCategoryPages()">🔄 Test Category OG:Images</button>
+      <button class="test-btn" onclick="testCategoryPages()">
+        🔄 Test Category OG:Images
+      </button>
     </div>
 
     <div class="test-section">
@@ -152,7 +160,9 @@
       <div id="socialTests">
         <!-- Will be populated by JavaScript -->
       </div>
-      <button class="test-btn" onclick="generateSocialTestLinks()">🔗 Generate Social Test Links</button>
+      <button class="test-btn" onclick="generateSocialTestLinks()">
+        🔗 Generate Social Test Links
+      </button>
     </div>
 
     <script>
@@ -160,13 +170,29 @@
         products: [
           { id: 7, name: "Gaming Product", expectedSource: "product.image" },
           { id: 1, name: "Laptop Gaming", expectedSource: "product.image" },
-          { id: 2, name: "PC Desktop", expectedSource: "product.image or fallback" }
+          {
+            id: 2,
+            name: "PC Desktop",
+            expectedSource: "product.image or fallback",
+          },
         ],
         categories: [
-          { slug: "dien-thoai", name: "Điện thoại", expectedSource: "category.image or first product.image" },
-          { slug: "laptop", name: "Laptop", expectedSource: "category.image or first product.image" },
-          { slug: "gaming", name: "Gaming", expectedSource: "category.image or first product.image" }
-        ]
+          {
+            slug: "dien-thoai",
+            name: "Điện thoại",
+            expectedSource: "category.image or first product.image",
+          },
+          {
+            slug: "laptop",
+            name: "Laptop",
+            expectedSource: "category.image or first product.image",
+          },
+          {
+            slug: "gaming",
+            name: "Gaming",
+            expectedSource: "category.image or first product.image",
+          },
+        ],
       };
 
       function createTestCard(item, type, pageUrl) {
@@ -193,108 +219,140 @@
       async function extractOgImage(pageUrl) {
         try {
           // Using a CORS proxy for local testing
-          const proxyUrl = `http://localhost:3000${pageUrl.replace('http://localhost:3000', '')}`;
+          const proxyUrl = `http://localhost:3000${pageUrl.replace("http://localhost:3000", "")}`;
           const response = await fetch(proxyUrl);
           const html = await response.text();
 
           // Extract og:image from HTML
-          const ogImageMatch = html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i);
+          const ogImageMatch = html.match(
+            /<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i,
+          );
           const ogImage = ogImageMatch ? ogImageMatch[1] : null;
 
           return {
             success: true,
             ogImage,
-            isBackendImage: ogImage && ogImage.includes('/uploads/'),
-            isReal: ogImage && !ogImage.includes('placeholder') && !ogImage.includes('default')
+            isBackendImage: ogImage && ogImage.includes("/uploads/"),
+            isReal:
+              ogImage &&
+              !ogImage.includes("placeholder") &&
+              !ogImage.includes("default"),
           };
         } catch (error) {
           console.error(`Error extracting og:image from ${pageUrl}:`, error);
           return {
             success: false,
-            error: error.message
+            error: error.message,
           };
         }
       }
 
       async function testSinglePage(item, type) {
-        const pageUrl = type === 'product' 
-          ? `http://localhost:3000/products/${item.id}`
-          : `http://localhost:3000/category/${item.slug}`;
+        const pageUrl =
+          type === "product"
+            ? `http://localhost:3000/products/${item.id}`
+            : `http://localhost:3000/category/${item.slug}`;
 
-        const statusEl = document.getElementById(`status-${type}-${item.id || item.slug}`);
-        const previewEl = document.getElementById(`preview-${type}-${item.id || item.slug}`);
-        const ogUrlEl = document.getElementById(`og-url-${type}-${item.id || item.slug}`);
+        const statusEl = document.getElementById(
+          `status-${type}-${item.id || item.slug}`,
+        );
+        const previewEl = document.getElementById(
+          `preview-${type}-${item.id || item.slug}`,
+        );
+        const ogUrlEl = document.getElementById(
+          `og-url-${type}-${item.id || item.slug}`,
+        );
 
-        statusEl.textContent = 'Testing...';
-        statusEl.className = 'status loading';
+        statusEl.textContent = "Testing...";
+        statusEl.className = "status loading";
 
         const result = await extractOgImage(pageUrl);
 
         if (result.success && result.ogImage) {
-          statusEl.textContent = result.isBackendImage && result.isReal ? 'Success ✅' : 'Using Fallback ⚠️';
-          statusEl.className = result.isBackendImage && result.isReal ? 'status success' : 'status warning';
-          
+          statusEl.textContent =
+            result.isBackendImage && result.isReal
+              ? "Success ✅"
+              : "Using Fallback ⚠️";
+          statusEl.className =
+            result.isBackendImage && result.isReal
+              ? "status success"
+              : "status warning";
+
           previewEl.innerHTML = `<img src="${result.ogImage}" alt="${item.name}" onerror="this.parentElement.innerHTML='❌ Image failed to load'">`;
           ogUrlEl.innerHTML = `<strong>OG:Image:</strong> ${result.ogImage}`;
 
           console.log(`✅ ${type} ${item.id || item.slug}:`, {
             ogImage: result.ogImage,
             isBackendImage: result.isBackendImage,
-            isReal: result.isReal
+            isReal: result.isReal,
           });
         } else {
-          statusEl.textContent = 'Error ❌';
-          statusEl.className = 'status error';
-          previewEl.innerHTML = '❌ No og:image found';
-          ogUrlEl.innerHTML = `<strong>Error:</strong> ${result.error || 'No og:image found'}`;
+          statusEl.textContent = "Error ❌";
+          statusEl.className = "status error";
+          previewEl.innerHTML = "❌ No og:image found";
+          ogUrlEl.innerHTML = `<strong>Error:</strong> ${result.error || "No og:image found"}`;
         }
       }
 
       async function testProductPages() {
-        const container = document.getElementById('productTests');
-        container.innerHTML = testPages.products.map(product => 
-          createTestCard(product, 'product', `http://localhost:3000/products/${product.id}`)
-        ).join('');
+        const container = document.getElementById("productTests");
+        container.innerHTML = testPages.products
+          .map((product) =>
+            createTestCard(
+              product,
+              "product",
+              `http://localhost:3000/products/${product.id}`,
+            ),
+          )
+          .join("");
 
-        console.log('🧪 Testing Product Pages...');
-        
+        console.log("🧪 Testing Product Pages...");
+
         // Test each product page
         for (const product of testPages.products) {
-          await testSinglePage(product, 'product');
+          await testSinglePage(product, "product");
         }
       }
 
       async function testCategoryPages() {
-        const container = document.getElementById('categoryTests');
-        container.innerHTML = testPages.categories.map(category => 
-          createTestCard(category, 'category', `http://localhost:3000/category/${category.slug}`)
-        ).join('');
+        const container = document.getElementById("categoryTests");
+        container.innerHTML = testPages.categories
+          .map((category) =>
+            createTestCard(
+              category,
+              "category",
+              `http://localhost:3000/category/${category.slug}`,
+            ),
+          )
+          .join("");
 
-        console.log('🧪 Testing Category Pages...');
-        
+        console.log("🧪 Testing Category Pages...");
+
         // Test each category page
         for (const category of testPages.categories) {
-          await testSinglePage(category, 'category');
+          await testSinglePage(category, "category");
         }
       }
 
       function generateSocialTestLinks() {
-        const container = document.getElementById('socialTests');
+        const container = document.getElementById("socialTests");
         const testUrls = [
-          'http://localhost:3000/products/7',
-          'http://localhost:3000/category/dien-thoai'
+          "http://localhost:3000/products/7",
+          "http://localhost:3000/category/dien-thoai",
         ];
 
         const socialPlatforms = {
-          facebook: (url) => `https://developers.facebook.com/tools/debug/?q=${encodeURIComponent(url)}`,
+          facebook: (url) =>
+            `https://developers.facebook.com/tools/debug/?q=${encodeURIComponent(url)}`,
           twitter: () => `https://cards-dev.twitter.com/validator`,
           linkedin: () => `https://www.linkedin.com/post-inspector/`,
-          opengraph: (url) => `https://www.opengraph.xyz/?url=${encodeURIComponent(url)}`
+          opengraph: (url) =>
+            `https://www.opengraph.xyz/?url=${encodeURIComponent(url)}`,
         };
 
-        let html = '<h4>Test your pages on social platforms:</h4>';
-        
-        testUrls.forEach(url => {
+        let html = "<h4>Test your pages on social platforms:</h4>";
+
+        testUrls.forEach((url) => {
           html += `<div style="margin: 15px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">`;
           html += `<strong>${url}</strong><br>`;
           Object.entries(socialPlatforms).forEach(([platform, generator]) => {
@@ -308,9 +366,9 @@
       }
 
       // Auto-run tests on page load
-      document.addEventListener('DOMContentLoaded', function() {
-        console.log('🔍 OG:Image Fixed Logic Test Suite Loaded');
-        
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔍 OG:Image Fixed Logic Test Suite Loaded");
+
         // Auto-test after a delay
         setTimeout(() => {
           testProductPages();

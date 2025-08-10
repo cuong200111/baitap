@@ -14,6 +14,7 @@ User reported that og:image was not correctly using actual product/category imag
 **File:** `app/category/[slug]/layout.tsx`
 
 **New Logic:**
+
 ```typescript
 // Priority order for category og:image:
 1. Category's own image (category.image)
@@ -22,6 +23,7 @@ User reported that og:image was not correctly using actual product/category imag
 ```
 
 **Implementation Details:**
+
 - Fetches category data from `${Domain}/api/categories/${slug}`
 - If category has no image, makes additional API call to get first product from category
 - Uses product's main image or first gallery image as category og:image
@@ -32,6 +34,7 @@ User reported that og:image was not correctly using actual product/category imag
 **File:** `app/products/[id]/layout.tsx`
 
 **New Logic:**
+
 ```typescript
 // Priority order for product og:image:
 1. Product's main image (product.image)
@@ -40,6 +43,7 @@ User reported that og:image was not correctly using actual product/category imag
 ```
 
 **Implementation Details:**
+
 - Fetches product data from `${Domain}/api/products/${id}`
 - Prioritizes `product.image` over `product.images` array
 - Handles both absolute URLs and relative paths
@@ -48,18 +52,23 @@ User reported that og:image was not correctly using actual product/category imag
 ## 📋 Key Changes Made
 
 ### Category Layout Changes:
+
 ```typescript
 // OLD: Only used category.image or fallback
-let categoryImage = category.image ? `${Domain}/uploads/${category.image}` : undefined;
+let categoryImage = category.image
+  ? `${Domain}/uploads/${category.image}`
+  : undefined;
 
 // NEW: Use category image OR first product image from category
 if (category.image) {
   categoryImage = category.image.startsWith("http")
-    ? category.image 
+    ? category.image
     : `${Domain}/uploads/${category.image}`;
 } else {
   // Fetch first product from this category
-  const productsResponse = await fetch(`${Domain}/api/products?category=${params.slug}&limit=1`);
+  const productsResponse = await fetch(
+    `${Domain}/api/products?category=${params.slug}&limit=1`,
+  );
   if (productsResponse.ok) {
     const productsData = await productsResponse.json();
     if (productsData.success && productsData.data.length > 0) {
@@ -72,6 +81,7 @@ if (category.image) {
 ```
 
 ### Product Layout Changes:
+
 ```typescript
 // Enhanced with better priority logic and debug logging
 let productImage = undefined;
@@ -79,7 +89,11 @@ if (product.image) {
   productImage = product.image.startsWith("http")
     ? product.image
     : `${Domain}/uploads/${product.image}`;
-} else if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+} else if (
+  product.images &&
+  Array.isArray(product.images) &&
+  product.images.length > 0
+) {
   const firstImage = product.images[0];
   productImage = firstImage.startsWith("http")
     ? firstImage
@@ -90,7 +104,7 @@ if (product.image) {
 console.log(`Product ${params.id} image logic:`, {
   productId: params.id,
   hasMainImage: !!product.image,
-  selectedImage: productImage
+  selectedImage: productImage,
 });
 ```
 
@@ -99,6 +113,7 @@ console.log(`Product ${params.id} image logic:`, {
 ### Test File: `test-og-image-fixed.html`
 
 **Features:**
+
 - Tests both product and category pages
 - Extracts actual og:image meta tags from pages
 - Validates images are from backend `/uploads/` path
@@ -106,6 +121,7 @@ console.log(`Product ${params.id} image logic:`, {
 - Real-time status indicators
 
 **Test Cases:**
+
 ```javascript
 products: [
   { id: 7, name: "Gaming Product" },
@@ -122,11 +138,13 @@ categories: [
 ## 🎯 Expected Results
 
 ### For Product Pages:
+
 - `http://localhost:3000/products/7` → Uses product 7's actual image
 - `http://localhost:3000/products/1` → Uses product 1's actual image
 - If no product image → Uses SEO settings fallback
 
 ### For Category Pages:
+
 - `http://localhost:3000/category/dien-thoai` → Uses category image OR first product image from "dien-thoai" category
 - `http://localhost:3000/category/laptop` → Uses category image OR first product image from "laptop" category
 - If no images available → Uses SEO settings fallback
@@ -134,12 +152,14 @@ categories: [
 ## 🌐 Social Media Benefits
 
 ### Improved Sharing:
+
 1. **Facebook** - Shows actual product/category images
 2. **Twitter** - Better card previews with real images
 3. **LinkedIn** - Professional sharing with authentic visuals
 4. **WhatsApp** - Rich link previews with product images
 
 ### SEO Benefits:
+
 1. **Image Search** - Search engines index actual product images
 2. **Rich Snippets** - Better Google search results with images
 3. **User Engagement** - More clicks due to attractive image previews
@@ -170,9 +190,10 @@ categories: [
 ## 🎉 Result
 
 **Social media sharing now displays authentic, relevant images:**
+
 - Product shares show the actual product being sold
 - Category shares show representative images from that category
 - Improved click-through rates and user engagement
 - Better SEO performance with real image indexing
 
-*All og:image tags now reflect the actual content being shared!*
+_All og:image tags now reflect the actual content being shared!_
