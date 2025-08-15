@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎯 Subpage & Interaction Tester</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f8fafc;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .header {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .test-section {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 16px 0;
+        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+      }
+      .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .page-test-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 16px;
+        background: #f9fafb;
+      }
+      .page-test-card h4 {
+        margin-top: 0;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .subtest-list {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .subtest-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        margin: 4px 0;
+        background: white;
+        border-radius: 6px;
+        border-left: 4px solid #cbd5e1;
+        font-size: 13px;
+      }
+      .subtest-item.testing {
+        border-left-color: #f59e0b;
+        background: #fffbeb;
+      }
+      .subtest-item.success {
+        border-left-color: #22c55e;
+        background: #f0fdf4;
+      }
+      .subtest-item.error {
+        border-left-color: #ef4444;
+        background: #fef2f2;
+      }
+      .subtest-item.warning {
+        border-left-color: #f59e0b;
+        background: #fffbeb;
+      }
+      .btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+        margin: 2px;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+      .btn:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+      }
+      .btn-sm {
+        padding: 4px 8px;
+        font-size: 11px;
+      }
+      .btn-test {
+        background: #059669;
+      }
+      .btn-test:hover {
+        background: #047857;
+      }
+      .url-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        margin: 8px 0;
+      }
+      .progress-container {
+        background: #e5e7eb;
+        height: 6px;
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 12px 0;
+      }
+      .progress-bar {
+        background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+      .summary-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+        margin: 16px 0;
+      }
+      .stat-card {
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+      }
+      .stat-number {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+      .stat-label {
+        font-size: 11px;
+        color: #6b7280;
+      }
+      .iframe-viewer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        display: none;
+      }
+      .iframe-content {
+        position: absolute;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        height: 90%;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .iframe-header {
+        background: #374151;
+        color: white;
+        padding: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .iframe-close {
+        background: #ef4444;
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .test-iframe {
+        width: 100%;
+        height: calc(100% - 50px);
+        border: none;
+      }
+      .interaction-controls {
+        background: #f3f4f6;
+        padding: 12px;
+        border-radius: 6px;
+        margin: 12px 0;
+      }
+      .interaction-controls label {
+        display: block;
+        margin: 8px 0;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .interaction-controls input,
+      .interaction-controls select {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎯 Subpage & Interaction Tester</h1>
+        <p>Test chi tiết các trang con, navigation, forms, và interactions trong từng trang</p>
+        
+        <input type="text" id="baseUrl" class="url-input" 
+               value="https://20bdfb1e64e3483694c7ba59225ae1a6-ffe7619288fb40b59e347ff8b.fly.dev" 
+               placeholder="Base URL">
+        
+        <div style="margin: 16px 0;">
+          <button class="btn btn-test" onclick="startComprehensiveTest()">🚀 Test Toàn Bộ</button>
+          <button class="btn" onclick="testUserInteractions()">👤 Test User Interactions</button>
+          <button class="btn" onclick="testAdminFeatures()">⚙️ Test Admin Features</button>
+          <button class="btn" onclick="testNavigation()">🧭 Test Navigation</button>
+          <button class="btn" onclick="clearResults()">🗑️ Clear</button>
+        </div>
+
+        <div class="progress-container" id="progressContainer" style="display: none;">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="summary-stats" id="summaryStats" style="display: none;">
+          <div class="stat-card">
+            <div class="stat-number" id="totalTests">0</div>
+            <div class="stat-label">Tổng Tests</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="passedTests">0</div>
+            <div class="stat-label">Thành Công</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="failedTests">0</div>
+            <div class="stat-label">Thất Bại</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="warningTests">0</div>
+            <div class="stat-label">Cảnh Báo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-grid" id="testGrid">
+        <!-- Test cards will be populated here -->
+      </div>
+    </div>
+
+    <!-- Iframe viewer -->
+    <div class="iframe-viewer" id="iframeViewer">
+      <div class="iframe-content">
+        <div class="iframe-header">
+          <span id="iframeTitle">Testing Page...</span>
+          <button class="iframe-close" onclick="closeIframe()">✕ Close</button>
+        </div>
+        <iframe id="testIframe" class="test-iframe"></iframe>
+      </div>
+    </div>
+
+    <script>
+      // Comprehensive test configuration
+      const TEST_CONFIGURATIONS = {
+        userPages: {
+          name: '👤 User Pages',
+          tests: [
+            {
+              page: '/',
+              name: 'Homepage',
+              subtests: [
+                { type: 'navigation', target: '.nav-link', name: 'Navigation links' },
+                { type: 'product-grid', target: '.product-card', name: 'Product cards' },
+                { type: 'search', target: 'input[type="search"]', name: 'Search functionality' },
+                { type: 'categories', target: '.category-link', name: 'Category links' }
+              ]
+            },
+            {
+              page: '/products',
+              name: 'Products Page',
+              subtests: [
+                { type: 'pagination', target: '.pagination', name: 'Pagination' },
+                { type: 'filters', target: '.filter-option', name: 'Product filters' },
+                { type: 'sort', target: '.sort-dropdown', name: 'Sort options' },
+                { type: 'product-links', target: '.product-link', name: 'Product detail links' }
+              ]
+            },
+            {
+              page: '/products/1',
+              name: 'Product Detail',
+              subtests: [
+                { type: 'add-to-cart', target: '.add-to-cart', name: 'Add to cart button' },
+                { type: 'image-gallery', target: '.product-image', name: 'Image gallery' },
+                { type: 'quantity', target: '.quantity-input', name: 'Quantity selector' },
+                { type: 'reviews', target: '.review-section', name: 'Reviews section' }
+              ]
+            },
+            {
+              page: '/cart',
+              name: 'Shopping Cart',
+              subtests: [
+                { type: 'cart-items', target: '.cart-item', name: 'Cart items display' },
+                { type: 'quantity-update', target: '.qty-update', name: 'Quantity update' },
+                { type: 'remove-item', target: '.remove-item', name: 'Remove item button' },
+                { type: 'checkout-btn', target: '.checkout-button', name: 'Checkout button' }
+              ]
+            },
+            {
+              page: '/checkout',
+              name: 'Checkout',
+              subtests: [
+                { type: 'shipping-form', target: '.shipping-form', name: 'Shipping form' },
+                { type: 'payment-options', target: '.payment-option', name: 'Payment options' },
+                { type: 'order-summary', target: '.order-summary', name: 'Order summary' },
+                { type: 'place-order', target: '.place-order', name: 'Place order button' }
+              ]
+            },
+            {
+              page: '/login',
+              name: 'Login Page',
+              subtests: [
+                { type: 'login-form', target: '.login-form', name: 'Login form' },
+                { type: 'email-input', target: 'input[type="email"]', name: 'Email input' },
+                { type: 'password-input', target: 'input[type="password"]', name: 'Password input' },
+                { type: 'login-button', target: '.login-button', name: 'Login button' }
+              ]
+            }
+          ]
+        },
+        adminPages: {
+          name: '⚙️ Admin Pages',
+          tests: [
+            {
+              page: '/admin',
+              name: 'Admin Dashboard',
+              subtests: [
+                { type: 'stats-cards', target: '.stat-card', name: 'Statistics cards' },
+                { type: 'charts', target: '.chart-container', name: 'Charts and graphs' },
+                { type: 'recent-orders', target: '.recent-orders', name: 'Recent orders' },
+                { type: 'admin-nav', target: '.admin-nav', name: 'Admin navigation' }
+              ]
+            },
+            {
+              page: '/admin/products',
+              name: 'Product Management',
+              subtests: [
+                { type: 'product-table', target: '.products-table', name: 'Products table' },
+                { type: 'add-product', target: '.add-product-btn', name: 'Add product button' },
+                { type: 'edit-buttons', target: '.edit-btn', name: 'Edit buttons' },
+                { type: 'delete-buttons', target: '.delete-btn', name: 'Delete buttons' }
+              ]
+            },
+            {
+              page: '/admin/categories',
+              name: 'Category Management',
+              subtests: [
+                { type: 'category-list', target: '.category-list', name: 'Category list' },
+                { type: 'add-category', target: '.add-category', name: 'Add category' },
+                { type: 'category-tree', target: '.category-tree', name: 'Category tree' },
+                { type: 'bulk-actions', target: '.bulk-actions', name: 'Bulk actions' }
+              ]
+            },
+            {
+              page: '/admin/orders',
+              name: 'Order Management',
+              subtests: [
+                { type: 'orders-table', target: '.orders-table', name: 'Orders table' },
+                { type: 'status-filters', target: '.status-filter', name: 'Status filters' },
+                { type: 'order-details', target: '.order-detail-btn', name: 'Order detail buttons' },
+                { type: 'export-btn', target: '.export-btn', name: 'Export button' }
+              ]
+            },
+            {
+              page: '/admin/settings',
+              name: 'Settings',
+              subtests: [
+                { type: 'settings-tabs', target: '.settings-tab', name: 'Settings tabs' },
+                { type: 'form-inputs', target: '.settings-input', name: 'Settings inputs' },
+                { type: 'save-buttons', target: '.save-btn', name: 'Save buttons' },
+                { type: 'reset-buttons', target: '.reset-btn', name: 'Reset buttons' }
+              ]
+            }
+          ]
+        }
+      };
+
+      let testStats = {
+        total: 0,
+        passed: 0,
+        failed: 0,
+        warning: 0,
+        completed: 0
+      };
+
+      let allTestResults = [];
+
+      function updateProgress() {
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progress = (testStats.completed / testStats.total) * 100;
+        
+        progressContainer.style.display = 'block';
+        progressBar.style.width = progress + '%';
+        
+        if (testStats.completed >= testStats.total) {
+          setTimeout(() => {
+            progressContainer.style.display = 'none';
+          }, 2000);
+        }
+      }
+
+      function updateStats() {
+        document.getElementById('totalTests').textContent = testStats.total;
+        document.getElementById('passedTests').textContent = testStats.passed;
+        document.getElementById('failedTests').textContent = testStats.failed;
+        document.getElementById('warningTests').textContent = testStats.warning;
+        document.getElementById('summaryStats').style.display = 'grid';
+      }
+
+      function createTestCard(config) {
+        const card = document.createElement('div');
+        card.className = 'test-section';
+        
+        card.innerHTML = `
+          <h3>${config.name}</h3>
+          <div class="test-grid" id="${config.name.replace(/\s+/g, '-').toLowerCase()}-grid">
+            ${config.tests.map(test => `
+              <div class="page-test-card">
+                <h4>
+                  📄 ${test.name}
+                  <button class="btn btn-sm" onclick="openPageInIframe('${test.page}', '${test.name}')">👀 View</button>
+                  <button class="btn btn-sm btn-test" onclick="testSinglePage('${test.page}', '${test.name}')">🧪 Test</button>
+                </h4>
+                <div class="subtest-list" id="subtests-${test.page.replace(/\//g, '-')}">
+                  ${test.subtests.map(subtest => `
+                    <div class="subtest-item" id="subtest-${test.page.replace(/\//g, '-')}-${subtest.type}">
+                      <span>${subtest.name}</span>
+                      <span>⏳</span>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="interaction-controls">
+                  <label>🎯 Test Specific Element:</label>
+                  <select onchange="testSpecificElement('${test.page}', this.value)">
+                    <option value="">Choose element to test...</option>
+                    ${test.subtests.map(subtest => `
+                      <option value="${subtest.target}">${subtest.name}</option>
+                    `).join('')}
+                  </select>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        
+        return card;
+      }
+
+      function populateTestGrid() {
+        const testGrid = document.getElementById('testGrid');
+        testGrid.innerHTML = '';
+        
+        Object.values(TEST_CONFIGURATIONS).forEach(config => {
+          const card = createTestCard(config);
+          testGrid.appendChild(card);
+        });
+        
+        // Calculate total tests
+        testStats.total = Object.values(TEST_CONFIGURATIONS)
+          .reduce((total, config) => 
+            total + config.tests.reduce((sum, test) => sum + test.subtests.length, 0), 0
+          );
+      }
+
+      async function testSinglePage(pagePath, pageName) {
+        const baseUrl = document.getElementById('baseUrl').value;
+        const fullUrl = baseUrl + pagePath;
+        
+        console.log(`Testing page: ${pageName} (${fullUrl})`);
+        
+        // Find the test configuration for this page
+        let pageConfig = null;
+        Object.values(TEST_CONFIGURATIONS).forEach(config => {
+          const found = config.tests.find(test => test.page === pagePath);
+          if (found) pageConfig = found;
+        });
+        
+        if (!pageConfig) {
+          console.error('No test configuration found for page:', pagePath);
+          return;
+        }
+        
+        // Test each subtest
+        for (const subtest of pageConfig.subtests) {
+          await testPageElement(fullUrl, pagePath, subtest);
+          await new Promise(resolve => setTimeout(resolve, 500)); // Delay between tests
+        }
+      }
+
+      async function testPageElement(url, pagePath, subtest) {
+        const subtestId = `subtest-${pagePath.replace(/\//g, '-')}-${subtest.type}`;
+        const subtestElement = document.getElementById(subtestId);
+        
+        if (!subtestElement) return;
+        
+        // Update UI to show testing
+        subtestElement.className = 'subtest-item testing';
+        subtestElement.querySelector('span:last-child').textContent = '🔄';
+        
+        try {
+          const result = await testElementExists(url, subtest.target, subtest.name);
+          
+          if (result.exists) {
+            subtestElement.className = 'subtest-item success';
+            subtestElement.querySelector('span:last-child').textContent = '✅';
+            testStats.passed++;
+          } else if (result.partial) {
+            subtestElement.className = 'subtest-item warning';
+            subtestElement.querySelector('span:last-child').textContent = '⚠️';
+            testStats.warning++;
+          } else {
+            subtestElement.className = 'subtest-item error';
+            subtestElement.querySelector('span:last-child').textContent = '❌';
+            testStats.failed++;
+          }
+          
+          allTestResults.push({
+            page: pagePath,
+            test: subtest.name,
+            target: subtest.target,
+            result: result.exists ? 'passed' : result.partial ? 'warning' : 'failed',
+            details: result.details,
+            timestamp: new Date()
+          });
+          
+        } catch (error) {
+          subtestElement.className = 'subtest-item error';
+          subtestElement.querySelector('span:last-child').textContent = '❌';
+          testStats.failed++;
+          
+          allTestResults.push({
+            page: pagePath,
+            test: subtest.name,
+            target: subtest.target,
+            result: 'error',
+            details: error.message,
+            timestamp: new Date()
+          });
+        }
+        
+        testStats.completed++;
+        updateProgress();
+        updateStats();
+      }
+
+      async function testElementExists(url, selector, testName) {
+        return new Promise((resolve) => {
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = url;
+          
+          const timeout = setTimeout(() => {
+            document.body.removeChild(iframe);
+            resolve({
+              exists: false,
+              partial: false,
+              details: 'Timeout waiting for page to load'
+            });
+          }, 15000);
+          
+          iframe.onload = () => {
+            clearTimeout(timeout);
+            
+            try {
+              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+              
+              if (iframeDoc) {
+                const elements = iframeDoc.querySelectorAll(selector);
+                const exists = elements.length > 0;
+                
+                let details = `Found ${elements.length} elements matching "${selector}"`;
+                
+                if (exists) {
+                  // Additional checks for element visibility and functionality
+                  const visibleElements = Array.from(elements).filter(el => {
+                    const style = iframeDoc.defaultView.getComputedStyle(el);
+                    return style.display !== 'none' && style.visibility !== 'hidden';
+                  });
+                  
+                  if (visibleElements.length === 0) {
+                    resolve({
+                      exists: false,
+                      partial: true,
+                      details: `${details}, but all are hidden`
+                    });
+                  } else {
+                    resolve({
+                      exists: true,
+                      partial: false,
+                      details: `${details}, ${visibleElements.length} visible`
+                    });
+                  }
+                } else {
+                  resolve({
+                    exists: false,
+                    partial: false,
+                    details: details
+                  });
+                }
+              } else {
+                resolve({
+                  exists: false,
+                  partial: false,
+                  details: 'Cannot access iframe content (CORS restriction)'
+                });
+              }
+            } catch (error) {
+              resolve({
+                exists: false,
+                partial: false,
+                details: `Error testing element: ${error.message}`
+              });
+            }
+            
+            document.body.removeChild(iframe);
+          };
+          
+          iframe.onerror = () => {
+            clearTimeout(timeout);
+            document.body.removeChild(iframe);
+            resolve({
+              exists: false,
+              partial: false,
+              details: 'Failed to load page'
+            });
+          };
+          
+          document.body.appendChild(iframe);
+        });
+      }
+
+      function openPageInIframe(pagePath, pageName) {
+        const baseUrl = document.getElementById('baseUrl').value;
+        const fullUrl = baseUrl + pagePath;
+        
+        const iframeViewer = document.getElementById('iframeViewer');
+        const iframeTitle = document.getElementById('iframeTitle');
+        const testIframe = document.getElementById('testIframe');
+        
+        iframeTitle.textContent = `${pageName} - ${fullUrl}`;
+        testIframe.src = fullUrl;
+        iframeViewer.style.display = 'block';
+      }
+
+      function closeIframe() {
+        document.getElementById('iframeViewer').style.display = 'none';
+      }
+
+      async function startComprehensiveTest() {
+        clearResults();
+        
+        console.log('Starting comprehensive subpage and interaction test...');
+        
+        for (const config of Object.values(TEST_CONFIGURATIONS)) {
+          for (const test of config.tests) {
+            await testSinglePage(test.page, test.name);
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Delay between pages
+          }
+        }
+        
+        console.log('Comprehensive test completed!');
+        console.log('Results:', allTestResults);
+        
+        // Generate summary report
+        generateSummaryReport();
+      }
+
+      async function testUserInteractions() {
+        clearResults();
+        const userConfig = TEST_CONFIGURATIONS.userPages;
+        
+        for (const test of userConfig.tests) {
+          await testSinglePage(test.page, test.name);
+          await new Promise(resolve => setTimeout(resolve, 800));
+        }
+      }
+
+      async function testAdminFeatures() {
+        clearResults();
+        const adminConfig = TEST_CONFIGURATIONS.adminPages;
+        
+        for (const test of adminConfig.tests) {
+          await testSinglePage(test.page, test.name);
+          await new Promise(resolve => setTimeout(resolve, 800));
+        }
+      }
+
+      async function testNavigation() {
+        // Test navigation elements across all pages
+        console.log('Testing navigation consistency...');
+        
+        const baseUrl = document.getElementById('baseUrl').value;
+        const pages = ['/'];
+        
+        for (const page of pages) {
+          const url = baseUrl + page;
+          await testElementExists(url, 'nav', 'Main navigation');
+          await testElementExists(url, '.nav-link', 'Navigation links');
+          await testElementExists(url, '.header', 'Page header');
+          await testElementExists(url, '.footer', 'Page footer');
+        }
+      }
+
+      function generateSummaryReport() {
+        const report = {
+          timestamp: new Date(),
+          totalTests: testStats.total,
+          passed: testStats.passed,
+          failed: testStats.failed,
+          warnings: testStats.warning,
+          details: allTestResults
+        };
+        
+        console.log('📊 Test Summary Report:', report);
+        
+        // You can extend this to save or export the report
+        localStorage.setItem('lastTestReport', JSON.stringify(report));
+      }
+
+      function clearResults() {
+        testStats = { total: 0, passed: 0, failed: 0, warning: 0, completed: 0 };
+        allTestResults = [];
+        
+        // Reset all subtest items
+        document.querySelectorAll('.subtest-item').forEach(item => {
+          item.className = 'subtest-item';
+          item.querySelector('span:last-child').textContent = '⏳';
+        });
+        
+        updateStats();
+        console.log('Test results cleared');
+      }
+
+      async function testSpecificElement(pagePath, selector) {
+        if (!selector) return;
+        
+        const baseUrl = document.getElementById('baseUrl').value;
+        const fullUrl = baseUrl + pagePath;
+        
+        console.log(`Testing specific element: ${selector} on ${fullUrl}`);
+        
+        const result = await testElementExists(fullUrl, selector, `Custom test: ${selector}`);
+        
+        alert(`Test Result for "${selector}":\n\n${result.exists ? '✅ Found' : '❌ Not found'}\n\nDetails: ${result.details}`);
+      }
+
+      // Initialize the testing interface
+      window.addEventListener('DOMContentLoaded', function() {
+        populateTestGrid();
+        console.log('🎯 Subpage & Interaction Tester loaded');
+        console.log('📋 Ready to test', testStats.total, 'interactions across all pages');
+      });
+    </script>
+  </body>
+</html>
