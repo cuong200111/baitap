@@ -6,7 +6,9 @@ interface DevErrorSuppressorProps {
   children: ReactNode;
 }
 
-export default function DevErrorSuppressor({ children }: DevErrorSuppressorProps) {
+export default function DevErrorSuppressor({
+  children,
+}: DevErrorSuppressorProps) {
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       // Suppress common development errors in console

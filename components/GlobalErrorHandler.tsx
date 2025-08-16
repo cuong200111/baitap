@@ -17,7 +17,10 @@ export function GlobalErrorHandler() {
 
     return () => {
       window.removeEventListener("error", handleError);
-      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+      window.removeEventListener(
+        "unhandledrejection",
+        handleUnhandledRejection,
+      );
     };
   }, []);
 
