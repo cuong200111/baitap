@@ -83,6 +83,8 @@ export default function AdminOrdersPage() {
       params.append("limit", "50");
 
       console.log("Loading orders with params:", params.toString());
+      console.log("API_DOMAIN:", API_DOMAIN);
+      console.log("Full URL:", `${API_DOMAIN}/api/orders?${params.toString()}`);
       const token = localStorage.getItem("token");
       const response = await fetch(
         `${API_DOMAIN}/api/orders?${params.toString()}`,
