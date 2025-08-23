@@ -249,10 +249,13 @@ router.get("/:identifier", authenticateToken, async (req, res) => {
     // Get order items
     const orderItems = await executeQuery(
       `
-      SELECT 
+      SELECT
         oi.*,
+        p.id as product_id_exists,
         p.slug as product_slug,
-        p.images as product_images
+        p.images as product_images,
+        p.name as current_product_name,
+        p.status as product_status
       FROM order_items oi
       LEFT JOIN products p ON oi.product_id = p.id
       WHERE oi.order_id = ?
