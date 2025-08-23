@@ -90,7 +90,7 @@ export default function HomePage() {
       description: "Lên đến 36 tháng",
     },
     {
-      icon: HeadphonesIcon,
+      icon: Headphones,
       title: "Hỗ trợ 24/7",
       description: "Tư vấn chuyên nghiệp",
     },
