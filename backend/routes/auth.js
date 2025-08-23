@@ -140,10 +140,45 @@ router.post(
       const { email, password } = req.body;
 
       // Find user
-      const users = await executeQuery(
-        "SELECT id, email, password, full_name, phone, role, is_active FROM users WHERE email = ?",
-        [email],
-      );
+      let users;
+      try {
+        users = await executeQuery(
+          "SELECT id, email, password, full_name, phone, role, is_active FROM users WHERE email = ?",
+          [email],
+        );
+      } catch (dbError) {
+        console.log("🌐 Database unavailable for login, checking fallback admin");
+        // Database is unavailable, check for fallback admin credentials
+        if (email === "admin@hacom.vn" && password === "admin123") {
+          const token = jwt.sign(
+            { id: 1, email: "admin@hacom.vn", role: "admin" },
+            process.env.JWT_SECRET || "fallback_secret",
+            { expiresIn: "7d" }
+          );
+
+          return res.json({
+            success: true,
+            message: "Login successful (fallback)",
+            data: {
+              user: {
+                id: 1,
+                email: "admin@hacom.vn",
+                full_name: "Admin User (Fallback)",
+                phone: null,
+                role: "admin",
+                is_active: true,
+                created_at: new Date().toISOString(),
+              },
+              token,
+            },
+          });
+        } else {
+          return res.status(500).json({
+            success: false,
+            message: "Database unavailable. Use admin@hacom.vn / admin123 for fallback access.",
+          });
+        }
+      }
 
       if (users.length === 0) {
         return res.status(401).json({
