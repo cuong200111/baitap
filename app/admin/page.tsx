@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { formatPrice } from "../../config";
 import { API_DOMAIN } from "@/lib/api-helpers";
-import { usersApi, productsApi, categoriesApi } from "../../config";
 
 interface DashboardStats {
   products: {
