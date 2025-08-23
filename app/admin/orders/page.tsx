@@ -57,6 +57,8 @@ interface OrderItem {
   price: number;
   total: number;
   images: string[];
+  product_exists?: boolean;
+  product_status_note?: string;
 }
 
 export default function AdminOrdersPage() {
@@ -447,25 +449,45 @@ export default function AdminOrdersPage() {
                                   {selectedOrder.items.map((item, index) => (
                                     <div
                                       key={index}
-                                      className="flex items-center gap-4 p-4 border rounded"
+                                      className={`flex items-center gap-4 p-4 border rounded ${
+                                        !item.product_exists ? 'bg-red-50 border-red-200' : ''
+                                      }`}
                                     >
                                       <div className="relative w-16 h-16 flex-shrink-0">
-                                        <Image
-                                          src={getMediaUrl(
-                                            item.images[0] || "",
-                                          )}
-                                          alt={item.product_name}
-                                          fill
-                                          className="object-cover rounded"
-                                        />
+                                        {item.product_exists ? (
+                                          <Image
+                                            src={getMediaUrl(
+                                              item.images[0] || "",
+                                            )}
+                                            alt={item.product_name}
+                                            fill
+                                            className="object-cover rounded"
+                                          />
+                                        ) : (
+                                          <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                                            <Package className="h-6 w-6 text-gray-400" />
+                                          </div>
+                                        )}
                                       </div>
                                       <div className="flex-1">
-                                        <h4 className="font-medium">
-                                          {item.product_name}
-                                        </h4>
+                                        <div className="flex items-center gap-2">
+                                          <h4 className={`font-medium ${!item.product_exists ? 'text-gray-600' : ''}`}>
+                                            {item.product_name}
+                                          </h4>
+                                          {!item.product_exists && (
+                                            <Badge variant="destructive" className="text-xs">
+                                              Đã xóa
+                                            </Badge>
+                                          )}
+                                        </div>
                                         <p className="text-sm text-gray-500">
                                           SKU: {item.product_sku}
                                         </p>
+                                        {item.product_status_note && (
+                                          <p className="text-sm text-red-600 font-medium mt-1">
+                                            {item.product_status_note}
+                                          </p>
+                                        )}
                                         <div className="flex items-center gap-4 mt-2">
                                           <span className="text-sm">
                                             Số lượng: {item.quantity}
