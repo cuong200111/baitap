@@ -58,9 +58,9 @@ import {
 } from "lucide-react";
 import { MediaPicker } from "../MediaPicker";
 import { toast } from "sonner";
-import { productsApi, categoriesApi } from "../../config";
 import { getMediaUrl, formatPrice } from "../../config";
 import { Product, Category } from "../../types";
+import { apiWrappers } from "../../lib/api-wrapper";
 
 interface ProductFormData {
   name: string;
