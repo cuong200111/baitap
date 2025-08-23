@@ -132,7 +132,10 @@ router.get("/", authenticateToken, async (req, res) => {
         `
         SELECT
           oi.*,
-          p.images as product_images
+          p.id as product_id_exists,
+          p.images as product_images,
+          p.name as current_product_name,
+          p.status as product_status
         FROM order_items oi
         LEFT JOIN products p ON oi.product_id = p.id
         WHERE oi.order_id = ?
