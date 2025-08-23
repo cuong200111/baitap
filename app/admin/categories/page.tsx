@@ -1,18 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -27,487 +19,554 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
+  FolderTree,
+  Search,
   Plus,
   Edit,
   Trash2,
-  FolderTree,
-  ChevronRight,
-  ChevronDown,
-  Search,
+  Eye,
+  Package,
+  TrendingUp,
+  BarChart3,
+  Folder,
+  RefreshCw,
 } from "lucide-react";
-import { toast } from "sonner";
-import { Category } from "../../../types";
-import { apiWrappers } from "@/lib/api-wrapper";
-import { MediaSelector } from "@/components/MediaSelector";
 
-interface CategoryFormData {
+interface Category {
+  id: number;
   name: string;
-  description: string;
-  parent_id: number | null;
+  slug: string;
+  description?: string;
+  image?: string;
+  parent_id?: number;
+  is_active: boolean;
   sort_order: number;
-  image: string;
+  products_count?: number;
+  created_at: string;
 }
 
-const initialFormData: CategoryFormData = {
-  name: "",
-  description: "",
-  parent_id: null,
-  sort_order: 0,
-  image: "",
-};
-
-export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [flatCategories, setFlatCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState<CategoryFormData>(initialFormData);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<Set<number>>(
-    new Set(),
-  );
+export default function AdminCategoriesPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  // Demo categories data
+  const [categories, setCategories] = useState<Category[]>([
+    {
+      id: 1,
+      name: "Laptop",
+      slug: "laptop",
+      description: "Máy tính xách tay các loại",
+      is_active: true,
+      sort_order: 1,
+      products_count: 45,
+      created_at: "2024-01-15T10:30:00Z",
+    },
+    {
+      id: 2,
+      name: "Laptop Gaming",
+      slug: "laptop-gaming",
+      description: "Laptop chuyên game với cấu hình cao",
+      parent_id: 1,
+      is_active: true,
+      sort_order: 1,
+      products_count: 23,
+      created_at: "2024-01-16T11:00:00Z",
+    },
+    {
+      id: 3,
+      name: "Laptop Văn phòng",
+      slug: "laptop-van-phong",
+      description: "Laptop phù hợp cho công việc văn phòng",
+      parent_id: 1,
+      is_active: true,
+      sort_order: 2,
+      products_count: 22,
+      created_at: "2024-01-16T11:15:00Z",
+    },
+    {
+      id: 4,
+      name: "PC Gaming",
+      slug: "pc-gaming",
+      description: "Máy tính bàn chuyên game",
+      is_active: true,
+      sort_order: 2,
+      products_count: 18,
+      created_at: "2024-01-17T09:30:00Z",
+    },
+    {
+      id: 5,
+      name: "Linh kiện máy tính",
+      slug: "linh-kien-may-tinh",
+      description: "Các linh kiện, phụ kiện máy tính",
+      is_active: true,
+      sort_order: 3,
+      products_count: 156,
+      created_at: "2024-01-18T14:20:00Z",
+    },
+    {
+      id: 6,
+      name: "CPU",
+      slug: "cpu",
+      description: "Bộ vi xử lý Intel, AMD",
+      parent_id: 5,
+      is_active: true,
+      sort_order: 1,
+      products_count: 34,
+      created_at: "2024-01-19T10:45:00Z",
+    },
+    {
+      id: 7,
+      name: "GPU - Card đồ họa",
+      slug: "gpu-card-do-hoa",
+      description: "Card đồ họa NVIDIA, AMD",
+      parent_id: 5,
+      is_active: true,
+      sort_order: 2,
+      products_count: 28,
+      created_at: "2024-01-19T11:00:00Z",
+    },
+    {
+      id: 8,
+      name: "Màn hình",
+      slug: "man-hinh",
+      description: "Màn hình máy tính, gaming monitor",
+      is_active: true,
+      sort_order: 4,
+      products_count: 67,
+      created_at: "2024-01-20T15:30:00Z",
+    },
+    {
+      id: 9,
+      name: "Phụ kiện Gaming",
+      slug: "phu-kien-gaming",
+      description: "Bàn phím, chuột, tai nghe gaming",
+      is_active: false,
+      sort_order: 5,
+      products_count: 0,
+      created_at: "2024-01-21T16:00:00Z",
+    },
+  ]);
 
-  const loadCategories = async () => {
-    try {
-      setLoading(true);
-      const [hierarchicalResponse, flatResponse] = await Promise.all([
-        apiWrappers.categories.getAll(),
-        apiWrappers.categories.getAll({ flat: true }),
-      ]);
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    description: "",
+    parent_id: "",
+    sort_order: "1",
+    is_active: true,
+  });
 
-      if (hierarchicalResponse.success && hierarchicalResponse.data) {
-        setCategories(hierarchicalResponse.data);
-      }
+  // Filter categories
+  const filteredCategories = categories.filter((category) => {
+    const matchesSearch = category.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" ||
+      (statusFilter === "active" && category.is_active) ||
+      (statusFilter === "inactive" && !category.is_active);
+    return matchesSearch && matchesStatus;
+  });
 
-      if (flatResponse.success && flatResponse.data) {
-        setFlatCategories(flatResponse.data);
-      }
-    } catch (error) {
-      console.error("Failed to load categories:", error);
-      toast.error("Không thể tải danh sách danh mục");
-    } finally {
-      setLoading(false);
+  const handleCreateCategory = () => {
+    if (newCategory.name) {
+      const category: Category = {
+        id: Math.max(...categories.map((c) => c.id)) + 1,
+        name: newCategory.name,
+        slug: newCategory.name.toLowerCase().replace(/\s+/g, "-"),
+        description: newCategory.description,
+        parent_id: newCategory.parent_id
+          ? parseInt(newCategory.parent_id)
+          : undefined,
+        is_active: newCategory.is_active,
+        sort_order: parseInt(newCategory.sort_order),
+        products_count: 0,
+        created_at: new Date().toISOString(),
+      };
+      setCategories([...categories, category]);
+      setNewCategory({
+        name: "",
+        description: "",
+        parent_id: "",
+        sort_order: "1",
+        is_active: true,
+      });
+      setIsCreateDialogOpen(false);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    if (!formData.name) {
-      toast.error("Tên danh mục là bắt buộc");
-      setSubmitting(false);
-      return;
-    }
-    try {
-      if (editingCategory) {
-        const response = await apiWrappers.categories.update(
-          editingCategory.id,
-          {
-            ...formData,
-            parent_id: formData.parent_id || undefined,
-          },
-        );
-        if (response.success) {
-          toast.success("Cập nhật danh mục thành công");
-        } else {
-          toast.error(response.message || "Không thể cập nhật danh mục");
-          return;
-        }
-      } else {
-        const response = await apiWrappers.categories.create({
-          ...formData,
-          parent_id: formData.parent_id || undefined,
-        });
-        if (response.success) {
-          toast.success("Tạo danh mục thành công");
-        } else {
-          toast.error(response.message || "Không thể tạo danh mục");
-          return;
-        }
-      }
-
-      setFormData(initialFormData);
-      setEditingCategory(null);
-      setIsFormOpen(false);
-      loadCategories();
-    } catch (error) {
-      console.error("Failed to save category:", error);
-      toast.error("Không thể lưu danh mục");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleEdit = (category: Category) => {
-    setEditingCategory(category);
-    setFormData({
-      name: category.name,
-      description: category.description || "",
-      parent_id: category.parent_id || null,
-      sort_order: category.sort_order,
-      image: category.image || "",
-    });
-    setIsFormOpen(true);
-  };
-
-  const handleDelete = async (category: Category) => {
-    try {
-      const response = await apiWrappers.categories.delete(category.id);
-      if (response.success) {
-        toast.success("Xóa danh mục thành công");
-        loadCategories();
-      } else {
-        toast.error(response.message || "Không thể xóa danh mục");
-      }
-    } catch (error: any) {
-      console.error("Failed to delete category:", error);
-      toast.error(error.message || "Không thể xóa danh mục");
-    }
-  };
-
-  const toggleExpanded = (categoryId: number) => {
-    const newExpanded = new Set(expandedCategories);
-    if (newExpanded.has(categoryId)) {
-      newExpanded.delete(categoryId);
-    } else {
-      newExpanded.add(categoryId);
-    }
-    setExpandedCategories(newExpanded);
-  };
-
-  const renderCategoryRow = (
-    category: Category,
-    level = 0,
-  ): React.ReactNode => {
-    const hasChildren = category.children && category.children.length > 0;
-    const isExpanded = expandedCategories.has(category.id);
-
-    const filteredCategories = searchTerm
-      ? flatCategories.filter((cat) =>
-          cat.name.toLowerCase().includes(searchTerm.toLowerCase()),
-        )
-      : flatCategories;
-
-    if (searchTerm && !filteredCategories.find((c) => c.id === category.id)) {
-      return null;
-    }
-
-    return (
-      <>
-        <TableRow key={category.id}>
-          <TableCell>
-            <div
-              className="flex items-center"
-              style={{ paddingLeft: `${level * 24}px` }}
-            >
-              {hasChildren && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleExpanded(category.id)}
-                  className="p-0 h-6 w-6 mr-2"
-                >
-                  {isExpanded ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronRight className="h-4 w-4" />
-                  )}
-                </Button>
-              )}
-              {!hasChildren && <div className="w-8" />}
-              <FolderTree className="h-4 w-4 mr-2 text-blue-600" />
-              <span className="font-medium">{category.name}</span>
-            </div>
-          </TableCell>
-          <TableCell>
-            <code className="text-sm bg-gray-100 px-2 py-1 rounded">
-              {category.slug}
-            </code>
-          </TableCell>
-          <TableCell className="max-w-xs truncate">
-            {category.description || "-"}
-          </TableCell>
-          <TableCell className="text-center">
-            <Badge variant="outline">{category.products_count || 0}</Badge>
-          </TableCell>
-          <TableCell className="text-center">
-            <Badge
-              variant={category.is_active ? "default" : "secondary"}
-              className={
-                category.is_active ? "bg-green-100 text-green-800" : ""
-              }
-            >
-              {category.is_active ? "Hoạt động" : "Tạm dừng"}
-            </Badge>
-          </TableCell>
-          <TableCell className="text-right">
-            <div className="flex items-center justify-end space-x-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleEdit(category)}
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="ghost" size="sm">
-                    <Trash2 className="h-4 w-4 text-red-600" />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Xác nhận xóa danh mục</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Bạn có chắc chắn muốn xóa danh mục &quot;{category.name}
-                      &quot;? Hành động này không thể hoàn tác.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Hủy</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleDelete(category)}
-                      className="bg-red-600 hover:bg-red-700"
-                    >
-                      Xóa
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </TableCell>
-        </TableRow>
-        {hasChildren &&
-          isExpanded &&
-          category.children?.map((child) => (
-            <React.Fragment key={child.id}>
-              {renderCategoryRow(child, level + 1)}
-            </React.Fragment>
-          ))}
-      </>
+  const handleToggleStatus = (categoryId: number) => {
+    setCategories(
+      categories.map((category) =>
+        category.id === categoryId
+          ? { ...category, is_active: !category.is_active }
+          : category,
+      ),
     );
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Đang tải danh mục...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleDeleteCategory = (categoryId: number) => {
+    if (confirm("Bạn có chắc chắn muốn xóa danh mục này?")) {
+      setCategories(categories.filter((category) => category.id !== categoryId));
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
+
+  const getParentName = (parentId?: number) => {
+    const parent = categories.find((c) => c.id === parentId);
+    return parent ? parent.name : "—";
+  };
+
+  const getLevel = (category: Category) => {
+    return category.parent_id ? 2 : 1;
+  };
+
+  const stats = {
+    total: categories.length,
+    active: categories.filter((c) => c.is_active).length,
+    parentCategories: categories.filter((c) => !c.parent_id).length,
+    totalProducts: categories.reduce(
+      (sum, c) => sum + (c.products_count || 0),
+      0,
+    ),
+  };
+
+  const parentCategories = categories.filter((c) => !c.parent_id);
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Quản lý danh mục</h1>
-          <p className="text-gray-600">
-            Quản lý danh mục sản phẩm theo cấu trúc phân cấp
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center">
+            <FolderTree className="h-8 w-8 mr-3" />
+            Quản lý danh mục
+          </h1>
+          <p className="text-gray-600 mt-1">
+            Quản lý cấu trúc danh mục sản phẩm
           </p>
         </div>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-          <DialogTrigger asChild>
-            <Button
-              onClick={() => {
-                setEditingCategory(null);
-                setFormData(initialFormData);
-              }}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Thêm danh mục
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>
-                {editingCategory ? "Sửa danh mục" : "Thêm danh mục mới"}
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <Label htmlFor="name">Tên danh mục *</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  placeholder="Nhập tên danh mục"
-                  required
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="parent_id">Danh mục cha</Label>
-                <Select
-                  value={formData.parent_id?.toString() || "0"}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      parent_id: value === "0" ? null : parseInt(value),
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Chọn danh mục cha" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">Không có danh mục cha</SelectItem>
-                    {flatCategories
-                      .filter((cat) => cat.id !== editingCategory?.id)
-                      .map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
-                        >
-                          {category.name}
+        <div className="flex gap-3">
+          <Button variant="outline" size="sm">
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Làm mới
+          </Button>
+          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Thêm danh mục
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Tạo danh mục mới</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Tên danh mục *</label>
+                  <Input
+                    value={newCategory.name}
+                    onChange={(e) =>
+                      setNewCategory({ ...newCategory, name: e.target.value })
+                    }
+                    placeholder="Laptop Gaming"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Mô tả</label>
+                  <Textarea
+                    value={newCategory.description}
+                    onChange={(e) =>
+                      setNewCategory({
+                        ...newCategory,
+                        description: e.target.value,
+                      })
+                    }
+                    placeholder="Mô tả danh mục..."
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Danh mục cha</label>
+                  <Select
+                    value={newCategory.parent_id}
+                    onValueChange={(value) =>
+                      setNewCategory({ ...newCategory, parent_id: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn danh mục cha (tùy chọn)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">Không có</SelectItem>
+                      {parentCategories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id.toString()}>
+                          {cat.name}
                         </SelectItem>
                       ))}
-                  </SelectContent>
-                </Select>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Thứ tự sắp xếp</label>
+                  <Input
+                    type="number"
+                    value={newCategory.sort_order}
+                    onChange={(e) =>
+                      setNewCategory({
+                        ...newCategory,
+                        sort_order: e.target.value,
+                      })
+                    }
+                    placeholder="1"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_active"
+                    checked={newCategory.is_active}
+                    onChange={(e) =>
+                      setNewCategory({
+                        ...newCategory,
+                        is_active: e.target.checked,
+                      })
+                    }
+                  />
+                  <label htmlFor="is_active" className="text-sm font-medium">
+                    Kích hoạt danh mục
+                  </label>
+                </div>
               </div>
-
-              <div>
-                <Label htmlFor="description">Mô tả</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  placeholder="Nhập mô tả danh mục"
-                  rows={3}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="sort_order">Thứ tự sắp xếp</Label>
-                <Input
-                  id="sort_order"
-                  type="number"
-                  value={formData.sort_order}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      sort_order: parseInt(e.target.value) || 0,
-                    })
-                  }
-                  placeholder="0"
-                />
-              </div>
-
-              <div>
-                <Label>Hình ảnh danh mục</Label>
-                <MediaSelector
-                  selectedImage={formData.image}
-                  onSelect={(imageUrl) => {
-                    setFormData({ ...formData, image: imageUrl });
-                    console.log("Selected image:", imageUrl);
-                  }}
-                  placeholder="Chọn hình ảnh cho danh mục"
-                />
-              </div>
-
-              <div className="flex justify-end space-x-2 pt-4">
+              <DialogFooter>
                 <Button
-                  type="button"
                   variant="outline"
-                  onClick={() => setIsFormOpen(false)}
+                  onClick={() => setIsCreateDialogOpen(false)}
                 >
                   Hủy
                 </Button>
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {submitting
-                    ? "Đang lưu..."
-                    : editingCategory
-                      ? "Cập nhật"
-                      : "Thêm mới"}
-                </Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <Button onClick={handleCreateCategory}>Tạo danh mục</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Tổng danh mục</p>
+                <p className="text-2xl font-bold">{stats.total}</p>
+              </div>
+              <FolderTree className="h-8 w-8 text-blue-500" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Đang hoạt động</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {stats.active}
+                </p>
+              </div>
+              <TrendingUp className="h-8 w-8 text-green-500" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Danh mục cha</p>
+                <p className="text-2xl font-bold text-purple-600">
+                  {stats.parentCategories}
+                </p>
+              </div>
+              <Folder className="h-8 w-8 text-purple-500" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Tổng sản phẩm</p>
+                <p className="text-2xl font-bold text-orange-600">
+                  {stats.totalProducts}
+                </p>
+              </div>
+              <Package className="h-8 w-8 text-orange-500" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Filters */}
       <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Danh sách danh mục</CardTitle>
-            <div className="flex items-center space-x-2">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg">Bộ lọc & Tìm kiếm</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Tìm kiếm danh mục..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-64"
+                  className="pl-10"
                 />
               </div>
             </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Trạng thái" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tất cả trạng thái</SelectItem>
+                <SelectItem value="active">Đang hoạt động</SelectItem>
+                <SelectItem value="inactive">Đã tắt</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Categories Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            Danh sách danh mục ({filteredCategories.length})
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Tên danh mục</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Mô t��</TableHead>
-                <TableHead className="text-center">Sản phẩm</TableHead>
-                <TableHead className="text-center">Trạng thái</TableHead>
+                <TableHead>Danh mục cha</TableHead>
+                <TableHead>Cấp độ</TableHead>
+                <TableHead>Số sản phẩm</TableHead>
+                <TableHead>Thứ tự</TableHead>
+                <TableHead>Trạng thái</TableHead>
+                <TableHead>Ngày tạo</TableHead>
                 <TableHead className="text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categories.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8">
-                    <div className="text-gray-500">
-                      <FolderTree className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <p>Chưa có danh mục nào</p>
-                      <p className="text-sm">
-                        Thêm danh mục đầu tiên để bắt đầu
-                      </p>
+              {filteredCategories.map((category) => (
+                <TableRow key={category.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                          category.parent_id ? "bg-purple-100" : "bg-blue-100"
+                        }`}
+                      >
+                        {category.parent_id ? (
+                          <Folder className="h-4 w-4 text-purple-600" />
+                        ) : (
+                          <FolderTree className="h-4 w-4 text-blue-600" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium">{category.name}</p>
+                        <p className="text-sm text-gray-500">
+                          ID: {category.id}
+                        </p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {getParentName(category.parent_id)}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={getLevel(category) === 1 ? "default" : "secondary"}
+                    >
+                      Cấp {getLevel(category)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="font-medium">
+                      {category.products_count || 0}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{category.sort_order}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={category.is_active ? "default" : "destructive"}
+                      className={
+                        category.is_active
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }
+                    >
+                      {category.is_active ? "Hoạt động" : "Đã tắt"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {formatDate(category.created_at)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center gap-2 justify-end">
+                      <Button size="sm" variant="outline">
+                        <Eye className="h-3 w-3" />
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <Edit className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleToggleStatus(category.id)}
+                      >
+                        {category.is_active ? "Tắt" : "Bật"}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDeleteCategory(category.id)}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>
-              ) : (
-                categories.map((category) => (
-                  <React.Fragment key={category.id}>
-                    {renderCategoryRow(category)}
-                  </React.Fragment>
-                ))
-              )}
+              ))}
             </TableBody>
           </Table>
+          {filteredCategories.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Không tìm thấy danh mục nào</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
