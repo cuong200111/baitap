@@ -340,7 +340,11 @@ export default function AdminOrdersPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setSelectedOrder(order)}
+                          onClick={() => {
+                            console.log('Setting selected order:', order);
+                            console.log('Order items:', order.items);
+                            setSelectedOrder(order);
+                          }}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
