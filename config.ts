@@ -1,5 +1,5 @@
 import { API_CONFIG } from "./lib/config-client";
-import { configApi, utilsApi, seoApi, clientUtils } from "./lib/api-client";
+import { clientUtils } from "./lib/api-client";
 
 // API Configuration - Direct backend connection
 export const API_BASE_URL = API_CONFIG.BASE_URL;
