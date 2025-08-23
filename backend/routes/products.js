@@ -13,7 +13,7 @@ const router = express.Router();
 const createSlug = (name) => {
   return name
     .toLowerCase()
-    .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, "a")
+    .replace(/[àáạả��âầấậẩẫăằắặẳẵ]/g, "a")
     .replace(/[èéẹẻẽêềếệểễ]/g, "e")
     .replace(/[ìíịỉĩ]/g, "i")
     .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, "o")
@@ -603,18 +603,8 @@ router.delete(
         });
       }
 
-      // Check if product has orders
-      const orders = await executeQuery(
-        "SELECT COUNT(*) as count FROM order_items WHERE product_id = ?",
-        [id],
-      );
-
-      if (orders[0].count > 0) {
-        return res.status(400).json({
-          success: false,
-          message: "Cannot delete product with existing orders",
-        });
-      }
+      // Note: Product can now be deleted even if it exists in orders
+      // The order_items table no longer has foreign key constraint to products
 
       // Delete product (cascades will handle related records)
       await executeQuery("DELETE FROM products WHERE id = ?", [id]);
