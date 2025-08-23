@@ -9,11 +9,11 @@ console.log("🔄 Using MySQL database...");
 
 // MySQL configuration với thông tin cụ thể
 export const dbConfig = {
-  host: process.env.DB_HOST || "103.57.221.79",
-  user: process.env.DB_USER || "qftuzbjqhosting_b5",
-  password: process.env.DB_PASSWORD || "Iw~hwC@*9eyN.HQh",
-  database: process.env.DB_NAME || "qftuzbjqhosting_b5",
-  port: parseInt(process.env.DB_PORT) || 3306,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "wocom",
+  port: 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
