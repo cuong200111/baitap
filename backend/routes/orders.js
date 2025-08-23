@@ -167,8 +167,10 @@ router.get("/", authenticateToken, async (req, res) => {
         price: item.unit_price,
         total: item.total_price,
         // Check if product still exists
-        product_exists: item.product_images !== null,
-        product_status_note: item.product_images === null ? "Sản phẩm này đã bị xóa" : null,
+        product_exists: item.product_id_exists !== null,
+        product_status_note: item.product_id_exists === null
+          ? "Sản phẩm này không tồn tại"
+          : (item.product_status !== 'active' ? "Sản phẩm đã bị vô hiệu hóa" : null),
       }));
 
       formattedOrders.push({
