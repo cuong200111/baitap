@@ -441,12 +441,15 @@ export default function AdminOrdersPage() {
                             <Card>
                               <CardHeader>
                                 <CardTitle className="text-lg">
-                                  Sản phẩm đã đặt
+                                  S��n phẩm đã đặt
                                 </CardTitle>
                               </CardHeader>
                               <CardContent>
+                                {console.log('Selected Order:', selectedOrder)}
+                                {console.log('Order Items:', selectedOrder.items)}
                                 <div className="space-y-4">
-                                  {selectedOrder.items.map((item, index) => (
+                                  {selectedOrder.items && selectedOrder.items.length > 0 ? (
+                                    selectedOrder.items.map((item, index) => (
                                     <div
                                       key={index}
                                       className={`flex items-center gap-4 p-4 border rounded ${
@@ -502,7 +505,16 @@ export default function AdminOrdersPage() {
                                         </div>
                                       </div>
                                     </div>
-                                  ))}
+                                    ))
+                                  ) : (
+                                    <div className="text-center py-8">
+                                      <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                                      <p className="text-gray-500 mb-2">Không có thông tin sản phẩm</p>
+                                      <p className="text-sm text-gray-400">
+                                        Items data: {JSON.stringify(selectedOrder.items || 'undefined')}
+                                      </p>
+                                    </div>
+                                  )}
                                 </div>
                               </CardContent>
                             </Card>
