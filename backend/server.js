@@ -34,7 +34,7 @@ import { initSeo } from "./init-seo.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 
 // Security middleware
 // app.use(helmet());
