@@ -39,11 +39,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { WithAuth } from "@/components/AuthGuard";
 import { Domain, getMediaUrl } from "@/config";
 import { toast } from "sonner";
-import {
-  fetchProvinces,
-  fetchDistricts,
-  fetchWards,
-} from "@/vietnam-locations";
 
 interface UserProfile {
   id: number;
@@ -763,7 +758,7 @@ export default function ProfilePage() {
             },
             {
               code: 491,
-              name: "Cam Lệ",
+              name: "Cam L���",
               full_name: "Quận Cam Lệ",
               province_code: 48,
             },
