@@ -1,7 +1,7 @@
 // Client-side configuration utilities
 
 // Function to detect API URL based on environment
-function getApiUrl() {
+function getBaseApiUrl() {
   // If explicit API URL is set, use it
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
@@ -22,7 +22,7 @@ function getApiUrl() {
 
 // API Configuration - Direct backend connection
 export const API_CONFIG = {
-  BASE_URL: getApiUrl(),
+  BASE_URL: getBaseApiUrl(),
   TIMEOUT: 15000,
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000,
