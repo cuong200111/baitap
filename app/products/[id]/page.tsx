@@ -60,7 +60,13 @@ export default function ProductDetailPage() {
     try {
       setLoading(true);
       setError("");
-      const response = await productsApi.getById(params.id as string);
+      const id = Number(params.id);
+      if (Number.isNaN(id)) {
+        setError("ID sản phẩm không hợp lệ");
+        setLoading(false);
+        return;
+      }
+      const response = await productsApi.getById(id);
 
       if (response.success && response.data) {
         setProduct(response.data);

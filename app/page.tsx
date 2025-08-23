@@ -14,7 +14,7 @@ import {
   ShoppingCart,
   Truck,
   Shield,
-  HeadphonesIcon,
+  Headphones,
   Award,
 } from "lucide-react";
 import Link from "next/link";
