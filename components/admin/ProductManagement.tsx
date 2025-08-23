@@ -274,9 +274,9 @@ export function ProductManagement() {
 
       let response;
       if (editingProduct) {
-        response = await productsApi.update(editingProduct.id, productData);
+        response = await apiWrappers.products.update(editingProduct.id, productData);
       } else {
-        response = await productsApi.create(productData);
+        response = await apiWrappers.products.create(productData);
       }
 
       if (response.success) {
