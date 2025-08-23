@@ -118,8 +118,8 @@ export function ProductManagement() {
     try {
       setLoading(true);
       const [productsResponse, categoriesResponse] = await Promise.all([
-        productsApi.getAll({ page: 1, limit: 50 }),
-        categoriesApi.getAll({ flat: true }),
+        apiWrappers.products.getAll({ page: 1, limit: 50 }),
+        apiWrappers.categories.getAll({ flat: true }),
       ]);
 
       if (productsResponse.success && productsResponse.data) {
@@ -298,7 +298,7 @@ export function ProductManagement() {
 
   const handleDelete = async (productId: number) => {
     try {
-      const response = await productsApi.delete(productId);
+      const response = await apiWrappers.products.delete(productId);
       if (response.success) {
         toast.success("Xóa sản phẩm thành công");
         await loadData();
@@ -564,7 +564,7 @@ export function ProductManagement() {
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingProduct ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
+              {editingProduct ? "Chỉnh sửa sản ph��m" : "Thêm sản phẩm mới"}
             </DialogTitle>
           </DialogHeader>
 
