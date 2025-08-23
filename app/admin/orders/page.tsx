@@ -103,7 +103,12 @@ export default function AdminOrdersPage() {
 
       if (data.success && data.data && data.data.orders) {
         console.log("Setting orders:", data.data.orders.length, "orders");
-        setOrders(data.data.orders);
+        // Ensure each order has items array
+        const processedOrders = data.data.orders.map(order => ({
+          ...order,
+          items: order.items || []
+        }));
+        setOrders(processedOrders);
       } else {
         console.error("Invalid response structure:", data);
         toast.error(data.message || "Không thể tải danh sách đơn hàng");
