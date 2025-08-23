@@ -163,6 +163,9 @@ router.get("/", authenticateToken, async (req, res) => {
         quantity: item.quantity,
         price: item.unit_price,
         total: item.total_price,
+        // Check if product still exists
+        product_exists: item.product_images !== null,
+        product_status_note: item.product_images === null ? "Sản phẩm này đã bị xóa" : null,
       }));
 
       formattedOrders.push({
@@ -281,6 +284,9 @@ router.get("/:identifier", authenticateToken, async (req, res) => {
             return [];
           }
         })(),
+        // Check if product still exists
+        product_exists: item.product_images !== null,
+        product_status_note: item.product_images === null ? "Sản phẩm này đã bị xóa" : null,
       })),
       status_history: statusHistory,
     };
