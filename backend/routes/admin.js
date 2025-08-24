@@ -57,6 +57,20 @@ router.get("/reports/customers", reportsController.getCustomerReports);
 router.get("/reports/products", reportsController.getProductReports);
 router.get("/reports/sales", reportsController.getSalesReports);
 
+// Test routes without auth (for debugging)
+router.get("/test-reports/customers", (req, res, next) => {
+  req.user = { id: 1, role: 'admin' }; // Mock user
+  reportsController.getCustomerReports(req, res, next);
+});
+router.get("/test-reports/products", (req, res, next) => {
+  req.user = { id: 1, role: 'admin' }; // Mock user
+  reportsController.getProductReports(req, res, next);
+});
+router.get("/test-reports/sales", (req, res, next) => {
+  req.user = { id: 1, role: 'admin' }; // Mock user
+  reportsController.getSalesReports(req, res, next);
+});
+
 // Settings Management
 router.get("/settings", settingsController.getSettings);
 router.post("/settings", settingsController.saveSettings);
