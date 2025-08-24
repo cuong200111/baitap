@@ -257,6 +257,7 @@ export const executeQuery = async (query, params = []) => {
       // Parse query to determine what mock data to return
       const queryLower = query.toLowerCase();
 
+      // Products queries
       if (queryLower.includes('select') && queryLower.includes('products')) {
         if (queryLower.includes('count(*)')) {
           return [{ total: mockData.products.length }];
@@ -264,15 +265,91 @@ export const executeQuery = async (query, params = []) => {
         return mockData.products;
       }
 
+      // SEO settings
       if (queryLower.includes('seo_settings')) {
         return mockData.seo_settings;
       }
 
+      // Sales reports queries
+      if (queryLower.includes('orders') && queryLower.includes('total_amount')) {
+        if (queryLower.includes('sum')) {
+          return [mockData.sales_overview];
+        }
+        if (queryLower.includes('date(o.created_at)')) {
+          return mockData.daily_sales;
+        }
+        if (queryLower.includes('date_format')) {
+          return mockData.monthly_sales;
+        }
+      }
+
+      // Product sales analytics
+      if (queryLower.includes('order_items') && queryLower.includes('quantity')) {
+        if (queryLower.includes('products p') && queryLower.includes('sum(oi.quantity)')) {
+          return mockData.best_selling_products;
+        }
+      }
+
+      // Category sales
+      if (queryLower.includes('categories c') && queryLower.includes('product_categories')) {
+        return mockData.sales_by_category;
+      }
+
+      // Product overview stats
+      if (queryLower.includes('count(case when status') && queryLower.includes('products')) {
+        return [mockData.product_overview];
+      }
+
+      // Top products by sales
+      if (queryLower.includes('p.id, p.name, p.sku, p.price') && queryLower.includes('order_items oi')) {
+        return mockData.top_products_by_sales;
+      }
+
+      // Low stock products
+      if (queryLower.includes('stock_quantity') && queryLower.includes('p.stock_quantity <= 20')) {
+        return mockData.low_stock_products;
+      }
+
+      // Category performance
+      if (queryLower.includes('c.id, c.name as category_name') && queryLower.includes('product_count')) {
+        return mockData.category_performance;
+      }
+
+      // Customer stats
+      if (queryLower.includes('users') && queryLower.includes('role = \'user\'')) {
+        if (queryLower.includes('count(*)') && queryLower.includes('paying_customers')) {
+          return [mockData.customer_stats];
+        }
+        if (queryLower.includes('avg(order_count)')) {
+          return [{
+            avg_orders_per_customer: mockData.customer_stats.avg_orders_per_customer,
+            avg_spent_per_customer: mockData.customer_stats.avg_spent_per_customer
+          }];
+        }
+        if (queryLower.includes('u.id, u.full_name, u.email') && queryLower.includes('order_count')) {
+          if (queryLower.includes('order by order_count desc')) {
+            return mockData.top_customers_by_orders;
+          }
+          if (queryLower.includes('order by total_spent desc')) {
+            return mockData.top_customers_by_spent;
+          }
+        }
+      }
+
+      // Customer retention analysis
+      if (queryLower.includes('customer_type') && queryLower.includes('when total_spent >= 10000000')) {
+        return mockData.retention_analysis;
+      }
+
+      // Database structure queries
       if (queryLower.includes('show tables')) {
         return [
           { 'Tables_in_hacom_dev': 'products' },
           { 'Tables_in_hacom_dev': 'seo_settings' },
-          { 'Tables_in_hacom_dev': 'categories' }
+          { 'Tables_in_hacom_dev': 'categories' },
+          { 'Tables_in_hacom_dev': 'orders' },
+          { 'Tables_in_hacom_dev': 'order_items' },
+          { 'Tables_in_hacom_dev': 'users' }
         ];
       }
 
