@@ -392,6 +392,77 @@ export const seoController = {
       });
     } catch (error) {
       console.error("Get SEO settings error:", error);
+
+      // If database is unavailable, return default settings
+      if (error.code === 'ECONNREFUSED' || error.code === 'ER_ACCESS_DENIED_ERROR' || error.message.includes('connect ECONNREFUSED')) {
+        console.log("🔄 Database unavailable, using default SEO settings");
+
+        const defaultSettings = {
+          general: {
+            site_name: "HACOM - Máy tính, Laptop, Gaming Gear",
+            site_url: "https://hacom.vn",
+            site_description: "HACOM - Chuyên cung cấp máy tính, laptop, linh kiện máy tính, gaming gear với giá tốt nhất. Bảo hành chính hãng, giao hàng toàn quốc.",
+            site_keywords: "máy tính, laptop, gaming, linh kiện máy tính, PC, HACOM",
+            site_logo: "/logo.png",
+            site_favicon: "/favicon.ico",
+            default_meta_title_pattern: "{title} | HACOM",
+            product_meta_title_pattern: "{product_name} - {category} | HACOM",
+            category_meta_title_pattern: "{category_name} - {description} | HACOM",
+            auto_generate_meta_description: true,
+            meta_description_length: 160,
+          },
+          social: {
+            facebook_app_id: "",
+            twitter_site: "@hacom_vn",
+            default_og_image: "/og-image.jpg",
+          },
+          analytics: {
+            google_analytics_id: "",
+            google_tag_manager_id: "",
+            google_search_console_verification: "",
+            enable_analytics: true,
+          },
+          schema: {
+            organization_name: "HACOM",
+            organization_logo: "/logo.png",
+            organization_address: "Số 131 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội",
+            organization_phone: "1900 1903",
+            organization_email: "contact@hacom.vn",
+            business_type: "ElectronicsStore",
+            enable_organization_schema: true,
+            enable_product_schema: true,
+          },
+          technical: {
+            enable_sitemap: true,
+            sitemap_max_urls: 50000,
+            enable_robots_txt: true,
+            enable_schema_markup: true,
+          },
+          content: {
+            enable_auto_seo: true,
+            keyword_density_target: 2.5,
+            content_min_words: 300,
+            h1_optimization: true,
+          },
+          performance: {
+            enable_cdn: false,
+            optimize_images: true,
+            lazy_load_threshold: 200,
+          },
+          local: {
+            enable_local_seo: true,
+            business_category: "Electronics Store",
+            opening_hours: "Thứ 2 - Chủ nhật: 8:00 - 22:00",
+          },
+        };
+
+        return res.json({
+          success: true,
+          data: defaultSettings,
+        });
+      }
+
+      // For other errors, return 500
       res.status(500).json({
         success: false,
         message: "Failed to get SEO settings",
