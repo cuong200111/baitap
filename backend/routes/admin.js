@@ -8,20 +8,6 @@ import { authenticateToken, requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// Test routes without auth (for debugging) - MUST be before auth middleware
-router.get("/test-reports/customers", (req, res, next) => {
-  req.user = { id: 1, role: 'admin' }; // Mock user
-  reportsController.getCustomerReports(req, res, next);
-});
-router.get("/test-reports/products", (req, res, next) => {
-  req.user = { id: 1, role: 'admin' }; // Mock user
-  reportsController.getProductReports(req, res, next);
-});
-router.get("/test-reports/sales", (req, res, next) => {
-  req.user = { id: 1, role: 'admin' }; // Mock user
-  reportsController.getSalesReports(req, res, next);
-});
-
 // Apply admin authentication to all routes
 router.use(authenticateToken);
 router.use(requireAdmin);
